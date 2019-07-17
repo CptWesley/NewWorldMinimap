@@ -24,8 +24,9 @@ define([
     if (isGameRunning) {
 		  window.close();
     } else {
-      let mainWindow = overwolf.windows.getMainWindow();
-      mainWindow.close();
+      // let mainWindow = overwolf.windows.getMainWindow();
+      // mainWindow.close();
+      window.close();
     }
 	}
 

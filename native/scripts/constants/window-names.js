@@ -1,5 +1,5 @@
 define({
   BACKGROUND: 'background',
-  SETTINGS: 'settings',
+  DESKTOP: 'desktop',
   IN_GAME: 'in_game'
 });

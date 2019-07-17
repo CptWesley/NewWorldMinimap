@@ -2,14 +2,14 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-    "name": "PUBG Dev Challenge Sample",
+    "name": "Sample App",
     "version": "0.0.0",
     "minimum-overwolf-version": "0.120.0",
     "author": "Overwolf",
     "icon": "IconMouseOver.png",
     "icon_gray": "IconMouseNormal.png",
     "launcher_icon": "desktop-icon.ico",
-    "description": "Sample app for PUBG dev challenge in plain Javascript"
+    "description": "Sample app for new developers"
   },
   "permissions": [
     "Hotkeys"
@@ -58,17 +58,21 @@
         },
         "grab_keyboard_focus": false
       },
-      "settings": {
-        "file": "windows/settings/settings.html",
+      "desktop": {
+        "file": "windows/desktop/desktop.html",
         "transparent": true,
         "resizable": true,
         "size": {
-          "width": 500,
-          "height": 300
+          "width": 200,
+          "height": 200
         },
         "min_size": {
-          "width": 500,
-          "height": 300
+          "width": 200,
+          "height": 200
+        },
+        "max_size": {
+          "width": 1920,
+          "height": 1080
         }
       },
       "in_game": {

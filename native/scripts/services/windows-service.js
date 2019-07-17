@@ -12,15 +12,13 @@ define([
    * on that window
    * @param name
    * @returns {Promise<any>}
-   * @private
    */
-  function _obtainWindow(name) {
+  function obtainWindow(name) {
     return new Promise((resolve, reject) => {
       overwolf.windows.obtainDeclaredWindow(name, (response) => {
         if (response.status !== 'success') {
           return reject(response);
         }
-
         resolve(response);
       });
     });
@@ -46,7 +44,7 @@ define([
   function restore(name) {
     return new Promise(async (resolve, reject) => {
       try {
-        await _obtainWindow(name);
+        await obtainWindow(name);
         overwolf.windows.restore(name, (result) => {
           if (result.status === 'success') {
             resolve();
@@ -68,7 +66,7 @@ define([
   function dragMove(name) {
     return new Promise(async (resolve, reject) => {
       try {
-        await _obtainWindow(name);
+        await obtainWindow(name);
         let window = await _getCurrentWindow();
         overwolf.windows.dragMove(window.id, (result) => {
           if (result.status === 'success') {
@@ -91,8 +89,29 @@ define([
   function minimize(name) {
     return new Promise(async (resolve, reject) => {
       try {
-        await _obtainWindow(name);
+        await obtainWindow(name);
         overwolf.windows.minimize(name, (result) => {
+          if (result.status === 'success') {
+            resolve();
+          } else {
+            reject(result);
+          }
+        });
+      } catch (e) {
+        reject(e)
+      }
+    });
+  }
+
+  /**
+   * change window size by window id
+   * @param windowId
+   * @returns {Promise<any>}
+   */
+  function changeSize(windowId, width, height) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        overwolf.windows.changeSize(windowId, width, height, (result) => {
           if (result.status === 'success') {
             resolve();
           } else {
@@ -121,13 +140,15 @@ define([
       return WindowNames.IN_GAME;
     }
 
-    return WindowNames.SETTINGS;
+    return WindowNames.DESKTOP;
   }
 
   return {
     restore,
     dragMove,
     minimize,
-    getStartupWindowName
+    getStartupWindowName,
+    obtainWindow,
+    changeSize
   }
 });
