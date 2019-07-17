@@ -1,0 +1,98 @@
+{
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "PUBG Dev Challenge Sample",
+    "version": "0.0.0",
+    "minimum-overwolf-version": "0.120.0",
+    "author": "Overwolf",
+    "icon": "IconMouseOver.png",
+    "icon_gray": "IconMouseNormal.png",
+    "launcher_icon": "desktop-icon.ico",
+    "description": "Sample app for PUBG dev challenge in plain Javascript"
+  },
+  "permissions": [
+    "Hotkeys"
+  ],
+  "data": {
+    "game_targeting": {
+      "type": "dedicated",
+      "game_ids": [10906]
+    },
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [10906]
+        },
+        "start_minimized": true
+      }
+    ],
+    "hotkeys": {
+      "pubg_devchallenge_showhide": {
+        "title": "Show In-Game Window",
+        "action-type": "toggle",
+        "default": "Ctrl+F"
+      },
+      "pubg_devchallenge_screenshot": {
+        "title": "Take Screenshot",
+        "action-type": "custom",
+        "default": "Ctrl+R"
+      }
+    },
+    "game_events": [10906],
+    "start_window": "background",
+    "windows": {
+      "background": {
+        "file": "windows/background/background.html",
+        "native_window": true,
+        "desktop_only": true,
+        "background_optimization": false,
+        "is_background_page": true,
+        "transparent": true,
+        "resizable": false,
+        "show_in_taskbar": false,
+        "size": {
+          "width": 100,
+          "height": 100
+        },
+        "grab_keyboard_focus": false
+      },
+      "settings": {
+        "file": "windows/settings/settings.html",
+        "transparent": true,
+        "resizable": true,
+        "size": {
+          "width": 500,
+          "height": 300
+        },
+        "min_size": {
+          "width": 500,
+          "height": 300
+        }
+      },
+      "in_game": {
+        "file": "windows/in-game/in-game.html",
+        "transparent": true,
+        "resizable": true,
+        "size": {
+          "width": 620,
+          "height": 600
+        },
+        "min_size": {
+          "width": 620,
+          "height": 600
+        }
+      }
+    },
+    "externally_connectable": {
+      "matches": [
+        "http://*.overwolf.com",
+        "https://*.overwolf.com",
+        "https://*.google-analytics.com",
+        "http://*.google-analytics.com",
+        "https://www.googleapis.com"
+      ]
+    }
+  }
+}

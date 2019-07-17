@@ -1,0 +1,120 @@
+button {
+  padding: 0;
+  border: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+.icon {
+  position: relative;
+  width: var(--size, 30px);
+  height: var(--size, 30px);
+  transition: .15s;
+}
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toggle-icons svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.toggle-icons svg:nth-of-type(1) {
+  opacity: 1;
+}
+.toggle-icons svg:nth-of-type(2) {
+  opacity: 0;
+}
+
+.toggle-icons.toggled svg:nth-of-type(1) {
+  opacity: 0;
+}
+.toggle-icons.toggled svg:nth-of-type(2) {
+  opacity: 1;
+}
+
+.app-header {
+  display: flex;
+  height: 40px;
+  background-color: #131313;
+}
+
+.window-controls-group {
+  margin-left: auto;
+  display: flex;
+  --color: #a8a8a8;
+  --color-hover: #dedede;
+  --bg-color-hover: #272727;
+}
+
+.window-control {
+  color: var(--color);
+  background-color: transparent;
+}
+.window-control:hover, .window-control:active {
+  color: var(--color-hover);
+  background-color: var(--bg-color-hover);
+}
+
+.window-control-close {
+  --color-hover: #dedede;
+  --bg-color-hover: #c21913;
+}
+
+.light-theme {
+  background-color: #f6f6f6;
+}
+.light-theme .window-controls-group {
+  --color: #828282;
+  --color-hover: #4f4f4f;
+  --bg-color-hover: #dedede;
+}
+
+body {
+  background-color: #f6f6f6;
+  color: #131313;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+main {
+  flex: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+main > * + * {
+  margin-top: 10px;
+}
+
+kbd {
+  margin: 0px 0.1em;
+  padding: 0.1em 0.6em;
+  border-radius: 3px;
+  border: 1px solid rgb(204, 204, 204);
+  color: rgb(51, 51, 51);
+  line-height: 1.4;
+  display: inline-block;
+  box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+  background-color: rgb(247, 247, 247);
+  text-shadow: 0 1px 0 #fff;
+  font-family: inherit;
+}
+
+.in-game {
+  background-color: transparent;
+}
+
+.settings {
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
+}

@@ -1,0 +1,155 @@
+// reset
+button {
+  padding: 0;
+	border: none;
+}
+
+button:focus {
+  outline: none;
+}
+
+// colors
+$red01: rgb(194, 25, 19);
+$red02: rgb(255, 0, 0);
+
+$gray019: rgb(19, 19, 19);
+$gray039: rgb(39, 39, 39);
+$gray079: rgb(79, 79, 79);
+$gray130: rgb(130, 130, 130);
+$gray168: rgb(168, 168, 168);
+$gray222: rgb(222, 222, 222);
+$gray246: rgb(246, 246, 246);
+
+// dark theme
+$dark-background_main: $gray019;
+$dark-background_secondary: $gray039;
+
+$dark-foreground_main: $gray168;
+$dark-foreground_main-hover: $gray222;
+
+// light theme
+$light-background_main: $gray246;
+$light-background_secondary: $gray222;
+
+$light-foreground_main: $gray019;
+$light-foreground_secondary: $gray079;
+$light-foreground_third: $gray130;
+
+// icons
+.icon {
+	position: relative;
+	width: var(--size, 30px);
+	height: var(--size, 30px);
+	transition: .15s;
+
+	svg {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.toggle-icons {
+	svg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		opacity: 0;
+	}
+
+	svg:nth-of-type(1) { opacity: 1; }
+	svg:nth-of-type(2) { opacity: 0; }
+}
+
+.toggle-icons.toggled {
+	svg:nth-of-type(1) { opacity: 0; }
+	svg:nth-of-type(2) { opacity: 1; }
+}
+
+// header
+.app-header {
+	display: flex;
+	height: 40px;
+	background-color: $dark-background_main;
+}
+
+.window-controls-group {
+	margin-left: auto;
+	display: flex;
+
+	--color: #{$dark-foreground_main};
+	--color-hover: #{$dark-foreground_main-hover};
+	--bg-color-hover: #{$dark-background_secondary};
+}
+
+.window-control {
+	color: var(--color);
+  background-color: transparent;
+  
+  &:hover,
+  &:active {
+  	color: var(--color-hover);
+  	background-color: var(--bg-color-hover);
+  }
+}
+
+.window-control-close {
+	--color-hover: #{$gray222};
+	--bg-color-hover: #{$red01};
+}
+
+.light-theme {
+	background-color: $light-background_main;
+
+	.window-controls-group {
+		--color: #{$light-foreground_third};
+		--color-hover: #{$light-foreground_secondary};
+		--bg-color-hover: #{$light-background_secondary};
+	}
+}
+
+// for demo
+body {
+	// padding: 40px;
+	background-color: $light-background_main;
+	color: $light-foreground_main;
+	margin: 0px;
+	display: flex;
+	flex-direction: column;
+	font-size: 14px;
+	min-height: 100vh;
+}
+
+main {
+	flex: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+
+	> * + * {
+		 margin-top: 10px;
+	}
+}
+
+kbd {
+	margin: 0px 0.1em;
+	padding: 0.1em 0.6em;
+	border-radius: 3px;
+	border: 1px solid rgb(204, 204, 204);
+	color: rgb(51, 51, 51);
+	line-height: 1.4;
+	display: inline-block;
+	box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
+	background-color: rgb(247, 247, 247);
+	text-shadow: 0 1px 0 #fff;
+	font-family: inherit;
+}
+
+.in-game {
+	background-color: transparent;
+}
+
+.settings {
+	font-family: Arial, Helvetica, sans-serif;
+	color: black;
+}
