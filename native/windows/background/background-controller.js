@@ -24,7 +24,7 @@ define([
 
       const startupWindowName = await windowsService.getStartupWindowName();
       const startupWindow = await windowsService.obtainWindow(startupWindowName);
-      await windowsService.changeSize(startupWindow.window.id, 1212, 659);
+      await windowsService.changeSize(startupWindow.window.id, 1200, 659);
       windowsService.restore(startupWindowName);
 
       let isGameRunning = await runningGameService.isGameRunning();

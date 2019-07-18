@@ -31,11 +31,11 @@ define([
 	}
 
   function updateToggle(value) {
-    toggleDiv.textContent = value;
+    // toggleDiv.textContent = value;
   }
 
   function updateScreenshot(value) {
-    screenshotDiv.textContent = value;
+    // screenshotDiv.textContent = value;
   }
 
   return {
