@@ -63,6 +63,7 @@ button:focus {
 }
 
 .window-controls-group {
+  z-index: 1001;
   margin-left: auto;
   display: flex;
   --color: #a8a8a8;
@@ -124,6 +125,10 @@ kbd {
   font-family: inherit;
 }
 
+a {
+  color: inherit;
+}
+
 .in-game {
   background-color: transparent;
 }
@@ -139,12 +144,53 @@ kbd {
   width: 100%;
   height: 243px;
   top: 0;
-  padding-top: 40px;
   text-align: center;
+}
+
+
+.desktopTop h1 {
+  margin-top: 40px;
+}
+
+.desktopTop p {
+  font-size: 15px;
+  line-height: 20px;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  margin-top: -3px;
+  width: 200px;
+  right: 0px;
+  background: #272727;
+  padding: 30px 5px;
+  line-height: 20px;
+}
+
+.support:hover .tooltip {
+  visibility: visible;
+}
+
+.socialIcons {
+  margin-top: 20px;
+  margin-right: 10px;
+}
+
+.socialIcons img {
+  vertical-align: middle;
 }
 
 .desktopBottom {
   background-color: #333333;
   width: 100%;
   flex: 1;
+}
+
+.desktopBottom p {
+  color: white;
+  margin-top: 18px;
+  margin-left: 30px;
+  font-size: 18px;
+  line-height: 135%;
 }
