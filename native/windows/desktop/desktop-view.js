@@ -7,39 +7,28 @@ define([
              windowsService,
              DragService,
              runningGameService) {
-  const toggleDiv = document.getElementById('toggle');
-	const screenshotDiv = document.getElementById('screenshot');
-	const closeButton = document.getElementById('closeButton');
-	const header = document.getElementsByClassName('app-header')[0];
-	
-	closeButton.addEventListener('click', onCloseClicked);
 
-  let dragService = null;
-  overwolf.windows.getCurrentWindow(result => {
-    dragService = new DragService(result.window, header);
-  });
+  class DesktopView {
+    static run() {
+      const closeButton = document.getElementById('closeButton');
+      const header = document.getElementsByClassName('app-header')[0];
 
-	async function onCloseClicked(event) {
-    let isGameRunning = await runningGameService.isGameRunning();
-    if (isGameRunning) {
-		  window.close();
-    } else {
+      closeButton.addEventListener('click', DesktopView.onCloseClicked);
+
+      let dragService = null;
+      overwolf.windows.getCurrentWindow(result => {
+        dragService = new DragService(result.window, header);
+      });
+    }
+
+    static async onCloseClicked(event) {
+      // Open 'close/minimize' dialog
       // let mainWindow = overwolf.windows.getMainWindow();
-      // mainWindow.close();
+      // mainWindow.promptCloseMinimize();
+
       window.close();
     }
-	}
-
-  function updateToggle(value) {
-    // toggleDiv.textContent = value;
   }
 
-  function updateScreenshot(value) {
-    // screenshotDiv.textContent = value;
-  }
-
-  return {
-    updateScreenshot,
-    updateToggle
-  }
+  return DesktopView;
 });

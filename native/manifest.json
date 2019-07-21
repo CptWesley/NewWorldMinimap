@@ -17,30 +17,25 @@
   "data": {
     "game_targeting": {
       "type": "dedicated",
-      "game_ids": [10906]
+      "game_ids": [21216]
     },
     "launch_events": [
       {
         "event": "GameLaunch",
         "event_data": {
-          "game_ids": [10906]
+          "game_ids": [21216]
         },
         "start_minimized": true
       }
     ],
     "hotkeys": {
-      "pubg_devchallenge_showhide": {
+      "sample_app_showhide": {
         "title": "Show In-Game Window",
         "action-type": "toggle",
         "default": "Ctrl+F"
-      },
-      "pubg_devchallenge_screenshot": {
-        "title": "Take Screenshot",
-        "action-type": "custom",
-        "default": "Ctrl+R"
       }
     },
-    "game_events": [10906],
+    "game_events": [21216],
     "start_window": "background",
     "windows": {
       "background": {
@@ -73,7 +68,8 @@
         "max_size": {
           "width": 1920,
           "height": 1080
-        }
+        },
+        "desktop_only": true
       },
       "in_game": {
         "file": "windows/in-game/in-game.html",

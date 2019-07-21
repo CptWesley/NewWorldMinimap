@@ -4,14 +4,12 @@ define([
   '../../scripts/services/windows-service.js',
   '../../scripts/services/hotkeys-service.js',
   '../../scripts/services/gep-service.js',
-  '../../scripts/services/screenshots-service.js',
   '../../scripts/services/event-bus.js'
 ], function (WindowNames,
              runningGameService,
              windowsService,
              hotkeysService,
              gepService,
-             screenshotService,
              eventBus) {
 
   class BackgroundController {
@@ -19,16 +17,21 @@ define([
       // this will be available when calling overwolf.windows.getMainWindow()
       window.ow_eventBus = eventBus;
 
+      // Handle what happens when the app is launched while already running
+      // (relaunch)
       BackgroundController._registerAppLaunchTriggerHandler();
+      // Register handlers to hotkey events
       BackgroundController._registerHotkeys();
 
-      const startupWindowName = await windowsService.getStartupWindowName();
-      const startupWindow = await windowsService.obtainWindow(startupWindowName);
-      await windowsService.changeSize(startupWindow.window.id, 1200, 659);
-      windowsService.restore(startupWindowName);
-
       let isGameRunning = await runningGameService.isGameRunning();
-      if (isGameRunning) {
+
+      if (!isGameRunning) {
+        const desktopWindowName = await windowsService.getStartupWindowName();
+        const desktopWindow = await windowsService.obtainWindow(desktopWindowName);
+        await windowsService.changeSize(desktopWindow.window.id, 1200, 659);
+        windowsService.restore(desktopWindowName);
+      }
+      else {
         gepService.registerToGEP();
         await windowsService.restore(WindowNames.IN_GAME);
         windowsService.minimize(WindowNames.IN_GAME);
@@ -36,11 +39,12 @@ define([
 
       runningGameService.addGameRunningChangedListener((isGameRunning) => {
         if (isGameRunning) {
+          // Close desktop window
+          // Open in-game window
           windowsService.restore(WindowNames.IN_GAME);
         } else {
-          // windowsService.minimize(WindowNames.IN_GAME);
-          console.log('closing app after game closed');
-          window.close();
+          // Close in-game window
+          // Open desktop window
         }
       });
     }
@@ -61,18 +65,18 @@ define([
     }
 
     /**
-     * set custom hotkey behavior to take screenshot in game
+     * set custom hotkey behavior
      * @private
      */
     static _registerHotkeys() {
-      hotkeysService.setTakeScreenshotHotkey(async () => {
-        try {
-          let screenshotUrl = await screenshotService.takeScreenshot();
-          window.ow_eventBus.trigger('screenshot', screenshotUrl);
-        } catch (e) {
-          console.error(e);
-        }
-      });
+      // hotkeysService.setTakeScreenshotHotkey(async () => {
+      //   try {
+      //     let screenshotUrl = await screenshotService.takeScreenshot();
+      //     window.ow_eventBus.trigger('screenshot', screenshotUrl);
+      //   } catch (e) {
+      //     console.error(e);
+      //   }
+      // });
     }
   }
 

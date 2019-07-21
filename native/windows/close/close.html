@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<link rel="stylesheet" href="../../css/style.css">
+  <title></title>
+</head>
+<body class="close">
+
+  <main>
+
+  </main>
+
+  <script src="../../lib/require.js"></script>
+  <script>
+    require(['close-controller'], function (CloseController) {
+      console.log(`[INIT] close module loaded`);
+      CloseController.run();
+    }, function (error) {
+      console.log(`[INIT] failed to load close module ${error}`);
+    });
+  </script>
+
+
+</body>
+</html>

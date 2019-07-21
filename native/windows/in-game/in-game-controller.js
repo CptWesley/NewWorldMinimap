@@ -23,18 +23,12 @@ define([
 
     static _eventListener(eventName, data) {
       switch (eventName) {
-        case 'screenshot': {
-          InGameController._updateScreenshot(data);
+        case '': {
           break;
         }
         default:
           break;
       }
-    }
-
-    static _updateScreenshot(url) {
-      inGameView.updateScreenshot(url);
-      windowsService.restore(WindowNames.IN_GAME);
     }
   }
 

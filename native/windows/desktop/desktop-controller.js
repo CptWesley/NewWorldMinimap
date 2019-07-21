@@ -10,24 +10,11 @@ define([
              runningGameService,
              windowsService,
              hotkeysService,
-             desktopView) {
+             DesktopView) {
 
   class DesktopController {
     static async run() {
-      try {
-        await DesktopController._updateHotkeys();
-      } catch (e) {
-        console.error(e);
-      }
-
-      hotkeysService.addHotkeyChangeListener(DesktopController._updateHotkeys);
-    }
-
-    static async _updateHotkeys() {
-      let toggleHotkey = await hotkeysService.getToggleHotkey();
-      let screenshotHotkey = await hotkeysService.getTakeScreenshotHotkey();
-      desktopView.updateToggle(toggleHotkey);
-      desktopView.updateScreenshot(screenshotHotkey);
+      DesktopView.run();
     }
   }
 

@@ -7,7 +7,6 @@ define([
 						 DragService) {
 	const img = document.querySelector('img');
 	const closeButton = document.getElementById('closeButton');
-	const desktopButton = document.getElementById('desktopButton');
 	const header = document.getElementsByClassName('app-header')[0];
 
 	let dragService = null;
@@ -19,18 +18,9 @@ define([
 	});
 
 	function onCloseClicked(event) {
-		windowsService.minimize(WindowNames.IN_GAME)
+		// windowsService.minimize(WindowNames.IN_GAME)
 	}
-
-	function onDesktopClicked(event) {
-		windowsService.restore(WindowNames.DESKTOP)
-	}
-
-  function updateScreenshot(url) {
-    img.src = url;
-  }
 
   return {
-    updateScreenshot
   }
 });

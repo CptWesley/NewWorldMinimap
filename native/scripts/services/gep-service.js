@@ -4,9 +4,9 @@
  * Overwolf's Game Events Provider
  */
 define([
-    '../services/screenshots-service.js'
+
   ],
-  function (screenshotService) {
+  function () {
 
     const REQUIRED_FEATURES = ['kill'];
     const REGISTER_RETRY_TIMEOUT = 10000;
@@ -28,8 +28,8 @@ define([
         switch (eventData.name) {
           case 'kill': {
             try {
-              let screenshotUrl = await screenshotService.takeScreenshot();
-              window.ow_eventBus.trigger('screenshot', screenshotUrl);
+              // let screenshotUrl = await screenshotService.takeScreenshot();
+              // window.ow_eventBus.trigger('screenshot', screenshotUrl);
             } catch (e) {
               console.error(e);
             }
