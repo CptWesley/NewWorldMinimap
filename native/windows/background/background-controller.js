@@ -26,10 +26,17 @@ define([
 
       let isGameRunning = await runningGameService.isGameRunning();
 
+      // Obtain windows and set their sizes:
+      // Desktop:
+      const desktopWindowName = await WindowsService.getStartupWindowName();
+      const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
+      await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
+      // In-Game:
+      const inGameWindow = await WindowsService.obtainWindow(WindowNames.IN_GAME);
+      await WindowsService.changeSize(inGameWindow.window.id, 1641, 692);
+
+
       if (!isGameRunning) {
-        const desktopWindowName = await WindowsService.getStartupWindowName();
-        const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
-        await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
         WindowsService.restore(desktopWindowName);
       }
       else {
