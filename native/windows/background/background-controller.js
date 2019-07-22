@@ -7,7 +7,7 @@ define([
   '../../scripts/services/event-bus.js'
 ], function (WindowNames,
              runningGameService,
-             windowsService,
+             WindowsService,
              hotkeysService,
              gepService,
              eventBus) {
@@ -16,6 +16,7 @@ define([
     static async run() {
       // this will be available when calling overwolf.windows.getMainWindow()
       window.ow_eventBus = eventBus;
+      window.minimize = BackgroundController.minimize;
 
       // Handle what happens when the app is launched while already running
       // (relaunch)
@@ -26,27 +27,41 @@ define([
       let isGameRunning = await runningGameService.isGameRunning();
 
       if (!isGameRunning) {
-        const desktopWindowName = await windowsService.getStartupWindowName();
-        const desktopWindow = await windowsService.obtainWindow(desktopWindowName);
-        await windowsService.changeSize(desktopWindow.window.id, 1200, 659);
-        windowsService.restore(desktopWindowName);
+        const desktopWindowName = await WindowsService.getStartupWindowName();
+        const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
+        await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
+        WindowsService.restore(desktopWindowName);
       }
       else {
         gepService.registerToGEP();
-        await windowsService.restore(WindowNames.IN_GAME);
-        windowsService.minimize(WindowNames.IN_GAME);
+        await WindowsService.restore(WindowNames.IN_GAME);
+        WindowsService.minimize(WindowNames.IN_GAME);
       }
 
       runningGameService.addGameRunningChangedListener((isGameRunning) => {
         if (isGameRunning) {
           // Close desktop window
+          WindowsService.close(WindowNames.DESKTOP);
           // Open in-game window
-          windowsService.restore(WindowNames.IN_GAME);
+          WindowsService.restore(WindowNames.IN_GAME);
         } else {
           // Close in-game window
+          WindowsService.close(WindowNames.IN_GAME);
           // Open desktop window
+          WindowsService.restore(WindowNames.DESKTOP);
         }
       });
+    }
+
+    /**
+     * Minimize all app windows
+     * @public
+     */
+    static async minimize() {
+      const openWindows = await WindowsService.getOpenWindows();
+      for (let windowName in openWindows) {
+        await WindowsService.minimize(windowName);
+      }
     }
 
     /**
@@ -61,7 +76,7 @@ define([
     }
 
     static _onAppRelaunch() {
-      windowsService.restore(WindowNames.DESKTOP);
+      WindowsService.restore(WindowNames.DESKTOP);
     }
 
     /**
@@ -78,6 +93,7 @@ define([
       //   }
       // });
     }
+
   }
 
 

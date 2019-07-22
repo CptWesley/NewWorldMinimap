@@ -10,11 +10,12 @@ define([
              runningGameService,
              windowsService,
              hotkeysService,
-             inGameView) {
+             InGameView) {
 
   class InGameController {
 
     static run() {
+      const desktopView = new InGameView();
       // listen to events from the event bus from the main window,
       // the callback will be run in the context of the current window
       let mainWindow = overwolf.windows.getMainWindow();

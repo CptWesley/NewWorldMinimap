@@ -14,7 +14,7 @@ define([
 
   class DesktopController {
     static async run() {
-      DesktopView.run();
+      const desktopView = new DesktopView();
     }
   }
 

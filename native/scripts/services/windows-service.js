@@ -143,12 +143,47 @@ define([
     return WindowNames.DESKTOP;
   }
 
+  /**
+   * Returns a map (window name, object) of all open windows.
+   * @returns {Promise<any>}
+   */
+  function getOpenWindows() {
+    return new Promise(async (resolve, reject) => {
+      try {
+        overwolf.windows.getOpenWindows((result) => {
+          resolve(result);
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
+  /**
+   * Close a window
+   * @param windowName
+   * @returns {Promise<any>}
+   */
+  function close(windowName) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        overwolf.windows.close(windowName, () => {
+          resolve();
+        });
+      } catch (e) {
+        reject(e);
+      }
+    });
+  }
+
   return {
     restore,
     dragMove,
     minimize,
     getStartupWindowName,
     obtainWindow,
-    changeSize
+    changeSize,
+    getOpenWindows,
+    close
   }
 });

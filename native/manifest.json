@@ -83,6 +83,19 @@
           "width": 620,
           "height": 600
         }
+      },
+      "notification": {
+        "file": "windows/notification/notification.html",
+        "transparent": true,
+        "resizable": true,
+        "size": {
+          "width": 320,
+          "height": 260
+        },
+        "min_size": {
+          "width": 320,
+          "height": 260
+        }
       }
     },
     "externally_connectable": {
