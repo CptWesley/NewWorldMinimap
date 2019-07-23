@@ -1,17 +1,3 @@
-h1, h2 {
-  margin: 0;
-  cursor: default;
-}
-
-button {
-  padding: 0;
-  border: none;
-}
-
-button:focus {
-  outline: none;
-}
-
 .icon {
   position: relative;
   width: var(--size, 30px);
@@ -45,12 +31,12 @@ button:focus {
 
 .app-header {
   display: flex;
-  /* height: 40px; */
   background-color: #525252;
   align-items: center;
 }
 
 .app-header h1 {
+  font-family: Arial, Helvetica, sans-serif;
   color: #D6D6D6;
   font-size: 14px;
   padding-left: 2px;
@@ -94,69 +80,6 @@ button:focus {
   --bg-color-hover: #dedede;
 }
 
-body {
-  background-color: #f6f6f6;
-  color: #131313;
-  margin: 0px;
-  display: flex;
-  flex-direction: column;
-  font-size: 14px;
-  min-height: 100vh;
-}
-
-main {
-  flex: auto;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-kbd {
-  margin: 0px 0.1em;
-  padding: 0.1em 0.6em;
-  border-radius: 3px;
-  border: 1px solid rgb(204, 204, 204);
-  color: rgb(51, 51, 51);
-  line-height: 1.4;
-  display: inline-block;
-  box-shadow: 0px 1px 0px rgba(0,0,0,0.2), inset 0px 0px 0px 2px #ffffff;
-  background-color: rgb(247, 247, 247);
-  text-shadow: 0 1px 0 #fff;
-  font-family: inherit;
-}
-
-a {
-  color: inherit;
-}
-
-.in-game {
-  background-color: transparent;
-}
-
-.desktop {
-  font-family: Arial, Helvetica, sans-serif;
-  color: black;
-}
-
-.desktopTop {
-  color: white;
-  background-image: url("../img/background.svg");
-  width: 100%;
-  height: 243px;
-  top: 0;
-  text-align: center;
-}
-
-
-.desktopTop h1 {
-  margin-top: 40px;
-}
-
-.desktopTop p {
-  font-size: 15px;
-  line-height: 20px;
-}
-
 .tooltip {
   visibility: hidden;
   position: absolute;
@@ -179,18 +102,4 @@ a {
 
 .socialIcons img {
   vertical-align: middle;
-}
-
-.desktopBottom {
-  background-color: #333333;
-  width: 100%;
-  flex: 1;
-}
-
-.desktopBottom p {
-  color: white;
-  margin-top: 18px;
-  margin-left: 30px;
-  font-size: 18px;
-  line-height: 135%;
 }

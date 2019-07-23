@@ -34,14 +34,6 @@ define(['../constants/hotkeys-ids.js'], function (HOTKEYS) {
     });
   }
 
-  function getTakeScreenshotHotkey() {
-    return new Promise((resolve, reject) => {
-      _getHotkey(HOTKEYS.TAKE_SCREENSHOT, function (result) {
-        resolve(result);
-      });
-    });
-  }
-
   function getToggleHotkey() {
     return new Promise((resolve, reject) => {
       _getHotkey(HOTKEYS.TOGGLE, function (result) {
@@ -50,8 +42,8 @@ define(['../constants/hotkeys-ids.js'], function (HOTKEYS) {
     });
   }
 
-  function setTakeScreenshotHotkey(action) {
-    _setHotkey(HOTKEYS.TAKE_SCREENSHOT, action);
+  function setToggleHotkey(action) {
+    _setHotkey(HOTKEYS.TOGGLE,action);
   }
 
   function addHotkeyChangeListener(listener) {
@@ -59,9 +51,8 @@ define(['../constants/hotkeys-ids.js'], function (HOTKEYS) {
   }
 
   return {
-    getTakeScreenshotHotkey,
     getToggleHotkey,
-    setTakeScreenshotHotkey,
+    setToggleHotkey,
     addHotkeyChangeListener
   };
 });

@@ -2,7 +2,7 @@ define([
   '../scripts/services/drag-service.js',
 ], function (DragService) {
 
-  class InGameView {
+  class SampleAppView {
     constructor() {
       // Methods:
       this.showExitMinimizeModal = this.showExitMinimizeModal.bind(this);
@@ -52,5 +52,5 @@ define([
     }
   }
 
-  return InGameView;
+  return SampleAppView;
 });

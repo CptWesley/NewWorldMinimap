@@ -1,0 +1,13 @@
+h1, h2 {
+  margin: 0;
+  cursor: default;
+}
+
+button {
+  padding: 0;
+  border: none;
+}
+
+button:focus {
+  outline: none;
+}

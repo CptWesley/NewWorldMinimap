@@ -62,12 +62,12 @@
           "height": 200
         },
         "min_size": {
-          "width": 200,
-          "height": 200
+          "width": 1200,
+          "height": 659
         },
         "max_size": {
-          "width": 1920,
-          "height": 1080
+          "width": 1200,
+          "height": 659
         },
         "desktop_only": true
       },
@@ -80,8 +80,12 @@
           "height": 600
         },
         "min_size": {
-          "width": 620,
-          "height": 600
+          "width": 1641,
+          "height": 692
+        },
+        "max_size": {
+          "width": 1641,
+          "height": 692
         }
       },
       "notification": {

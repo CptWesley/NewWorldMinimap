@@ -91,16 +91,15 @@ define([
      * @private
      */
     static _registerHotkeys() {
-      // hotkeysService.setTakeScreenshotHotkey(async () => {
-      //   try {
-      //     let screenshotUrl = await screenshotService.takeScreenshot();
-      //     window.ow_eventBus.trigger('screenshot', screenshotUrl);
-      //   } catch (e) {
-      //     console.error(e);
-      //   }
-      // });
+      hotkeysService.setToggleHotkey(async () => {
+        let state = await WindowsService.getWindowState(WindowNames.IN_GAME);
+        if ((state === 'minimized') || (state === 'closed')) {
+          WindowsService.restore(WindowNames.IN_GAME)
+        } else if ((state === 'normal') || (state === 'maximized')) {
+          WindowsService.minimize(WindowNames.IN_GAME)
+        }
+      });
     }
-
   }
 
 

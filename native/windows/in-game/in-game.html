@@ -2,11 +2,13 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/ingame.css">
+  <link rel="stylesheet" href="../../css/header.css">
+  <link rel="stylesheet" href="../../css/general.css">
   <link rel="stylesheet" href="../../css/modal.css">
   <title>Overwolf Sample App - In-Game page</title>
 </head>
-<body class="ingame">
+<body class="in-game">
 
 <!-- -------------------------------- Header ------------------------------- -->
 
@@ -50,7 +52,35 @@
 
 <!-- --------------------------------- Main -------------------------------- -->
 <main>
-
+  <div id="events">
+    <h1>Real Time Game Data</h1>
+    <p>
+      The background controller of this app is listening to all game events and
+      info updates. It sends them to this window, which prints them to the
+      screen. Some specific events (startMatch, Kill and Death) are painted in
+      red and logged to the developers console.</p>
+      <div id="logs">
+        <div id="eventsLog">
+          <h1>Game Events</h1>
+          <div id="eventsText" class="dataText">
+            <span class="highlight">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+          </div>
+        </div>
+        <div id="updatesLog">
+          <h1>Info Updates</h1>
+          <div id="updatesText" class="dataText">
+            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div id="ad">
+    div2
+  </div>
 </main>
 
 <!-- -------------------------------- Modal -------------------------------- -->

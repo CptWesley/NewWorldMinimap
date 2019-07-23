@@ -112,6 +112,7 @@ define([
     return new Promise(async (resolve, reject) => {
       try {
         overwolf.windows.changeSize(windowId, width, height, (result) => {
+          console.log(`${windowId}`, result);
           if (result.status === 'success') {
             resolve();
           } else {
@@ -176,6 +177,26 @@ define([
     });
   }
 
+  /**
+   * get state of the window
+   * @returns {Promise<*>}
+   */
+  async function getWindowState(name) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        overwolf.windows.getWindowState(name, (state) => {
+          if (state.status === 'success') {
+            resolve(state.window_state_ex);
+          } else {
+            reject(result);
+          }
+        })
+      } catch (e){
+        reject(e);
+      }
+    });
+  }
+
   return {
     restore,
     dragMove,
@@ -184,6 +205,7 @@ define([
     obtainWindow,
     changeSize,
     getOpenWindows,
-    close
+    close,
+    getWindowState
   }
 });

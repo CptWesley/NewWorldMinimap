@@ -1,0 +1,67 @@
+.in-game {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+}
+
+body {
+  background-color: #333333;
+  color: #131313;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+main {
+  display: flex;
+  position: relative;
+  padding: 5px;
+}
+
+#events {
+  margin-left: 17px;
+  margin-top: 18px;
+  margin-right: 19px;
+  margin-bottom: 24px;
+  padding: 16px 24px;
+  border-style: solid;
+}
+
+#ad {
+  flex: 0 0 400px;
+  margin-left: 19px;
+  margin-top: 322px;
+  margin-right: 13px;
+  margin-bottom: 24px;
+  border-style: solid;
+  height: 300px;
+  width: 515.25px;
+}
+
+#logs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dataText {
+  width: 500px;
+  height: 400px;
+  background-color: #949494;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 5px;
+}
+
+#logs h1 {
+  margin: 10px 0px;
+}
+
+#logs span {
+  color: black;
+  margin: 5px 0px;
+}
+
+#logs span.highlight {
+  background-color: red;
+}
