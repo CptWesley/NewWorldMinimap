@@ -48,7 +48,7 @@ main {
 
 .dataText {
   width: 500px;
-  height: 400px;
+  height: 380px;
   background-color: #949494;
   border-radius: 4px;
   overflow-x: auto;
@@ -67,4 +67,15 @@ main {
 
 #logs span.highlight {
   background-color: red;
+}
+
+button.logCopy {
+  background: #525252;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  color: white;
+  font-size: 15px;
+  padding: 6px 8px;
+  margin-top: 10px;
+  cursor: pointer;
 }
