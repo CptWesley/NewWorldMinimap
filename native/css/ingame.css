@@ -25,7 +25,8 @@ main {
   margin-right: 19px;
   margin-bottom: 24px;
   padding: 16px 24px;
-  border-style: solid;
+  background-color: #454545;
+  border-radius: 4px;
 }
 
 #ad {
@@ -34,9 +35,10 @@ main {
   margin-top: 322px;
   margin-right: 13px;
   margin-bottom: 24px;
-  border-style: solid;
   height: 300px;
   width: 515.25px;
+  background-color: #454545;
+  border-radius: 4px;
 }
 
 #logs {
@@ -48,6 +50,7 @@ main {
   width: 500px;
   height: 400px;
   background-color: #949494;
+  border-radius: 4px;
   overflow-x: auto;
   white-space: nowrap;
   padding: 5px;

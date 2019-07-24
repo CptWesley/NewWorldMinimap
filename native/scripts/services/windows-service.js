@@ -112,7 +112,6 @@ define([
     return new Promise(async (resolve, reject) => {
       try {
         overwolf.windows.changeSize(windowId, width, height, (result) => {
-          console.log(`${windowId}`, result);
           if (result.status === 'success') {
             resolve();
           } else {

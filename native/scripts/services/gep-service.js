@@ -8,36 +8,28 @@ define([
   ],
   function () {
 
-    const REQUIRED_FEATURES = ['kill'];
+    const REQUIRED_FEATURES = [
+      'kill', 'killed', 'killer', 'revived', 'death', 'match', 'match_info',
+      'rank', 'me', 'phase', 'location', 'team', 'items', 'counters'
+    ];
     const REGISTER_RETRY_TIMEOUT = 10000;
 
-    function registerToGEP() {
+    function registerToGEP(eventsListener, infoListener) {
       // set the features we are interested in receiving
       overwolf.games.events.setRequiredFeatures(REQUIRED_FEATURES, function (response) {
         if (response.status === 'error') {
           setTimeout(registerToGEP, REGISTER_RETRY_TIMEOUT);
         } else if (response.status === 'success') {
-          overwolf.games.events.onNewEvents.removeListener(_handleGameEvent);
-          overwolf.games.events.onNewEvents.addListener(_handleGameEvent);
+          // Listen to game events. We call 'removeListener' before
+          // 'addListener' to make sure we don't listen multiple times
+          overwolf.games.events.onNewEvents.removeListener(eventsListener);
+          overwolf.games.events.onNewEvents.addListener(eventsListener);
+
+          // Listen to info updates
+          overwolf.games.events.onInfoUpdates2.removeListener(infoListener);
+          overwolf.games.events.onInfoUpdates2.addListener(infoListener);
         }
       });
-    }
-
-    async function _handleGameEvent(eventsInfo) {
-      for (let eventData of eventsInfo.events) {
-        switch (eventData.name) {
-          case 'kill': {
-            try {
-              // let screenshotUrl = await screenshotService.takeScreenshot();
-              // window.ow_eventBus.trigger('screenshot', screenshotUrl);
-            } catch (e) {
-              console.error(e);
-            }
-
-            break;
-          }
-        }
-      }
     }
 
     return {

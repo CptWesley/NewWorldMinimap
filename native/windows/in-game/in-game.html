@@ -60,20 +60,14 @@
       screen. Some specific events (startMatch, Kill and Death) are painted in
       red and logged to the developers console.</p>
       <div id="logs">
-        <div id="eventsLog">
+        <div id="eventsSection">
           <h1>Game Events</h1>
-          <div id="eventsText" class="dataText">
-            <span class="highlight">Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
-            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
-            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+          <div id="eventsLog" class="dataText">
           </div>
         </div>
-        <div id="updatesLog">
+        <div id="updatesSection">
           <h1>Info Updates</h1>
-          <div id="updatesText" class="dataText">
-            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
-            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
-            <span>Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum </span><br>
+          <div id="updatesLog" class="dataText">
           </div>
         </div>
       </div>
@@ -106,7 +100,8 @@
 <script>
   require(['in-game-controller'], function (InGameController) {
     console.log(`[INIT] in-game module loaded`);
-    InGameController.run();
+    const inGameController = new InGameController();
+    inGameController.run();
   }, function (error) {
     console.log(`[INIT] failed to load in-game module ${error}`);
   });

@@ -40,7 +40,7 @@ define([
         WindowsService.restore(desktopWindowName);
       }
       else {
-        gepService.registerToGEP();
+        gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
         await WindowsService.restore(WindowNames.IN_GAME);
         WindowsService.minimize(WindowNames.IN_GAME);
       }
@@ -99,6 +99,25 @@ define([
           WindowsService.minimize(WindowNames.IN_GAME)
         }
       });
+    }
+
+    /**
+     * Pass events to windows that are listening to them
+     * @private
+     */
+    static onGameEvents(data) {
+      for (let event of data.events) {
+        console.log(JSON.stringify(event));
+        window.ow_eventBus.trigger('event', event);
+      }
+    }
+
+    /**
+     * Pass info updates to windows that are listening to them
+     * @private
+     */
+    static onInfoUpdate(data) {
+      window.ow_eventBus.trigger('info', data);
     }
   }
 

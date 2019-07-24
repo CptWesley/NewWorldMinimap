@@ -73,6 +73,8 @@
       },
       "in_game": {
         "file": "windows/in-game/in-game.html",
+        "focus_game_takeover": "ReleaseOnHidden",
+        "focus_game_takeover_release_hotkey": "sample_app_showhide",
         "transparent": true,
         "resizable": true,
         "size": {
