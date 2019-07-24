@@ -12,6 +12,7 @@ define([
       // Page elements:
       this.modal = document.getElementById("exitMinimizeModal");
       this.closeButton = document.getElementById('closeButton');
+      this.minimizeHeaderButton = document.getElementById('minimizeButton');
       this.exitButton = document.getElementById("exit");
       this.minimizeButton = document.getElementById("minimize");
       this.header = document.getElementsByClassName('app-header')[0];
@@ -22,6 +23,8 @@ define([
     init() {
       // Listen to X button click
       this.closeButton.addEventListener('click', this.showExitMinimizeModal);
+      // Listen to minimize click
+      this.minimizeHeaderButton.addEventListener('click', this.backgroundWindow.minimize);
       // Close app on exit click
       this.exitButton.addEventListener('click', () => {
         this.backgroundWindow.close();
