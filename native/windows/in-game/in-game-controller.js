@@ -1,16 +1,6 @@
 define([
-  '../../scripts/constants/window-names.js',
-  '../../scripts/services/launch-source-service.js',
-  '../../scripts/services/running-game-service.js',
-  '../../scripts/services/windows-service.js',
-  '../../scripts/services/hotkeys-service.js',
   '../../windows/in-game/in-game-view.js'
-], function (WindowNames,
-             launchSourceService,
-             runningGameService,
-             windowsService,
-             hotkeysService,
-             InGameView) {
+], function (InGameView) {
 
   class InGameController {
 

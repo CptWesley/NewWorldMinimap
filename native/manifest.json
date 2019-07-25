@@ -16,7 +16,8 @@
     "Extensions",
     "Streaming",
     "Profile",
-    "GameInfo"
+    "GameInfo",
+    "DesktopStreaming"
   ],
   "data": {
     "game_targeting": {
@@ -104,6 +105,10 @@
           "height": 260
         },
         "min_size": {
+          "width": 320,
+          "height": 260
+        },
+        "max_size": {
           "width": 320,
           "height": 260
         }

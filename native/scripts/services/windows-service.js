@@ -2,9 +2,11 @@ define([
   '../constants/window-names.js',
   '../services/launch-source-service.js',
   '../services/running-game-service.js',
+  '../services/utils-service.js',
 ], function (WindowNames,
              launchSourceService,
-             runningGameService) {
+             runningGameService,
+             utilsService) {
 
   /**
    * obtain a window object by a name as declared in the manifest
@@ -196,6 +198,43 @@ define([
     });
   }
 
+  /**
+   * Change window position
+   * @returns {Promise<*>}
+   */
+  async function changePosition(windowId, left, top) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        overwolf.windows.changePosition(windowId, left, top, (result) => {
+          if (result.status === 'success') {
+            resolve();
+          } else {
+            reject(result);
+          }
+        })
+      } catch (e){
+        reject(e);
+      }
+    });
+  }
+
+  /**
+   * Change window position to screen center
+   * @returns {Promise<*>}
+   */
+  async function changePositionCenter(windowId) {
+    const window = await obtainWindow(windowId);
+    const monitors = await utilsService.getMonitorsList();
+
+    const { width: windowWidth, height: windowHeight } = window.window;
+    const { width: monitorWidth, height: monitorHeight } = monitors[0];
+
+    const left = (monitorWidth / 2) - (windowWidth /  2);
+    const top = (monitorHeight / 2) - (windowHeight /  2);
+
+    return await changePosition(windowId, parseInt(left), parseInt(top));
+  }
+
   return {
     restore,
     dragMove,
@@ -205,6 +244,8 @@ define([
     changeSize,
     getOpenWindows,
     close,
-    getWindowState
+    getWindowState,
+    changePosition,
+    changePositionCenter
   }
 });

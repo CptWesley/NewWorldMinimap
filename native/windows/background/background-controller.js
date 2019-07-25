@@ -31,6 +31,7 @@ define([
       const desktopWindowName = await WindowsService.getStartupWindowName();
       const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
       await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
+      await WindowsService.changePositionCenter(desktopWindowName);
       // In-Game:
       const inGameWindow = await WindowsService.obtainWindow(WindowNames.IN_GAME);
       await WindowsService.changeSize(inGameWindow.window.id, 1641, 692);
@@ -38,6 +39,7 @@ define([
 
       if (!isGameRunning) {
         WindowsService.restore(desktopWindowName);
+        BackgroundController._displayNotification('asdas', 'asdsad', 100, 100, 1);
       }
       else {
         gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
@@ -69,6 +71,27 @@ define([
       for (let windowName in openWindows) {
         await WindowsService.minimize(windowName);
       }
+    }
+
+    /**
+     * Display notification
+     * @private
+     */
+    static async _displayNotification(title, message, left, top, time) {
+      const data = { title, message };
+      const notificationWindow = await WindowsService.obtainWindow(WindowNames.NOTIFICATION);
+
+      await WindowsService.changeSize(WindowNames.NOTIFICATION, 320, 260);
+      await WindowsService.changePositionCenter(WindowNames.NOTIFICATION);
+      // Tell the notification what it should display
+      window.ow_eventBus.trigger('notification', data);
+
+      // Display notification
+      await WindowsService.restore(WindowNames.NOTIFICATION);
+      // Start notification timer
+      setTimeout(() => {
+        window.ow_eventBus.trigger('notification-time', time);
+      }, 20);
     }
 
     /**

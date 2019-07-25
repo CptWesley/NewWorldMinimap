@@ -14,7 +14,7 @@
 
 <header class="app-header">
   <img src="../../img/header_icon.svg">
-  <h1>SAMPLE_APP / desktop window</h1>
+  <h1>Sample App / desktop window</h1>
   <div class="window-controls-group">
     <button class="icon window-control support">
       <svg>
@@ -53,7 +53,7 @@
 <!-- --------------------------------- Main -------------------------------- -->
 <main>
   <div class="desktopTop">
-    <h1>Overwolf Sample_App</h1>
+    <h1>Overwolf Sample App</h1>
     <p>Welcome to the Overwolf tutorial app for developers.<br>
       Learn how to build an app by using one!</p>
   </div>
@@ -95,7 +95,8 @@
 <script>
   require(['desktop-controller'], function (DesktopController) {
     console.log(`[INIT] desktop module loaded`);
-    DesktopController.run();
+    const desktopCntroller = new DesktopController();
+    desktopCntroller.run();
   }, function (error) {
     console.log(`[INIT] failed to load desktop module ${error}`);
   });
