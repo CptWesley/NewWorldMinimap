@@ -14,7 +14,7 @@
 
 <header class="app-header">
   <img src="../../img/header_icon.svg">
-  <h1>SAMPLE_APP / desktop window</h1>
+  <h1>SAMPLE_APP / in-game window</h1>
   <div class="window-controls-group">
     <button class="icon window-control support">
       <svg>
@@ -79,7 +79,6 @@
       </div>
   </div>
   <div id="ad">
-    div2
   </div>
 </main>
 
@@ -112,7 +111,8 @@
     console.log(`[INIT] failed to load in-game module ${error}`);
   });
 </script>
-
+<script src="http://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+<script>function onOwAdReady(){new OwAd(document.getElementById("ad"))}</script> 
 
 </body>
 </html>

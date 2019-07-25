@@ -12,7 +12,11 @@
     "description": "Sample app for new developers"
   },
   "permissions": [
-    "Hotkeys"
+    "Hotkeys",
+    "Extensions",
+    "Streaming",
+    "Profile",
+    "GameInfo"
   ],
   "data": {
     "game_targeting": {
@@ -55,6 +59,7 @@
       },
       "desktop": {
         "file": "windows/desktop/desktop.html",
+        "native_window": true,
         "transparent": true,
         "resizable": true,
         "size": {
@@ -104,6 +109,10 @@
         }
       }
     },
+    "protocol_override_domains" : {"googlesyndication" : "http"},
+    "block_top_window_navigation":true,
+    "popup_blocker":true,
+    "mute":true,
     "externally_connectable": {
       "matches": [
         "http://*.overwolf.com",
