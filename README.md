@@ -1,8 +1,8 @@
 # Overwolf sample app
 
-This repository contains an sample app that demonstrates some basic points and flows that are relevant when developing Overwolf apps:
+This repository contains a sample app that demonstrates some basic points and flows that are relevant when developing Overwolf apps:
 
-The app will show up automatically when you launch Fortnite
+- The app will launch automatically when Fortnite starts
 - Register to the overwolf.games.events API in order to receive real time events from the game.
 - Define a custom hotkey to be used in-game
 - Communication between the app windows according to our best practices 
