@@ -12,5 +12,6 @@ Under Overwolf's settings, choose Support tab and then Development options. Clic
 
 ## Notes
 Editing the author or app name in the manifest will prevent loading the app
-as unpacked app
+as unpacked app.
+
 For any further information or questions, contact developers@overwolf.com
