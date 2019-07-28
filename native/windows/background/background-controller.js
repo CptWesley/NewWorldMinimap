@@ -56,17 +56,17 @@ define([
       }
 
       // Switch between desktop/in-game windows when launching/closing game
-      runningGameService.addGameRunningChangedListener((isGameRunning) => {
+      runningGameService.addGameRunningChangedListener(async (isGameRunning) => {
         if (isGameRunning) {
           // Open in-game window
-          WindowsService.restore(WindowNames.IN_GAME);
+          await WindowsService.restore(WindowNames.IN_GAME);
           // Close desktop window
           WindowsService.close(WindowNames.DESKTOP);
           // And display a notification
           BackgroundController._displayNotification('Events', ingameMessage, 10);
         } else {
           // Open desktop window
-          WindowsService.restore(WindowNames.DESKTOP);
+          await WindowsService.restore(WindowNames.DESKTOP);
           // Close in-game window
           WindowsService.close(WindowNames.IN_GAME);
         }
