@@ -6,39 +6,39 @@ define([
     constructor() {
       super();
 
-      this.eventsLog = document.getElementById('eventsLog');
-      this.infoLog = document.getElementById('infoLog');
-      this.copyEventsButton = document.getElementById('copyEvents');
-      this.copyInfoButton = document.getElementById('copyInfo');
+      this._eventsLog = document.getElementById('eventsLog');
+      this._infoLog = document.getElementById('infoLog');
+      this._copyEventsButton = document.getElementById('copyEvents');
+      this._copyInfoButton = document.getElementById('copyInfo');
 
       this.logEvent = this.logEvent.bind(this);
       this.logInfoUpdate = this.logInfoUpdate.bind(this);
-      this.copyEventsLog = this._copyEventsLog.bind(this);
-      this.copyInfoLog = this._copyInfoLog.bind(this);
+      this._copyEventsLog = this._copyEventsLog.bind(this);
+      this._copyInfoLog = this._copyInfoLog.bind(this);
 
-      this.copyEventsButton.addEventListener('click', this._copyEventsLog);
-      this.copyInfoButton.addEventListener('click', this._copyInfoLog);
+      this._copyEventsButton.addEventListener('click', this._copyEventsLog);
+      this._copyInfoButton.addEventListener('click', this._copyInfoLog);
     }
 
     // -- Public --
 
     // Add a line to the events log
     logEvent(string, isHighlight) {
-      this._logLine(this.eventsLog, string, isHighlight);
+      this._logLine(this._eventsLog, string, isHighlight);
     }
     // Add a line to the info updates log
     logInfoUpdate(string, isHighlight) {
-      this._logLine(this.infoLog, string, isHighlight);
+      this._logLine(this._infoLog, string, isHighlight);
     }
 
     // -- Private --
 
     _copyEventsLog() {
-      this._copyLog(this.eventsLog);
+      this._copyLog(this._eventsLog);
     }
 
     _copyInfoLog() {
-      this._copyLog(this.infoLog);
+      this._copyLog(this._infoLog);
     }
 
     // Copy text from log

@@ -5,53 +5,53 @@ define([
   class SampleAppView {
     constructor() {
       // Methods:
-      this.showExitMinimizeModal = this.showExitMinimizeModal.bind(this);
-      this.hideExitMinimizeModal = this.hideExitMinimizeModal.bind(this);
+      this._showExitMinimizeModal = this._showExitMinimizeModal.bind(this);
+      this._hideExitMinimizeModal = this._hideExitMinimizeModal.bind(this);
       // Background window:
-      this.backgroundWindow = overwolf.windows.getMainWindow();
+      this._backgroundWindow = overwolf.windows.getMainWindow();
       // Page elements:
-      this.modal = document.getElementById("exitMinimizeModal");
-      this.closeButton = document.getElementById('closeButton');
-      this.minimizeHeaderButton = document.getElementById('minimizeButton');
-      this.exitButton = document.getElementById("exit");
-      this.minimizeButton = document.getElementById("minimize");
-      this.header = document.getElementsByClassName('app-header')[0];
+      this._modal = document.getElementById("exitMinimizeModal");
+      this._closeButton = document.getElementById('closeButton');
+      this._minimizeHeaderButton = document.getElementById('minimizeButton');
+      this._exitButton = document.getElementById("exit");
+      this._minimizeButton = document.getElementById("minimize");
+      this._header = document.getElementsByClassName('app-header')[0];
       // Inittialize
       this.init();
     }
 
     init() {
       // Listen to X button click
-      this.closeButton.addEventListener('click', this.showExitMinimizeModal);
+      this._closeButton.addEventListener('click', this._showExitMinimizeModal);
       // Listen to minimize click
-      this.minimizeHeaderButton.addEventListener('click', this.backgroundWindow.minimize);
+      this._minimizeHeaderButton.addEventListener('click', this._backgroundWindow.minimize);
       // Close app on exit click
-      this.exitButton.addEventListener('click', () => {
-        this.backgroundWindow.close();
+      this._exitButton.addEventListener('click', () => {
+        this._backgroundWindow.close();
       });
       // Minimize app on minimize click
-      this.minimizeButton.addEventListener('click', () => {
-        this.backgroundWindow.minimize();
-        this.hideExitMinimizeModal();
+      this._minimizeButton.addEventListener('click', () => {
+        this._backgroundWindow.minimize();
+        this._hideExitMinimizeModal();
       });
       // When the user clicks anywhere outside of the modal, close it
       window.onclick = (function(event) {
-        if (event.target == this.modal) {
-          this.hideExitMinimizeModal();
+        if (event.target == this._modal) {
+          this._hideExitMinimizeModal();
         }
       }).bind(this);
       // Enable dragging on this window
       overwolf.windows.getCurrentWindow(result => {
-        this.dragService = new DragService(result.window, this.header);
+        this.dragService = new DragService(result.window, this._header);
       });
     }
 
-    showExitMinimizeModal() {
-      this.modal.style.display = "block";
+    _showExitMinimizeModal() {
+      this._modal.style.display = "block";
     }
 
-    hideExitMinimizeModal() {
-      this.modal.style.display = "none";
+    _hideExitMinimizeModal() {
+      this._modal.style.display = "none";
     }
   }
 

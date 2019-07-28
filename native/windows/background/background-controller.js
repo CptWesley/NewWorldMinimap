@@ -36,15 +36,20 @@ define([
       const inGameWindow = await WindowsService.obtainWindow(WindowNames.IN_GAME);
       await WindowsService.changeSize(inGameWindow.window.id, 1641, 692);
 
+      const desktopMessage = `Note that app is targeted to Fortnite.
+        An app can declare itself as targeted to one or more games.`;
+      const ingameMessage = `Once you get into a match, you'll start seeing
+        events and info updates in the in-game window.`;
 
       if (!isGameRunning) {
         WindowsService.restore(desktopWindowName);
-        BackgroundController._displayNotification('asdas', 'asdsad', 100, 100, 1);
+        BackgroundController._displayNotification('Notification', desktopMessage, 10);
       }
       else {
         gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
         await WindowsService.restore(WindowNames.IN_GAME);
         WindowsService.minimize(WindowNames.IN_GAME);
+        BackgroundController._displayNotification('Events', ingameMessage, 10);
       }
 
       runningGameService.addGameRunningChangedListener((isGameRunning) => {
@@ -53,6 +58,8 @@ define([
           WindowsService.close(WindowNames.DESKTOP);
           // Open in-game window
           WindowsService.restore(WindowNames.IN_GAME);
+          // And display a notification
+          BackgroundController._displayNotification('Events', ingameMessage, 10);
         } else {
           // Close in-game window
           WindowsService.close(WindowNames.IN_GAME);
@@ -77,21 +84,21 @@ define([
      * Display notification
      * @private
      */
-    static async _displayNotification(title, message, left, top, time) {
-      const data = { title, message };
+    static async _displayNotification(title, message, time) {
+      const data = { title, message, time };
       const notificationWindow = await WindowsService.obtainWindow(WindowNames.NOTIFICATION);
 
       await WindowsService.changeSize(WindowNames.NOTIFICATION, 320, 260);
       await WindowsService.changePositionCenter(WindowNames.NOTIFICATION);
-      // Tell the notification what it should display
-      window.ow_eventBus.trigger('notification', data);
 
       // Display notification
       await WindowsService.restore(WindowNames.NOTIFICATION);
       // Start notification timer
+      // We use a timeout to give the notification controller time to register
+      // to the event bus.
       setTimeout(() => {
-        window.ow_eventBus.trigger('notification-time', time);
-      }, 20);
+        window.ow_eventBus.trigger('notification', data);
+      }, 500);
     }
 
     /**

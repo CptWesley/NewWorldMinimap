@@ -4,7 +4,11 @@ define([
 
   class NotificationController {
     constructor() {
-      this.notificationView = new NotificationView();
+      this._notificationView = new NotificationView();
+
+      this._notificationView.addCloseClickedListener(() => {
+        window.close();
+      })
 
       this._notificationListener = this._notificationListener.bind(this);
     }
@@ -16,13 +20,12 @@ define([
     }
 
     _notificationListener(event, data) {
-      switch (event) {
-        case 'notification':
-
-          break;
-        case 'notification-time':
-          this.notificationView.startTimer(data);
-          break;
+      if (event === "notification") {
+        const seconds = data.time;
+        this._notificationView.setTitle(data.title);
+        this._notificationView.setMessage(data.message);
+        this._notificationView.startTimer(seconds);
+        setTimeout(window.close, seconds * 1000);
       }
     }
   }

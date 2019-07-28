@@ -51,10 +51,10 @@ p {
   top: 0;
   right: 0;
   margin: 10px;
-  /* margin-top: 100px; */
   height: 18px;
   width: 18px;
   text-align: center;
+  cursor: pointer;
 }
 
 #countdown-number {
@@ -73,15 +73,11 @@ svg {
 }
 
 svg circle {
-  stroke-dasharray: 113px;
+  stroke-dasharray: 60px;
   stroke-dashoffset: 0px;
   stroke-linecap: round;
-  /* stroke-width: 2px; */
   stroke: white;
   fill: none;
-  /* r: 9;
-  cx: 10;
-  cy: 10; */
 }
 
 @keyframes countdown {
@@ -89,6 +85,6 @@ svg circle {
     stroke-dashoffset: 0px;
   }
   to {
-    stroke-dashoffset: 113px;
+    stroke-dashoffset: 60px;
   }
 }
