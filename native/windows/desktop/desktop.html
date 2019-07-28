@@ -74,6 +74,9 @@
         2. How to <a target="_blank" href="https://overwolf.github.io/docs/topics/using-overwolf-windows#using-background-controller">use a transparent background window</a> as a service bus, that acts as the main controller of your app.<br>
         3. How to use <a target="_blank" href="https://overwolf.github.io/docs/topics/hotkeys-best-practices#a-guide-on-how-to-use-hotkeys ">Hotkeys</a> that show/hide your app while you are in-game.
     </p>
+    <!-- Ad -->
+    <div id="ad">
+    </div>
   </div>
 
 </main>
@@ -94,8 +97,8 @@
         Minimize
       </button>
       <button id="exit" class="modalButton">
-          Exit
-        </button>
+        Exit
+      </button>
     </span>
   </div>
 </div>
@@ -110,7 +113,8 @@
     console.log(`[INIT] failed to load desktop module ${error}`);
   });
 </script>
-
+<script src="http://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+<script>function onOwAdReady(){new OwAd(document.getElementById("ad"))}</script> 
 
 </body>
 </html>

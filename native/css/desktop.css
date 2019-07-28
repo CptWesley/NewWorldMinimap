@@ -47,6 +47,7 @@ a {
   background-color: #333333;
   width: 100%;
   flex: 1;
+  display: flex;
 }
 
 .desktopBottom p {
@@ -55,4 +56,8 @@ a {
   margin-left: 30px;
   font-size: 18px;
   line-height: 135%;
+}
+
+#ad {
+  display: inline-block;
 }
