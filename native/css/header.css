@@ -103,3 +103,7 @@
 .socialIcons img {
   vertical-align: middle;
 }
+
+.socialIcons a {
+  text-decoration: none;
+}
