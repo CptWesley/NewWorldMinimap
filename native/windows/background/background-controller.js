@@ -41,30 +41,43 @@ define([
       const ingameMessage = `Once you get into a match, you'll start seeing
         events and info updates in the in-game window.`;
 
+      // Determine which window (desktop/in-game) to display when app is launched
       if (!isGameRunning) {
+        // Game isn't runnig, display desktop window
         WindowsService.restore(desktopWindowName);
         BackgroundController._displayNotification('Notification', desktopMessage, 10);
       }
       else {
+        // Display in-game window
         gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
         await WindowsService.restore(WindowNames.IN_GAME);
         WindowsService.minimize(WindowNames.IN_GAME);
         BackgroundController._displayNotification('Events', ingameMessage, 10);
       }
 
+      // Switch between desktop/in-game windows when launching/closing game
       runningGameService.addGameRunningChangedListener((isGameRunning) => {
         if (isGameRunning) {
-          // Close desktop window
-          WindowsService.close(WindowNames.DESKTOP);
           // Open in-game window
           WindowsService.restore(WindowNames.IN_GAME);
+          // Close desktop window
+          WindowsService.close(WindowNames.DESKTOP);
           // And display a notification
           BackgroundController._displayNotification('Events', ingameMessage, 10);
         } else {
-          // Close in-game window
-          WindowsService.close(WindowNames.IN_GAME);
           // Open desktop window
           WindowsService.restore(WindowNames.DESKTOP);
+          // Close in-game window
+          WindowsService.close(WindowNames.IN_GAME);
+        }
+      });
+
+      // Listen to changes in windows
+      overwolf.windows.onStateChanged.addListener(async () => {
+        // If there's only 1 window (background) open, close the app
+        const openWindows = await WindowsService.getOpenWindows();
+        if (Object.keys(openWindows).length <= 1) {
+          window.close();
         }
       });
     }
