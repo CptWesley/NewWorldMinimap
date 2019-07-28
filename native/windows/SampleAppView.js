@@ -25,7 +25,9 @@ define([
       // Listen to X button click
       this._closeButton.addEventListener('click', this._showExitMinimizeModal);
       // Listen to minimize click
-      this._minimizeHeaderButton.addEventListener('click', this._backgroundWindow.minimize);
+      this._minimizeHeaderButton.addEventListener('click', () => {
+        this._backgroundWindow.minimize();
+      });
       // Close app on exit click
       this._exitButton.addEventListener('click', () => {
         this._backgroundWindow.close();
