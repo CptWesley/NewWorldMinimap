@@ -64,8 +64,8 @@
         "transparent": true,
         "resizable": true,
         "size": {
-          "width": 200,
-          "height": 200
+          "width": 1200,
+          "height": 659
         },
         "min_size": {
           "width": 1200,
@@ -84,8 +84,8 @@
         "transparent": true,
         "resizable": true,
         "size": {
-          "width": 620,
-          "height": 600
+          "width": 1641,
+          "height": 692
         },
         "min_size": {
           "width": 1641,
