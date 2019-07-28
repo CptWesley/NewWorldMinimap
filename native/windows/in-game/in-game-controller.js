@@ -1,6 +1,10 @@
 define([
-  '../../windows/in-game/in-game-view.js'
-], function (InGameView) {
+  '../../windows/in-game/in-game-view.js',
+  '../../scripts/services/hotkeys-service.js'
+], function (
+  InGameView,
+  HotkeysService
+  ) {
 
   class InGameController {
 
@@ -10,6 +14,7 @@ define([
       this._gameEventHandler = this._gameEventHandler.bind(this);
       this._infoUpdateHandler = this._infoUpdateHandler.bind(this);
       this._eventListener = this._eventListener.bind(this);
+      this._updateHotkey = this._updateHotkey.bind(this);
     }
 
     run() {
@@ -17,6 +22,15 @@ define([
       // the callback will be run in the context of the current window
       let mainWindow = overwolf.windows.getMainWindow();
       mainWindow.ow_eventBus.addListener(this._eventListener);
+
+      // Update hotkey view and listen to changes:
+      this._updateHotkey();
+      HotkeysService.addHotkeyChangeListener(this._updateHotkey);
+    }
+
+    async _updateHotkey() {
+      const hotkey = await HotkeysService.getToggleHotkey();
+      this.inGameView.updateHotkey(hotkey);
     }
 
     _eventListener(eventName, data) {

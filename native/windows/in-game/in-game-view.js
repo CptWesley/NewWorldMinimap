@@ -10,9 +10,11 @@ define([
       this._infoLog = document.getElementById('infoLog');
       this._copyEventsButton = document.getElementById('copyEvents');
       this._copyInfoButton = document.getElementById('copyInfo');
+      this._hotkey = document.getElementById('hotkey');
 
       this.logEvent = this.logEvent.bind(this);
       this.logInfoUpdate = this.logInfoUpdate.bind(this);
+      this.updateHotkey = this.updateHotkey.bind(this);
       this._copyEventsLog = this._copyEventsLog.bind(this);
       this._copyInfoLog = this._copyInfoLog.bind(this);
 
@@ -29,6 +31,11 @@ define([
     // Add a line to the info updates log
     logInfoUpdate(string, isHighlight) {
       this._logLine(this._infoLog, string, isHighlight);
+    }
+
+    // Update hotkey header
+    updateHotkey(hotkey) {
+      this._hotkey.textContent = hotkey;
     }
 
     // -- Private --

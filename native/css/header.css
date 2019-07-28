@@ -91,6 +91,14 @@
   line-height: 20px;
 }
 
+.tooltip a {
+  color: white;
+}
+
+.tooltip a:visited {
+  color: white;
+}
+
 .support:hover .tooltip {
   visibility: visible;
 }
