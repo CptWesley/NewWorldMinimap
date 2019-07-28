@@ -35,7 +35,7 @@
     ],
     "hotkeys": {
       "sample_app_showhide": {
-        "title": "Show In-Game Window",
+        "title": "Show/Hide In-Game Window",
         "action-type": "toggle",
         "default": "Ctrl+F"
       }
