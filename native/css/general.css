@@ -11,3 +11,9 @@ button {
 button:focus {
   outline: none;
 }
+
+#version {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}

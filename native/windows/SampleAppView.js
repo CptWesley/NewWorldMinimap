@@ -16,6 +16,7 @@ define([
       this._exitButton = document.getElementById("exit");
       this._minimizeButton = document.getElementById("minimize");
       this._header = document.getElementsByClassName('app-header')[0];
+      this._version = document.getElementById("version");
       // Inittialize
       this.init();
     }
@@ -44,6 +45,10 @@ define([
       overwolf.windows.getCurrentWindow(result => {
         this.dragService = new DragService(result.window, this._header);
       });
+      // Display version
+      overwolf.extensions.current.getManifest(manifest => {
+        this._version.textContent = `Version ${manifest.meta.version}`
+      })
     }
 
     _showExitMinimizeModal() {
