@@ -45,18 +45,8 @@
     "windows": {
       "background": {
         "file": "windows/background/background.html",
-        "native_window": true,
-        "desktop_only": true,
         "background_optimization": false,
-        "is_background_page": true,
-        "transparent": true,
-        "resizable": false,
-        "show_in_taskbar": false,
-        "size": {
-          "width": 100,
-          "height": 100
-        },
-        "grab_keyboard_focus": false
+        "is_background_page": true
       },
       "desktop": {
         "file": "windows/desktop/desktop.html",
@@ -79,6 +69,7 @@
       },
       "in_game": {
         "file": "windows/in-game/in-game.html",
+        "in_game_only": true,
         "focus_game_takeover": "ReleaseOnHidden",
         "focus_game_takeover_release_hotkey": "sample_app_showhide",
         "transparent": true,
