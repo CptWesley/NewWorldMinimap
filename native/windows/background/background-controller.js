@@ -4,13 +4,15 @@ define([
   '../../scripts/services/windows-service.js',
   '../../scripts/services/hotkeys-service.js',
   '../../scripts/services/gep-service.js',
-  '../../scripts/services/event-bus.js'
+  '../../scripts/services/event-bus.js',
+  '../../scripts/constants/notifications.js'
 ], function (WindowNames,
              runningGameService,
              WindowsService,
              hotkeysService,
              gepService,
-             eventBus) {
+             eventBus,
+             Notifications) {
 
   class BackgroundController {
     static async run() {
@@ -24,56 +26,10 @@ define([
       // Register handlers to hotkey events
       BackgroundController._registerHotkeys();
 
-      let isGameRunning = await runningGameService.isGameRunning();
-
-      // Obtain windows and set their sizes:
-      // Desktop:
-      const desktopWindowName = await WindowsService.getStartupWindowName();
-      const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
-      await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
-      await WindowsService.changePositionCenter(desktopWindowName);
-      // In-Game:
-      const inGameWindow = await WindowsService.obtainWindow(WindowNames.IN_GAME);
-      await WindowsService.changeSize(inGameWindow.window.id, 1641, 692);
-
-      const desktopMessage = `Note that app is targeted to Fortnite.
-        An app can declare itself as targeted to one or more games.`;
-      const ingameMessage = `Once you get into a match, you'll start seeing
-        events and info updates in the in-game window.`;
-
-      // Determine which window (desktop/in-game) to display when app is launched
-      if (!isGameRunning) {
-        // Game isn't runnig, display desktop window
-        WindowsService.restore(desktopWindowName);
-        BackgroundController._displayNotification('Notification', desktopMessage, 10);
-      }
-      else {
-        // Register to game events
-        gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
-        // Display in-game window
-        await WindowsService.restore(WindowNames.IN_GAME);
-        WindowsService.minimize(WindowNames.IN_GAME);
-        BackgroundController._displayNotification('Events', ingameMessage, 10);
-      }
+      await BackgroundController._restoreLaunchWindow();
 
       // Switch between desktop/in-game windows when launching/closing game
-      runningGameService.addGameRunningChangedListener(async (isGameRunning) => {
-        if (isGameRunning) {
-          // Register to game events
-          gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
-          // Open in-game window
-          await WindowsService.restore(WindowNames.IN_GAME);
-          // Close desktop window
-          WindowsService.close(WindowNames.DESKTOP);
-          // And display a notification
-          BackgroundController._displayNotification('Events', ingameMessage, 10);
-        } else {
-          // Open desktop window
-          await WindowsService.restore(WindowNames.DESKTOP);
-          // Close in-game window
-          WindowsService.close(WindowNames.IN_GAME);
-        }
-      });
+      runningGameService.addGameRunningChangedListener(BackgroundController._onRunningGameChanged);
 
       // Listen to changes in windows
       overwolf.windows.onStateChanged.addListener(async () => {
@@ -93,6 +49,73 @@ define([
       const openWindows = await WindowsService.getOpenWindows();
       for (let windowName in openWindows) {
         await WindowsService.minimize(windowName);
+      }
+    }
+
+    /**
+     * Handle game opening/closing
+     * @private
+     */
+    static async _onRunningGameChanged(isGameRunning) {
+      if (isGameRunning) {
+        // Register to game events
+        gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
+        // Open in-game window
+        await WindowsService.restore(WindowNames.IN_GAME);
+        // Close desktop window
+        WindowsService.close(WindowNames.DESKTOP);
+        // And display a notification
+        BackgroundController._displayNotification(
+          Notifications.IN_GAME.title,
+          Notifications.IN_GAME.message,
+          10
+        );
+      } else {
+        // Open desktop window
+        await WindowsService.restore(WindowNames.DESKTOP);
+        // Close in-game window
+        WindowsService.close(WindowNames.IN_GAME);
+      }
+    }
+
+    /**
+     * Open the relevant window on app launch
+     * @private
+     */
+    static async _restoreLaunchWindow() {
+      // Obtain windows and set their sizes:
+      // Desktop:
+      const desktopWindowName = await WindowsService.getStartupWindowName();
+      const desktopWindow = await WindowsService.obtainWindow(desktopWindowName);
+      await WindowsService.changeSize(desktopWindow.window.id, 1200, 659);
+      await WindowsService.changePositionCenter(desktopWindowName);
+      // In-Game:
+      const inGameWindow = await WindowsService.obtainWindow(WindowNames.IN_GAME);
+      await WindowsService.changeSize(inGameWindow.window.id, 1641, 692);
+
+      const isGameRunning = await runningGameService.isGameRunning();
+
+      // Determine which window (desktop/in-game) to display when app is launched
+      if (!isGameRunning) {
+        // Game isn't runnig, display desktop window
+        WindowsService.restore(desktopWindowName);
+        BackgroundController._displayNotification(
+          Notifications.DESKTOP.title,
+          Notifications.DESKTOP.message,
+          10
+        );
+      }
+      else {
+        // Register to game events
+        gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
+        // Display in-game window
+        await WindowsService.restore(WindowNames.IN_GAME);
+        WindowsService.minimize(WindowNames.IN_GAME);
+        BackgroundController._displayNotification(
+          Notifications.IN_GAME.title,
+          Notifications.IN_GAME.message,
+          10
+        );
       }
     }
 
