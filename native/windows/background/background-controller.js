@@ -48,8 +48,9 @@ define([
         BackgroundController._displayNotification('Notification', desktopMessage, 10);
       }
       else {
-        // Display in-game window
+        // Register to game events
         gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
+        // Display in-game window
         await WindowsService.restore(WindowNames.IN_GAME);
         WindowsService.minimize(WindowNames.IN_GAME);
         BackgroundController._displayNotification('Events', ingameMessage, 10);
@@ -58,6 +59,8 @@ define([
       // Switch between desktop/in-game windows when launching/closing game
       runningGameService.addGameRunningChangedListener(async (isGameRunning) => {
         if (isGameRunning) {
+          // Register to game events
+          gepService.registerToGEP(BackgroundController.onGameEvents, BackgroundController.onInfoUpdate);
           // Open in-game window
           await WindowsService.restore(WindowNames.IN_GAME);
           // Close desktop window
@@ -111,7 +114,7 @@ define([
       // to the event bus.
       setTimeout(() => {
         window.ow_eventBus.trigger('notification', data);
-      }, 500);
+      }, 1000);
     }
 
     /**

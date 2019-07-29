@@ -18,8 +18,10 @@ define([
       // set the features we are interested in receiving
       overwolf.games.events.setRequiredFeatures(REQUIRED_FEATURES, function (response) {
         if (response.status === 'error') {
-          setTimeout(registerToGEP, REGISTER_RETRY_TIMEOUT);
+          console.log(`Failed to register to GEP, retrying in ${REGISTER_RETRY_TIMEOUT / 1000}s...`);
+          setTimeout(registerToGEP, REGISTER_RETRY_TIMEOUT, eventsListener, infoListener);
         } else if (response.status === 'success') {
+          console.log(`Successfully registered to GEP.`);
           // Listen to game events. We call 'removeListener' before
           // 'addListener' to make sure we don't listen multiple times
           overwolf.games.events.onNewEvents.removeListener(eventsListener);
