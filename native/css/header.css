@@ -2,7 +2,7 @@
   position: relative;
   width: var(--size, 30px);
   height: var(--size, 30px);
-  transition: .15s;
+  transition: 0.15s;
 }
 .icon svg {
   width: 100%;
@@ -31,15 +31,17 @@
 
 .app-header {
   display: flex;
-  background-color: #525252;
+  background-color: #272727;
   align-items: center;
 }
 
 .app-header h1 {
-  font-family: Arial, Helvetica, sans-serif;
-  color: #D6D6D6;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  color: #8d8d8d;
   font-size: 14px;
-  padding-left: 2px;
+  padding-left: 8px;
   margin: 0;
 }
 
@@ -54,14 +56,15 @@
   display: flex;
   --color: #a8a8a8;
   --color-hover: #dedede;
-  --bg-color-hover: #272727;
+  --bg-color-hover: #464646;
 }
 
 .window-control {
   color: var(--color);
   background-color: transparent;
 }
-.window-control:hover, .window-control:active {
+.window-control:hover,
+.window-control:active {
   color: var(--color-hover);
   background-color: var(--bg-color-hover);
 }
@@ -86,17 +89,31 @@
   margin-top: -3px;
   width: 200px;
   right: 0px;
-  background: #272727;
+  background: #464646;
   padding: 30px 5px;
   line-height: 20px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #d5d5d5;
 }
 
 .tooltip a {
-  color: white;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #d5d5d5;
+}
+
+.tooltip hr {
+  border-color: #272727;
+  border-width: 0.5px;
 }
 
 .tooltip a:visited {
-  color: white;
+  color: #d5d5d5;
 }
 
 .support:hover .tooltip {

@@ -26,36 +26,73 @@ a {
 
 .desktopTop {
   color: white;
-  background-image: url("../img/background.svg");
+  background-image: url("../img/background.png");
   width: 100%;
   height: 243px;
   top: 0;
   text-align: center;
 }
 
-
 .desktopTop h1 {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 24px;
+  color: #d5d5d5;
   margin-top: 40px;
 }
 
 .desktopTop p {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  color: #d5d5d5;
   font-size: 15px;
   line-height: 20px;
 }
 
+#version {
+  margin-top: 57px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  color: #8d8d8d;
+}
+
 .desktopBottom {
-  background-color: #333333;
+  background-color: #464646;
   width: 100%;
   flex: 1;
   display: flex;
+  padding: 67px 0px;
 }
 
-.desktopBottom p {
-  color: white;
-  margin-top: 18px;
-  margin-left: 30px;
+.desktopBottom > #left {
+  flex: 1 1 30%;
+}
+
+.desktopBottom > #left > h1 {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
   font-size: 18px;
-  line-height: 135%;
+  margin: 0px 57px;
+  color: #d5d5d5;
+}
+
+.desktopBottom > #middle {
+  flex: 1 1 40%;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #8d8d8d;
+}
+
+.desktopBottom > #right {
+  flex: 1 1 30%;
 }
 
 #ad {

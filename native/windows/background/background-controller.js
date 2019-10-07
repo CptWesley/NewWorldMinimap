@@ -70,12 +70,6 @@ define([
         await WindowsService.restore(WindowNames.IN_GAME);
         // Close desktop window
         WindowsService.close(WindowNames.DESKTOP);
-        // And display a notification
-        BackgroundController._displayNotification(
-          Notifications.IN_GAME.title,
-          Notifications.IN_GAME.message,
-          10
-        );
       } else {
         // Open desktop window
         await WindowsService.restore(WindowNames.DESKTOP);
@@ -109,11 +103,6 @@ define([
       if (!isGameRunning) {
         // Game isn't runnig, display desktop window
         WindowsService.restore(desktopWindowName);
-        BackgroundController._displayNotification(
-          Notifications.DESKTOP.title,
-          Notifications.DESKTOP.message,
-          10
-        );
       } else {
         // Register to game events
         gepService.registerToGEP(
@@ -123,11 +112,6 @@ define([
         // Display in-game window
         await WindowsService.restore(WindowNames.IN_GAME);
         WindowsService.minimize(WindowNames.IN_GAME);
-        BackgroundController._displayNotification(
-          Notifications.IN_GAME.title,
-          Notifications.IN_GAME.message,
-          10
-        );
       }
     }
 

@@ -54,16 +54,16 @@
         "transparent": true,
         "resizable": true,
         "size": {
-          "width": 1200,
-          "height": 659
+          "width": 1212,
+          "height": 699
         },
         "min_size": {
-          "width": 1200,
-          "height": 659
+          "width": 1212,
+          "height": 699
         },
         "max_size": {
-          "width": 1200,
-          "height": 659
+          "width": 1212,
+          "height": 699
         },
         "desktop_only": true
       },
@@ -75,16 +75,16 @@
         "transparent": true,
         "resizable": true,
         "size": {
-          "width": 1641,
-          "height": 692
+          "width": 1212,
+          "height": 699
         },
         "min_size": {
-          "width": 1641,
-          "height": 692
+          "width": 1212,
+          "height": 699
         },
         "max_size": {
-          "width": 1641,
-          "height": 692
+          "width": 1212,
+          "height": 699
         }
       },
       "notification": {
