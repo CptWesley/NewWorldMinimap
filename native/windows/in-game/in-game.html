@@ -69,11 +69,19 @@
     <!-- --------------------------------- Main -------------------------------- -->
     <main>
       <div id="logs">
-        <div id="events">
+        <div id="events" class="logColumn">
           <h1>Game Events</h1>
+          <div id="eventsLog" class="dataText"></div>
+          <button id="copyEvents" class="logCopy">
+            COPY GAME EVENTS
+          </button>
         </div>
-        <div id="infoUpdates">
+        <div id="infoUpdates" class="logColumn">
           <h1>Info Updates</h1>
+          <div id="infoLog" class="dataText"></div>
+          <button id="copyInfo" class="logCopy">
+            COPY INFO UPDATES
+          </button>
         </div>
       </div>
       <div id="other">
@@ -86,6 +94,9 @@
           the developers console.
         </p>
         <div id="ad"></div>
+        <p id="sampleAdText">
+          This is a sample ad (400x300px) of the best size
+        </p>
       </div>
       <!-- <div id="events">
         <h1>Real Time Game Data</h1>

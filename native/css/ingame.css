@@ -15,6 +15,7 @@ body {
 
 main {
   display: flex;
+  flex: 1;
   position: relative;
   padding: 38px;
 }
@@ -27,34 +28,40 @@ h1 {
   color: #d5d5d5;
 }
 
-#events {
-  flex: 1 1 auto;
-}
-
-#infoUpdates {
-  flex: 1 1 auto;
-}
-
-#ad {
-  /* flex: 0 0 400px; */
-  /* margin-left: 19px; */
-  /* margin-top: 322px; */
-  /* margin-right: 13px; */
-  /* margin-bottom: 24px; */
-  height: 300px;
-  width: 400px;
-  background-color: #454545;
-  border-radius: 4px;
-}
-
 #logs {
   display: flex;
   justify-content: space-between;
   flex: 1 1 auto;
 }
 
+.logColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding-right: 30px;
+}
+
+#ad {
+  margin-top: auto;
+  height: 300px;
+  width: 400px;
+  background-color: #454545;
+  border-radius: 4px;
+}
+
 #other {
+  display: flex;
+  flex-direction: column;
   flex: 0 1 400px;
+}
+
+#other > #sampleAdText {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 133.59%;
+  align-self: center;
 }
 
 #other > p {
@@ -65,18 +72,18 @@ h1 {
   line-height: 150%;
 }
 
-/* .dataText {
-  width: 500px;
-  height: 380px;
+.dataText {
+  flex: 1;
   background-color: #949494;
   border-radius: 4px;
   overflow-x: hidden;
   white-space: nowrap;
   padding: 5px;
-} */
+  margin-top: 16px;
+}
 
 /* #logs h1 {
-  margin: 10px 0px;
+  margin-bottom: 20px;
 } */
 
 /* #logs p {
@@ -90,13 +97,18 @@ h1 {
   background-color: red;
 } */
 
-/* button.logCopy {
-  background: #525252;
-  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-  border-radius: 4px;
-  color: white;
-  font-size: 15px;
+button.logCopy {
+  background: #464646;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  color: #d5d5d5;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 120%;
   padding: 6px 8px;
   margin-top: 10px;
   cursor: pointer;
-} */
+  align-self: flex-start;
+}
