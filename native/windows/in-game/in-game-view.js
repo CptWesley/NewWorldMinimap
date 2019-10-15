@@ -47,11 +47,6 @@ define(["../SampleAppView.js"], function(SampleAppView) {
 
     // Copy text from log
     _copyLog(log) {
-      this._logLine(
-        log,
-        '{"feature":"inventory","category":"me","key":"inventory_0","value":"{"name":"Shotgun Shells","',
-        false
-      );
       // Get text from all span children
       const nodes = log.childNodes;
       let text = "";

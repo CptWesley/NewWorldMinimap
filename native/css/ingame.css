@@ -99,16 +99,22 @@ h1 {
   margin: 5px 0;
 }
 
-/* #logs h1 {
-  margin-bottom: 20px;
-} */
+.dataText::-webkit-scrollbar {
+  width: 20px;
+}
 
-/* #logs p {
-  color: black;
-  margin: 5px 0px;
-  white-space: normal;
-  word-break: break-all;
-} */
+.dataText::-webkit-scrollbar-track {
+  background: #333333;
+  border-left: 9px solid #464646;
+  border-right: 9px solid #464646;
+  margin: 10px 0px;
+}
+
+.dataText::-webkit-scrollbar-thumb {
+  background: #8d8d8d;
+  border-left: 8px solid #464646;
+  border-right: 8px solid #464646;
+}
 
 .highlight {
   color: #00defa;
