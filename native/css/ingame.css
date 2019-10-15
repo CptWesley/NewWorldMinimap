@@ -1,11 +1,9 @@
 .in-game {
   font-family: "Roboto";
-  color: #8d8d8d;
 }
 
 body {
-  background-color: #464646;
-  color: #131313;
+  background-color: #333333;
   margin: 0px;
   display: flex;
   flex-direction: column;
@@ -37,7 +35,7 @@ h1 {
 .logColumn {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
+  flex: 1 1 50%;
   padding-right: 30px;
 }
 
@@ -55,13 +53,24 @@ h1 {
   flex: 0 1 400px;
 }
 
+#other > #infoParagraph {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 150%;
+  color: #8d8d8d;
+}
+
 #other > #sampleAdText {
+  margin: 1em 0 0.5em 0;
   font-family: "Roboto Mono";
   font-style: normal;
   font-weight: normal;
   font-size: 13px;
   line-height: 133.59%;
   align-self: center;
+  color: #8d8d8d;
 }
 
 #other > p {
@@ -74,12 +83,20 @@ h1 {
 
 .dataText {
   flex: 1;
-  background-color: #949494;
+  background-color: #464646;
   border-radius: 4px;
   overflow-x: hidden;
   white-space: nowrap;
-  padding: 5px;
+  padding: 10px;
   margin-top: 16px;
+  color: #8d8d8d;
+  height: 0;
+}
+
+.dataText p {
+  white-space: normal;
+  word-break: break-all;
+  margin: 5px 0;
 }
 
 /* #logs h1 {
@@ -93,9 +110,9 @@ h1 {
   word-break: break-all;
 } */
 
-/* #logs span.highlight {
-  background-color: red;
-} */
+.highlight {
+  color: #00defa;
+}
 
 button.logCopy {
   background: #464646;
@@ -111,4 +128,9 @@ button.logCopy {
   margin-top: 10px;
   cursor: pointer;
   align-self: flex-start;
+}
+
+button.logCopy:hover {
+  background: #8d8d8d;
+  color: #ffffff;
 }
