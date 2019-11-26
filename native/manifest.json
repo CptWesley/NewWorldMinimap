@@ -9,7 +9,7 @@
     "icon": "IconMouseOver.png",
     "icon_gray": "IconMouseNormal.png",
     "launcher_icon": "desktop-icon.ico",
-    "window_icon": "IconMouseOver.png",
+    "window_icon": "TaskbarIcon.png",
     "description": "Sample app for new developers"
   },
   "permissions": [
