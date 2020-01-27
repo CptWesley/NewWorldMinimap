@@ -1,14 +1,12 @@
 define(function () {
-  let _listeners = [];
+  const _listeners = [];
 
   function addListener(eventHandler) {
     _listeners.push(eventHandler);
   }
 
   function trigger(eventName, data) {
-    for (let listener of _listeners) {
-      listener(eventName, data);
-    }
+    _listeners.forEach(listener => listener(eventName, data))
   }
 
   return {

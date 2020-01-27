@@ -3,7 +3,7 @@
  */
 define(function () {
 
-  let _gameRunningChangedListeners = [];
+  const _gameRunningChangedListeners = [];
 
   function _init() {
     overwolf.games.onGameInfoUpdated.removeListener(_onGameInfoUpdated);

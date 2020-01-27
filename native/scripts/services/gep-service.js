@@ -5,32 +5,44 @@
  */
 define([
 
-  ],
+],
   function () {
 
     const REQUIRED_FEATURES = [
-      'kill', 'killed', 'killer', 'revived', 'death', 'match', 'match_info',
-      'rank', 'me', 'phase', 'location', 'team', 'items', 'counters'
+      'counters',
+      'death',
+      'items',
+      'kill',
+      'killed',
+      'killer',
+      'location',
+      'match_info',
+      'match',
+      'me',
+      'phase',
+      'rank',
+      'revived',
+      'team',
     ];
     const REGISTER_RETRY_TIMEOUT = 10000;
 
     function registerToGEP(eventsListener, infoListener) {
-      // set the features we are interested in receiving
       overwolf.games.events.setRequiredFeatures(REQUIRED_FEATURES, function (response) {
         if (response.status === 'error') {
           console.log(`Failed to register to GEP, retrying in ${REGISTER_RETRY_TIMEOUT / 1000}s...`);
-          setTimeout(registerToGEP, REGISTER_RETRY_TIMEOUT, eventsListener, infoListener);
-        } else if (response.status === 'success') {
-          console.log(`Successfully registered to GEP.`);
-          // Listen to game events. We call 'removeListener' before
-          // 'addListener' to make sure we don't listen multiple times
-          overwolf.games.events.onNewEvents.removeListener(eventsListener);
-          overwolf.games.events.onNewEvents.addListener(eventsListener);
 
-          // Listen to info updates
-          overwolf.games.events.onInfoUpdates2.removeListener(infoListener);
-          overwolf.games.events.onInfoUpdates2.addListener(infoListener);
+          setTimeout(registerToGEP, REGISTER_RETRY_TIMEOUT, eventsListener, infoListener);
+          
+          return;
         }
+
+        console.log(`Successfully registered to GEP.`);
+        
+        overwolf.games.events.onNewEvents.removeListener(eventsListener);
+        overwolf.games.events.onNewEvents.addListener(eventsListener);
+
+        overwolf.games.events.onInfoUpdates2.removeListener(infoListener);
+        overwolf.games.events.onInfoUpdates2.addListener(infoListener);
       });
     }
 
