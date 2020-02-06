@@ -12,7 +12,7 @@ export class OWWindow {
   public async restore(): Promise<void> {
     let that = this;
 
-    return new Promise(async (resolve) => {
+    return new Promise<void>(async (resolve) => {
       await that.assureObtained();
       let id: string = <string>that._id;
       overwolf.windows.restore(id, result => {
@@ -26,7 +26,7 @@ export class OWWindow {
   public async minimize(): Promise<void> {
     let that = this;
 
-    return new Promise(async resolve => {
+    return new Promise<void>(async resolve => {
       await that.assureObtained();
       let id: string = <string>that._id;
       overwolf.windows.minimize(id, () => { });
@@ -37,7 +37,7 @@ export class OWWindow {
   public async maximize(): Promise<void> {
     let that = this;
 
-    return new Promise(async resolve => {
+    return new Promise<void>(async resolve => {
       await that.assureObtained();
       let id: string = <string>that._id;
       overwolf.windows.maximize(id, () => { });
@@ -48,7 +48,7 @@ export class OWWindow {
   public async hide(): Promise<void> {
     let that = this;
 
-    return new Promise(async resolve => {
+    return new Promise<void>(async resolve => {
       await that.assureObtained();
       let id: string = <string>that._id;
       overwolf.windows.hide(id, () => { });
@@ -84,7 +84,7 @@ export class OWWindow {
   public async getWindowState(): Promise<GetWindowStateResult> {
     let that = this;
 
-    return new Promise(async resolve => {
+    return new Promise<GetWindowStateResult>(async resolve => {
       await that.assureObtained();
       let id: string = <string>that._id;
       overwolf.windows.getWindowState(id, resolve);
@@ -92,7 +92,7 @@ export class OWWindow {
   }
 
   public static async getCurrentInfo(): Promise<overwolf.windows.WindowInfo> {
-    return new Promise(async resolve => {
+    return new Promise<overwolf.windows.WindowInfo>(async resolve => {
       overwolf.windows.getCurrentWindow(result => {
         resolve(result.window);
       })
@@ -126,7 +126,7 @@ export class OWWindow {
 
   private async assureObtained(): Promise<void> {
     let that = this;
-    return new Promise(async resolve => {
+    return new Promise<void>(async resolve => {
       await that.obtain();
       return resolve();
     });
@@ -135,7 +135,7 @@ export class OWWindow {
   private async internalClose(): Promise<void> {
     let that = this;
 
-    return new Promise(async (resolve, reject) => {
+    return new Promise<void>(async (resolve, reject) => {
       await that.assureObtained();
       let id: string = <string>that._id;
 

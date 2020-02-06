@@ -1,5 +1,5 @@
 export class OWGames {
-	public static getRunningGameInfo(): Promise<overwolf.games.RunningGameInfo> { 
+	public static getRunningGameInfo(): Promise<overwolf.games.RunningGameInfo> {
     return new Promise((resolve) => {
       overwolf.games.getRunningGameInfo(resolve);
     })
@@ -10,10 +10,10 @@ export class OWGames {
     return classId;
   }
 
-  public static async getRecentlyPlayedGames(limit: number = 3): 
+  public static async getRecentlyPlayedGames(limit: number = 3):
     Promise<number[]|null> {
 
-    return new Promise((resolve) => {
+    return new Promise<number[]|null>((resolve) => {
       if (!overwolf.games.getRecentlyPlayedGames) {
         return resolve(null);
       }
@@ -24,10 +24,10 @@ export class OWGames {
     })
   }
 
-  public static async getGameDBInfo(gameClassId: number): 
+  public static async getGameDBInfo(gameClassId: number):
     Promise<overwolf.games.GetGameDBInfoResult> {
 
-    return new Promise((resolve) => {     
+    return new Promise<overwolf.games.GetGameDBInfoResult>((resolve) => {
       overwolf.games.getGameDBInfo(gameClassId, resolve);
     });
   }
