@@ -4,27 +4,27 @@ import { OWHotkeys } from "../../odk-ts/ow-hotkeys";
 import { interestingFeatures, hotkeys, windowNames } from "../../consts";
 import WindowState = overwolf.windows.WindowState;
 
-// The window displayed in-game while a LoL game is running.
+// The window displayed in-game while a Fortnite game is running.
 // It listens to all info events and to the game events listed in the consts.ts file
 // and writes them to the relevant log using <pre> tags.
 // The window also sets up Ctrl+F as the minimize/restore hotkey.
 // Like the background window, it also implements the Singleton design pattern.
 class InGame extends AppWindow {
   private static _instance: InGame;
-  private lolGameEventsListener: OWGamesEvents;
-  private eventsLog: HTMLElement;
-  private infoLog: HTMLElement;
+  private _fortniteGameEventsListener: OWGamesEvents;
+  private _eventsLog: HTMLElement;
+  private _infoLog: HTMLElement;
 
   private constructor() {
     super(windowNames.inGame);
 
-    this.eventsLog = document.getElementById('eventsLog');
-    this.infoLog = document.getElementById('infoLog');
+    this._eventsLog = document.getElementById('eventsLog');
+    this._infoLog = document.getElementById('infoLog');
 
     this.setToggleHotkeyBehavior();
     this.setToggleHotkeyText();
 
-    this.lolGameEventsListener = new OWGamesEvents({
+    this._fortniteGameEventsListener = new OWGamesEvents({
       onInfoUpdates: this.onInfoUpdates.bind(this),
       onNewEvents: this.onNewEvents.bind(this)
     },
@@ -40,22 +40,22 @@ class InGame extends AppWindow {
   }
 
   public run() {
-    this.lolGameEventsListener.start();
+    this._fortniteGameEventsListener.start();
   }
 
   private onInfoUpdates(info) {
-    this.logLine(this.infoLog, info, false);
+    this.logLine(this._infoLog, info, false);
   }
 
   // Special events will be highlighted in the event log
   private onNewEvents(e) {
     const shouldHighlight = e.events.some(event => {
       return event.name === 'kill' ||
-             event.name === 'death' ||
-             event.name === 'assist' ||
-             event.name === 'level'
+        event.name === 'death' ||
+        event.name === 'assist' ||
+        event.name === 'level'
     });
-    this.logLine(this.eventsLog, e, shouldHighlight);
+    this.logLine(this._eventsLog, e, shouldHighlight);
   }
 
   // Displays the toggle minimize/restore hotkey in the window header
@@ -72,10 +72,10 @@ class InGame extends AppWindow {
       const inGameState = await this.getWindowState();
 
       if (inGameState.window_state === WindowState.NORMAL ||
-          inGameState.window_state === WindowState.MAXIMIZED) {
+        inGameState.window_state === WindowState.MAXIMIZED) {
         this.currWindow.minimize();
       } else if (inGameState.window_state === WindowState.MINIMIZED ||
-                 inGameState.window_state === WindowState.CLOSED) {
+        inGameState.window_state === WindowState.CLOSED) {
         this.currWindow.restore();
       }
     }

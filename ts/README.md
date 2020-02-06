@@ -40,7 +40,7 @@ In our manifest.json file, we have [```{ "start_window": "background" }```](http
 
 
 ### windows/background
-This folder holds the background window, which serves as the application's starting point and window orchestrator. The window's ```run()``` method detects whether a League of Legends game is currently running, decides which window to launch accordingly, and listens for changes.
+This folder holds the background window, which serves as the application's starting point and window orchestrator. The window's ```run()``` method detects whether a Fortnite game is currently running, decides which window to launch accordingly, and listens for changes.
 
 The background window has no visual representation, which can be gleaned from the empty background.html file or from the [```{ is_background_page: true }```](https://overwolf.github.io/docs/api/manifest-json#is_background_page) property the background window has in our manifest.json.
 
