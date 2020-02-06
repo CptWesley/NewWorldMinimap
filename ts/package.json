@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "webpack --mode=development",
     "dev": "webpack --watch --mode=development"
   },
   "keywords": [],

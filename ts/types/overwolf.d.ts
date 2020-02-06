@@ -1,3 +1,10 @@
+/* ******************************************************************************** */
+// IMPORTANT NOTICE
+// Currently, the Overwolf SDK is written in javascript. This file holds type definitions
+// for the SDK methods overwolf offers. We are constantly working on improving our SDK and
+// this file will be released as a proper stand-alone package in the future.
+/* ******************************************************************************** */
+
 declare namespace overwolf {
   const version: string;
 
@@ -640,8 +647,8 @@ declare namespace overwolf.media.replays {
   }
 
   interface raw_events {
-    type:string;
-    time:number;
+    type: string;
+    time: number;
   }
 
   /**
@@ -828,7 +835,7 @@ declare namespace overwolf.media.replays {
    * Fired when a new Replay highlight recorded (when highlightsSetting is enabled).
    */
   const onHighlightsCapturedEvent: Event<onHighlightsCapturedEvent>;
-  
+
 }
 
 declare namespace overwolf.profile {
@@ -3236,10 +3243,10 @@ declare namespace overwolf.streaming {
      * Defines the settings of the specific encoder.
      */
     config?:
-      | StreamingVideoEncoderNVIDIA_NVENCSettings
-      | StreamingVideoEncoderIntelSettings
-      | StreamingVideoEncoderx264Settings
-      | StreamingVideoEncoderAMD_AMFSettings;
+    | StreamingVideoEncoderNVIDIA_NVENCSettings
+    | StreamingVideoEncoderIntelSettings
+    | StreamingVideoEncoderx264Settings
+    | StreamingVideoEncoderAMD_AMFSettings;
   }
 
   /**
@@ -3263,7 +3270,7 @@ declare namespace overwolf.streaming {
   /**
    * Defines the configuration for an Intel encoder.
    */
-  interface StreamingVideoEncoderIntelSettings {}
+  interface StreamingVideoEncoderIntelSettings { }
 
   /**
    * Defines the configuration for an x264 encoder.
@@ -3676,7 +3683,7 @@ declare namespace overwolf.os {
     info: RegionInfo;
   }
 
-  interface RegionInfo{
+  interface RegionInfo {
     date_format?: string;
     time_format?: string;
     currency_symbol?: string;
@@ -3705,11 +3712,11 @@ declare namespace overwolf.os.tray {
     sub_items?: menu_item[];
   }
 
-   /**
-   * Fired when an item from the tray icon’s context menu is selected.
-   */
+  /**
+  * Fired when an item from the tray icon’s context menu is selected.
+  */
   const onMenuItemClicked: Event<onMenuItemClickedEvent>;
-  
+
   interface onMenuItemClickedEvent {
     item: string;
   }
@@ -4268,7 +4275,7 @@ declare namespace overwolf.extensions {
     left: number;
   }
 
-  interface GetManifestResult extends Result, Manifest {}
+  interface GetManifestResult extends Result, Manifest { }
 
   interface GetInfoResult extends Result {
     info: string;
@@ -4302,14 +4309,14 @@ declare namespace overwolf.extensions {
     version: string;
     state: ExtensionUpdateState
   }
-  
+
   /**
    * The following types are related to the |onUncaughtException| event - which
    * is a different than the usual events.
    */
-  type UncaughtExceptionCallback = (message: string, 
-                                    functionName: string, 
-                                    scriptName: string) => void;
+  type UncaughtExceptionCallback = (message: string,
+    functionName: string,
+    scriptName: string) => void;
 
   interface UncaughtExceptionEvent {
     addListener(callback: UncaughtExceptionCallback): void;
