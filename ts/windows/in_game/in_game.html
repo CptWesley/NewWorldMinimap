@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="../../css/general.css" />
+  <link rel="stylesheet" href="../../css/header.css" />
+  <link rel="stylesheet" href="../../css/ingame.css" />
+  <link rel="stylesheet" href="../../css/modal.css" />
+  <title>Overwolf Sample App - In-Game page</title>
+</head>
+<body class="in-game">
+  <!-- -------------------------------- Header ------------------------------- -->
+
+  <header id="header" class="app-header">
+    <img src="../../img/header_icon.svg" />
+    <h1>Sample App / in-game window</h1>
+    <h1 style="margin: auto;">
+      Show/Hide:
+      <span id="hotkey" style="font-weight: bold; color: white;"></span>
+    </h1>
+    <div class="window-controls-group">
+      <button class="icon window-control support">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_support" />
+        </svg>
+        <div class="tooltip">
+          <a target="_blank" href="https://discord.gg/v5cfBTq">Talk to us on Discord</a><br />
+          <a target="_blank" href="http://support.overwolf.com/">FAQ page at Overwolf</a>
+          <hr />
+          <h3>Social Media</h3>
+          <div class="socialIcons">
+            <a target="_blank" href="https://twitter.com/theoverwolf">
+              <img src="../../img/twitter.svg" />
+            </a>
+            <a target="_blank" href="https://www.facebook.com/Overwolf/">
+              <img src="../../img/facebook.svg" />
+            </a>
+            <a target="_blank" href="https://www.reddit.com/r/Overwolf/">
+              <img src="../../img/reddit.png" />
+            </a>
+          </div>
+        </div>
+      </button>
+      <a class="icon window-control" href="overwolf://settings/hotkeys">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_settings" />
+        </svg>
+      </a>
+      <button class="icon window-control" id="minimizeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+        </svg>
+      </button>
+      <button class="icon window-control" id="maximizeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_maximize" />
+        </svg>
+      </button>
+      <button class="icon window-control window-control-close" id="closeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_close" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- --------------------------------- Main -------------------------------- -->
+  <main>
+    <div id="logs">
+      <div id="events" class="logColumn">
+        <h1>Game Events</h1>
+        <div id="eventsLog" class="dataText">
+        </div>
+      </div>
+      <div id="infoUpdates" class="logColumn">
+        <h1>Info Updates</h1>
+        <div id="infoLog" class="dataText"></div>
+      </div>
+    </div>
+    <div id="other">
+      <h1>Real time Game Data</h1>
+      <p id="infoParagraph">
+        The background controller of this app is listening to all the game
+        events and info updates, and sends them to this window, that prints
+        them to the screen. Some specific events (startMatch, Kill and Death)
+        are painted in <span style="color: #00DEFA">teal</span> and logged to
+        the developers console.
+      </p>
+      <div id="ad"></div>
+      <p id="sampleAdText">
+        This is a sample ad (400x300px) of the best size
+      </p>
+    </div>
+  </main>
+
+  <!-- -------------------------------- Modal -------------------------------- -->
+  <div id="exitMinimizeModal" class="modal">
+    <div class="modal-content">
+      <h3>Exit the app?</h3>
+      <p>
+        Exiting the app will close all the app windows and terminate the app
+        process.<br />
+        <br />
+        Are you sure?
+      </p>
+      <span class="buttonBar">
+        <button id="minimize" class="modalButton">
+          Minimize
+        </button>
+        <button id="exit" class="modalButton">
+          Exit
+        </button>
+      </span>
+    </div>
+  </div>
+  <script src="http://content.overwolf.com/libs/ads/latest/owads.min.js" async onload="onOwAdReady()"></script>
+  <script>
+    function onOwAdReady() {
+      const owAd = new OwAd(document.getElementById("ad"));
+      function onWindowStateChanged(state) {
+        if (state && state.window_name === "desktop") {
+          // when state changes to minimized, call removeAd()
+          if (state.window_state === "minimized") {
+            owAd.removeAd();
+          }
+          // when state changes from minimized to normal, call refreshAd()
+          else if (
+            state.window_previous_state === "minimized" &&
+            state.window_state === "normal"
+          ) {
+            owAd.refreshAd();
+          }
+        }
+      }
+
+      overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
+      overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
+    }
+  </script>
+  <script>
+    // Standard Google Universal Analytics code
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      },
+        i[r].l = 1 * new Date(); a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+      // Note: https protocol here
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-144253676-3', 'auto');
+
+    // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
+    ga('set', 'checkProtocolTask', function () { });
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview', '/in_game.html');
+  </script>
+</body>
+</html>

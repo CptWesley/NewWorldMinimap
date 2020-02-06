@@ -12,8 +12,8 @@ define(function () {
     }
 
     /**
-     * check that the mouse is moved in a significant distance to prevent
-     * unnecessary calls for dragMove
+     * check that the mouse is moved a significant distance to prevent
+     * unnecessary calls to dragMove
      * @param event mouse event
      * @returns {boolean}
      * @private
@@ -23,15 +23,11 @@ define(function () {
         return false;
       }
 
-      let x = event.clientX;
-      let y = event.clientY;
-      let diffX = Math.abs(x - this.initialMousePosition.x);
-      let diffY = Math.abs(y - this.initialMousePosition.y);
-      let isSignificant =
-        (diffX > SIGNIFICANT_MOUSE_MOVE_THRESHOLD) ||
-        (diffY > SIGNIFICANT_MOUSE_MOVE_THRESHOLD);
-
-      return isSignificant;
+      const x = event.clientX;
+      const y = event.clientY;
+      const diffX = Math.abs(x - this.initialMousePosition.x);
+      const diffY = Math.abs(y - this.initialMousePosition.y);
+      return diffX > SIGNIFICANT_MOUSE_MOVE_THRESHOLD || diffY > SIGNIFICANT_MOUSE_MOVE_THRESHOLD;
     }
 
     onDragStart(event) {
@@ -47,8 +43,7 @@ define(function () {
         return;
       }
 
-      let isSignificantMove = this._isSignificantMouseMove(event);
-      if (!isSignificantMove) {
+      if (!this._isSignificantMouseMove(event)) {
         return;
       }
 

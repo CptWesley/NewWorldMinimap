@@ -1,12 +1,4 @@
-define([
-  '../constants/window-names.js',
-  '../services/launch-source-service.js',
-  '../services/running-game-service.js',
-  '../services/utils-service.js',
-], function (WindowNames,
-             launchSourceService,
-             runningGameService,
-             utilsService) {
+define([ ], function () {
 
   /**
    * obtain a window object by a name as declared in the manifest
@@ -22,18 +14,6 @@ define([
           return reject(response);
         }
         resolve(response);
-      });
-    });
-  }
-
-  function _getCurrentWindow() {
-    return new Promise((resolve, reject) => {
-      overwolf.windows.getCurrentWindow(result => {
-        if (result.status === 'success') {
-          resolve(result.window);
-        } else {
-          reject(result);
-        }
       });
     });
   }
@@ -61,29 +41,6 @@ define([
   }
 
   /**
-   * start dragging the current window
-   * @param name
-   * @returns {Promise<any>}
-   */
-  function dragMove(name) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await obtainWindow(name);
-        let window = await _getCurrentWindow();
-        overwolf.windows.dragMove(window.id, (result) => {
-          if (result.status === 'success') {
-            resolve();
-          } else {
-            reject(result)
-          }
-        })
-      } catch (e) {
-        reject(e)
-      }
-    })
-  }
-
-  /**
    * minimize a window by name
    * @param name
    * @returns {Promise<any>}
@@ -103,46 +60,6 @@ define([
         reject(e)
       }
     });
-  }
-
-  /**
-   * change window size by window id
-   * @param windowId
-   * @returns {Promise<any>}
-   */
-  function changeSize(windowId, width, height) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        overwolf.windows.changeSize(windowId, width, height, (result) => {
-          if (result.status === 'success') {
-            resolve();
-          } else {
-            reject(result);
-          }
-        });
-      } catch (e) {
-        reject(e)
-      }
-    });
-  }
-
-  /**
-   * get the name of the window to show first
-   * @returns {Promise<*>}
-   */
-  async function getStartupWindowName() {
-    let launchSource = launchSourceService.getLaunchSource();
-
-    if (launchSource === 'gamelaunchevent') {
-      return WindowNames.IN_GAME;
-    }
-
-    let isGameRunning = await runningGameService.isGameRunning();
-    if (isGameRunning) {
-      return WindowNames.IN_GAME;
-    }
-
-    return WindowNames.DESKTOP;
   }
 
   /**
@@ -197,55 +114,13 @@ define([
       }
     });
   }
-
-  /**
-   * Change window position
-   * @returns {Promise<*>}
-   */
-  async function changePosition(windowId, left, top) {
-    return new Promise(async (resolve, reject) => {
-      try {
-        overwolf.windows.changePosition(windowId, left, top, (result) => {
-          if (result.status === 'success') {
-            resolve();
-          } else {
-            reject(result);
-          }
-        })
-      } catch (e){
-        reject(e);
-      }
-    });
-  }
-
-  /**
-   * Change window position to screen center
-   * @returns {Promise<*>}
-   */
-  async function changePositionCenter(windowId) {
-    const window = await obtainWindow(windowId);
-    const monitors = await utilsService.getMonitorsList();
-
-    const { width: windowWidth, height: windowHeight } = window.window;
-    const { width: monitorWidth, height: monitorHeight } = monitors[0];
-
-    const left = (monitorWidth / 2) - (windowWidth /  2);
-    const top = (monitorHeight / 2) - (windowHeight /  2);
-
-    return await changePosition(windowId, parseInt(left), parseInt(top));
-  }
-
+  
   return {
     restore,
-    dragMove,
     minimize,
-    getStartupWindowName,
     obtainWindow,
-    changeSize,
     getOpenWindows,
     close,
-    getWindowState,
-    changePosition,
-    changePositionCenter
+    getWindowState
   }
 });

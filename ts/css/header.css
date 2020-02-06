@@ -1,0 +1,134 @@
+.icon {
+  position: relative;
+  width: var(--size, 30px);
+  height: var(--size, 30px);
+  transition: 0.15s;
+}
+.icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.toggle-icons svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+}
+.toggle-icons svg:nth-of-type(1) {
+  opacity: 1;
+}
+.toggle-icons svg:nth-of-type(2) {
+  opacity: 0;
+}
+
+.toggle-icons.toggled svg:nth-of-type(1) {
+  opacity: 0;
+}
+.toggle-icons.toggled svg:nth-of-type(2) {
+  opacity: 1;
+}
+
+.app-header {
+  display: flex;
+  background-color: #272727;
+  align-items: center;
+}
+
+.app-header h1 {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  color: #8d8d8d;
+  font-size: 14px;
+  padding-left: 8px;
+  margin: 0;
+}
+
+.app-header img {
+  padding-left: 10px;
+  margin: 0;
+}
+
+.window-controls-group {
+  z-index: 1001;
+  margin-left: auto;
+  display: flex;
+  --color: #a8a8a8;
+  --color-hover: #dedede;
+  --bg-color-hover: #464646;
+}
+
+.window-control {
+  color: var(--color);
+  background-color: transparent;
+}
+.window-control:hover,
+.window-control:active {
+  color: var(--color-hover);
+  background-color: var(--bg-color-hover);
+}
+
+.window-control-close {
+  --color-hover: #dedede;
+  --bg-color-hover: #c21913;
+}
+
+.light-theme {
+  background-color: #f6f6f6;
+}
+.light-theme .window-controls-group {
+  --color: #828282;
+  --color-hover: #4f4f4f;
+  --bg-color-hover: #dedede;
+}
+
+.tooltip {
+  visibility: hidden;
+  position: absolute;
+  margin-top: -3px;
+  width: 200px;
+  right: 0px;
+  background: #464646;
+  padding: 30px 5px;
+  line-height: 20px;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #d5d5d5;
+}
+
+.tooltip a {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  color: #d5d5d5;
+}
+
+.tooltip hr {
+  border-color: #272727;
+  border-width: 0.5px;
+}
+
+.tooltip a:visited {
+  color: #d5d5d5;
+}
+
+.support:hover .tooltip {
+  visibility: visible;
+}
+
+.socialIcons {
+  margin-top: 20px;
+  margin-right: 10px;
+}
+
+.socialIcons img {
+  vertical-align: middle;
+}
+
+.socialIcons a {
+  text-decoration: none;
+}

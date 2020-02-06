@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="../../css/general.css" />
+  <link rel="stylesheet" href="../../css/header.css" />
+  <link rel="stylesheet" href="../../css/desktop.css" />
+  <link rel="stylesheet" href="../../css/modal.css" />
+  <title>Overwolf Sample App - Desktop page</title>
+</head>
+
+<body class="desktop">
+  <!-- -------------------------------- Header ------------------------------- -->
+
+  <header id="header" class="app-header">
+    <img src="../../img/header_icon.svg" />
+    <h1>Sample App / desktop window</h1>
+    <div class="window-controls-group">
+      <button class="icon window-control support">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_support" />
+        </svg>
+        <div class="tooltip">
+          <a target="_blank" href="https://discord.gg/v5cfBTq">Talk to us on Discord</a><br />
+          <a target="_blank" href="http://support.overwolf.com/">FAQ page at Overwolf</a>
+          <hr />
+          <h3>Social Media</h3>
+          <div class="socialIcons">
+            <a target="_blank" href="https://twitter.com/theoverwolf">
+              <img src="../../img/twitter.svg" />
+            </a>
+            <a target="_blank" href="https://www.facebook.com/Overwolf/">
+              <img src="../../img/facebook.svg" />
+            </a>
+            <a target="_blank" href="https://www.reddit.com/r/Overwolf/">
+              <img src="../../img/reddit.png" />
+            </a>
+          </div>
+        </div>
+      </button>
+      <a class="icon window-control" href="overwolf://settings/hotkeys">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_settings" />
+        </svg>
+      </a>
+      <button class="icon window-control" id="minimizeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+        </svg>
+      </button>
+      <button class="icon window-control" id="maximizeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_maximize" />
+        </svg>
+      </button>
+      <button class="icon window-control window-control-close" id="closeButton">
+        <svg>
+          <use xlink:href="/img/header_icons.svg#window-control_close" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- --------------------------------- Main -------------------------------- -->
+  <main>
+    <div class="desktopTop">
+      <h1>Overwolf Sample App</h1>
+      <p>
+        Welcome to the Overwolf tutorial app for developers.<br />
+        Learn how to build an app by using one!
+      </p>
+      <div id="version"></div>
+    </div>
+    <div class="desktopBottom">
+      <!-- Launch Fortnite! -->
+      <div id="left">
+        <h1>
+          Launch Fortnite and the In-Game window will pop-up automatically!
+        </h1>
+      </div>
+      <!-- Launch Fortnite! -->
+      <div id="middle">
+        What can you learn with this sample app?
+        <br /><br />
+        1. How to listen to real-time game events and how to identify specific
+        events like start/end match, kill, and death.
+        <br /><br />
+        2. How to use a transparent background window as a service bus, that
+        acts as the main controller of your app.
+        <br /><br />
+        3. How to use Hotkeys that show/hide your app while you are in-game.
+      </div>
+      <!-- picture -->
+      <div id="right">
+        <div style="text-align: center">
+          <div style="display: inline-block">
+            <img src="../../img/cool_wolf.png" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- -------------------------------- Modal -------------------------------- -->
+  <div id="exitMinimizeModal" class="modal">
+    <div class="modal-content">
+      <h3>Exit the app?</h3>
+      <p>
+        Exiting the app will close all the app windows and terminate the app
+        process.<br />
+        <br />
+        Are you sure?
+      </p>
+      <span class="buttonBar">
+        <button id="minimize" class="modalButton">
+          Minimize
+        </button>
+        <button id="exit" class="modalButton">
+          Exit
+        </button>
+      </span>
+    </div>
+  </div>
+  <script>
+    // Standard Google Universal Analytics code
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      },
+        i[r].l = 1 * new Date(); a = s.createElement(o),
+          m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+      // Note: https protocol here
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-144253676-3', 'auto');
+
+    // Removes failing protocol check. @see: http://stackoverflow.com/a/22152353/1958200
+    ga('set', 'checkProtocolTask', function () { });
+    ga('require', 'displayfeatures');
+    ga('send', 'pageview', '/desktop.html');
+  </script>
+</body>
+
+</html>

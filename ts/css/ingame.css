@@ -1,0 +1,143 @@
+.in-game {
+  font-family: "Roboto";
+}
+
+body {
+  background-color: #333333;
+  margin: 0px;
+  display: flex;
+  flex-direction: column;
+  font-size: 14px;
+  min-height: 100vh;
+}
+
+main {
+  display: flex;
+  flex: 1;
+  position: relative;
+  padding: 38px;
+}
+
+h1 {
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  color: #d5d5d5;
+}
+
+#logs {
+  display: flex;
+  justify-content: space-between;
+  flex: 1 1 auto;
+}
+
+.logColumn {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 50%;
+  padding-right: 30px;
+}
+
+#ad {
+  margin-top: auto;
+  height: 300px;
+  width: 400px;
+  background-color: #454545;
+  border-radius: 4px;
+}
+
+#other {
+  display: flex;
+  flex-direction: column;
+  flex: 0 1 400px;
+}
+
+#other > #infoParagraph {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 150%;
+  color: #8d8d8d;
+}
+
+#other > #sampleAdText {
+  margin: 1em 0 0.5em 0;
+  font-family: "Roboto Mono";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 13px;
+  line-height: 133.59%;
+  align-self: center;
+  color: #8d8d8d;
+}
+
+#other > p {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 150%;
+}
+
+.dataText {
+  flex: 1;
+  background-color: #464646;
+  border-radius: 4px;
+  overflow-x: hidden;
+  white-space: nowrap;
+  padding: 10px;
+  margin-top: 16px;
+  color: #8d8d8d;
+  height: 0;
+  max-width: inherit;
+}
+
+.dataText pre {
+  white-space: pre-line;
+  word-break: break-word;
+  margin: 5px 0;
+}
+
+.dataText::-webkit-scrollbar {
+  width: 20px;
+}
+
+.dataText::-webkit-scrollbar-track {
+  background: #333333;
+  border-left: 9px solid #464646;
+  border-right: 9px solid #464646;
+  margin: 10px 0px;
+}
+
+.dataText::-webkit-scrollbar-thumb {
+  background: #8d8d8d;
+  border-left: 8px solid #464646;
+  border-right: 8px solid #464646;
+}
+
+.highlight {
+  color: #00defa;
+}
+
+button.logCopy {
+  background: #464646;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  color: #d5d5d5;
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: bold;
+  font-size: 12px;
+  line-height: 120%;
+  padding: 6px 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+button.logCopy:hover {
+  background: #8d8d8d;
+  color: #ffffff;
+}
