@@ -1,5 +1,12 @@
 # Sample - TS
 Example-ts is an example app, meant to be used as a reference for developers who are new to Overwolf.
+The app is meant to demonstrate some basic points and flows that are relevant when developing Overwolf apps:
+
+- Auto-launch when a game starts.
+- Register to the overwolf.games.events API and receive real time events from the game.
+- Define a custom hotkey to be used in-game.
+- Communicate between the app windows according to our best practices.
+
 
 ## Setting up
 In order to run the app, you must first complete several steps:
@@ -75,3 +82,9 @@ We are constantly working on improving our SDK and both the odk-ts and the types
 
 ### css, icons, and images
 All of the visual resources used by the app.
+
+
+## Notes
+Editing the author or app name in the manifest will prevent loading the app as an unpacked app.
+
+For any further information or questions, contact developers@overwolf.com
