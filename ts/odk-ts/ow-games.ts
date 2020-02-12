@@ -1,6 +1,9 @@
+type GetGameDBInfoResult = overwolf.games.GetGameDBInfoResult
+type RunningGameInfo = overwolf.games.RunningGameInfo
+
 export class OWGames {
-	public static getRunningGameInfo(): Promise<overwolf.games.RunningGameInfo> {
-    return new Promise((resolve) => {
+	public static getRunningGameInfo(): Promise<RunningGameInfo> {
+    return new Promise<RunningGameInfo>((resolve) => {
       overwolf.games.getRunningGameInfo(resolve);
     })
   }
@@ -25,9 +28,9 @@ export class OWGames {
   }
 
   public static async getGameDBInfo(gameClassId: number):
-    Promise<overwolf.games.GetGameDBInfoResult> {
+    Promise<GetGameDBInfoResult> {
 
-    return new Promise<overwolf.games.GetGameDBInfoResult>((resolve) => {
+    return new Promise<GetGameDBInfoResult>((resolve) => {
       overwolf.games.getGameDBInfo(gameClassId, resolve);
     });
   }
