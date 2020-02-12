@@ -1,5 +1,5 @@
 type GetWindowStateResult = overwolf.windows.GetWindowStateResult;
-
+type OwWindowInfo = overwolf.windows.WindowInfo;
 export class OWWindow {
   private _name: string | null;
   private _id: string | null;
@@ -91,15 +91,15 @@ export class OWWindow {
     })
   }
 
-  public static async getCurrentInfo(): Promise<overwolf.windows.WindowInfo> {
-    return new Promise<overwolf.windows.WindowInfo>(async resolve => {
+  public static async getCurrentInfo(): Promise<OwWindowInfo> {
+    return new Promise<OwWindowInfo>(async resolve => {
       overwolf.windows.getCurrentWindow(result => {
         resolve(result.window);
       })
     })
   }
 
-  private obtain(): Promise<overwolf.windows.WindowInfo | null> {
+  private obtain(): Promise<OwWindowInfo | null> {
     return new Promise((resolve, reject) => {
       const cb = res => {
         if (res && res.status === "success" && res.window && res.window.id) {
