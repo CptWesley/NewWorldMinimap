@@ -11,7 +11,7 @@ export class Timer {
 
   //----------------------------------------------------------------------------
   public static async wait(intervalInMS: number): Promise<void> {
-    return new Promise(resolve => {
+    return new Promise<void>(resolve => {
       setTimeout(resolve, intervalInMS);
     })
   }
