@@ -9,6 +9,7 @@ define(function () {
 
       element.addEventListener('mousedown', this.onDragStart.bind(this));
       element.addEventListener('mousemove', this.onMouseMove.bind(this));
+      element.className = element.className + ' draggable';
     }
 
     /**
