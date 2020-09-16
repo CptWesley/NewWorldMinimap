@@ -30,12 +30,13 @@
         "native_window": true,
         "resizable": true,
         "transparent": true,
+        "override_on_update": true,
         "size": {
-          "width": 1212,
+          "width": 500,
           "height": 699
         },
         "min_size": {
-          "width": 1212,
+          "width": 500,
           "height": 699
         }
       },
@@ -46,6 +47,7 @@
         "focus_game_takeover_release_hotkey": "showhide",
         "resizable": true,
         "transparent": true,
+        "override_on_update": true,
         "size": {
           "width": 1212,
           "height": 699
