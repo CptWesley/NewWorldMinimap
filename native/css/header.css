@@ -33,6 +33,7 @@
   display: flex;
   background-color: #272727;
   align-items: center;
+  z-index: 9999;
 }
 
 .app-header h1 {
@@ -43,6 +44,16 @@
   font-size: 14px;
   padding-left: 8px;
   margin: 0;
+}
+
+.app-header.draggable,
+.app-header.draggable h1 {
+    user-select: none;
+
+    cursor: move;
+    cursor: grab;
+    cursor: -moz-grab;
+    cursor: -webkit-grab;
 }
 
 .app-header img {

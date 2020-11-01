@@ -75,6 +75,7 @@ export class OWWindow {
   }
 
   public dragMove(elem: HTMLElement) {
+    elem.className = elem.className + ' draggable';
     elem.onmousedown = e => {
       e.preventDefault();
       overwolf.windows.dragMove(this._name);
