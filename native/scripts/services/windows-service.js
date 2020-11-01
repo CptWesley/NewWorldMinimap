@@ -106,7 +106,7 @@ define([ ], function () {
           if (state.status === 'success') {
             resolve(state.window_state_ex);
           } else {
-            reject(result);
+            reject(state);
           }
         })
       } catch (e){
