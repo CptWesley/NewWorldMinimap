@@ -1060,8 +1060,13 @@ declare namespace overwolf.windows {
     }
   }
 
-  type WindowStateEx =
-    "closed" | "minimized" | "hidden" | "normal" | "maximized";
+  const enum WindowStateEx {
+    CLOSED = "closed",
+    MINIMIZED = "minimized",
+    HIDDEN = "hidden",
+    NORMAL = "normal",
+    MAXIMIZED = "maximized"
+  }
 
   interface WindowInfo {
     name: string;

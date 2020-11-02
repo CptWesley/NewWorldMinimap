@@ -2,7 +2,7 @@ import { AppWindow } from "../AppWindow";
 import { OWGamesEvents } from "../../odk-ts/ow-games-events";
 import { OWHotkeys } from "../../odk-ts/ow-hotkeys";
 import { interestingFeatures, hotkeys, windowNames } from "../../consts";
-import WindowState = overwolf.windows.WindowState;
+import WindowState = overwolf.windows.WindowStateEx;
 
 // The window displayed in-game while a Fortnite game is running.
 // It listens to all info events and to the game events listed in the consts.ts file
