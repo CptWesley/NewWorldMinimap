@@ -1,7 +1,7 @@
 import { AppWindow } from "../AppWindow";
 import { OWGamesEvents } from "../../odk-ts/ow-games-events";
 import { OWHotkeys } from "../../odk-ts/ow-hotkeys";
-import { interestingFeatures, hotkeys, windowNames } from "../../consts";
+import { interestingFeatures, hotkeys, windowNames, fortniteClassId } from "../../consts";
 import WindowState = overwolf.windows.WindowStateEx;
 
 // The window displayed in-game while a Fortnite game is running.
@@ -50,25 +50,32 @@ class InGame extends AppWindow {
   // Special events will be highlighted in the event log
   private onNewEvents(e) {
     const shouldHighlight = e.events.some(event => {
-      return event.name === 'kill' ||
-        event.name === 'death' ||
-        event.name === 'assist' ||
-        event.name === 'level'
+      switch (event.name) {
+        case 'kill':
+        case 'death':
+        case 'assist':
+        case 'level':
+        case 'matchStart':
+        case 'matchEnd':
+          return true;
+      }
+
+      return false
     });
     this.logLine(this._eventsLog, e, shouldHighlight);
   }
 
   // Displays the toggle minimize/restore hotkey in the window header
   private async setToggleHotkeyText() {
-    const hotkeyText = await OWHotkeys.getHotkeyText(hotkeys.toggle);
+    const hotkeyText = await OWHotkeys.getHotkeyText(hotkeys.toggle, fortniteClassId);
     const hotkeyElem = document.getElementById('hotkey');
     hotkeyElem.textContent = hotkeyText;
   }
 
   // Sets toggleInGameWindow as the behavior for the Ctrl+F hotkey
   private async setToggleHotkeyBehavior() {
-    const toggleInGameWindow = async hotkeyResult => {
-      console.log(`pressed hotkey for ${hotkeyResult.featureId}`);
+    const toggleInGameWindow = async (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent): Promise<void> => {
+      console.log(`pressed hotkey for ${hotkeyResult.name}`);
       const inGameState = await this.getWindowState();
 
       if (inGameState.window_state === WindowState.NORMAL ||

@@ -19,37 +19,6 @@
         <span id="hotkey" style="font-weight: bold; color: white;"></span>
       </h1>
       <div class="window-controls-group">
-        <button class="icon window-control support">
-          <svg>
-            <use xlink:href="/img/header_icons.svg#window-control_support" />
-          </svg>
-          <div class="tooltip">
-            <a target="_blank" href="https://discord.gg/v5cfBTq"
-              >Talk to us on Discord</a
-            ><br />
-            <a target="_blank" href="http://support.overwolf.com/"
-              >FAQ page at Overwolf</a
-            >
-            <hr />
-            <h3>Social Media</h3>
-            <div class="socialIcons">
-              <a target="_blank" href="https://twitter.com/theoverwolf">
-                <img src="../../img/twitter.svg" />
-              </a>
-              <a target="_blank" href="https://www.facebook.com/Overwolf/">
-                <img src="../../img/facebook.svg" />
-              </a>
-              <a target="_blank" href="https://www.reddit.com/r/Overwolf/">
-                <img src="../../img/reddit.png" />
-              </a>
-            </div>
-          </div>
-        </button>
-        <a class="icon window-control" href="overwolf://settings/hotkeys">
-          <svg>
-            <use xlink:href="/img/header_icons.svg#window-control_settings" />
-          </svg>
-        </a>
         <button class="icon window-control" id="minimizeButton">
           <svg>
             <use xlink:href="/img/header_icons.svg#window-control_minimize" />
@@ -94,59 +63,8 @@
           are painted in <span style="color: #00DEFA">teal</span> and logged to
           the developers console.
         </p>
-        <div id="ad"></div>
-        <p id="sampleAdText">
-          This is a sample ad (400x300px) of the best size
-        </p>
       </div>
-      <!-- <div id="events">
-        <h1>Real Time Game Data</h1>
-        <p>
-          The background controller of this app is listening to all game events
-          and info updates. It sends them to this window, which prints them to
-          the screen. Some specific events (startMatch, Kill and Death) are
-          painted in red and logged to the developers console.
-        </p>
-        <div id="logs">
-          <div id="eventsSection">
-            <h1>Game Events</h1>
-            <div id="eventsLog" class="dataText"></div>
-            <button id="copyEvents" class="logCopy">
-              Copy
-            </button>
-          </div>
-          <div id="updatesSection">
-            <h1>Info Updates</h1>
-            <div id="infoLog" class="dataText"></div>
-            <button id="copyInfo" class="logCopy">
-              Copy
-            </button>
-          </div>
-        </div>
-      </div>
-      <div id="ad"></div> -->
     </main>
-
-    <!-- -------------------------------- Modal -------------------------------- -->
-    <div id="exitMinimizeModal" class="modal">
-      <div class="modal-content">
-        <h3>Exit the app?</h3>
-        <p>
-          Exiting the app will close all the app windows and terminate the app
-          process.<br />
-          <br />
-          Are you sure?
-        </p>
-        <span class="buttonBar">
-          <button id="minimize" class="modalButton">
-            Minimize
-          </button>
-          <button id="exit" class="modalButton">
-            Exit
-          </button>
-        </span>
-      </div>
-    </div>
 
     <script src="../../lib/require.js"></script>
     <script>
@@ -157,34 +75,6 @@
       }, function(error) {
         console.log(`[INIT] failed to load in-game module ${error}`);
       });
-    </script>
-    <script
-      src="http://content.overwolf.com/libs/ads/latest/owads.min.js"
-      async
-      onload="onOwAdReady()"
-    ></script>
-    <script>
-      function onOwAdReady() {
-        const owAd = new OwAd(document.getElementById("ad"));
-        function onWindowStateChanged(state) {
-          if (state && state.window_name === "in_game") {
-            // when state changes to minimized, call removeAd()
-            if (state.window_state === "minimized") {
-              owAd.removeAd();
-            }
-            // when state changes from minimized to normal, call refreshAd()
-            else if (
-              state.window_previous_state === "minimized" &&
-              state.window_state === "normal"
-            ) {
-              owAd.refreshAd();
-            }
-          }
-        }
-
-        overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
-        overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
-      }
     </script>
   </body>
 </html>

@@ -3,7 +3,7 @@
   "type": "WebApp",
   "meta": {
     "name": "Sample App",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "minimum-overwolf-version": "0.120.0",
     "author": "Overwolf",
     "icon": "IconMouseOver.png",

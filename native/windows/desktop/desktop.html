@@ -15,37 +15,6 @@
       <img src="../../img/header_icon.svg" />
       <h1>Sample App / desktop window</h1>
       <div class="window-controls-group">
-        <button class="icon window-control support">
-          <svg>
-            <use xlink:href="/img/header_icons.svg#window-control_support" />
-          </svg>
-          <div class="tooltip">
-            <a target="_blank" href="https://discord.gg/v5cfBTq"
-              >Talk to us on Discord</a
-            ><br />
-            <a target="_blank" href="http://support.overwolf.com/"
-              >FAQ page at Overwolf</a
-            >
-            <hr />
-            <h3>Social Media</h3>
-            <div class="socialIcons">
-              <a target="_blank" href="https://twitter.com/theoverwolf">
-                <img src="../../img/twitter.svg" />
-              </a>
-              <a target="_blank" href="https://www.facebook.com/Overwolf/">
-                <img src="../../img/facebook.svg" />
-              </a>
-              <a target="_blank" href="https://www.reddit.com/r/Overwolf/">
-                <img src="../../img/reddit.png" />
-              </a>
-            </div>
-          </div>
-        </button>
-        <a class="icon window-control" href="overwolf://settings/hotkeys">
-          <svg>
-            <use xlink:href="/img/header_icons.svg#window-control_settings" />
-          </svg>
-        </a>
         <button class="icon window-control" id="minimizeButton">
           <svg>
             <use xlink:href="/img/header_icons.svg#window-control_minimize" />
@@ -102,27 +71,6 @@
       </div>
     </main>
 
-    <!-- -------------------------------- Modal -------------------------------- -->
-    <div id="exitMinimizeModal" class="modal">
-      <div class="modal-content">
-        <h3>Exit the app?</h3>
-        <p>
-          Exiting the app will close all the app windows and terminate the app
-          process.<br />
-          <br />
-          Are you sure?
-        </p>
-        <span class="buttonBar">
-          <button id="minimize" class="modalButton">
-            Minimize
-          </button>
-          <button id="exit" class="modalButton">
-            Exit
-          </button>
-        </span>
-      </div>
-    </div>
-
     <script src="../../lib/require.js"></script>
     <script>
       require(["desktop-controller"], function(DesktopController) {
@@ -132,34 +80,6 @@
       }, function(error) {
         console.log(`[INIT] failed to load desktop module ${error}`);
       });
-    </script>
-    <script
-      src="http://content.overwolf.com/libs/ads/latest/owads.min.js"
-      async
-      onload="onOwAdReady()"
-    ></script>
-    <script>
-      function onOwAdReady() {
-        const owAd = new OwAd(document.getElementById("ad"));
-        function onWindowStateChanged(state) {
-          if (state && state.window_name === "desktop") {
-            // when state changes to minimized, call removeAd()
-            if (state.window_state === "minimized") {
-              owAd.removeAd();
-            }
-            // when state changes from minimized to normal, call refreshAd()
-            else if (
-              state.window_previous_state === "minimized" &&
-              state.window_state === "normal"
-            ) {
-              owAd.refreshAd();
-            }
-          }
-        }
-
-        overwolf.windows.onStateChanged.removeListener(onWindowStateChanged);
-        overwolf.windows.onStateChanged.addListener(onWindowStateChanged);
-      }
     </script>
   </body>
 </html>

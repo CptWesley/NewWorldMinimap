@@ -9,6 +9,7 @@ body {
   flex-direction: column;
   font-size: 14px;
   min-height: 100vh;
+  overflow: hidden;
 }
 
 main {
@@ -29,7 +30,8 @@ h1 {
 #logs {
   display: flex;
   justify-content: space-between;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
+  width: calc(100% - 210px);
 }
 
 .logColumn {
@@ -50,7 +52,8 @@ h1 {
 #other {
   display: flex;
   flex-direction: column;
-  flex: 0 1 400px;
+  flex: 0 0 auto;
+  width: 210px;
 }
 
 #other > #infoParagraph {
@@ -82,15 +85,15 @@ h1 {
 }
 
 .dataText {
-  flex: 1;
   background-color: #464646;
   border-radius: 4px;
   overflow-x: hidden;
+  overflow-y: auto;
   white-space: nowrap;
   padding: 10px;
   margin-top: 16px;
   color: #8d8d8d;
-  height: 0;
+  height: calc(100vh - 165px);
   max-width: inherit;
 }
 

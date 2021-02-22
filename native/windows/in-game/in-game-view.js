@@ -51,7 +51,7 @@ define(["../SampleAppView.js"], function(SampleAppView) {
       const nodes = log.childNodes;
       let text = "";
       for (let node of nodes) {
-        if (node.tagName === "P") {
+        if (node.tagName === "PRE") {
           text += node.innerText + "\n";
         }
       }
@@ -69,7 +69,7 @@ define(["../SampleAppView.js"], function(SampleAppView) {
 
     // Add a line to a log
     _logLine(log, string, isHighlight) {
-      const line = document.createElement("p");
+      const line = document.createElement("pre");
       // Check if scroll is near bottom
       const autoScrollOn =
         log.scrollTop + log.offsetHeight > log.scrollHeight - 10;
