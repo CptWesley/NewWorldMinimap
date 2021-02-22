@@ -8,9 +8,8 @@
     "strict": true,
     "noImplicitAny": false,
     "strictNullChecks": false,
-    "typeRoots": [
-      "/types", 
-      "/node_modules/@overwolf/types"
+    "types": [
+      "@overwolf/types"
     ],
     "rootDirs": [
       "./src"

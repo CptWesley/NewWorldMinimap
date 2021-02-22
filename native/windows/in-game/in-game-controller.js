@@ -52,6 +52,8 @@ define([
       switch (event.name) {
         case 'kill':
         case 'death':
+        case 'assist':
+        case 'level':
         case 'matchStart':
         case 'matchEnd':
           isHightlight = true;
