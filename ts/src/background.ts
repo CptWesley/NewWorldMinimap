@@ -1,7 +1,9 @@
-import { windowNames, fortniteClassId } from "../../consts";
-import { OWGames } from '../../odk-ts/ow-games';
-import { OWGameListener } from '../../odk-ts/ow-game-listener';
-import { OWWindow } from '../../odk-ts/ow-window';
+import { windowNames, fortniteClassId } from "./consts";
+import {
+  OWGames,
+  OWGameListener,
+  OWWindow
+} from '@overwolf/overwolf-api-ts';
 import RunningGameInfo = overwolf.games.RunningGameInfo;
 
 // The background controller holds all of the app's background logic - hence its name. it has

@@ -34,7 +34,7 @@ npm run build
 
 6. Click on "Development options".
 
-7. In the opened window, click on "Load unpacked extension" and select the extracted 'ts' folder.
+7. In the opened window, click on "Load unpacked extension" and select the 'ts/dist/' folder.
 This will add the app to your dock.
 
 8. Click on the app's icon in your dock.
@@ -72,13 +72,6 @@ This window serves a purely visual purpose and has no special logic.
 
 ### windows/AppWindow
 This is a base class that holds the logic shared by the in_game and desktop windows, such as minimize/close, drag, etc.
-
-
-### odk-ts and types
-Currently, the Overwolf SDK is written in javascript. These folders hold typescript wrappers and type definitions for the SDK methods used in this app.
-
-We are constantly working on improving our SDK and both the odk-ts and the types definition file will be released as proper packages in the future.
-
 
 ### css, icons, and images
 All of the visual resources used by the app.

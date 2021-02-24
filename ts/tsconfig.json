@@ -4,6 +4,7 @@
     "module": "none",
     "sourceMap": true,
     "outDir": "./dist",
+    "moduleResolution": "node",
     "removeComments": true,
     "strict": true,
     "noImplicitAny": false,

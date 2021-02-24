@@ -4,7 +4,7 @@
   "meta": {
     "name": "Sample App",
     "author": "Overwolf",
-    "version": "2.1.0",
+    "version": "3.0.0",
     "minimum-overwolf-version": "0.120.0",
     "description": "An example app for developers new to Overwolf",
     "dock_button_title": "Sample - TS",
@@ -21,27 +21,27 @@
     "start_window": "background",
     "windows": {
       "background": {
-        "file": "dist/background/background.html",
+        "file": "background.html",
         "is_background_page": true
       },
       "desktop": {
-        "file": "dist/desktop/desktop.html",
+        "file": "desktop.html",
         "desktop_only": true,
         "native_window": true,
         "resizable": true,
         "transparent": true,
         "override_on_update": true,
         "size": {
-          "width": 500,
+          "width": 1212,
           "height": 699
         },
         "min_size": {
-          "width": 500,
+          "width": 1212,
           "height": 699
         }
       },
       "in_game": {
-        "file": "dist/in_game/in_game.html",
+        "file": "in_game.html",
         "in_game_only": true,
         "focus_game_takeover": "ReleaseOnHidden",
         "focus_game_takeover_release_hotkey": "showhide",

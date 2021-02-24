@@ -1,4 +1,4 @@
-import { OWWindow } from "../odk-ts/ow-window";
+import { OWWindow } from "@overwolf/overwolf-api-ts";
 
 // A base class for the app's foreground windows.
 // Sets the modal and drag behaviors, which are shared accross the desktop and in-game windows.

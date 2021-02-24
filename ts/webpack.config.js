@@ -1,10 +1,14 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const
+    path = require('path'),
+    HtmlWebpackPlugin = require('html-webpack-plugin'),
+    CopyPlugin = require("copy-webpack-plugin"),
+    { CleanWebpackPlugin } = require('clean-webpack-plugin');;
 
 module.exports = {
     entry: {
-        background: './windows/background/background.ts',
-        desktop: './windows/desktop/desktop.ts',
-        in_game: './windows/in_game/in_game.ts'
+        background: './src/background.ts',
+        desktop: './src/desktop.ts',
+        in_game: './src/in_game.ts'
     },
     devtool: 'inline-source-map',
     module: {
@@ -17,26 +21,30 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['.ts']
+        extensions: ['.ts', '.js']
     },
     output: {
-      path: `${__dirname}/dist`,
-      filename: '[name]/[name].js'
+      path: path.resolve(__dirname, 'dist/'),
+      filename: 'js/[name].js'
     },
     plugins: [
+        new CleanWebpackPlugin,
+        new CopyPlugin({
+            patterns: [ { from: "public", to: "./" } ],
+        }),
         new HtmlWebpackPlugin({
-            template: './windows/background/background.html',
-            filename: `${__dirname}/dist/background/background.html`,
+            template: './src/background.html',
+            filename: path.resolve(__dirname, './dist/background.html'),
             chunks: ['background']
         }),
         new HtmlWebpackPlugin({
-            template: './windows/desktop/desktop.html',
-            filename: `${__dirname}/dist/desktop/desktop.html`,
+            template: './src/desktop.html',
+            filename: path.resolve(__dirname, './dist/desktop.html'),
             chunks: ['desktop']
         }),
         new HtmlWebpackPlugin({
-            template: './windows/in_game/in_game.html',
-            filename: `${__dirname}/dist/in_game/in_game.html`,
+            template: './src/in_game.html',
+            filename: path.resolve(__dirname, './dist/in_game.html'),
             chunks: ['in_game']
         })
     ]
