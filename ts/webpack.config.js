@@ -6,9 +6,9 @@ const
 
 module.exports = {
     entry: {
-        background: './src/background.ts',
-        desktop: './src/desktop.ts',
-        in_game: './src/in_game.ts'
+        background: './src/background/background.ts',
+        desktop: './src/desktop/desktop.ts',
+        in_game: './src/in_game/in_game.ts'
     },
     devtool: 'inline-source-map',
     module: {
@@ -33,17 +33,17 @@ module.exports = {
             patterns: [ { from: "public", to: "./" } ],
         }),
         new HtmlWebpackPlugin({
-            template: './src/background.html',
+            template: './src/background/background.html',
             filename: path.resolve(__dirname, './dist/background.html'),
             chunks: ['background']
         }),
         new HtmlWebpackPlugin({
-            template: './src/desktop.html',
+            template: './src/desktop/desktop.html',
             filename: path.resolve(__dirname, './dist/desktop.html'),
             chunks: ['desktop']
         }),
         new HtmlWebpackPlugin({
-            template: './src/in_game.html',
+            template: './src/in_game/in_game.html',
             filename: path.resolve(__dirname, './dist/in_game.html'),
             chunks: ['in_game']
         })

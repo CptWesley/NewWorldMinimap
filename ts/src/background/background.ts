@@ -1,4 +1,4 @@
-import { windowNames, fortniteClassId } from "./consts";
+import { windowNames, fortniteClassId } from "../consts";
 import {
   OWGames,
   OWGameListener,
