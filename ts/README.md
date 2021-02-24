@@ -34,7 +34,7 @@ npm run build
 
 6. Click on "Development options".
 
-7. In the opened window, click on "Load unpacked extension" and select the extracted 'ts' folder.
+7. In the opened window, click on "Load unpacked extension" and select the 'ts/dist/' folder.
 This will add the app to your dock.
 
 8. Click on the app's icon in your dock.
