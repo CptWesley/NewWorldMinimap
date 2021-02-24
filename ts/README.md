@@ -34,14 +34,18 @@ npm run build
 
 6. Click on "Development options".
 
-7. In the opened window, click on "Load unpacked extension" and select the 'ts/dist/' folder.
+7. In the opened window, click on "Load unpacked extension" and select the `ts/dist/` folder.
 This will add the app to your dock.
 
 8. Click on the app's icon in your dock.
 
 
 ## What will you find inside?
-### manifest.json
+
+### public/
+All of the static resources used by the app, like icons, images and CSS
+
+##### public/manifest.json
 This file defines all of the aspects of the app.
 Read all about Overwolf's manifest.json mechanism [here](https://overwolf.github.io/docs/api/manifest-json#welcome-to-the-manifestjson-file).
 In our manifest.json file, we have [```{ "start_window": "background" }```](https://overwolf.github.io/docs/api/manifest-json#start_window) defined.
@@ -49,9 +53,11 @@ This sets our [background](###windows/background) window as the app's starting p
 All of this app's windows' properties can be found under the [```windows```](https://overwolf.github.io/docs/api/manifest-json#window-data) object.
 Please refer to the [dev site](https://overwolf.github.io/docs/api/manifest-json#welcome-to-the-manifestjson-file) to learn more about each property.
 
+#### src/
+Source .html & .ts files for the app
 
-### windows/background
-This folder holds the background window, which serves as the application's starting point and window orchestrator.
+##### src/background.js & src/background.html
+These are files of the background window, which serves as the application's starting point and window orchestrator.
 The window's ```run()``` method detects whether a Fortnite game is currently running, decides which window to launch accordingly, and listens for changes.
 
 The background window has no visual representation, which can be gleaned from the empty background.html file or from the
@@ -59,22 +65,19 @@ The background window has no visual representation, which can be gleaned from th
 property the background window has in our manifest.json.
 
 
-### windows/in_game
+##### src/in_game.js & src/in_game.html
 The in_game window listens to [Info Events](https://overwolf.github.io/docs/api/overwolf-games-events#oninfoupdates2) and
 [Game Events](https://overwolf.github.io/docs/api/overwolf-games-events#onnewevents) emitted by the game and
 displays an ad. Furthermore, it defines the behavior for the show/hide hotkey.
 Read all about hotkeys [here](https://overwolf.github.io/docs/topics/hotkeys-best-practices).
 
 
-### windows/desktop
+##### src/desktop.js & src/desktop.html
 This window serves a purely visual purpose and has no special logic.
 
 
-### windows/AppWindow
+##### src/AppWindow.js
 This is a base class that holds the logic shared by the in_game and desktop windows, such as minimize/close, drag, etc.
-
-### css, icons, and images
-All of the visual resources used by the app.
 
 
 ## Notes
