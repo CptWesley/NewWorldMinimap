@@ -1,7 +1,9 @@
-import { AppWindow } from "../AppWindow";
-import { OWGamesEvents } from "../../odk-ts/ow-games-events";
-import { OWHotkeys } from "../../odk-ts/ow-hotkeys";
-import { interestingFeatures, hotkeys, windowNames, fortniteClassId } from "../../consts";
+import { AppWindow } from "./AppWindow";
+import {
+  OWGamesEvents,
+  OWHotkeys
+} from "@overwolf/overwolf-api-ts";
+import { interestingFeatures, hotkeys, windowNames, fortniteClassId } from "./consts";
 import WindowState = overwolf.windows.WindowStateEx;
 
 // The window displayed in-game while a Fortnite game is running.
