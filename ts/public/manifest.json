@@ -10,8 +10,8 @@
     "dock_button_title": "Sample - TS",
     "icon": "icons/iconMouseOver.png",
     "icon_gray": "icons/iconMouseNormal.png",
-    "launcher_icon": "icons/desktop-icon.ico",
-    "window_icon": "icons/TaskbarIcon.png"
+    "launcher_icon": "icons/desktopIcon.ico",
+    "window_icon": "icons/taskbarIcon.png"
   },
   "permissions": [
     "Hotkeys",
