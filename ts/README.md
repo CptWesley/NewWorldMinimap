@@ -43,7 +43,7 @@ This will add the app to your dock.
 When you run run ```npm run build``` in your terminal, an .opk is created in releases/ directory
 
 ## Changing the version number quickly
-We have included a webpack plugin that can change the .opk version quickly with just a command line argument. Simlpy add ```--env setVersion=1.0.1``` to your build command.
+We have included a webpack plugin that can change the .opk version quickly with just a command line argument. Simply add ```--env setVersion=1.0.1``` to your build command.
 Example:
 ```
 npm run build --env setVersion=1.0.1
