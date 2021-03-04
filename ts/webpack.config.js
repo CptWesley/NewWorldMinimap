@@ -2,9 +2,10 @@ const
     path = require('path'),
     HtmlWebpackPlugin = require('html-webpack-plugin'),
     CopyPlugin = require("copy-webpack-plugin"),
-    { CleanWebpackPlugin } = require('clean-webpack-plugin');;
+    { CleanWebpackPlugin } = require('clean-webpack-plugin'),
+    OverwolfPlugin = require('./overwolf.webpack');
 
-module.exports = {
+module.exports = env => ({
     entry: {
         background: './src/background/background.ts',
         desktop: './src/desktop/desktop.ts',
@@ -46,6 +47,7 @@ module.exports = {
             template: './src/in_game/in_game.html',
             filename: path.resolve(__dirname, './dist/in_game.html'),
             chunks: ['in_game']
-        })
+        }),
+        new OverwolfPlugin(env)
     ]
-}
+})
