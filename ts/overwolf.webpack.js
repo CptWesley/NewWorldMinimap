@@ -15,7 +15,6 @@ const PluginName = 'OverwolfPlugin';
 module.exports = class OverwolfPlugin {
   constructor(env) {
     this.env = env
-    console.log(env)
   }
   apply(compiler) {
     compiler.hooks.run.tapPromise(PluginName, async (compilation) => {

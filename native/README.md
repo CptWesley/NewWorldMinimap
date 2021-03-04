@@ -1,6 +1,5 @@
 ## Important note
 
-This version of the sample app is obsolete.  
-Although the code should work, some unexpected issues can show up, and we will not support it.
+This is the native "pure" JS version of the sample app. Although the code is working, we highly recommend using the "ts" version, which uses the most up-to-date techniques and recommendations by us, like background controller, npm packages for def file, and more.
 
-Please use the new sample app that can be found here: https://github.com/overwolf/sample-app/tree/master/ts.
+The TypeScript version can be found here: https://github.com/overwolf/sample-app/tree/master/ts.
