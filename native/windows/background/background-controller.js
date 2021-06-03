@@ -29,6 +29,11 @@ define([
         BackgroundController._onRunningGameChanged
       );
 
+      overwolf.extensions.onAppLaunchTriggered.addListener(e => {
+        if (e && e.source !== 'gamelaunchevent')
+          BackgroundController._restoreLaunchWindow();
+      });
+
       // Listen to changes in windows
       overwolf.windows.onStateChanged.addListener(async () => {
         // If there's only 1 window (background) open, close the app
@@ -90,8 +95,19 @@ define([
         );
 
         await WindowsService.restore(WindowNames.IN_GAME);
-        WindowsService.minimize(WindowNames.IN_GAME);
+
+        if (BackgroundController._launchedWithGameEvent()) {
+          WindowsService.minimize(WindowNames.IN_GAME);
+        }
       }
+    }
+
+    /**
+     * app was launched with game launch
+     * @private
+     */
+    static _launchedWithGameEvent() {
+      return location.href.includes('source=gamelaunchevent');
     }
 
     /**
