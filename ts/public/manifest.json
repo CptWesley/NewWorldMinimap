@@ -8,10 +8,10 @@
     "minimum-overwolf-version": "0.160.0",
     "description": "An example app for developers new to Overwolf",
     "dock_button_title": "Sample - TS",
-    "icon": "icons/iconMouseOver.png",
-    "icon_gray": "icons/iconMouseNormal.png",
-    "launcher_icon": "icons/desktopIcon.ico",
-    "window_icon": "icons/taskbarIcon.png"
+    "icon": "icons/IconMouseOver.png",
+    "icon_gray": "icons/IconMouseNormal.png",
+    "launcher_icon": "icons/DesktopIcon.ico",
+    "window_icon": "icons/TaskbarIcon.png"
   },
   "permissions": [
     "Hotkeys",
