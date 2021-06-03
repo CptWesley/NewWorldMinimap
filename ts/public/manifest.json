@@ -4,7 +4,7 @@
   "meta": {
     "name": "Sample App",
     "author": "Overwolf",
-    "version": "3.0.0",
+    "version": "3.0.1",
     "minimum-overwolf-version": "0.160.0",
     "description": "An example app for developers new to Overwolf",
     "dock_button_title": "Sample - TS",
