@@ -30,8 +30,9 @@ define([
       );
 
       overwolf.extensions.onAppLaunchTriggered.addListener(e => {
-        if (e && e.source !== 'gamelaunchevent')
-          BackgroundController._restoreLaunchWindow();
+        if (e && e.source !== 'gamelaunchevent') {
+          BackgroundController._restoreAppWindow();
+        }
       });
 
       // Listen to changes in windows
@@ -99,6 +100,20 @@ define([
         if (BackgroundController._launchedWithGameEvent()) {
           WindowsService.minimize(WindowNames.IN_GAME);
         }
+      }
+    }
+
+    /**
+     * Open the relevant window on user request
+     * @private
+     */
+    static async _restoreAppWindow() {
+      const isGameRunning = await runningGameService.isGameRunning();
+
+      if (isGameRunning) {
+        WindowsService.restore(WindowNames.IN_GAME);
+      } else {
+        WindowsService.restore(WindowNames.DESKTOP);
       }
     }
 
