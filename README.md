@@ -21,7 +21,7 @@ In the future we will add more variants like React, Vue, etc.
 ### Download from the store
 
 It's highly recommended to follow the build steps for setting up the sample app, including download the source code and built it manually.  
-For those who need it, here is a [direct download link]((https://www.overwolf.com/app/Overwolf-Sample_App)) to the latest version on the store.
+For those who need it, here is a [direct download link](https://www.overwolf.com/app/Overwolf-Sample_App) to the latest version on the store.
 
 ### Load as unpackged extension.
 
