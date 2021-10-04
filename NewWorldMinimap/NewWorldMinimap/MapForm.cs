@@ -15,10 +15,10 @@ namespace NewWorldMinimap
         private static readonly Screen screen = Screen.PrimaryScreen;
         private PictureBox picture = new PictureBox();
         private Bitmap sourceMap;
-        private MapImageCache map = new MapImageCache();
+        private MapImageCache map = new MapImageCache(4);
         private PositionBuffer posBuf = new PositionBuffer();
         private MarkerCache markers = new MarkerCache();
-        private const int MinimapRadius = 2;
+        private Thread scannerThread;
 
         public MapForm()
         {
@@ -32,8 +32,8 @@ namespace NewWorldMinimap
             this.ClientSize = new Size(128, 128);
             this.Name = "New World Minimap";
             this.Text = "New World Minimap";
-            sourceMap = new Bitmap("map.png");
-            //sourceMap = map.GetTileForCoordinate(9649.031, 6349.472, 2);
+            sourceMap = new Bitmap(512, 512);
+            picture.SizeMode = PictureBoxSizeMode.CenterImage;
             picture.Image = sourceMap;
             picture.Width = sourceMap.Width;
             picture.Height = sourceMap.Height;
@@ -42,6 +42,19 @@ namespace NewWorldMinimap
             this.Width = picture.Width;
             this.Height = picture.Height;
             markers.Populate(map);
+            this.ResizeEnd += OnResize;
+            this.FormClosed += OnClose;
+        }
+
+        private void OnResize(object sender, EventArgs e)
+        {
+            picture.Width = this.Width;
+            picture.Height = this.Height;
+        }
+
+        private void OnClose(object sender, EventArgs e)
+        {
+            Environment.Exit(0);
         }
 
         private static Bitmap TakeScreenshot()
@@ -58,9 +71,9 @@ namespace NewWorldMinimap
 
         private Thread StartUpdateLoop()
         {
-            Thread t = new Thread(UpdateLoop);
-            t.Start();
-            return t;
+            scannerThread = new Thread(UpdateLoop);
+            scannerThread.Start();
+            return scannerThread;
         }
 
         private void UpdateLoop()
@@ -73,27 +86,17 @@ namespace NewWorldMinimap
             while (true)
             {
                 using Bitmap bmp = TakeScreenshot();
-                if (pd.TryGetPosition(bmp, lastPos, out Vector3 pos) && posBuf.Push(pos))
+                if (pd.TryGetPosition(bmp, out Vector3 pos) && posBuf.Push(pos))
                 {
                     lastPos = pos;
                     Console.WriteLine($"{i}: {pos}");
                     sourceMap.Dispose();
-                    sourceMap = map.GetTileForCoordinate(pos.X, pos.Y, MinimapRadius);
+                    sourceMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
-                    (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y, MinimapRadius);
+                    (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
 
                     (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
-                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY, MinimapRadius);
-
-                    /*
-                    //int imageX = (int)((pos.X / 18416.0) * newMap.Width);
-                    //int imageY = newMap.Height - (int)((pos.Y / 10640.0) * newMap.Height);
-                    //Console.WriteLine($"Ratio X/Y: {18416.0/10640.0} vs {newMap.Width / (double)newMap.Height}");
-                    //Console.WriteLine($"Ratio X/Y: {newMap.Width / 18416.0} and {newMap.Height / 10640.0}");
-                    Rectangle rect = new Rectangle(imageX - radius, imageY - radius, radius * 2, radius * 2);
-                    g.DrawEllipse(pen, rect);
-                    g.DrawRectangle(pen, new Rectangle(map.TileWidth * 2, map.TileHeight * 2, map.TileWidth, map.TileHeight));
-                    */
+                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
                     Bitmap temp = new Bitmap(sourceMap);
                     using Graphics g = Graphics.FromImage(temp);
@@ -101,25 +104,20 @@ namespace NewWorldMinimap
                     foreach (Marker marker in visibleMarkers)
                     {
                         Console.WriteLine(marker);
-                        (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y, MinimapRadius);
+                        (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
                         Rectangle rect2 = new Rectangle(ix, iy, radius * 2, radius * 2);
                         g.DrawEllipse(pen2, rect2);
                     }
 
                     Bitmap newMap = temp.MakeCenter(imageX, imageY);
-                    //newMap = temp;
                     using Graphics g2 = Graphics.FromImage(newMap);
                     Rectangle rect = new Rectangle(newMap.Width / 2, newMap.Height / 2, radius * 2, radius * 2);
                     g2.DrawEllipse(pen, rect);
 
-                    this.Invoke(new Action(() => {
-                        this.Text = $"New World Minimap: {pos}";
+                    SafeInvoke(() => {
+                        Text = $"New World Minimap: {pos}";
                         picture.Image = newMap;
-                        picture.Width = sourceMap.Width;
-                        picture.Height = sourceMap.Height;
-                        this.Width = picture.Width;
-                        this.Height = picture.Height;
-                    }));
+                    });
                 }
                 else
                 {
@@ -127,6 +125,17 @@ namespace NewWorldMinimap
                 }
                 i++;
                 Thread.Sleep(200);
+            }
+        }
+
+        private void SafeInvoke(Action act)
+        {
+            try
+            {
+                Invoke(act);
+            }
+            catch (InvalidOperationException)
+            {
             }
         }
     }

@@ -16,8 +16,12 @@ namespace NewWorldMinimap
         private HttpClient http = new HttpClient();
         private Dictionary<string, List<Marker>> markers = new Dictionary<string, List<Marker>>();
 
+        public int Radius { get; private set; }
+
         public void Populate(MapImageCache mapCache)
         {
+            markers.Clear();
+            Radius = mapCache.Radius;
             string stringData = http.GetAsync("https://www.newworld-map.com/markers.json").Result.Content.ReadAsStringAsync().Result;
             var data = JObject.Parse(stringData);
             var ores = data.GetValue("ores");
@@ -42,11 +46,9 @@ namespace NewWorldMinimap
                     l.Add(m);
                 }
             }
-
-            //Console.WriteLine("xxx");
         }
 
-        public IEnumerable<Marker> Get(int x, int y)
+        private IEnumerable<Marker> GetInternal(int x, int y)
         {
             string name = $"{x}-{y}";
 
@@ -57,15 +59,15 @@ namespace NewWorldMinimap
             return Array.Empty<Marker>();
         }
 
-        public IEnumerable<Marker> Get(int x, int y, int radius)
+        public IEnumerable<Marker> Get(int x, int y)
         {
             IEnumerable<Marker> result = Array.Empty<Marker>();
 
-            for (int dx = x - radius; dx <= x + radius; dx++)
+            for (int dx = x - Radius; dx <= x + Radius; dx++)
             {
-                for (int dy = y - radius; dy <= y + radius; dy++)
+                for (int dy = y - Radius; dy <= y + Radius; dy++)
                 {
-                    result = result.Concat(Get(dx, dy));
+                    result = result.Concat(GetInternal(dx, dy));
                 }
             }
 

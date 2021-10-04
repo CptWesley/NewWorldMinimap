@@ -23,6 +23,11 @@ namespace NewWorldMinimap
         private Queue<string> queue = new Queue<string>();
         private Dictionary<string, Bitmap> map = new Dictionary<string, Bitmap>();
 
+        public MapImageCache(int radius)
+            => Radius = radius;
+
+        public int Radius { get; }
+
         public Bitmap Get(int x, int y)
         {
             if (x < 0 || y < 0 || x >= Width || y >= Height)
@@ -64,20 +69,17 @@ namespace NewWorldMinimap
         }
 
         public Bitmap GetTileForCoordinate(double x, double y)
-            => GetTileForCoordinate(x, y, 0);
-
-        public Bitmap GetTileForCoordinate(double x, double y, int radius)
         {
             (int tileX, int tileY) = GetTileCoordinatesForCoordinate(x, y);
-            Bitmap result = new Bitmap(TileWidth * (1 + 2 * radius), TileHeight * (1 + 2 * radius));
+            Bitmap result = new Bitmap(TileWidth * (1 + 2 * Radius), TileHeight * (1 + 2 * Radius));
 
             using Graphics g = Graphics.FromImage(result);
 
-            for (int xt = 0; xt < 1 + radius * 2; xt++)
+            for (int xt = 0; xt < 1 + Radius * 2; xt++)
             {
-                for (int yt = 0; yt < 1 + radius * 2; yt++)
+                for (int yt = 0; yt < 1 + Radius * 2; yt++)
                 {
-                    Bitmap temp = Get(tileX - radius + xt, tileY - radius + yt);
+                    Bitmap temp = Get(tileX - Radius + xt, tileY - Radius + yt);
                     g.DrawImage(temp, xt * TileWidth, yt * TileHeight);
                 }
             }
@@ -136,26 +138,17 @@ namespace NewWorldMinimap
             GC.SuppressFinalize(this);
         }
 
-        public (int X, int Y) ToMinimapCoordinate(double playerX, double playerY, double x, double y, int radius)
+        public (int X, int Y) ToMinimapCoordinate(double playerX, double playerY, double x, double y)
         {
             int totalWidth = TileWidth * Width;
             int totalHeight = TileHeight * Height;
             (int tileX, int tileY) = GetTileCoordinatesForCoordinate(playerX, playerY);
 
-
             int pixelX = (int)(x / GameMapWidth * totalWidth);
             int pixelY = (int)((GameMapHeight - y) / GameMapHeight * totalHeight);
 
-            Console.WriteLine($"PX: {pixelX} PY: {pixelY}");
-
-            int imageX = pixelX - (tileX - radius) * TileWidth;
-            int imageY = pixelY - (tileY - radius + 1) * TileHeight;
-
-            Console.WriteLine($"IX: {imageX} IY: {imageY}");
-
-
-            //int imageX = (int)((x / GameMapWidth) * totalWidth - (tileX - radius) * TileWidth);
-            //int imageY = (int)(((GameMapHeight - y) / GameMapHeight) * totalHeight - (tileY - radius) * TileHeight);
+            int imageX = pixelX - (tileX - Radius) * TileWidth;
+            int imageY = pixelY - (tileY - Radius + 1) * TileHeight;
 
             return (imageX, imageY);
         }
