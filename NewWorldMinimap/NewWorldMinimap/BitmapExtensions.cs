@@ -49,7 +49,7 @@ namespace NewWorldMinimap
         public static Bitmap Walk(this Bitmap bmp, Func<int, int, Color, Color> func)
         {
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
-            Bitmap result = bmp.Clone(rect, PixelFormat.Format24bppRgb);
+            Bitmap result = bmp.Clone(rect, PixelFormat.Format32bppArgb);
             BitmapData bmpData = result.LockBits(rect, ImageLockMode.ReadWrite, result.PixelFormat);
 
             IntPtr ptr = bmpData.Scan0;
@@ -57,7 +57,7 @@ namespace NewWorldMinimap
             byte[] rgbValues = new byte[bytes];
             Marshal.Copy(ptr, rgbValues, 0, bytes);
 
-            for (int counter = 2; counter < rgbValues.Length; counter += 3)
+            for (int counter = 2; counter < rgbValues.Length; counter += 4)
             {
                 Color current = Color.FromArgb(rgbValues[counter], rgbValues[counter - 1], rgbValues[counter - 2]);
                 int i = (counter / 3);

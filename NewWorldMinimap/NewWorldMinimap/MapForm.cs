@@ -19,6 +19,7 @@ namespace NewWorldMinimap
         private PositionBuffer posBuf = new PositionBuffer();
         private MarkerCache markers = new MarkerCache();
         private Thread scannerThread;
+        private IconCache icons = new IconCache();
 
         public MapForm()
         {
@@ -105,8 +106,9 @@ namespace NewWorldMinimap
                     {
                         Console.WriteLine(marker);
                         (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-                        Rectangle rect2 = new Rectangle(ix, iy, radius * 2, radius * 2);
-                        g.DrawEllipse(pen2, rect2);
+                        g.DrawImage(icons.Get(marker.Type), ix, iy);
+                        //Rectangle rect2 = new Rectangle(ix, iy, radius * 2, radius * 2);
+                        //g.DrawEllipse(pen2, rect2);
                     }
 
                     Bitmap newMap = temp.MakeCenter(imageX, imageY);

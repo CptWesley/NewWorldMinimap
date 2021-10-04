@@ -19,4 +19,8 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
 
+	<ItemGroup>
+		<EmbeddedResource Include="Resources/**" />
+	</ItemGroup>
+
 </Project>
