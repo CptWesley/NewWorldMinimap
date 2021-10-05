@@ -154,10 +154,18 @@ namespace NewWorldMinimap
             Hsl x = Hsl.FromRgb(a);
             Hsl y = Hsl.FromRgb(b);
 
-            double avgHue = (x.Hue + y.Hue) / 2;
-            double distance = Math.Abs(y.Hue - avgHue);
+            double hd = Math.Abs(x.Hue - y.Hue);
+            double ld = Math.Abs(x.Lightness - y.Lightness);
+            double sd = Math.Abs(x.Saturation - y.Saturation);
 
-            return distance < tolerance;
+            if (hd <= tolerance)
+            {
+                //Console.WriteLine($"LD: {ld} SD: {sd}");
+            }
+
+            //Console.WriteLine($"HD: {hd}");
+
+            return hd <= tolerance && ld < 0.1 && sd < 0.1;
         }
 
         public static void DrawImage(this Graphics g, Image img, int x, int y, float angle)
