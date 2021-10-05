@@ -82,13 +82,14 @@ namespace NewWorldMinimap
             using Pen pen = new Pen(Color.Red);
             using Pen pen2 = new Pen(Color.Pink);
             Vector3 lastPos = Vector3.Zero;
-            int radius = 5;
             int i = 0;
             while (true)
             {
                 using Bitmap bmp = TakeScreenshot();
                 if (pd.TryGetPosition(bmp, out Vector3 pos) && posBuf.Push(pos))
                 {
+                    Vector3 dir = lastPos - pos;
+
                     lastPos = pos;
                     Console.WriteLine($"{i}: {pos}");
                     sourceMap.Dispose();
@@ -104,17 +105,13 @@ namespace NewWorldMinimap
 
                     foreach (Marker marker in visibleMarkers)
                     {
-                        Console.WriteLine(marker);
                         (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-                        g.DrawImage(icons.Get(marker.Type), ix, iy);
-                        //Rectangle rect2 = new Rectangle(ix, iy, radius * 2, radius * 2);
-                        //g.DrawEllipse(pen2, rect2);
+                        g.DrawImage(icons.Get(marker), ix, iy);
                     }
 
                     Bitmap newMap = temp.MakeCenter(imageX, imageY);
                     using Graphics g2 = Graphics.FromImage(newMap);
-                    Rectangle rect = new Rectangle(newMap.Width / 2, newMap.Height / 2, radius * 2, radius * 2);
-                    g2.DrawEllipse(pen, rect);
+                    g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
 
                     SafeInvoke(() => {
                         Text = $"New World Minimap: {pos}";
@@ -126,7 +123,7 @@ namespace NewWorldMinimap
                     Console.WriteLine($"{i}: Failure");
                 }
                 i++;
-                Thread.Sleep(200);
+                //Thread.Sleep(50);
             }
         }
 

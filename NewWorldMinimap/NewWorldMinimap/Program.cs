@@ -21,6 +21,8 @@ namespace NewWorldMinimap
         [STAThread]
         public static void Main(string[] args)
         {
+            Console.WriteLine(Hsl.FromRgb(Color.Red));
+
             Application.EnableVisualStyles();
             Console.WriteLine("Hello World!");
             /*

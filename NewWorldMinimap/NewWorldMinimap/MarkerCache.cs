@@ -10,7 +10,7 @@ namespace NewWorldMinimap
 {
     public class MarkerCache : IDisposable
     {
-        public record Marker(double X, double Y, string Type);
+        public record Marker(double X, double Y, string Category, string Type);
 
         private bool disposedValue;
         private HttpClient http = new HttpClient();
@@ -23,18 +23,26 @@ namespace NewWorldMinimap
             markers.Clear();
             Radius = mapCache.Radius;
             string stringData = http.GetAsync("https://www.newworld-map.com/markers.json").Result.Content.ReadAsStringAsync().Result;
-            var data = JObject.Parse(stringData);
-            var ores = data.GetValue("ores");
+            JObject data = JObject.Parse(stringData);
 
-            foreach (JProperty ore in ores)
+            PopulateResource(mapCache, data, "ores");
+            PopulateResource(mapCache, data, "woods");
+            PopulateResource(mapCache, data, "chests");
+            PopulateResource(mapCache, data, "plants");
+        }
+
+        private void PopulateResource(MapImageCache mapCache, JObject data, string resourceName)
+        {
+            JToken category = data.GetValue(resourceName);
+
+            foreach (JProperty type in category)
             {
-                string typeName = ore.Name;
-                foreach (JProperty marker in ore.Value)
+                foreach (JProperty marker in type.Value)
                 {
                     double x = marker.Value["x"].ToObject<double>();
                     double y = marker.Value["y"].ToObject<double>();
                     (int tileX, int tileY) = mapCache.GetTileCoordinatesForCoordinate(x, y);
-                    Marker m = new Marker(x, y, typeName);
+                    Marker m = new Marker(x, y, resourceName, type.Name);
 
                     string tileName = $"{tileX}-{tileY}";
                     if (!markers.TryGetValue(tileName, out List<Marker> l))
