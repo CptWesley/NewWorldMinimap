@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Globalization;
 using System.Numerics;
 using System.Threading;
 using System.Windows.Forms;
@@ -21,6 +22,13 @@ namespace NewWorldMinimap
         private Thread scannerThread;
         private IconCache icons = new IconCache();
 
+        private void SetName(Vector3 pos)
+        {
+            string name = $"CptWesley's Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
+            this.Name = name;
+            this.Text = name;
+        }
+
         public MapForm()
         {
             InitializeComponent();
@@ -31,8 +39,7 @@ namespace NewWorldMinimap
         {
             this.SuspendLayout();
             this.ClientSize = new Size(128, 128);
-            this.Name = "New World Minimap";
-            this.Text = "New World Minimap";
+            SetName(Vector3.Zero);
             sourceMap = new Bitmap(512, 512);
             picture.SizeMode = PictureBoxSizeMode.CenterImage;
             picture.Image = sourceMap;
@@ -114,7 +121,7 @@ namespace NewWorldMinimap
                     g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
 
                     SafeInvoke(() => {
-                        Text = $"New World Minimap: {pos}";
+                        SetName(pos);
                         picture.Image = newMap;
                     });
                 }
