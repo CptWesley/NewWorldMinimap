@@ -1,0 +1,16 @@
+﻿{
+  "$schema": "https://raw.githubusercontent.com/DotNetAnalyzers/StyleCopAnalyzers/master/StyleCop.Analyzers/StyleCop.Analyzers/Settings/stylecop.schema.json",
+  "settings": {
+    "indentation": {
+      "useTabs": false,
+      "indentationSize": 4
+    },
+    "maintainabilityRules": {
+      "topLevelTypes": [ "class", "interface", "struct" ]
+    },
+    "orderingRules": {
+      "usingDirectivesPlacement": "outsideNamespace",
+      "elementOrder": [ "kind", "constant", "accessibility", "static", "readonly" ]
+    }
+  }
+}

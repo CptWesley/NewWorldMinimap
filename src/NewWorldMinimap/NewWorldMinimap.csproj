@@ -3,6 +3,20 @@
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net47</TargetFramework>
 		<LangVersion>9</LangVersion>
+		<Nullable>enable</Nullable>
+
+		<CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
+		<DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
+		<Authors>Wesley Baartman</Authors>
+		<PackageProjectUrl>https://github.com/CptWesley/NewWorldMinimap</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/CptWesley/NewWorldMinimap</RepositoryUrl>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<Description>Minimap for New World.</Description>
+		<PackageTags>newworld new world minimap</PackageTags>
+		<AssemblyVersion>$(Version)</AssemblyVersion>
+		<FileVersion>$(Version)</FileVersion>
+		<Version>1.0-preview1</Version>
+		<Copyright></Copyright>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -17,6 +31,13 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="Costura.Fody" Version="4.1.0">
+			<PrivateAssets>all</PrivateAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="5.0.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
 	</ItemGroup>
