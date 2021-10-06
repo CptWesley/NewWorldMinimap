@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/CptWesley/NewWorldMinimap/master/Resources/icons/app_128.png" width="128" height="128">
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true" width="128" height="128">
 
 # CptWesley's Minimap
 Minimap for [Amazon's New World](https://www.newworld.com/).
