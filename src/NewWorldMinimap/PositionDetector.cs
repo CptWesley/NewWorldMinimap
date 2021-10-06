@@ -38,7 +38,7 @@ namespace NewWorldMinimap
         /// <returns>The found position.</returns>
         public bool TryGetPosition(Bitmap bmp, out Vector3 position)
         {
-            using Bitmap cut = bmp.Crop(0.856, 0.017, 0.143, 0.017);
+            using Bitmap cut = bmp.Crop(bmp.Width - 277, 18, 277, 18);
             using Bitmap scaled = new Bitmap(cut, cut.Width * 4, cut.Height * 4);
 
             using Bitmap segmented = scaled.Segment(TextColor, 20, 0.1, 0.1);
