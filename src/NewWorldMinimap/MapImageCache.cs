@@ -59,7 +59,7 @@ namespace NewWorldMinimap
             string name = $"{x}-{y}";
             if (map.TryGetValue(name, out Bitmap cachedInMem))
             {
-                return cachedInMem;
+                return new Bitmap(cachedInMem);
             }
 
             string fileName = ToFileName(x, y);
@@ -86,7 +86,7 @@ namespace NewWorldMinimap
             }
 
             map[name] = result;
-            return result;
+            return new Bitmap(result);
         }
 
         /// <summary>
