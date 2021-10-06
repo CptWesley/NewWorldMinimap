@@ -25,7 +25,6 @@ namespace NewWorldMinimap
         private readonly IconCache icons = new IconCache();
 
         private Thread? scannerThread;
-        private Bitmap? sourceMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapForm"/> class.
@@ -58,26 +57,29 @@ namespace NewWorldMinimap
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.ClientSize = new Size(128, 128);
+            this.ClientSize = new Size(512, 512);
             SetName(Vector3.Zero);
-            sourceMap = new Bitmap(512, 512);
             picture.SizeMode = PictureBoxSizeMode.CenterImage;
-            picture.Image = sourceMap;
-            picture.Width = sourceMap.Width;
-            picture.Height = sourceMap.Height;
             this.Controls.Add(picture);
             this.ResumeLayout(false);
-            this.Width = picture.Width;
-            this.Height = picture.Height;
+            this.Width = 512;
+            this.Height = 512;
             markers.Populate(map);
-            this.Resize += OnResize;
+            this.Resize += (s, e) => UpdateSize();
             this.FormClosed += OnClose;
         }
 
-        private void OnResize(object sender, EventArgs e)
+        private void UpdateSize()
         {
-            picture.Width = this.Width;
-            picture.Height = this.Height;
+            if (picture.Width != Width)
+            {
+                picture.Width = Width;
+            }
+
+            if (picture.Height != Height)
+            {
+                picture.Height = Height;
+            }
         }
 
         private void OnClose(object sender, EventArgs e)
@@ -108,16 +110,14 @@ namespace NewWorldMinimap
 
                     lastPos = pos;
                     Console.WriteLine($"{i}: {pos}");
-                    sourceMap?.Dispose();
-                    sourceMap = map.GetTileForCoordinate(pos.X, pos.Y);
+                    using Bitmap baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
 
                     (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
                     IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
-                    using Bitmap temp = new Bitmap(sourceMap);
-                    using Graphics g = Graphics.FromImage(temp);
+                    using Graphics g = Graphics.FromImage(baseMap);
 
                     foreach (Marker marker in visibleMarkers)
                     {
@@ -125,7 +125,7 @@ namespace NewWorldMinimap
                         g.DrawImage(icons.Get(marker), ix, iy);
                     }
 
-                    Bitmap newMap = temp.Recenter(imageX, imageY);
+                    Bitmap newMap = baseMap.Recenter(imageX, imageY);
                     using Graphics g2 = Graphics.FromImage(newMap);
                     g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
 
@@ -135,9 +135,10 @@ namespace NewWorldMinimap
                     {
                         SetName(pos);
                         picture.Image = newMap;
+                        UpdateSize();
                     });
 
-                    prev.Dispose();
+                    prev?.Dispose();
                 }
                 else
                 {
