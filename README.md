@@ -8,7 +8,7 @@ The application **DOES NOT** actively interact with the game window itself. It *
 It **ONLY** takes screenshots of your screen.
 
 ## Examples
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/docs/example1.jpg?raw=true" width="128" height="128">
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example1.jpg?raw=true" width="512" height="288">
 
 ## Current Features
 - Render surroundings of the player (including resources).
