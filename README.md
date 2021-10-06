@@ -1,3 +1,5 @@
+<img src="https://raw.githubusercontent.com/CptWesley/NewWorldMinimap/master/Resources/icons/app_128.png" width="128" height="128">
+
 # CptWesley's Minimap
 Minimap for [Amazon's New World](https://www.newworld.com/).
 The application takes screenshots of your desktop and performing **Optical Character Recognition** (OCR) to detect your position on the world map.
