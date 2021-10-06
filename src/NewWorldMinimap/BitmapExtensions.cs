@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
-using System.Numerics;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewWorldMinimap
 {
+    /// <summary>
+    /// Provides extensions for the <see cref="Bitmap"/> class.
+    /// </summary>
     public static class BitmapExtensions
     {
+        /// <summary>
+        /// Crops the specified area.
+        /// </summary>
+        /// <param name="bmp">The bitmap.</param>
+        /// <param name="area">The area to crop.</param>
+        /// <returns>A new bitmap containing the provided area.</returns>
         public static Bitmap Crop(this Bitmap bmp, Rectangle area)
         {
             int correctedX = Math.Max(Math.Min(bmp.Width - 1, area.X), 0);
@@ -23,9 +28,27 @@ namespace NewWorldMinimap
             return bmp.Clone(correctedArea, PixelFormat.Format24bppRgb);
         }
 
+        /// <summary>
+        /// Crops the specified area.
+        /// </summary>
+        /// <param name="bmp">The bitmap.</param>
+        /// <param name="x">The x-coordinate that starts the area.</param>
+        /// <param name="y">The y-coordinate that starts the area.</param>
+        /// <param name="width">The width of the area.</param>
+        /// <param name="height">The height of the area.</param>
+        /// <returns>A new bitmap containing the provided area.</returns>
         public static Bitmap Crop(this Bitmap bmp, int x, int y, int width, int height)
             => bmp.Crop(new Rectangle(x, y, width, height));
 
+        /// <summary>
+        /// Crops the specified area.
+        /// </summary>
+        /// <param name="bmp">The bitmap.</param>
+        /// <param name="x">The x-coordinate that starts the area in fractions.</param>
+        /// <param name="y">The y-coordinate that starts the area in fractions.</param>
+        /// <param name="width">The width of the area in fractions.</param>
+        /// <param name="height">The height of the area in fractions.</param>
+        /// <returns>A new bitmap containing the provided area.</returns>
         public static Bitmap Crop(this Bitmap bmp, double x, double y, double width, double height)
         {
             double correctedX = Math.Max(Math.Min(x, 1), 0);
@@ -36,6 +59,13 @@ namespace NewWorldMinimap
             return bmp.Crop((int)(correctedX * bmp.Width), (int)(correctedY * bmp.Height), (int)(correctedWidth * bmp.Width), (int)(correctedHeight * bmp.Height));
         }
 
+        /// <summary>
+        /// Segments the image based on the specified colour.
+        /// </summary>
+        /// <param name="bmp">The bitmap.</param>
+        /// <param name="color">The colour.</param>
+        /// <param name="tolerance">The tolerance.</param>
+        /// <returns>The segmented image.</returns>
         public static Bitmap Segment(this Bitmap bmp, Color color, double tolerance)
             => bmp.Walk(cur =>
             {
@@ -47,6 +77,12 @@ namespace NewWorldMinimap
                 return Color.White;
             });
 
+        /// <summary>
+        /// Walks the image and performs a transformation.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="func">The function.</param>
+        /// <returns>A new image with the transformation applied.</returns>
         public static Bitmap Walk(this Bitmap bmp, Func<int, int, Color, Color> func)
             => bmp.Transform((i, o) =>
             {
@@ -59,6 +95,12 @@ namespace NewWorldMinimap
                 }
             });
 
+        /// <summary>
+        /// Performs the given transformation on a copy of the given image.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="transformation">The transformation.</param>
+        /// <returns>A new image with the transformation applied.</returns>
         public static Bitmap Transform(this Bitmap bmp, Action<ColorData, ColorData> transformation)
         {
             Rectangle rect = new Rectangle(0, 0, bmp.Width, bmp.Height);
@@ -81,16 +123,28 @@ namespace NewWorldMinimap
             return result;
         }
 
-        public static Bitmap MakeCenter(this Bitmap bmp, int x, int y)
+        /// <summary>
+        /// Recenters the image around a new center coordinate.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns>The new image.</returns>
+        public static Bitmap Recenter(this Bitmap bmp, int x, int y)
         {
             Bitmap result = new Bitmap(bmp.Width, bmp.Height);
             using Graphics g = Graphics.FromImage(result);
 
-            g.DrawImage(bmp, bmp.Width / 2 - x, bmp.Height / 2 - y);
+            g.DrawImage(bmp, (bmp.Width / 2) - x, (bmp.Height / 2) - y);
 
             return result;
         }
 
+        /// <summary>
+        /// Erodes the specified image.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <returns>The eroded image.</returns>
         public static Bitmap Erode(this Bitmap bmp)
             => bmp.Transform((i, o) =>
             {
@@ -114,7 +168,12 @@ namespace NewWorldMinimap
                 }
             });
 
-        public static Bitmap Dilute(this Bitmap bmp)
+        /// <summary>
+        /// Dilates the specified image.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <returns>The dilated image.</returns>
+        public static Bitmap Dilate(this Bitmap bmp)
             => bmp.Transform((i, o) =>
             {
                 Color[] neighbors = new Color[8];
@@ -143,9 +202,24 @@ namespace NewWorldMinimap
                 }
             });
 
+        /// <summary>
+        /// Determines whether a coordinate exists on the image.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns>
+        ///   <c>true</c> if the coordinate lies on the image; otherwise, <c>false</c>.
+        /// </returns>
         public static bool IsValidCoordinate(this Bitmap bmp, int x, int y)
             => x >= 0 && x < bmp.Width && y >= 0 && y < bmp.Height;
 
+        /// <summary>
+        /// Walks the image and performs a transformation.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="func">The function.</param>
+        /// <returns>A new image with the transformation applied.</returns>
         public static Bitmap Walk(this Bitmap bmp, Func<Color, Color> func)
             => bmp.Walk((x, y, c) => func(c));
 
@@ -158,41 +232,7 @@ namespace NewWorldMinimap
             double ld = Math.Abs(x.Lightness - y.Lightness);
             double sd = Math.Abs(x.Saturation - y.Saturation);
 
-            if (hd <= tolerance)
-            {
-                //Console.WriteLine($"LD: {ld} SD: {sd}");
-            }
-
-            //Console.WriteLine($"HD: {hd}");
-
             return hd <= tolerance && ld < 0.1 && sd < 0.1;
         }
-
-        public static void DrawImage(this Graphics g, Image img, int x, int y, float angle)
-        {
-            g.TranslateTransform((float)img.Width / 2, (float)img.Height / 2);
-            g.RotateTransform(angle);
-            g.TranslateTransform(-(float)img.Width / 2, -(float)img.Height / 2);
-            g.DrawImage(img, x, y);
-            g.ResetTransform();
-        }
-
-        public static void DrawImage(this Graphics g, Image img, int x, int y, Vector2 dir)
-        {
-            float length = dir.Length();
-            float angle = 0;
-
-            if (length != 0)
-            {
-                Vector2 unit = dir / length;
-                angle = (float)(Math.Atan2(unit.Y, unit.X) / Math.PI * 180);
-            }
-
-            Console.WriteLine(angle);
-            g.DrawImage(img, x, y, angle);
-        }
-
-        public static void DrawImage(this Graphics g, Image img, int x, int y, Vector3 dir)
-            => g.DrawImage(img, x, y, new Vector2(dir.X, dir.Y));
     }
 }

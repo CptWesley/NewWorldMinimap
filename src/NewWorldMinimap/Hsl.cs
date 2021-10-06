@@ -1,14 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NewWorldMinimap
 {
+    /// <summary>
+    /// Data type containing a HSL-formatted colour.
+    /// </summary>
     public record Hsl(double Hue, double Saturation, double Lightness)
     {
+        /// <summary>
+        /// Creates an <see cref="Hsl"/> instance from an RGB colour.
+        /// </summary>
+        /// <param name="rgb">The RGB colour.</param>
+        /// <returns>The HSL representation of the given colour.</returns>
         public static Hsl FromRgb(Color rgb)
         {
             double rp = rgb.R / 255.0;
@@ -37,7 +41,7 @@ namespace NewWorldMinimap
             hue *= 60;
 
             double lightness = (cMax + cMin) / 2;
-            double saturation = delta == 0 ? 0 : delta / (1 - Math.Abs(2 * lightness - 1));
+            double saturation = delta == 0 ? 0 : delta / (1 - Math.Abs((2 * lightness) - 1));
 
             return new Hsl(hue, saturation, lightness);
         }

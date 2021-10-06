@@ -1,20 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using static NewWorldMinimap.MarkerCache;
 
 namespace NewWorldMinimap
 {
+    /// <summary>
+    /// Provides logic for caching icons.
+    /// </summary>
     public class IconCache
     {
         private readonly Dictionary<string, Bitmap> baseFiles = new Dictionary<string, Bitmap>();
         private readonly Dictionary<string, Bitmap> types = new Dictionary<string, Bitmap>();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="IconCache"/> class.
+        /// </summary>
         public IconCache()
         {
             Register("player.png", "player", Color.Red);
@@ -39,6 +40,41 @@ namespace NewWorldMinimap
             Register("tree.png", "ironwood", Color.Gray);
             Register("tree.png", "wyrdwood", Color.DarkBlue);
             Register("tree.png", "Briar", Color.Brown);
+        }
+
+        /// <summary>
+        /// Gets the icon for the given marker.
+        /// </summary>
+        /// <param name="marker">The marker.</param>
+        /// <returns>The found icon.</returns>
+        public Bitmap Get(Marker marker)
+        {
+            if (types.TryGetValue(marker.Type, out Bitmap result))
+            {
+                return result;
+            }
+
+            if (types.TryGetValue(marker.Category, out result))
+            {
+                return result;
+            }
+
+            return types["unknown"];
+        }
+
+        /// <summary>
+        /// Gets the icon for the given type or category name.
+        /// </summary>
+        /// <param name="name">The type or category name.</param>
+        /// <returns>The found icon.</returns>
+        public Bitmap Get(string name)
+        {
+            if (types.TryGetValue(name, out Bitmap result))
+            {
+                return result;
+            }
+
+            return types["unknown"];
         }
 
         private void Register(string baseName, string type, Color color)
@@ -69,31 +105,6 @@ namespace NewWorldMinimap
             bmp = new Bitmap(temp);
             baseFiles[name] = bmp;
             return bmp;
-        }
-
-        public Bitmap Get(Marker marker)
-        {
-            if (types.TryGetValue(marker.Type, out Bitmap result))
-            {
-                return result;
-            }
-
-            if (types.TryGetValue(marker.Category, out result))
-            {
-                return result;
-            }
-
-            return types["unknown"];
-        }
-
-        public Bitmap Get(string type)
-        {
-            if (types.TryGetValue(type, out Bitmap result))
-            {
-                return result;
-            }
-
-            return types["unknown"];
         }
     }
 }

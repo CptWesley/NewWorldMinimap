@@ -1,38 +1,58 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.Numerics;
 using System.Threading;
 using System.Windows.Forms;
-using static NewWorldMinimap.MarkerCache;
 
 namespace NewWorldMinimap
 {
+    /// <summary>
+    /// Provides an interface for rendering the map.
+    /// </summary>
+    /// <seealso cref="Form" />
     public class MapForm : Form
     {
-        private static readonly PositionDetector pd = new PositionDetector();
-        private static readonly Screen screen = Screen.PrimaryScreen;
-        private PictureBox picture = new PictureBox();
-        private Bitmap sourceMap;
-        private MapImageCache map = new MapImageCache(4);
-        private PositionBuffer posBuf = new PositionBuffer();
-        private MarkerCache markers = new MarkerCache();
-        private Thread scannerThread;
-        private IconCache icons = new IconCache();
+        private static readonly Screen Screen = Screen.PrimaryScreen;
+
+        private readonly PositionDetector pd = new PositionDetector();
+        private readonly PictureBox picture = new PictureBox();
+        private readonly MapImageCache map = new MapImageCache(4);
+        private readonly MarkerCache markers = new MarkerCache();
+        private readonly IconCache icons = new IconCache();
+
+        private Thread? scannerThread;
+        private Bitmap? sourceMap;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MapForm"/> class.
+        /// </summary>
+        public MapForm()
+        {
+            InitializeComponent();
+            StartUpdateLoop();
+        }
+
+        private static Bitmap TakeScreenshot()
+        {
+            Bitmap bmp = new Bitmap(Screen.Bounds.Width, Screen.Bounds.Height, PixelFormat.Format24bppRgb);
+
+            using (Graphics g = Graphics.FromImage(bmp))
+            {
+                g.CopyFromScreen(Screen.Bounds.X, Screen.Bounds.Y, 0, 0, Screen.Bounds.Size, CopyPixelOperation.SourceCopy);
+            }
+
+            return bmp;
+        }
 
         private void SetName(Vector3 pos)
         {
             string name = $"CptWesley's Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
             this.Name = name;
             this.Text = name;
-        }
-
-        public MapForm()
-        {
-            InitializeComponent();
-            StartUpdateLoop();
         }
 
         private void InitializeComponent()
@@ -65,18 +85,6 @@ namespace NewWorldMinimap
             Environment.Exit(0);
         }
 
-        private static Bitmap TakeScreenshot()
-        {
-            Bitmap bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height, PixelFormat.Format24bppRgb);
-
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
-            }
-
-            return bmp;
-        }
-
         private Thread StartUpdateLoop()
         {
             scannerThread = new Thread(UpdateLoop);
@@ -84,6 +92,7 @@ namespace NewWorldMinimap
             return scannerThread;
         }
 
+        [SuppressMessage("Reliability", "CA2000", Justification = "Value of 'newmap' is actually disposed.")]
         private void UpdateLoop()
         {
             using Pen pen = new Pen(Color.Red);
@@ -93,13 +102,13 @@ namespace NewWorldMinimap
             while (true)
             {
                 using Bitmap bmp = TakeScreenshot();
-                if (pd.TryGetPosition(bmp, out Vector3 pos) && posBuf.Push(pos))
+                if (pd.TryGetPosition(bmp, out Vector3 pos))
                 {
                     Vector3 dir = lastPos - pos;
 
                     lastPos = pos;
                     Console.WriteLine($"{i}: {pos}");
-                    sourceMap.Dispose();
+                    sourceMap?.Dispose();
                     sourceMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
@@ -107,7 +116,7 @@ namespace NewWorldMinimap
                     (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
                     IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
-                    Bitmap temp = new Bitmap(sourceMap);
+                    using Bitmap temp = new Bitmap(sourceMap);
                     using Graphics g = Graphics.FromImage(temp);
 
                     foreach (Marker marker in visibleMarkers)
@@ -116,21 +125,26 @@ namespace NewWorldMinimap
                         g.DrawImage(icons.Get(marker), ix, iy);
                     }
 
-                    Bitmap newMap = temp.MakeCenter(imageX, imageY);
+                    Bitmap newMap = temp.Recenter(imageX, imageY);
                     using Graphics g2 = Graphics.FromImage(newMap);
                     g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
 
-                    SafeInvoke(() => {
+                    Image prev = picture.Image;
+
+                    SafeInvoke(() =>
+                    {
                         SetName(pos);
                         picture.Image = newMap;
                     });
+
+                    prev.Dispose();
                 }
                 else
                 {
                     Console.WriteLine($"{i}: Failure");
                 }
+
                 i++;
-                //Thread.Sleep(50);
             }
         }
 
