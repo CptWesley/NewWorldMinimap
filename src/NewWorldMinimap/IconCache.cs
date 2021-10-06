@@ -42,11 +42,34 @@ namespace NewWorldMinimap
             Register("fish.png", "hotspot_rare", Color.Yellow);
             Register("fish.png", "hotspot_secret", Color.Red);
 
-            Register("chest.png", "chests", Color.Brown);
+            Register("chest.png", "chests", Color.SaddleBrown);
 
             Register("document.png", "documents", Color.LightYellow);
 
             Register("plant.png", "plants", Color.Green);
+
+            Register("skull.png", "monsters", Color.Green);
+            Register("turkey.png", "turkey", Color.Brown);
+            Register("turkey.png", "turkey_nest", Color.DodgerBlue);
+            Register("wolf.png", "wolf", Color.LightGray);
+            Register("wolf.png", "wolf_elemental", Color.DodgerBlue);
+            Register("deer.png", "elk", Color.SaddleBrown);
+            Register("deer.png", "elk_elemental", Color.DodgerBlue);
+            Register("skull.png", "named", Color.Red);
+            Register("alligator.png", "alligator", Color.Olive);
+            Register("rabbit.png", "rabbit", Color.White);
+            Register("bear.png", "bear", Color.SaddleBrown);
+            Register("bear.png", "bear_elemental", Color.DodgerBlue);
+            Register("boar.png", "bear_elemental", Color.DodgerBlue);
+            Register("pig.png", "pig", Color.LightPink);
+            Register("pig.png", "boar", Color.DarkGray);
+            Register("cow.png", "cow", Color.WhiteSmoke);
+            Register("cow.png", "bison", Color.DarkOrange);
+            Register("goat.png", "goat", Color.LightGray);
+            Register("sheep.png", "sheep", Color.WhiteSmoke);
+            Register("leopard.png", "leopard", Color.DarkOrange);
+            Register("leopard.png", "lion", Color.DarkGoldenrod);
+            Register("leopard.png", "lynx", Color.SlateGray);
         }
 
         /// <summary>
