@@ -18,7 +18,7 @@ namespace NewWorldMinimap
         /// </summary>
         public IconCache()
         {
-            Register("player.png", "player", Color.Red);
+            Register("player.png", "player", Color.Yellow);
             Register("unknown.png", "unknown", Color.Red);
 
             Register("ore.png", "ores", Color.Green);
