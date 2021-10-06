@@ -32,14 +32,21 @@ namespace NewWorldMinimap
             Register("ore.png", "silver", Color.Silver);
             Register("ore.png", "starmetal", Color.Blue);
 
-            Register("chest.png", "chests", Color.Brown);
-
-            Register("plant.png", "plants", Color.Green);
-
             Register("tree.png", "woods", Color.Green);
             Register("tree.png", "ironwood", Color.Gray);
             Register("tree.png", "wyrdwood", Color.DarkBlue);
             Register("tree.png", "Briar", Color.Brown);
+
+            Register("fish.png", "fishing", Color.Green);
+            Register("fish.png", "hotspot_broad", Color.Blue);
+            Register("fish.png", "hotspot_rare", Color.Yellow);
+            Register("fish.png", "hotspot_secret", Color.Red);
+
+            Register("chest.png", "chests", Color.Brown);
+
+            Register("document.png", "documents", Color.LightYellow);
+
+            Register("plant.png", "plants", Color.Green);
         }
 
         /// <summary>
