@@ -70,7 +70,7 @@ namespace NewWorldMinimap
             this.Width = picture.Width;
             this.Height = picture.Height;
             markers.Populate(map);
-            this.ResizeEnd += OnResize;
+            this.Resize += OnResize;
             this.FormClosed += OnClose;
         }
 
