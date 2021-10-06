@@ -1,3 +1,5 @@
+# EDIT: After receiving the information that a fellow programmer working on another minimap has received a cease and desist, I tried reaching out to AGS for their opinion. I will keep you posted on their answer. Until then: use at your own risk.
+
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true" width="128" height="128">
 
 # CptWesley's Minimap
@@ -39,3 +41,5 @@ However, the binary distribution contains a statically linked [Apache V2 license
 
 ## Contribution
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
+
+# EDIT: After receiving the information that a fellow programmer working on another minimap has received a cease and desist, I tried reaching out to AGS for their opinion. I will keep you posted on their answer. Until then: use at your own risk.
