@@ -4,7 +4,9 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
+using System.IO;
 using System.Numerics;
+using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -47,6 +49,12 @@ namespace NewWorldMinimap
             return bmp;
         }
 
+        private static Icon LoadIcon()
+        {
+            using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"NewWorldMinimap.Resources.icons.app.ico");
+            return new Icon(stream);
+        }
+
         private void SetName(Vector3 pos)
         {
             string name = $"CptWesley's Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
@@ -67,6 +75,7 @@ namespace NewWorldMinimap
             markers.Populate(map);
             this.Resize += (s, e) => UpdateSize();
             this.FormClosed += OnClose;
+            this.Icon = LoadIcon();
         }
 
         private void UpdateSize()

@@ -17,6 +17,7 @@
 		<FileVersion>$(Version)</FileVersion>
 		<Version>1.0-preview1</Version>
 		<Copyright></Copyright>
+		<ApplicationIcon>./Resources/icons/app.ico</ApplicationIcon>
 	</PropertyGroup>
 
 	<ItemGroup>
