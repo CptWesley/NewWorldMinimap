@@ -45,6 +45,7 @@ namespace NewWorldMinimap
             PopulateResource(mapCache, data, "documents");
             PopulateResource(mapCache, data, "fishing");
             PopulateResource(mapCache, data, "monsters");
+            PopulateResource(mapCache, data, "essences");
         }
 
         /// <summary>

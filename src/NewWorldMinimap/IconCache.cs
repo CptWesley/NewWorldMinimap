@@ -60,7 +60,6 @@ namespace NewWorldMinimap
             Register("rabbit.png", "rabbit", Color.White);
             Register("bear.png", "bear", Color.SaddleBrown);
             Register("bear.png", "bear_elemental", Color.DodgerBlue);
-            Register("boar.png", "bear_elemental", Color.DodgerBlue);
             Register("pig.png", "pig", Color.LightPink);
             Register("pig.png", "boar", Color.DarkGray);
             Register("cow.png", "cow", Color.WhiteSmoke);
@@ -70,6 +69,30 @@ namespace NewWorldMinimap
             Register("leopard.png", "leopard", Color.DarkOrange);
             Register("leopard.png", "lion", Color.DarkGoldenrod);
             Register("leopard.png", "lynx", Color.SlateGray);
+
+            Register("essence.png", "essences", Color.Green);
+
+            Register("essence.png", "air_boid", Color.WhiteSmoke);
+            Register("essence_minus.png", "air_plant", Color.WhiteSmoke);
+            Register("essence_plus.png", "air_stone", Color.WhiteSmoke);
+            Register("essence.png", "death_boid", Color.DarkViolet);
+            Register("essence_minus.png", "death_plant", Color.DarkViolet);
+            Register("essence_plus.png", "death_stone", Color.DarkViolet);
+            Register("essence.png", "earth_boid", Color.SaddleBrown);
+            Register("essence_minus.png", "earth_plant", Color.SaddleBrown);
+            Register("essence_plus.png", "earth_stone", Color.SaddleBrown);
+            Register("essence.png", "fire_boid", Color.Orange);
+            Register("essence_minus.png", "fire_plant", Color.Orange);
+            Register("essence_plus.png", "fire_stone", Color.Orange);
+            Register("essence.png", "life_boid", Color.Firebrick);
+            Register("essence_minus.png", "life_plant", Color.Firebrick);
+            Register("essence_plus.png", "life_stone", Color.Firebrick);
+            Register("essence.png", "soul_boid", Color.HotPink);
+            Register("essence_minus.png", "soul_plant", Color.HotPink);
+            Register("essence_plus.png", "soul_stone", Color.HotPink);
+            Register("essence.png", "water_boid", Color.DodgerBlue);
+            Register("essence_minus.png", "water_plant", Color.DodgerBlue);
+            Register("essence_plus.png", "water_stone", Color.DodgerBlue);
         }
 
         /// <summary>
