@@ -13,10 +13,15 @@ namespace NewWorldMinimap
     /// <seealso cref="IDisposable" />
     public class PositionDetector : IDisposable
     {
-        private static readonly Regex PosRegex = new Regex(@"(\d{7,8}) (\d{6,7}) (\d{5,6})", RegexOptions.Compiled);
+        private static readonly Regex PosRegex = new Regex(@"(\d{4,5} \d{3}) (\d{3,4} \d{3}) (\d{2,3} \d{3})", RegexOptions.Compiled);
         private static readonly Color TextColor = Color.FromArgb(169, 169, 125);
 
-        private readonly ITesseract tesseract = new TesseractPool();
+        private readonly ITesseract tesseract = new TesseractPool(new TesseractOptions
+        {
+            PageSegmentation = PageSegmentation.Line,
+            Numeric = true,
+        });
+
         private bool disposedValue;
 
         /// <summary>
@@ -36,11 +41,19 @@ namespace NewWorldMinimap
             using Bitmap cut = bmp.Crop(0.856, 0.017, 0.143, 0.017);
             using Bitmap scaled = new Bitmap(cut, cut.Width * 4, cut.Height * 4);
 
-            using Bitmap segmented = scaled.Segment(TextColor, 25);
-            using Bitmap dilated1 = segmented.Dilate();
-            using Bitmap dilated2 = dilated1.Dilate();
+            using Bitmap segmented = scaled.Segment(TextColor, 20, 0.1, 0.1);
 
-            if (TryGetPositionInternal(dilated2, out position))
+            using Graphics g = Graphics.FromImage(segmented);
+            g.FillRectangle(Brushes.White, 0, 0, segmented.Width, 8);
+
+            using Bitmap dilated1 = segmented.Dilate();
+
+            using Bitmap input = new Bitmap(dilated1.Width * 3, dilated1.Height * 3);
+            using Graphics g2 = Graphics.FromImage(input);
+            g2.Clear(Color.White);
+            g2.DrawImage(dilated1, dilated1.Width, dilated1.Height);
+
+            if (TryGetPositionInternal(input, out position))
             {
                 return true;
             }
@@ -76,18 +89,17 @@ namespace NewWorldMinimap
         private bool TryGetPositionInternal(Bitmap bmp, out Vector3 position)
         {
             bmp.SetResolution(300, 300);
-            bmp.Save("a.png");
-            string text = tesseract.Read(bmp);
-            text = Regex.Replace(text, @"[^0-9 ]+", string.Empty);
+            string text = tesseract.Read(bmp).Trim();
+            Console.WriteLine("Read: " + text);
+            text = Regex.Replace(text, @"[^0-9]+", " ");
             text = Regex.Replace(text, @"\s+", " ").Trim();
-
             Match m = PosRegex.Match(text);
 
             if (m.Success && m.Length == text.Length)
             {
-                float x = float.Parse(Regex.Replace(m.Groups[1].Value, @"\s+", string.Empty), CultureInfo.InvariantCulture) / 1000;
-                float y = float.Parse(Regex.Replace(m.Groups[2].Value, @"\s+", string.Empty), CultureInfo.InvariantCulture) / 1000;
-                float z = float.Parse(Regex.Replace(m.Groups[3].Value, @"\s+", string.Empty), CultureInfo.InvariantCulture) / 1000;
+                float x = float.Parse(m.Groups[1].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
+                float y = float.Parse(m.Groups[2].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
+                float z = float.Parse(m.Groups[3].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
                 position = CorrectPosition(new Vector3(x, y, z));
 
                 return IsSensiblePosition(position);

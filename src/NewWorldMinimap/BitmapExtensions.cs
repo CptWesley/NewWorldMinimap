@@ -64,12 +64,14 @@ namespace NewWorldMinimap
         /// </summary>
         /// <param name="bmp">The bitmap.</param>
         /// <param name="color">The colour.</param>
-        /// <param name="tolerance">The tolerance.</param>
+        /// <param name="hTolerance">The hue tolerance.</param>
+        /// <param name="sTolerance">The saturation tolerance.</param>
+        /// <param name="lTolerance">The lightness tolerance.</param>
         /// <returns>The segmented image.</returns>
-        public static Bitmap Segment(this Bitmap bmp, Color color, double tolerance)
+        public static Bitmap Segment(this Bitmap bmp, Color color, double hTolerance, double sTolerance, double lTolerance)
             => bmp.Walk(cur =>
             {
-                if (IsSameAs(cur, color, tolerance))
+                if (IsSameAs(cur, color, hTolerance, sTolerance, lTolerance))
                 {
                     return Color.Black;
                 }
@@ -154,14 +156,14 @@ namespace NewWorldMinimap
                 {
                     for (int y = 0; y < i.Height; y++)
                     {
-                        neighbors[0] = bmp.IsValidCoordinate(x - 1, y - 1) ? i[x - 1, y - 1] : Color.Black;
-                        neighbors[1] = bmp.IsValidCoordinate(x - 1, y) ? i[x - 1, y] : Color.Black;
-                        neighbors[2] = bmp.IsValidCoordinate(x - 1, y + 1) ? i[x - 1, y + 1] : Color.Black;
-                        neighbors[3] = bmp.IsValidCoordinate(x, y - 1) ? i[x, y - 1] : Color.Black;
-                        neighbors[4] = bmp.IsValidCoordinate(x, y + 1) ? i[x, y + 1] : Color.Black;
-                        neighbors[5] = bmp.IsValidCoordinate(x + 1, y - 1) ? i[x + 1, y - 1] : Color.Black;
-                        neighbors[6] = bmp.IsValidCoordinate(x + 1, y) ? i[x + 1, y] : Color.Black;
-                        neighbors[7] = bmp.IsValidCoordinate(x + 1, y + 1) ? i[x + 1, y + 1] : Color.Black;
+                        neighbors[0] = bmp.IsValidCoordinate(x - 1, y - 1) ? i[x - 1, y - 1] : Color.White;
+                        neighbors[1] = bmp.IsValidCoordinate(x - 1, y) ? i[x - 1, y] : Color.White;
+                        neighbors[2] = bmp.IsValidCoordinate(x - 1, y + 1) ? i[x - 1, y + 1] : Color.White;
+                        neighbors[3] = bmp.IsValidCoordinate(x, y - 1) ? i[x, y - 1] : Color.White;
+                        neighbors[4] = bmp.IsValidCoordinate(x, y + 1) ? i[x, y + 1] : Color.White;
+                        neighbors[5] = bmp.IsValidCoordinate(x + 1, y - 1) ? i[x + 1, y - 1] : Color.White;
+                        neighbors[6] = bmp.IsValidCoordinate(x + 1, y) ? i[x + 1, y] : Color.White;
+                        neighbors[7] = bmp.IsValidCoordinate(x + 1, y + 1) ? i[x + 1, y + 1] : Color.White;
 
                         o[x, y] = neighbors.Count(x => x.R > 0 || x.G > 0 || x.B > 0) > 1 ? Color.White : Color.Black;
                     }
@@ -188,14 +190,14 @@ namespace NewWorldMinimap
                             o[x, y] = Color.Black;
                         }
 
-                        neighbors[0] = bmp.IsValidCoordinate(x - 1, y - 1) ? i[x - 1, y - 1] : Color.Black;
-                        neighbors[1] = bmp.IsValidCoordinate(x - 1, y) ? i[x - 1, y] : Color.Black;
-                        neighbors[2] = bmp.IsValidCoordinate(x - 1, y + 1) ? i[x - 1, y + 1] : Color.Black;
-                        neighbors[3] = bmp.IsValidCoordinate(x, y - 1) ? i[x, y - 1] : Color.Black;
-                        neighbors[4] = bmp.IsValidCoordinate(x, y + 1) ? i[x, y + 1] : Color.Black;
-                        neighbors[5] = bmp.IsValidCoordinate(x + 1, y - 1) ? i[x + 1, y - 1] : Color.Black;
-                        neighbors[6] = bmp.IsValidCoordinate(x + 1, y) ? i[x + 1, y] : Color.Black;
-                        neighbors[7] = bmp.IsValidCoordinate(x + 1, y + 1) ? i[x + 1, y + 1] : Color.Black;
+                        neighbors[0] = bmp.IsValidCoordinate(x - 1, y - 1) ? i[x - 1, y - 1] : Color.White;
+                        neighbors[1] = bmp.IsValidCoordinate(x - 1, y) ? i[x - 1, y] : Color.White;
+                        neighbors[2] = bmp.IsValidCoordinate(x - 1, y + 1) ? i[x - 1, y + 1] : Color.White;
+                        neighbors[3] = bmp.IsValidCoordinate(x, y - 1) ? i[x, y - 1] : Color.White;
+                        neighbors[4] = bmp.IsValidCoordinate(x, y + 1) ? i[x, y + 1] : Color.White;
+                        neighbors[5] = bmp.IsValidCoordinate(x + 1, y - 1) ? i[x + 1, y - 1] : Color.White;
+                        neighbors[6] = bmp.IsValidCoordinate(x + 1, y) ? i[x + 1, y] : Color.White;
+                        neighbors[7] = bmp.IsValidCoordinate(x + 1, y + 1) ? i[x + 1, y + 1] : Color.White;
 
                         o[x, y] = neighbors.Any(x => x.R == 0 && x.G == 0 && x.B == 0) ? Color.Black : Color.White;
                     }
@@ -223,7 +225,7 @@ namespace NewWorldMinimap
         public static Bitmap Walk(this Bitmap bmp, Func<Color, Color> func)
             => bmp.Walk((x, y, c) => func(c));
 
-        private static bool IsSameAs(Color a, Color b, double tolerance)
+        private static bool IsSameAs(Color a, Color b, double hTolerance, double sTolerance, double lTolerance)
         {
             Hsl x = Hsl.FromRgb(a);
             Hsl y = Hsl.FromRgb(b);
@@ -232,7 +234,7 @@ namespace NewWorldMinimap
             double ld = Math.Abs(x.Lightness - y.Lightness);
             double sd = Math.Abs(x.Saturation - y.Saturation);
 
-            return hd <= tolerance && ld < 0.1 && sd < 0.1;
+            return hd <= hTolerance && ld < sTolerance && sd < lTolerance;
         }
     }
 }

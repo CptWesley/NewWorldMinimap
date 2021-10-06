@@ -21,7 +21,6 @@
 
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="TesserNet.System.Drawing" Version="0.4.0" />
 		<PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>compile</IncludeAssets>
@@ -40,6 +39,7 @@
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
+		<PackageReference Include="TesserNet.System.Drawing" Version="0.5.1" />
 	</ItemGroup>
 
 	<ItemGroup>
