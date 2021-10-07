@@ -9,6 +9,8 @@ It then utilizes data obtained from [StudioLoot's New World Interactive Map](htt
 The application **DOES NOT** actively interact with the game window itself. It **DOES NOT** inject itself. It **DOES NOT** read out memory. It **DOES NOT** feed input into the game.
 It **ONLY** takes screenshots of your screen.
 
+Join the [Discord](https://discord.gg/dCgStTDaet)!
+
 ## Examples
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example1.jpg?raw=true" width="512" height="288">
 
