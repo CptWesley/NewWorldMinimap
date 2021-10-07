@@ -30,12 +30,10 @@ namespace NewWorldMinimap
         private readonly MarkerCache markers = new MarkerCache();
         private readonly IconCache icons = new IconCache();
 
-        private Thread? scannerThread;
         private int scanCount = 0;
         private Vector3 currentPosition = Vector3.Zero;
         private Vector3 lastPosition = Vector3.Zero;
         private Vector3 direction = Vector3.Zero;
-        private Bitmap centeredBaseMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapForm"/> class.
@@ -75,7 +73,7 @@ namespace NewWorldMinimap
 
         private void SetName(Vector3 pos)
         {
-            string name = $"CptWesley's Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
+            string name = $"New World Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
             this.Name = name;
             this.Text = name;
         }
@@ -95,6 +93,7 @@ namespace NewWorldMinimap
             this.FormClosed += OnClose;
             this.Icon = LoadIcon();
             this.KeyPress += new KeyPressEventHandler(MapForm_KeyPress);
+            //currentPosition = new Vector3(9620.743f, 6300.072f, 252.559f);
         }
 
         private void UpdateSize()
@@ -115,24 +114,6 @@ namespace NewWorldMinimap
             Environment.Exit(0);
         }
 
-        private Thread StartUpdateLoop()
-        {
-            scannerThread = new Thread(UpdateLoop);
-            scannerThread.Start();
-            return scannerThread;
-        }
-
-        [SuppressMessage("Reliability", "CA2000", Justification = "Value of 'newmap' is actually disposed.")]
-        private void UpdateLoop()
-        {
-            //using Pen pen = new Pen(Color.Red);
-            //using Pen pen2 = new Pen(Color.Pink);
-            while (true)
-            {
-                UpdateView();
-            }
-        }
-
         private void GetPosition()
         {
             using Bitmap bmp = TakeScreenshot();
@@ -151,33 +132,25 @@ namespace NewWorldMinimap
             SafeInvoke(() => SetName(currentPosition));
         }
 
-        private void DrawBaseMap()
+        private Bitmap DrawPlayer(Bitmap baseMap)
         {
-            using Bitmap baseMap = map.GetTileForCoordinate(currentPosition.X, currentPosition.Y);
+
             (int imageX, int imageY) = map.ToMinimapCoordinate(currentPosition.X, currentPosition.Y, currentPosition.X, currentPosition.Y);
-            centeredBaseMap = baseMap.Recenter(imageX, imageY);
+            Bitmap updatedMap = baseMap.Recenter(imageX, imageY);
 
-            SafeInvoke(() =>
-            {
-                picture.Image = centeredBaseMap;
-                UpdateSize();
-            });
-        }
-
-        private void DrawPlayer()
-        {
-            currentPosition = new Vector3(9620.743f, 6300.072f, 252.559f);
-            using Graphics drawingGraphics = Graphics.FromImage(centeredBaseMap);
+            using Graphics drawingGraphics = Graphics.FromImage(updatedMap);
             var imageToDraw = icons.Get("player");
-            drawingGraphics.DrawImage(imageToDraw, centeredBaseMap.Width / 2 - imageToDraw.Width / 2, centeredBaseMap.Height / 2 - imageToDraw.Height / 2);
+            drawingGraphics.DrawImage(imageToDraw, (updatedMap.Width / 2) - (imageToDraw.Width / 2), (updatedMap.Height / 2) - (imageToDraw.Height / 2));
+
+            return updatedMap;
         }
 
-        private void DrawMapMarkers()
+        private void DrawMapMarkers(Bitmap baseMap)
         {
             (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(currentPosition.X, currentPosition.Y);
             IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
-            using Graphics drawingGraphics = Graphics.FromImage(centeredBaseMap);
+            using Graphics drawingGraphics = Graphics.FromImage(baseMap);
 
             foreach (Marker marker in visibleMarkers)
             {
@@ -186,52 +159,14 @@ namespace NewWorldMinimap
             }
         }
 
-        //private void GetPositionAndDraw()
-        //{
-        //    using Bitmap bmp = TakeScreenshot();
-        //    if (pd.TryGetPosition(bmp, out Vector3 pos))
-        //    {
-        //        Vector3 dir = lastPosition - pos;
-
-        //        lastPosition = pos;
-        //        Console.WriteLine($"{scanCount}: {pos}");
-        //        using Bitmap baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
-
-        //        (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
-
-        //        (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
-        //        IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
-
-        //        using Graphics g = Graphics.FromImage(baseMap);
-
-        //        foreach (Marker marker in visibleMarkers)
-        //        {
-        //            (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-        //            g.DrawImage(icons.Get(marker), ix, iy);
-        //        }
-
-        //        Bitmap newMap = baseMap.Recenter(imageX, imageY);
-        //        using Graphics g2 = Graphics.FromImage(newMap);
-        //        g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
-
-        //        Image prev = picture.Image;
-
-        //        SafeInvoke(() =>
-        //        {
-        //            SetName(pos);
-        //            picture.Image = newMap;
-        //            UpdateSize();
-        //        });
-
-        //        prev?.Dispose();
-        //    }
-        //    else
-        //    {
-        //        Console.WriteLine($"{scanCount}: Failure");
-        //    }
-
-        //    scanCount++;
-        //}
+        private void DrawMap(Bitmap baseMap)
+        {
+            SafeInvoke(() =>
+            {
+                picture.Image = baseMap;
+                UpdateSize();
+            });
+        }
 
         private void SafeInvoke(Action act)
         {
@@ -249,16 +184,19 @@ namespace NewWorldMinimap
             var upperCaseKey = e.KeyChar.ToString().ToUpper();
             if (upperCaseKey == Keys.R.ToString())
             {
+                currentPosition.X += 2;
                 UpdateView();
             }
         }
 
         private void UpdateView()
         {
+            using Bitmap baseMap = map.GetTileForCoordinate(currentPosition.X, currentPosition.Y);
+
             GetPosition();
-            DrawBaseMap();
-            DrawMapMarkers();
-            DrawPlayer();
+            DrawMapMarkers(baseMap);
+            var updatedMap = DrawPlayer(baseMap);
+            DrawMap(updatedMap);
             //DrawCompany();
         }
 
