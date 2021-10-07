@@ -9,6 +9,8 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using NewWorldMinimap.Caches;
+using NewWorldMinimap.Util;
 
 namespace NewWorldMinimap
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Drawing;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Util
 {
     /// <summary>
     /// Data type containing a HSL-formatted colour.

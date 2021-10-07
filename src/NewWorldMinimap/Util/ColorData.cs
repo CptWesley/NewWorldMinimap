@@ -1,6 +1,6 @@
 ﻿using System.Drawing;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Util
 {
     /// <summary>
     /// Represents color data in a bitmap.

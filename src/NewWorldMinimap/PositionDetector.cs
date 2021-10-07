@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Numerics;
 using System.Text.RegularExpressions;
+using NewWorldMinimap.Util;
 using TesserNet;
 
 namespace NewWorldMinimap

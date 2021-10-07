@@ -4,7 +4,7 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Runtime.InteropServices;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Util
 {
     /// <summary>
     /// Provides extensions for the <see cref="Bitmap"/> class.

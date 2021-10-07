@@ -2,8 +2,9 @@
 using System.Drawing;
 using System.IO;
 using System.Reflection;
+using NewWorldMinimap.Util;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Caches
 {
     /// <summary>
     /// Provides logic for caching icons.

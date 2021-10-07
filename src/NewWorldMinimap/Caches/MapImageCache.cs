@@ -4,7 +4,7 @@ using System.Drawing;
 using System.IO;
 using System.Net.Http;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Caches
 {
     /// <summary>
     /// Provides logic for caching background images.

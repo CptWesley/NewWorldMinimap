@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net.Http;
 using Newtonsoft.Json.Linq;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Caches
 {
     /// <summary>
     /// Provides logic for keeping track of markers.
