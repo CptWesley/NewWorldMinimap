@@ -22,8 +22,6 @@ namespace NewWorldMinimap
     /// <seealso cref="Form" />
     public class MapForm : Form
     {
-        private const int SleepTime = 350;
-
         private readonly PositionDetector pd = new PositionDetector();
         private readonly PictureBox picture = new PictureBox();
         private readonly MapImageCache map = new MapImageCache(4);
@@ -33,8 +31,10 @@ namespace NewWorldMinimap
         private readonly ContextMenu menu = new ContextMenu();
         private readonly MenuItem alwaysOnTopButton;
         private readonly List<MenuItem> screenItems = new List<MenuItem>();
+        private readonly List<MenuItem> refreshDelayItems = new List<MenuItem>();
 
-        private int currentScreen = 0;
+        private int currentScreen;
+        private int refreshDelay;
 
         private Thread? scannerThread;
 
@@ -84,18 +84,32 @@ namespace NewWorldMinimap
             this.ContextMenu = menu;
             this.picture.ContextMenu = menu;
 
-            menu.MenuItems.Add(alwaysOnTopButton);
-            menu.MenuItems.Add("-");
-
             for (int i = 0; i < ScreenGrabber.ScreenCount; i++)
             {
                 int ic = i;
                 MenuItem item = new MenuItem($"Screen {ic}", (s, e) => SelectScreen(ic), Shortcut.None);
-                menu.MenuItems.Add(item);
                 screenItems.Add(item);
             }
 
-            screenItems[0].Checked = true;
+            CreateRefreshMenuItem(0);
+            CreateRefreshMenuItem(200);
+            CreateRefreshMenuItem(350);
+            CreateRefreshMenuItem(1000);
+
+            menu.MenuItems.Add(alwaysOnTopButton);
+            menu.MenuItems.Add("-");
+            menu.MenuItems.AddRange(screenItems.ToArray());
+            menu.MenuItems.Add("-");
+            menu.MenuItems.AddRange(refreshDelayItems.ToArray());
+
+            SelectScreen(0);
+            SelectRefreshDelay(2, 350);
+        }
+
+        private void CreateRefreshMenuItem(int delay)
+        {
+            int index = refreshDelayItems.Count;
+            refreshDelayItems.Add(new MenuItem($"Refresh delay: {delay}ms.", (s, e) => SelectRefreshDelay(index, delay), Shortcut.None));
         }
 
         private void SelectScreen(int index)
@@ -103,6 +117,18 @@ namespace NewWorldMinimap
             screenItems[currentScreen].Checked = false;
             currentScreen = index;
             screenItems[index].Checked = true;
+        }
+
+        private void SelectRefreshDelay(int index, int delay)
+        {
+            refreshDelay = delay;
+
+            foreach (MenuItem mi in refreshDelayItems)
+            {
+                mi.Checked = false;
+            }
+
+            refreshDelayItems[index].Checked = true;
         }
 
         private void ToggleAlwaysOnTop(object sender, EventArgs e)
@@ -196,9 +222,9 @@ namespace NewWorldMinimap
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
 
-                if (elapsed < SleepTime)
+                if (elapsed < refreshDelay)
                 {
-                    Thread.Sleep(SleepTime - (int)elapsed);
+                    Thread.Sleep(refreshDelay - (int)elapsed);
                 }
             }
         }
