@@ -32,6 +32,9 @@ namespace NewWorldMinimap
 
         private readonly ContextMenu menu = new ContextMenu();
         private readonly MenuItem alwaysOnTopButton;
+        private readonly List<MenuItem> screenItems = new List<MenuItem>();
+
+        private int currentScreen = 0;
 
         private Thread? scannerThread;
 
@@ -82,6 +85,24 @@ namespace NewWorldMinimap
             this.picture.ContextMenu = menu;
 
             menu.MenuItems.Add(alwaysOnTopButton);
+            menu.MenuItems.Add("-");
+
+            for (int i = 0; i < ScreenGrabber.ScreenCount; i++)
+            {
+                int ic = i;
+                MenuItem item = new MenuItem($"Screen {ic}", (s, e) => SelectScreen(ic), Shortcut.None);
+                menu.MenuItems.Add(item);
+                screenItems.Add(item);
+            }
+
+            screenItems[0].Checked = true;
+        }
+
+        private void SelectScreen(int index)
+        {
+            screenItems[currentScreen].Checked = false;
+            currentScreen = index;
+            screenItems[index].Checked = true;
         }
 
         private void ToggleAlwaysOnTop(object sender, EventArgs e)
@@ -132,7 +153,7 @@ namespace NewWorldMinimap
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(), out Vector3 pos))
+                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector3 pos))
                 {
                     Console.WriteLine($"{i}: {pos}");
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);

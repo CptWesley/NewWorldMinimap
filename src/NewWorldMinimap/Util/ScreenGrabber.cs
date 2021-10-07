@@ -12,6 +12,12 @@ namespace NewWorldMinimap.Util
     public static class ScreenGrabber
     {
         /// <summary>
+        /// Gets the screen count.
+        /// </summary>
+        /// <returns>The number of screens.</returns>
+        public static int ScreenCount => Screen.AllScreens.Length;
+
+        /// <summary>
         /// Takes the screenshot.
         /// </summary>
         /// <param name="screenIndex">Index of the screen.</param>
