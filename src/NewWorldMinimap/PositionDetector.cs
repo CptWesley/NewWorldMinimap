@@ -17,9 +17,9 @@ namespace NewWorldMinimap
     public class PositionDetector : IDisposable
     {
         private const int XOffset = 277;
-        private const int YOffset = 0;
+        private const int YOffset = 18;
         private const int TextWidth = 277;
-        private const int TextHeight = 36;
+        private const int TextHeight = 18;
 
         private static readonly Regex PosRegex = new Regex(@"(\d{4,5} \d{3}) (\d{3,4} \d{3}) (\d{2,3} \d{3})", RegexOptions.Compiled);
 
@@ -47,18 +47,12 @@ namespace NewWorldMinimap
         {
             bmp.Mutate(x => x
                 .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
+                .Resize(TextWidth * 4, TextHeight * 4)
                 .HistogramEqualization()
-                .Crop(new Rectangle(0, 20, TextWidth, 16))
-                .ProcessPixelRowsAsVector4(r =>
-                {
-                    for (int x = 0; x < r.Length; x++)
-                    {
-                        r[x] = r[x].X < 0.9 ? new Vector4(1, 1, 1, 1) : new Vector4(0, 0, 0, 1);
-                    }
-                })
-                .Pad(TextWidth * 3, TextHeight * 3, Color.White));
-
-            bmp.SaveAsPng("a.png");
+                .Crop(new Rectangle(0, 2 * 4, TextWidth * 4, 16 * 4))
+                .WhiteFilter(0.9f)
+                .Dilate(2)
+                .Pad(TextWidth * 8, TextHeight * 16, Color.White));
 
             if (TryGetPositionInternal(bmp, out position))
             {

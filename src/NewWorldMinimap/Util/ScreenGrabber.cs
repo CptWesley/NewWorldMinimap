@@ -1,6 +1,5 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Windows.Forms;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
@@ -29,11 +28,7 @@ namespace NewWorldMinimap.Util
                 g.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
             }
 
-            using MemoryStream ms = new MemoryStream();
-            bmp.Save(ms, ImageFormat.Png);
-            ms.Position = 0;
-
-            return SixLabors.ImageSharp.Image.Load<Rgba32>(ms);
+            return bmp.ToImageSharp();
         }
     }
 }

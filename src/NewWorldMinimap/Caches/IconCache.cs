@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
+using System.Numerics;
 using System.Reflection;
-using NewWorldMinimap.Util;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace NewWorldMinimap.Caches
 {
@@ -11,8 +13,8 @@ namespace NewWorldMinimap.Caches
     /// </summary>
     public class IconCache
     {
-        private readonly Dictionary<string, Bitmap> baseFiles = new Dictionary<string, Bitmap>();
-        private readonly Dictionary<string, Bitmap> types = new Dictionary<string, Bitmap>();
+        private readonly Dictionary<string, Image<Rgba32>> baseFiles = new Dictionary<string, Image<Rgba32>>();
+        private readonly Dictionary<string, Image<Rgba32>> types = new Dictionary<string, Image<Rgba32>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="IconCache"/> class.
@@ -101,9 +103,9 @@ namespace NewWorldMinimap.Caches
         /// </summary>
         /// <param name="marker">The marker.</param>
         /// <returns>The found icon.</returns>
-        public Bitmap Get(Marker marker)
+        public Image<Rgba32> Get(Marker marker)
         {
-            if (types.TryGetValue(marker.Type, out Bitmap result))
+            if (types.TryGetValue(marker.Type, out Image<Rgba32> result))
             {
                 return result;
             }
@@ -121,9 +123,9 @@ namespace NewWorldMinimap.Caches
         /// </summary>
         /// <param name="name">The type or category name.</param>
         /// <returns>The found icon.</returns>
-        public Bitmap Get(string name)
+        public Image<Rgba32> Get(string name)
         {
-            if (types.TryGetValue(name, out Bitmap result))
+            if (types.TryGetValue(name, out Image<Rgba32> result))
             {
                 return result;
             }
@@ -133,30 +135,30 @@ namespace NewWorldMinimap.Caches
 
         private void Register(string baseName, string type, Color color)
         {
-            Bitmap b = LoadBase(baseName);
-            Bitmap result = b.Walk(c =>
+            Image<Rgba32> b = LoadBase(baseName);
+            Image<Rgba32> result = b.Clone(c => c.ProcessPixelRowsAsVector4(r =>
             {
-                if (c.R == 0 && c.B == 0 && c.G == 255)
+                for (int x = 0; x < r.Length; x++)
                 {
-                    return color;
+                    if (r[x].X == 0 && r[x].Y == 1 && r[x].Z == 0)
+                    {
+                        r[x] = (Vector4)color;
+                    }
                 }
-
-                return c;
-            });
+            }));
 
             types[type] = result;
         }
 
-        private Bitmap LoadBase(string name)
+        private Image<Rgba32> LoadBase(string name)
         {
-            if (baseFiles.TryGetValue(name, out Bitmap bmp))
+            if (baseFiles.TryGetValue(name, out Image<Rgba32> bmp))
             {
                 return bmp;
             }
 
             using Stream stream = Assembly.GetExecutingAssembly().GetManifestResourceStream($"NewWorldMinimap.Resources.icons.{name}");
-            using Bitmap temp = new Bitmap(stream);
-            bmp = new Bitmap(temp);
+            bmp = Image.Load<Rgba32>(stream);
             baseFiles[name] = bmp;
             return bmp;
         }

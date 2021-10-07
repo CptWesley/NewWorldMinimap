@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -10,6 +9,9 @@ using System.Threading;
 using System.Windows.Forms;
 using NewWorldMinimap.Caches;
 using NewWorldMinimap.Util;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace NewWorldMinimap
 {
@@ -52,7 +54,7 @@ namespace NewWorldMinimap
         private void InitializeComponent()
         {
             this.SuspendLayout();
-            this.ClientSize = new Size(512, 512);
+            this.ClientSize = new System.Drawing.Size(512, 512);
             SetName(Vector3.Zero);
             picture.SizeMode = PictureBoxSizeMode.CenterImage;
             this.Controls.Add(picture);
@@ -90,46 +92,39 @@ namespace NewWorldMinimap
             return scannerThread;
         }
 
-        [SuppressMessage("Reliability", "CA2000", Justification = "Value of 'newmap' is actually disposed.")]
         private void UpdateLoop()
         {
-            using Pen pen = new Pen(Color.Red);
-            using Pen pen2 = new Pen(Color.Pink);
-            Vector3 lastPos = Vector3.Zero;
             int i = 0;
             while (true)
             {
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(), out Vector3 pos))
                 {
-                    Vector3 dir = lastPos - pos;
-
-                    lastPos = pos;
                     Console.WriteLine($"{i}: {pos}");
-                    using Bitmap baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
+                    using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
 
                     (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
                     IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
-                    using Graphics g = Graphics.FromImage(baseMap);
-
-                    foreach (Marker marker in visibleMarkers)
+                    baseMap.Mutate(c =>
                     {
-                        (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-                        g.DrawImage(icons.Get(marker), ix, iy);
-                    }
+                        c.DrawImage(icons.Get("player"), imageX, imageY);
 
-                    Bitmap newMap = baseMap.Recenter(imageX, imageY);
-                    using Graphics g2 = Graphics.FromImage(newMap);
-                    g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
+                        foreach (Marker marker in visibleMarkers)
+                        {
+                            (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
+                            c.DrawImage(icons.Get(marker), ix, iy);
+                        }
+                    });
 
-                    Image prev = picture.Image;
+                    using Image<Rgba32> newMap = baseMap.Recenter(imageX, imageY);
+                    System.Drawing.Image prev = picture.Image;
 
                     SafeInvoke(() =>
                     {
                         SetName(pos);
-                        picture.Image = newMap;
+                        picture.Image = newMap.ToBitmap();
                         UpdateSize();
                     });
 

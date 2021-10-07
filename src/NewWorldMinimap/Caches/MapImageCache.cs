@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Net.Http;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 
 namespace NewWorldMinimap.Caches
 {
@@ -23,14 +25,17 @@ namespace NewWorldMinimap.Caches
         private bool disposedValue;
         private HttpClient http = new HttpClient();
         private Queue<string> queue = new Queue<string>();
-        private Dictionary<string, Bitmap> map = new Dictionary<string, Bitmap>();
+        private Dictionary<string, Image<Rgba32>> map = new Dictionary<string, Image<Rgba32>>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapImageCache"/> class.
         /// </summary>
         /// <param name="radius">The radius of tiles around the center tile that are visible.</param>
         public MapImageCache(int radius)
-            => Radius = radius;
+        {
+            Radius = radius;
+            map["blank"] = new Image<Rgba32>(TileWidth, TileHeight);
+        }
 
         /// <summary>
         /// Finalizes an instance of the <see cref="MapImageCache"/> class.
@@ -49,25 +54,25 @@ namespace NewWorldMinimap.Caches
         /// <param name="x">The x tile coordinate.</param>
         /// <param name="y">The y tile coordinate.</param>
         /// <returns>The map tile.</returns>
-        public Bitmap Get(int x, int y)
+        public Image<Rgba32> Get(int x, int y)
         {
             if (x < 0 || y < 0 || x >= Width || y >= Height)
             {
-                return new Bitmap(TileWidth, TileHeight);
+                return map["blank"];
             }
 
             string name = $"{x}-{y}";
-            if (map.TryGetValue(name, out Bitmap cachedInMem))
+            if (map.TryGetValue(name, out Image<Rgba32> cachedInMem))
             {
-                return new Bitmap(cachedInMem);
+                return cachedInMem;
             }
 
             string fileName = ToFileName(x, y);
-            Bitmap result;
+            Image<Rgba32> result;
 
             if (File.Exists(fileName))
             {
-                result = new Bitmap(fileName);
+                result = Image.Load<Rgba32>(fileName);
             }
             else
             {
@@ -80,13 +85,13 @@ namespace NewWorldMinimap.Caches
             if (queue.Count > MaxQueueSize)
             {
                 string popped = queue.Dequeue();
-                Bitmap temp = map[popped];
+                Image<Rgba32> temp = map[popped];
                 map.Remove(popped);
                 temp.Dispose();
             }
 
             map[name] = result;
-            return new Bitmap(result);
+            return result;
         }
 
         /// <summary>
@@ -95,21 +100,22 @@ namespace NewWorldMinimap.Caches
         /// <param name="x">The x world coordinate.</param>
         /// <param name="y">The y world coordinate.</param>
         /// <returns>The joined map.</returns>
-        public Bitmap GetTileForCoordinate(double x, double y)
+        public Image<Rgba32> GetTileForCoordinate(double x, double y)
         {
             (int tileX, int tileY) = GetTileCoordinatesForCoordinate(x, y);
-            Bitmap result = new Bitmap(TileWidth * (1 + (2 * Radius)), TileHeight * (1 + (2 * Radius)));
+            Image<Rgba32> result = new Image<Rgba32>(TileWidth * (1 + (2 * Radius)), TileHeight * (1 + (2 * Radius)));
 
-            using Graphics g = Graphics.FromImage(result);
-
-            for (int xt = 0; xt < 1 + (Radius * 2); xt++)
+            result.Mutate(c =>
             {
-                for (int yt = 0; yt < 1 + (Radius * 2); yt++)
+                for (int xt = 0; xt < 1 + (Radius * 2); xt++)
                 {
-                    using Bitmap temp = Get(tileX - Radius + xt, tileY - Radius + yt);
-                    g.DrawImage(temp, xt * TileWidth, yt * TileHeight);
+                    for (int yt = 0; yt < 1 + (Radius * 2); yt++)
+                    {
+                        Image<Rgba32> temp = Get(tileX - Radius + xt, tileY - Radius + yt);
+                        c.DrawImage(temp, new Point(xt * TileWidth, yt * TileHeight), 1);
+                    }
                 }
-            }
+            });
 
             return result;
         }
@@ -177,6 +183,12 @@ namespace NewWorldMinimap.Caches
                     queue.Clear();
                     queue = null!;
                     map.Clear();
+
+                    foreach (var pair in map)
+                    {
+                        pair.Value.Dispose();
+                    }
+
                     map = null!;
                     http.Dispose();
                     http = null!;
@@ -189,11 +201,10 @@ namespace NewWorldMinimap.Caches
         private static string ToFileName(int x, int y)
             => $"./maps/{x}-{y}.png";
 
-        private Bitmap Request(int x, int y)
+        private Image<Rgba32> Request(int x, int y)
         {
             using Stream data = http.GetAsync($"https://cdn.newworldfans.com/newworldmap/8/{x}/{y}.png").Result.Content.ReadAsStreamAsync().Result;
-            using Image image = Image.FromStream(data);
-            return new Bitmap(image);
+            return Image.Load<Rgba32>(data);
         }
     }
 }
