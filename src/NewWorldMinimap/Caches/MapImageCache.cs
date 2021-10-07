@@ -107,6 +107,8 @@ namespace NewWorldMinimap.Caches
 
             result.Mutate(c =>
             {
+                c.BackgroundColor(Color.LightSteelBlue);
+
                 for (int xt = 0; xt < 1 + (Radius * 2); xt++)
                 {
                     for (int yt = 0; yt < 1 + (Radius * 2); yt++)
