@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Drawing;
 using System.Globalization;
 using System.Numerics;
 using System.Text.RegularExpressions;
 using NewWorldMinimap.Util;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using TesserNet;
 
 namespace NewWorldMinimap
@@ -14,8 +16,12 @@ namespace NewWorldMinimap
     /// <seealso cref="IDisposable" />
     public class PositionDetector : IDisposable
     {
+        private const int XOffset = 277;
+        private const int YOffset = 0;
+        private const int TextWidth = 277;
+        private const int TextHeight = 36;
+
         private static readonly Regex PosRegex = new Regex(@"(\d{4,5} \d{3}) (\d{3,4} \d{3}) (\d{2,3} \d{3})", RegexOptions.Compiled);
-        private static readonly Color TextColor = Color.FromArgb(169, 169, 125);
 
         private readonly ITesseract tesseract = new TesseractPool(new TesseractOptions
         {
@@ -37,24 +43,24 @@ namespace NewWorldMinimap
         /// <param name="bmp">The image.</param>
         /// <param name="position">The position.</param>
         /// <returns>The found position.</returns>
-        public bool TryGetPosition(Bitmap bmp, out Vector3 position)
+        public bool TryGetPosition(Image<Rgba32> bmp, out Vector3 position)
         {
-            using Bitmap cut = bmp.Crop(bmp.Width - 277, 18, 277, 18);
-            using Bitmap scaled = new Bitmap(cut, cut.Width * 4, cut.Height * 4);
+            bmp.Mutate(x => x
+                .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
+                .HistogramEqualization()
+                .Crop(new Rectangle(0, 20, TextWidth, 16))
+                .ProcessPixelRowsAsVector4(r =>
+                {
+                    for (int x = 0; x < r.Length; x++)
+                    {
+                        r[x] = r[x].X < 0.9 ? new Vector4(1, 1, 1, 1) : new Vector4(0, 0, 0, 1);
+                    }
+                })
+                .Pad(TextWidth * 3, TextHeight * 3, Color.White));
 
-            using Bitmap segmented = scaled.Segment(TextColor, 20, 0.1, 0.1);
+            bmp.SaveAsPng("a.png");
 
-            using Graphics g = Graphics.FromImage(segmented);
-            g.FillRectangle(Brushes.White, 0, 0, segmented.Width, 8);
-
-            using Bitmap dilated1 = segmented.Dilate();
-
-            using Bitmap input = new Bitmap(dilated1.Width * 3, dilated1.Height * 3);
-            using Graphics g2 = Graphics.FromImage(input);
-            g2.Clear(Color.White);
-            g2.DrawImage(dilated1, dilated1.Width, dilated1.Height);
-
-            if (TryGetPositionInternal(input, out position))
+            if (TryGetPositionInternal(bmp, out position))
             {
                 return true;
             }
@@ -87,9 +93,11 @@ namespace NewWorldMinimap
             }
         }
 
-        private bool TryGetPositionInternal(Bitmap bmp, out Vector3 position)
+        private bool TryGetPositionInternal(Image<Rgba32> bmp, out Vector3 position)
         {
-            bmp.SetResolution(300, 300);
+            bmp.Metadata.HorizontalResolution = 300;
+            bmp.Metadata.VerticalResolution = 300;
+
             string text = tesseract.Read(bmp).Trim();
             Console.WriteLine("Read: " + text);
             text = Regex.Replace(text, @"[^0-9]+", " ");

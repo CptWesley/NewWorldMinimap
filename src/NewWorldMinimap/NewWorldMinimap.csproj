@@ -43,7 +43,7 @@
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.333">
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="TesserNet.System.Drawing" Version="0.5.1" />
+		<PackageReference Include="TesserNet.ImageSharp" Version="0.5.1" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -53,9 +53,5 @@
 	<ItemGroup>
 		<EmbeddedResource Include="Resources/**" />
 		<AdditionalFiles Include="../stylecop.json" Link="stylecop.json" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="ImageProcessing\" />
 	</ItemGroup>
 </Project>

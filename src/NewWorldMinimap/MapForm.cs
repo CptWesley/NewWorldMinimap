@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
 using System.Numerics;
@@ -20,8 +19,6 @@ namespace NewWorldMinimap
     /// <seealso cref="Form" />
     public class MapForm : Form
     {
-        private static readonly Screen Screen = Screen.PrimaryScreen;
-
         private readonly PositionDetector pd = new PositionDetector();
         private readonly PictureBox picture = new PictureBox();
         private readonly MapImageCache map = new MapImageCache(4);
@@ -37,18 +34,6 @@ namespace NewWorldMinimap
         {
             InitializeComponent();
             StartUpdateLoop();
-        }
-
-        private static Bitmap TakeScreenshot()
-        {
-            Bitmap bmp = new Bitmap(Screen.Bounds.Width, Screen.Bounds.Height, PixelFormat.Format24bppRgb);
-
-            using (Graphics g = Graphics.FromImage(bmp))
-            {
-                g.CopyFromScreen(Screen.Bounds.X, Screen.Bounds.Y, 0, 0, Screen.Bounds.Size, CopyPixelOperation.SourceCopy);
-            }
-
-            return bmp;
         }
 
         private static Icon LoadIcon()
@@ -114,8 +99,7 @@ namespace NewWorldMinimap
             int i = 0;
             while (true)
             {
-                using Bitmap bmp = TakeScreenshot();
-                if (pd.TryGetPosition(bmp, out Vector3 pos))
+                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(), out Vector3 pos))
                 {
                     Vector3 dir = lastPos - pos;
 
