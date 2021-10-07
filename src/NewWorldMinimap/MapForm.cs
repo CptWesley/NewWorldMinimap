@@ -174,6 +174,8 @@ namespace NewWorldMinimap
         {
             Stopwatch sw = new Stopwatch();
 
+            Vector3 lastPos = Vector3.Zero;
+            int jumpThreshold = int.MaxValue;
             int i = 0;
             while (true)
             {
@@ -181,7 +183,23 @@ namespace NewWorldMinimap
 
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector3 pos))
                 {
-                    Console.WriteLine($"{i}: {pos}");
+                    Vector3 difference = lastPos - pos;
+                    Console.WriteLine($"{i}: {pos} [{difference.Length()}]");
+                    if (difference.Length() > 20.0)
+                    {
+                        if (jumpThreshold < 3)
+                        {
+                            Console.WriteLine($"{i}: Failure due to jump of {difference.Length()}");
+                            jumpThreshold++;
+                            continue;
+                        }
+                        else
+                        {
+                            jumpThreshold = 0;
+                        }
+                    }
+
+                    lastPos = pos;
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
