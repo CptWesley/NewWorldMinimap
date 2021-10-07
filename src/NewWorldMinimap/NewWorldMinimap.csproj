@@ -23,6 +23,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="ImageProcessor" Version="2.9.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
 			<PrivateAssets>all</PrivateAssets>
