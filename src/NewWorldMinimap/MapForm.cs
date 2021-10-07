@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,8 @@ namespace NewWorldMinimap
     /// <seealso cref="Form" />
     public class MapForm : Form
     {
+        private const int SleepTime = 350;
+
         private readonly PositionDetector pd = new PositionDetector();
         private readonly PictureBox picture = new PictureBox();
         private readonly MapImageCache map = new MapImageCache(4);
@@ -94,9 +97,13 @@ namespace NewWorldMinimap
 
         private void UpdateLoop()
         {
+            Stopwatch sw = new Stopwatch();
+
             int i = 0;
             while (true)
             {
+                sw.Restart();
+
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(), out Vector3 pos))
                 {
                     Console.WriteLine($"{i}: {pos}");
@@ -136,6 +143,14 @@ namespace NewWorldMinimap
                 }
 
                 i++;
+
+                sw.Stop();
+                long elapsed = sw.ElapsedMilliseconds;
+
+                if (elapsed < SleepTime)
+                {
+                    Thread.Sleep(SleepTime - (int)elapsed);
+                }
             }
         }
 
