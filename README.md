@@ -41,7 +41,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 
 ## Licensing
 The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMinimap/blob/master/LICENSE).
-However, the binary distribution contains a statically linked [Apache V2 licensed](https://github.com/CptWesley/NewWorldMinimap/blob/master/dependency_licenses/tesseract_LICENSE) dependencies (tesseract, ImageProcessor).
+However, the binary distribution contains a statically linked [Apache-2.0](https://github.com/CptWesley/NewWorldMinimap/blob/master/dependency_licenses/tesseract_LICENSE) dependencies (tesseract, ImageSharp).
 
 ## Contribution
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
