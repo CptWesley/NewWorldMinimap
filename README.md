@@ -1,3 +1,5 @@
+[![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet)  
+
 # Note: I tried reaching out to AGS for their opinion. I will keep you posted on their answer.
 
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true" width="128" height="128">
