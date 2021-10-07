@@ -30,6 +30,9 @@ namespace NewWorldMinimap
         private readonly MarkerCache markers = new MarkerCache();
         private readonly IconCache icons = new IconCache();
 
+        private readonly ContextMenu menu = new ContextMenu();
+        private readonly MenuItem alwaysOnTopButton;
+
         private Thread? scannerThread;
 
         /// <summary>
@@ -37,6 +40,8 @@ namespace NewWorldMinimap
         /// </summary>
         public MapForm()
         {
+            alwaysOnTopButton = new MenuItem("Always-on-top", ToggleAlwaysOnTop, Shortcut.None);
+
             InitializeComponent();
             StartUpdateLoop();
         }
@@ -68,6 +73,29 @@ namespace NewWorldMinimap
             this.Resize += (s, e) => UpdateSize();
             this.FormClosed += OnClose;
             this.Icon = LoadIcon();
+            BuildMenu();
+        }
+
+        private void BuildMenu()
+        {
+            this.ContextMenu = menu;
+            this.picture.ContextMenu = menu;
+
+            menu.MenuItems.Add(alwaysOnTopButton);
+        }
+
+        private void ToggleAlwaysOnTop(object sender, EventArgs e)
+        {
+            if (alwaysOnTopButton.Checked)
+            {
+                alwaysOnTopButton.Checked = false;
+                this.TopMost = false;
+            }
+            else
+            {
+                alwaysOnTopButton.Checked = true;
+                this.TopMost = true;
+            }
         }
 
         private void UpdateSize()
