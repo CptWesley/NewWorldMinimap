@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewWorldMinimap.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
@@ -8,6 +9,7 @@ using System.IO;
 using System.Numerics;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace NewWorldMinimap
@@ -18,6 +20,8 @@ namespace NewWorldMinimap
     /// <seealso cref="Form" />
     public class MapForm : Form
     {
+        private readonly AppConfiguration appConfiguration;
+
         private static readonly Screen Screen = Screen.PrimaryScreen;
 
         private readonly PositionDetector pd = new PositionDetector();
@@ -27,14 +31,28 @@ namespace NewWorldMinimap
         private readonly IconCache icons = new IconCache();
 
         private Thread? scannerThread;
+        private int scanCount = 0;
+        private Vector3 currentPosition = Vector3.Zero;
+        private Vector3 lastPosition = Vector3.Zero;
+        private Vector3 direction = Vector3.Zero;
+        private Bitmap centeredBaseMap;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MapForm"/> class.
         /// </summary>
-        public MapForm()
+        public MapForm(AppConfiguration appConfiguration)
         {
+            this.appConfiguration = appConfiguration;
+
             InitializeComponent();
-            StartUpdateLoop();
+            UpdateView(); // call once to get view to show map
+            if (appConfiguration.AutoUpdate)
+            {
+                _ = UpdateViewAutomaticallyAsync();
+            }
+
+            Console.WriteLine($"Update Frequency: {appConfiguration.UpdateFrequency}");
+            Console.WriteLine($"Auto Update enabled: {appConfiguration.AutoUpdate}");
         }
 
         private static Bitmap TakeScreenshot()
@@ -76,6 +94,7 @@ namespace NewWorldMinimap
             this.Resize += (s, e) => UpdateSize();
             this.FormClosed += OnClose;
             this.Icon = LoadIcon();
+            this.KeyPress += new KeyPressEventHandler(MapForm_KeyPress);
         }
 
         private void UpdateSize()
@@ -106,57 +125,113 @@ namespace NewWorldMinimap
         [SuppressMessage("Reliability", "CA2000", Justification = "Value of 'newmap' is actually disposed.")]
         private void UpdateLoop()
         {
-            using Pen pen = new Pen(Color.Red);
-            using Pen pen2 = new Pen(Color.Pink);
-            Vector3 lastPos = Vector3.Zero;
-            int i = 0;
+            //using Pen pen = new Pen(Color.Red);
+            //using Pen pen2 = new Pen(Color.Pink);
             while (true)
             {
-                using Bitmap bmp = TakeScreenshot();
-                if (pd.TryGetPosition(bmp, out Vector3 pos))
-                {
-                    Vector3 dir = lastPos - pos;
-
-                    lastPos = pos;
-                    Console.WriteLine($"{i}: {pos}");
-                    using Bitmap baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
-
-                    (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
-
-                    (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
-                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
-
-                    using Graphics g = Graphics.FromImage(baseMap);
-
-                    foreach (Marker marker in visibleMarkers)
-                    {
-                        (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-                        g.DrawImage(icons.Get(marker), ix, iy);
-                    }
-
-                    Bitmap newMap = baseMap.Recenter(imageX, imageY);
-                    using Graphics g2 = Graphics.FromImage(newMap);
-                    g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
-
-                    Image prev = picture.Image;
-
-                    SafeInvoke(() =>
-                    {
-                        SetName(pos);
-                        picture.Image = newMap;
-                        UpdateSize();
-                    });
-
-                    prev?.Dispose();
-                }
-                else
-                {
-                    Console.WriteLine($"{i}: Failure");
-                }
-
-                i++;
+                UpdateView();
             }
         }
+
+        private void GetPosition()
+        {
+            using Bitmap bmp = TakeScreenshot();
+            if (pd.TryGetPosition(bmp, out Vector3 position))
+            {
+                Console.WriteLine($"{scanCount}: {position}");
+                lastPosition = currentPosition;
+                currentPosition = position;
+            }
+            else
+            {
+                Console.WriteLine($"{scanCount}: Failure");
+            }
+
+            direction = lastPosition - currentPosition;
+            SafeInvoke(() => SetName(currentPosition));
+        }
+
+        private void DrawBaseMap()
+        {
+            using Bitmap baseMap = map.GetTileForCoordinate(currentPosition.X, currentPosition.Y);
+            (int imageX, int imageY) = map.ToMinimapCoordinate(currentPosition.X, currentPosition.Y, currentPosition.X, currentPosition.Y);
+            centeredBaseMap = baseMap.Recenter(imageX, imageY);
+
+            SafeInvoke(() =>
+            {
+                picture.Image = centeredBaseMap;
+                UpdateSize();
+            });
+        }
+
+        private void DrawPlayer()
+        {
+            currentPosition = new Vector3(9620.743f, 6300.072f, 252.559f);
+            using Graphics drawingGraphics = Graphics.FromImage(centeredBaseMap);
+            var imageToDraw = icons.Get("player");
+            drawingGraphics.DrawImage(imageToDraw, centeredBaseMap.Width / 2 - imageToDraw.Width / 2, centeredBaseMap.Height / 2 - imageToDraw.Height / 2);
+        }
+
+        private void DrawMapMarkers()
+        {
+            (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(currentPosition.X, currentPosition.Y);
+            IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
+
+            using Graphics drawingGraphics = Graphics.FromImage(centeredBaseMap);
+
+            foreach (Marker marker in visibleMarkers)
+            {
+                (int markerX, int markerY) = map.ToMinimapCoordinate(currentPosition.X, currentPosition.Y, marker.X, marker.Y);
+                drawingGraphics.DrawImage(icons.Get(marker), markerX, markerY);
+            }
+        }
+
+        //private void GetPositionAndDraw()
+        //{
+        //    using Bitmap bmp = TakeScreenshot();
+        //    if (pd.TryGetPosition(bmp, out Vector3 pos))
+        //    {
+        //        Vector3 dir = lastPosition - pos;
+
+        //        lastPosition = pos;
+        //        Console.WriteLine($"{scanCount}: {pos}");
+        //        using Bitmap baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
+
+        //        (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
+
+        //        (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
+        //        IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
+
+        //        using Graphics g = Graphics.FromImage(baseMap);
+
+        //        foreach (Marker marker in visibleMarkers)
+        //        {
+        //            (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
+        //            g.DrawImage(icons.Get(marker), ix, iy);
+        //        }
+
+        //        Bitmap newMap = baseMap.Recenter(imageX, imageY);
+        //        using Graphics g2 = Graphics.FromImage(newMap);
+        //        g2.DrawImage(icons.Get("player"), newMap.Width / 2, newMap.Height / 2);
+
+        //        Image prev = picture.Image;
+
+        //        SafeInvoke(() =>
+        //        {
+        //            SetName(pos);
+        //            picture.Image = newMap;
+        //            UpdateSize();
+        //        });
+
+        //        prev?.Dispose();
+        //    }
+        //    else
+        //    {
+        //        Console.WriteLine($"{scanCount}: Failure");
+        //    }
+
+        //    scanCount++;
+        //}
 
         private void SafeInvoke(Action act)
         {
@@ -165,7 +240,34 @@ namespace NewWorldMinimap
                 Invoke(act);
             }
             catch (InvalidOperationException)
+            { }
+        }
+
+        private void MapForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // capture 'r' key to reload map manually
+            var upperCaseKey = e.KeyChar.ToString().ToUpper();
+            if (upperCaseKey == Keys.R.ToString())
             {
+                UpdateView();
+            }
+        }
+
+        private void UpdateView()
+        {
+            GetPosition();
+            DrawBaseMap();
+            DrawMapMarkers();
+            DrawPlayer();
+            //DrawCompany();
+        }
+
+        private async Task UpdateViewAutomaticallyAsync()
+        {
+            while (true)
+            {
+                await Task.Delay(TimeSpan.FromMilliseconds(appConfiguration.UpdateFrequency));
+                UpdateView();
             }
         }
     }

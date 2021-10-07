@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NewWorldMinimap.Configuration;
+using System;
 using System.Windows.Forms;
 
 namespace NewWorldMinimap
@@ -15,8 +16,10 @@ namespace NewWorldMinimap
         [STAThread]
         public static void Main(string[] args)
         {
+            var appConfiguration = new AppConfiguration();
+
             Application.EnableVisualStyles();
-            using Form map = new MapForm();
+            using Form map = new MapForm(appConfiguration);
             Application.Run(map);
         }
     }
