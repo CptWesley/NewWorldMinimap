@@ -20,17 +20,18 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Render surroundings of the player (including resources).
 - Track the player.
 - Resizable window (great for full-screen usage on second monitor).
+- Allow overlaying (always-on-top) flag.
+- Support for multiple monitors.
+- Configure refresh rate of minimap to spare your CPU.
 
 ## Planned Features
 - Better OCR results.
 - More (nicer) icons.
-- Allow overlaying (always-on-top) flag.
-- Support instances where game is running on different monitor than primary monitor.
 - Enable/disable certain icons (and other configuration option).
 
 ## Known Issues
 - The Optical Character Recognition (OCR) algorithm is not perfect so it sometimes jumps a bit.
-- Position accuracy results may vary based on your graphics settings of the game (only tested on default brightness/gamma on 1080p monitor).
+- Position accuracy results may vary based on your graphics settings of the game (only tested on default brightness/gamma on 1080p monitor, 1440p monitors and 4k monitors).
 - Currently it only works if the game is running on your primary monitor.
 
 ## Usage
@@ -38,6 +39,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Unzip the `.zip`.
 - Run the application (the `.exe` file).
 - Enable the option 'Show FPS' in-game.
+- Right click the minimap to configure some settings.
 
 ## Licensing
 The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMinimap/blob/master/LICENSE).
