@@ -36,5 +36,24 @@ namespace NewWorldMinimap.Util
 
             return bmp.ToImageSharp();
         }
+
+        /// <summary>
+        /// Gets the index of the primary screen.
+        /// </summary>
+        /// <returns>The index of the primary screen.</returns>
+        public static int GetPrimaryScreenIndex()
+        {
+            Screen[] screens = Screen.AllScreens;
+
+            for (int i = 0; i < screens.Length; i++)
+            {
+                if (screens[i] == Screen.PrimaryScreen)
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
     }
 }

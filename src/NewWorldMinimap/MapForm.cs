@@ -102,7 +102,7 @@ namespace NewWorldMinimap
             menu.MenuItems.Add("-");
             menu.MenuItems.AddRange(refreshDelayItems.ToArray());
 
-            SelectScreen(0);
+            SelectScreen(ScreenGrabber.GetPrimaryScreenIndex());
             SelectRefreshDelay(2, 350);
         }
 
