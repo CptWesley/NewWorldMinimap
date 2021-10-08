@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Bmp;
@@ -73,6 +74,18 @@ namespace NewWorldMinimap.Core.Util
             => context.DrawImage(img, new SixLabors.ImageSharp.Point(x, y), 1);
 
         /// <summary>
+        /// Draws an image.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="x">The x coordinate in pixels.</param>
+        /// <param name="y">The y coordinate in pixels.</param>
+        /// <param name="width">The width in pixels.</param>
+        /// <param name="height">The height in pixels.</param>
+        /// <returns>The same context.</returns>
+        public static IImageProcessingContext Crop(this IImageProcessingContext context, int x, int y, int width, int height)
+            => context.Crop(new SixLabors.ImageSharp.Rectangle(x, y, width, height));
+
+        /// <summary>
         /// Dilates the binary image with the gives radius.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -101,6 +114,61 @@ namespace NewWorldMinimap.Core.Util
                 for (int x = 0; x < r.Length; x++)
                 {
                     r[x] = r[x].X < threshold ? White : Black;
+                }
+            });
+
+        public static void Mask(this Image<Rgba32> baseImage, Image<Rgba32> mask)
+        {
+            for (int y = 0; y < baseImage.Height; y++)
+            {
+                for (int x = 0; x < baseImage.Width; x++)
+                {
+                    //Console.WriteLine($"m: {mask[x, y]}");
+                    if (mask[x, y].R == 255)
+                    {
+                        baseImage[x, y] = SixLabors.ImageSharp.Color.Black;
+                    }
+                }
+            }
+        }
+
+        public static void Erode(this Image<Rgba32> baseImage)
+        {
+            using Image<Rgba32> copy = baseImage.Clone();
+
+            Vector4[] nb = new Vector4[9];
+
+            for (int y = 1; y < baseImage.Height - 1; y++)
+            {
+                for (int x = 1; x < baseImage.Width - 1; x++)
+                {
+                    nb[0] = copy[x - 1, y - 1].ToVector4();
+                    nb[1] = copy[x - 1, y].ToVector4();
+                    nb[2] = copy[x - 1, y + 1].ToVector4();
+                    nb[3] = copy[x, y - 1].ToVector4();
+                    nb[4] = copy[x, y].ToVector4();
+                    nb[5] = copy[x, y + 1].ToVector4();
+                    nb[6] = copy[x + 1, y - 1].ToVector4();
+                    nb[7] = copy[x + 1, y].ToVector4();
+                    nb[8] = copy[x + 1, y + 1].ToVector4();
+
+                    baseImage[x, y] = nb.Any(v => v == White) ? (SixLabors.ImageSharp.Color)White : (SixLabors.ImageSharp.Color)Black;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Detects white pixels.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="threshold">The threshold.</param>
+        /// <returns>The same context.</returns>
+        public static IImageProcessingContext HslFilter(this IImageProcessingContext context, Hsl color, float hTolerance, float sTolerance, float lTolerance)
+            => context.ProcessPixelRowsAsVector4(r =>
+            {
+                for (int x = 0; x < r.Length; x++)
+                {
+                    r[x] = color.IsSimilarTo(Hsl.FromRgb(r[x]), hTolerance, sTolerance, lTolerance) ? Black : White;
                 }
             });
     }

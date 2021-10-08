@@ -28,6 +28,7 @@ namespace NewWorldMinimap.Core
             PageSegmentation = PageSegmentation.Line,
             Numeric = true,
             Whitelist = "[]0123456789 ,.",
+            //Language = "engrestrict_best_int"
         });
 
         private bool disposedValue;
@@ -44,21 +45,128 @@ namespace NewWorldMinimap.Core
         /// <param name="bmp">The image.</param>
         /// <param name="position">The position.</param>
         /// <returns>The found position.</returns>
+        private Image<Rgba32> GetString(Image<Rgba32> img)
+        {
+            Image<Rgba32> combined = new Image<Rgba32>(Characters * CharWidth * Scale, CharHeight * Scale);
+            combined.Mutate(c =>
+            {
+                c.BackgroundColor(Color.Black);
+
+                for (int i = 0; i < Characters; i++)
+                {
+                    using Image<Rgba32> charImg = GetChar(img, i);
+                    c.DrawImage(charImg, new Point(CharWidth * Scale * i), 0, 1);
+                }
+            });
+
+            return combined;
+        }
+
+        private const int Characters = 33;
+        private const int CharHeight = 14;
+        private const int CharWidth = 9;
+        private const int Scale = 4;
+
+        private static readonly Hsl Upper = Hsl.FromRgb(255, 255, 239);
+        private static readonly Hsl Lower = Hsl.FromRgb(182, 182, 171);
+        private static readonly Hsl Mid = new Hsl((Upper.Hue + Lower.Hue) / 2, (Upper.Saturation + Lower.Saturation) / 2, (Upper.Lightness + Lower.Lightness) / 2);
+        private static readonly float SaturationRange = Math.Abs(Upper.Saturation - Lower.Saturation);
+        private static readonly float LightnessRange = Math.Abs(Upper.Saturation - Lower.Saturation);
+
+        private Image<Rgba32> GetChar(Image<Rgba32> img, int index)
+        {
+            int invertedIndex = Characters - index;
+            int y = 21;
+
+            int x = img.Width - 4 - (CharWidth * invertedIndex);
+
+            Image<Rgba32> tex = img.Clone(c => c
+                .Crop(x, y, CharWidth, CharHeight)
+                .Resize(CharWidth * (Scale / 2), CharHeight * (Scale / 2)));
+
+            Image<Rgba32> cimg = tex.Clone(c => c
+                .HistogramEqualization()
+                .WhiteFilter(0.8f)
+                .Dilate(1));
+
+            tex.Mask(cimg);
+
+            //cimg.SaveAsPng($"c-{index}-1.png");
+            //tex.SaveAsPng($"c-{index}-2.png");
+            /*
+            //tex.Mutate(c => c.HistogramEqualization().WhiteFilter(0.8f));
+            //Console.WriteLine(Upper);
+            //Console.WriteLine(Lower);
+
+            tex.Mutate(c => c.HslFilter(Mid, 30, SaturationRange * 1.2f, LightnessRange * 1.2f));
+
+            tex.SaveAsPng($"c-{index}-3.png");
+
+            cimg.Mutate(c => c.Pad(cimg.Width * 3, cimg.Height * 3).BackgroundColor(Color.White));
+
+            cimg.SaveAsPng($"c-{index}-4.png");
+
+            string found = tesseract.Read(cimg).Trim();
+            cimg.Mutate(c => c.Invert());
+            string found2 = tesseract.Read(cimg).Trim();
+
+            Console.WriteLine($"GUESS 1: {found}");
+            Console.WriteLine($"GUESS 2: {found2}");
+            */
+            return tex;
+        }
+
+        /// <summary>
+        /// Tries to get the position from the provided image.
+        /// </summary>
+        /// <param name="bmp">The image.</param>
+        /// <param name="position">The position.</param>
+        /// <returns>The found position.</returns>
         public bool TryGetPosition(Image<Rgba32> bmp, out Vector3 position)
         {
             bmp.Mutate(x => x
-                .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
+                .Crop(bmp.Width - XOffset, YOffset, TextWidth, TextHeight)
                 .Resize(TextWidth * 4, TextHeight * 4)
                 .HistogramEqualization()
-                .Crop(new Rectangle(0, 2 * 4, TextWidth * 4, 16 * 4))
+                .Crop(0, 2 * 4, TextWidth * 4, 16 * 4)
                 .WhiteFilter(0.9f)
                 .Dilate(2)
                 .Pad(TextWidth * 8, TextHeight * 16, Color.White));
+
+            bmp.SaveAsPng($"a-{Guid.NewGuid()}.png");
 
             if (TryGetPositionInternal(bmp, out position))
             {
                 return true;
             }
+            
+
+            /*
+            using Image<Rgba32> input = GetString(bmp);
+            input.SaveAsPng($"a-{Guid.NewGuid()}.png");
+
+            if (TryGetPositionInternal(input, out position))
+            {
+                return true;
+            }
+            */
+            /*
+            string name = Guid.NewGuid().ToString();
+
+            using Image<Rgba32> input = GetString(bmp);
+            input.SaveAsPng($"a-{name}-0.png");
+            input.Mutate(c => c.Pad(TextWidth * 8, TextHeight * 16, Color.Black).Invert().Contrast(100));
+            input.SaveAsPng($"a-{name}-1.png");
+
+            Console.WriteLine("Running for: " + name);
+
+            if (TryGetPositionInternal(input, out position))
+            {
+                return true;
+            }
+
+            Console.WriteLine();
+            */
 
             position = default;
             return false;
