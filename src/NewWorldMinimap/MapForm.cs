@@ -9,6 +9,8 @@ using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
 using NewWorldMinimap.Caches;
+using NewWorldMinimap.Core;
+using NewWorldMinimap.Core.Util;
 using NewWorldMinimap.Util;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;

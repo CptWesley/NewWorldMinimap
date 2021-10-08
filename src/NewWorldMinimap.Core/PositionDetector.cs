@@ -2,13 +2,13 @@
 using System.Globalization;
 using System.Numerics;
 using System.Text.RegularExpressions;
-using NewWorldMinimap.Util;
+using NewWorldMinimap.Core.Util;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using TesserNet;
 
-namespace NewWorldMinimap
+namespace NewWorldMinimap.Core
 {
     /// <summary>
     /// Provides logic for performing OCR to find the position of the player.

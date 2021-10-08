@@ -54,4 +54,8 @@
 		<EmbeddedResource Include="Resources/**" />
 		<AdditionalFiles Include="../stylecop.json" Link="stylecop.json" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\NewWorldMinimap.Core\NewWorldMinimap.Core.csproj" />
+	</ItemGroup>
 </Project>

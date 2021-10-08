@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31605.320
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewWorldMinimap", "NewWorldMinimap\NewWorldMinimap.csproj", "{FFEB45A4-13B6-4386-9E8C-67DF2027191A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewWorldMinimap", "NewWorldMinimap\NewWorldMinimap.csproj", "{FFEB45A4-13B6-4386-9E8C-67DF2027191A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewWorldMinimap.TestBench", "NewWorldMinimap.TestBench\NewWorldMinimap.TestBench.csproj", "{FB8A8717-8AF8-472A-B70A-C14DD063200E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewWorldMinimap.Core", "NewWorldMinimap.Core\NewWorldMinimap.Core.csproj", "{9CDF3904-993F-41E9-877A-56A1D938AB76}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{FFEB45A4-13B6-4386-9E8C-67DF2027191A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFEB45A4-13B6-4386-9E8C-67DF2027191A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFEB45A4-13B6-4386-9E8C-67DF2027191A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB8A8717-8AF8-472A-B70A-C14DD063200E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB8A8717-8AF8-472A-B70A-C14DD063200E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB8A8717-8AF8-472A-B70A-C14DD063200E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB8A8717-8AF8-472A-B70A-C14DD063200E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CDF3904-993F-41E9-877A-56A1D938AB76}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CDF3904-993F-41E9-877A-56A1D938AB76}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CDF3904-993F-41E9-877A-56A1D938AB76}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CDF3904-993F-41E9-877A-56A1D938AB76}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

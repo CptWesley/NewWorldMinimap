@@ -7,7 +7,7 @@ using SixLabors.ImageSharp.Formats.Bmp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 
-namespace NewWorldMinimap.Util
+namespace NewWorldMinimap.Core.Util
 {
     /// <summary>
     /// Provides extensions for images.
