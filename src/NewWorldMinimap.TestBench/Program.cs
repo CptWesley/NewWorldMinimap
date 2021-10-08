@@ -28,6 +28,13 @@ namespace NewWorldMinimap.TestBench
 
             Dictionary<string, List<Result>> results = RunAll(searchPath).GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.ToList());
 
+            int totalFailures = 0;
+            int totalRuns = 0;
+            ulong totalTimeFail = 0;
+            ulong totalTimeSuccess = 0;
+
+            Console.WriteLine();
+
             foreach (KeyValuePair<string, List<Result>> group in results)
             {
                 Console.WriteLine($"=== Category: {group.Key}");
@@ -35,10 +42,18 @@ namespace NewWorldMinimap.TestBench
 
                 foreach (Result result in group.Value)
                 {
+                    totalRuns++;
+
                     if (!result.Success)
                     {
+                        totalFailures++;
                         failures++;
+                        totalTimeFail += result.Time;
                         Console.WriteLine($"[Fail] {result}");
+                    }
+                    else
+                    {
+                        totalTimeSuccess += result.Time;
                     }
                 }
 
@@ -46,6 +61,19 @@ namespace NewWorldMinimap.TestBench
                 Console.WriteLine($"Correct: {group.Value.Count - failures} / {group.Value.Count}");
                 Console.WriteLine();
             }
+
+            int totalSuccess = totalRuns - totalFailures;
+
+            Console.WriteLine("===== TOTAL =====");
+
+            if (totalRuns == 0)
+            {
+                Console.WriteLine("No runs were executed. Check your configuration.");
+            }
+
+            Console.WriteLine($"Correct: {totalSuccess}/{totalRuns} ({((float)totalSuccess / totalRuns * 100).ToString("#.00", CultureInfo.InvariantCulture)}%)");
+            Console.WriteLine($"Average success time: {((float)totalTimeSuccess / totalRuns).ToString("#.00", CultureInfo.InvariantCulture)}ms");
+            Console.WriteLine($"Average failure time: {((float)totalTimeFail / totalRuns).ToString("#.00", CultureInfo.InvariantCulture)}ms");
         }
 
         private static IEnumerable<Result> RunAll(string path)
@@ -77,7 +105,7 @@ namespace NewWorldMinimap.TestBench
             pd.TryGetPosition(img, out Vector3 found);
             sw.Stop();
 
-            return new Result(cat, name, found, expected, sw.ElapsedMilliseconds);
+            return new Result(cat, name, found, expected, (ulong)sw.ElapsedMilliseconds);
         }
 
         private static Vector3 ToVector(string coords)
@@ -95,7 +123,7 @@ namespace NewWorldMinimap.TestBench
     /// <summary>
     /// Used for passing around results of the test benchmark.
     /// </summary>
-    public record Result(string Category, string Name, Vector3 Found, Vector3 Expected, long Time)
+    public record Result(string Category, string Name, Vector3 Found, Vector3 Expected, ulong Time)
     {
         /// <summary>
         /// Gets a value indicating whether the result was correct.
