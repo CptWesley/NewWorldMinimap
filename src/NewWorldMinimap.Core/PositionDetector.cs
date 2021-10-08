@@ -20,8 +20,9 @@ namespace NewWorldMinimap.Core
         private const int YOffset = 18;
         private const int TextWidth = 277;
         private const int TextHeight = 18;
+        private const int MaxCounter = 5;
 
-        private static readonly Regex PosRegex = new Regex(@"(\d{4,5} \d{3}) (\d{3,4} \d{3}) (\d{2,3} \d{3})", RegexOptions.Compiled);
+        private static readonly Regex PosRegex = new Regex(@"(\d+ \d+) (\d+ \d+)", RegexOptions.Compiled);
 
         private readonly ITesseract tesseract = new TesseractPool(new TesseractOptions
         {
@@ -31,6 +32,9 @@ namespace NewWorldMinimap.Core
         });
 
         private bool disposedValue;
+        private float lastX;
+        private float lastY;
+        private int counter = int.MaxValue;
 
         /// <summary>
         /// Finalizes an instance of the <see cref="PositionDetector"/> class.
@@ -44,7 +48,7 @@ namespace NewWorldMinimap.Core
         /// <param name="bmp">The image.</param>
         /// <param name="position">The position.</param>
         /// <returns>The found position.</returns>
-        public bool TryGetPosition(Image<Rgba32> bmp, out Vector3 position)
+        public bool TryGetPosition(Image<Rgba32> bmp, out Vector2 position)
         {
             bmp.Mutate(x => x
                 .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
@@ -63,6 +67,12 @@ namespace NewWorldMinimap.Core
             position = default;
             return false;
         }
+
+        /// <summary>
+        /// Resets the counter.
+        /// </summary>
+        public void ResetCounter()
+            => counter = int.MaxValue;
 
         /// <inheritdoc/>
         public void Dispose()
@@ -88,35 +98,62 @@ namespace NewWorldMinimap.Core
             }
         }
 
-        private bool TryGetPositionInternal(Image<Rgba32> bmp, out Vector3 position)
+        private bool TryGetPositionInternal(Image<Rgba32> bmp, out Vector2 position)
         {
             bmp.Metadata.HorizontalResolution = 300;
             bmp.Metadata.VerticalResolution = 300;
 
             string text = tesseract.Read(bmp).Trim();
+            Console.WriteLine();
             Console.WriteLine("Read: " + text);
             text = Regex.Replace(text, @"[^0-9]+", " ");
             text = Regex.Replace(text, @"\s+", " ").Trim();
             Match m = PosRegex.Match(text);
 
-            if (m.Success && m.Length == text.Length)
+            if (m.Success)
             {
                 float x = float.Parse(m.Groups[1].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
                 float y = float.Parse(m.Groups[2].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
-                float z = float.Parse(m.Groups[3].Value.Replace(' ', '.'), CultureInfo.InvariantCulture);
-                position = CorrectPosition(new Vector3(x, y, z));
 
-                return IsSensiblePosition(position);
+                x %= 100000;
+
+                while (x > 14260)
+                {
+                    x -= 10000;
+                }
+
+                y %= 10000;
+
+                if (counter >= MaxCounter)
+                {
+                    counter = 0;
+                }
+                else
+                {
+                    if (Math.Abs(lastX - x) > 20 && counter < MaxCounter)
+                    {
+                        x = lastX;
+                        counter++;
+                    }
+
+                    if (Math.Abs(lastY - y) > 20 && counter < MaxCounter)
+                    {
+                        y = lastY;
+                        counter++;
+                    }
+                }
+
+                if (x >= 4468 && x <= 14260 && y >= 84 && y <= 9999)
+                {
+                    lastX = x;
+                    lastY = y;
+                    position = new Vector2(x, y);
+                    return true;
+                }
             }
 
             position = default;
             return false;
         }
-
-        private Vector3 CorrectPosition(Vector3 pos)
-            => new Vector3(pos.X > 14260 ? pos.X - 10000 : pos.X, pos.Y, pos.Z);
-
-        private bool IsSensiblePosition(Vector3 pos)
-            => pos.X >= 4468 && pos.X <= 14260 && pos.Y >= 84 && pos.Y <= 9999;
     }
 }

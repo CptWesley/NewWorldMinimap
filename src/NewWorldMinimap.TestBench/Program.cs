@@ -97,33 +97,33 @@ namespace NewWorldMinimap.TestBench
 
             string txtFile = Path.Combine(dir, name + ".txt");
             string txtContent = File.ReadAllText(txtFile);
-            Vector3 expected = ToVector(txtContent);
+            Vector2 expected = ToVector(txtContent);
 
             using Image<Rgba32> img = Image.Load<Rgba32>(fileName);
 
             Stopwatch sw = Stopwatch.StartNew();
-            pd.TryGetPosition(img, out Vector3 found);
+            pd.TryGetPosition(img, out Vector2 found);
+            pd.ResetCounter();
             sw.Stop();
 
             return new Result(cat, name, found, expected, (ulong)sw.ElapsedMilliseconds);
         }
 
-        private static Vector3 ToVector(string coords)
+        private static Vector2 ToVector(string coords)
         {
             string[] parts = coords.Split(' ');
 
             float x = float.Parse(parts[0], CultureInfo.InvariantCulture);
             float y = float.Parse(parts[1], CultureInfo.InvariantCulture);
-            float z = float.Parse(parts[2], CultureInfo.InvariantCulture);
 
-            return new Vector3(x, y, z);
+            return new Vector2(x, y);
         }
     }
 
     /// <summary>
     /// Used for passing around results of the test benchmark.
     /// </summary>
-    public record Result(string Category, string Name, Vector3 Found, Vector3 Expected, ulong Time)
+    public record Result(string Category, string Name, Vector2 Found, Vector2 Expected, ulong Time)
     {
         /// <summary>
         /// Gets a value indicating whether the result was correct.

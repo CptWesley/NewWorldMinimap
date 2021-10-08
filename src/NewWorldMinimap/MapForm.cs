@@ -57,9 +57,9 @@ namespace NewWorldMinimap
             return new Icon(stream);
         }
 
-        private void SetName(Vector3 pos)
+        private void SetName(Vector2 pos)
         {
-            string name = $"CptWesley's Minimap {pos.ToString("#.000", CultureInfo.InvariantCulture)}";
+            string name = $"CptWesley's Minimap {pos.ToString("0.000", CultureInfo.InvariantCulture)}";
             this.Name = name;
             this.Text = name;
         }
@@ -68,7 +68,7 @@ namespace NewWorldMinimap
         {
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(512, 512);
-            SetName(Vector3.Zero);
+            SetName(Vector2.Zero);
             picture.SizeMode = PictureBoxSizeMode.CenterImage;
             this.Controls.Add(picture);
             this.ResumeLayout(false);
@@ -176,32 +176,13 @@ namespace NewWorldMinimap
         {
             Stopwatch sw = new Stopwatch();
 
-            Vector3 lastPos = Vector3.Zero;
-            int jumpThreshold = int.MaxValue;
             int i = 0;
             while (true)
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector3 pos))
+                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos))
                 {
-                    Vector3 difference = lastPos - pos;
-                    Console.WriteLine($"{i}: {pos} [{difference.Length()}]");
-                    if (difference.Length() > 20.0)
-                    {
-                        if (jumpThreshold < 3)
-                        {
-                            Console.WriteLine($"{i}: Failure due to jump of {difference.Length()}");
-                            jumpThreshold++;
-                            continue;
-                        }
-                        else
-                        {
-                            jumpThreshold = 0;
-                        }
-                    }
-
-                    lastPos = pos;
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
