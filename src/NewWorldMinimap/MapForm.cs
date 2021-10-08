@@ -222,7 +222,6 @@ namespace NewWorldMinimap
                         {
                             using Image<Rgba32> playerTriangle = icons.Get("playerTriangle").Clone();
                             AffineTransformBuilder builder = new AffineTransformBuilder();
-                            Vector2 origin = new Vector2(playerTriangle.Width, playerTriangle.Height) / 2;
                             double rotationDegrees = Math.Atan2(difference.X, difference.Y) * (180 / Math.PI);
 
                             builder.AppendRotationDegrees((float)rotationDegrees);
