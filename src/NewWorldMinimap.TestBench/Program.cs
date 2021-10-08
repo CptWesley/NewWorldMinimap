@@ -71,9 +71,9 @@ namespace NewWorldMinimap.TestBench
                 Console.WriteLine("No runs were executed. Check your configuration.");
             }
 
-            Console.WriteLine($"Correct: {totalSuccess}/{totalRuns} ({((float)totalSuccess / totalRuns * 100).ToString("#.00", CultureInfo.InvariantCulture)}%)");
-            Console.WriteLine($"Average success time: {((float)totalTimeSuccess / totalRuns).ToString("#.00", CultureInfo.InvariantCulture)}ms");
-            Console.WriteLine($"Average failure time: {((float)totalTimeFail / totalRuns).ToString("#.00", CultureInfo.InvariantCulture)}ms");
+            Console.WriteLine($"Correct: {totalSuccess}/{totalRuns} ({((float)totalSuccess / totalRuns * 100).ToString("0.00", CultureInfo.InvariantCulture)}%)");
+            Console.WriteLine($"Average success time: {((float)totalTimeSuccess / totalRuns).ToString("0.00", CultureInfo.InvariantCulture)}ms");
+            Console.WriteLine($"Average failure time: {((float)totalTimeFail / totalRuns).ToString("0.00", CultureInfo.InvariantCulture)}ms");
         }
 
         private static IEnumerable<Result> RunAll(string path)
