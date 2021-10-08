@@ -27,6 +27,7 @@ namespace NewWorldMinimap.Core
         {
             PageSegmentation = PageSegmentation.Line,
             Numeric = true,
+            Whitelist = "[]0123456789 ,.",
         });
 
         private bool disposedValue;
