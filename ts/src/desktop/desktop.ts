@@ -1,3 +1,6 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from '../App';
 import { AppWindow } from '../AppWindow';
 import { windowNames } from '../consts';
 
@@ -5,3 +8,8 @@ import { windowNames } from '../consts';
 // In our case, our desktop window has no logic - it only displays static data.
 // Therefore, only the generic AppWindow class is called.
 new AppWindow(windowNames.desktop);
+
+const rootElement = document.getElementById('app');
+if (rootElement) {
+    ReactDOM.render(React.createElement(App), rootElement);
+}
