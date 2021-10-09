@@ -111,7 +111,7 @@ namespace NewWorldMinimap.Caches
                 {
                     double x = marker.Value["x"]!.ToObject<double>();
                     double y = marker.Value["y"]!.ToObject<double>();
-                    (int tileX, int tileY) = mapCache.GetTileCoordinatesForCoordinate(x, y);
+                    (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(x, y);
                     Marker m = new Marker(x, y, resourceName, type.Name);
 
                     string tileName = $"{tileX}-{tileY}";

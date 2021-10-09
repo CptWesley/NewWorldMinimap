@@ -209,7 +209,7 @@ namespace NewWorldMinimap
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
 
-                    (int tileX, int tileY) = map.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
+                    (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
                     IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
                     baseMap.Mutate(c =>

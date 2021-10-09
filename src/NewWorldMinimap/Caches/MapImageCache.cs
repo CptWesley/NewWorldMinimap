@@ -49,6 +49,26 @@ namespace NewWorldMinimap.Caches
         public int Radius { get; }
 
         /// <summary>
+        /// Gets the tile coordinates for world coordinate.
+        /// </summary>
+        /// <param name="x">The x world coordinate.</param>
+        /// <param name="y">The y world coordinate.</param>
+        /// <returns>The tile coordinates.</returns>
+        public static (int X, int Y) GetTileCoordinatesForCoordinate(double x, double y)
+        {
+            int totalWidth = Width * TileWidth;
+            int totalHeight = Height * TileHeight;
+
+            int imageX = (int)(x / GameMapWidth * totalWidth);
+            int imageY = (int)((GameMapHeight - y) / GameMapHeight * totalHeight);
+
+            int tileX = imageX / TileWidth;
+            int tileY = imageY / TileHeight;
+
+            return (tileX, tileY - 1);
+        }
+
+        /// <summary>
         /// Gets the map tile for the tile coordinates.
         /// </summary>
         /// <param name="x">The x tile coordinate.</param>
@@ -120,26 +140,6 @@ namespace NewWorldMinimap.Caches
             });
 
             return result;
-        }
-
-        /// <summary>
-        /// Gets the tile coordinates for world coordinate.
-        /// </summary>
-        /// <param name="x">The x world coordinate.</param>
-        /// <param name="y">The y world coordinate.</param>
-        /// <returns>The tile coordinates.</returns>
-        public (int X, int Y) GetTileCoordinatesForCoordinate(double x, double y)
-        {
-            int totalWidth = Width * TileWidth;
-            int totalHeight = Height * TileHeight;
-
-            int imageX = (int)(x / GameMapWidth * totalWidth);
-            int imageY = (int)((GameMapHeight - y) / GameMapHeight * totalHeight);
-
-            int tileX = imageX / TileWidth;
-            int tileY = imageY / TileHeight;
-
-            return (tileX, tileY - 1);
         }
 
         /// <summary>
