@@ -21,11 +21,11 @@ const interestingFeatures = [
 const windowNames = {
     inGame: 'in_game',
     desktop: 'desktop',
-};
+} as const;
 
 const hotkeys = {
     toggle: 'showhide',
-};
+} as const;
 
 export {
     portal2ClassId,
