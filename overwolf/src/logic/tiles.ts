@@ -12,8 +12,8 @@ export function getTileCoordinatesForWorldCoordinate(x: number, y: number) {
     const imageX = x / gameMapWidth * totalWidth;
     const imageY = (gameMapHeight - y) / gameMapHeight * totalHeight;
 
-    const tileX = imageX / tileWidth;
-    const tileY = imageY / tileHeight;
+    const tileX = Math.floor(imageX / tileWidth);
+    const tileY = Math.floor(imageY / tileHeight);
 
     return { x: tileX, y: tileY - 1 };
 }
@@ -23,7 +23,7 @@ function getTileImageUrl(x: number, y: number) {
 }
 
 async function getTileBitmapFromServer(x: number, y: number) {
-    const imageUrl = getTileImageUrl(109, 205);
+    const imageUrl = getTileImageUrl(x, y);
     console.log(imageUrl);
     const imageRequest = await fetch(imageUrl, {
         method: 'get',
