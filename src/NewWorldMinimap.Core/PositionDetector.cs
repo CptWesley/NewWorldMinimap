@@ -48,11 +48,13 @@ namespace NewWorldMinimap.Core
         /// <param name="bmp">The image.</param>
         /// <param name="position">The position.</param>
         /// <returns>The found position.</returns>
-        public bool TryGetPosition(Image<Rgba32> bmp, out Vector2 position)
+        public bool TryGetPosition(Image<Rgba32> bmp, out Vector2 position, bool debugEnabled, out Image<Rgba32> debugImage)
         {
             bmp.Mutate(x => x
                 .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
-                .Resize(TextWidth * 4, TextHeight * 4)
+                .Resize(TextWidth * 4, TextHeight * 4));
+            debugImage = debugEnabled ? bmp.Clone() : null;
+            bmp.Mutate(x => x
                 .HistogramEqualization()
                 .Crop(new Rectangle(0, 2 * 4, TextWidth * 4, 16 * 4))
                 .WhiteFilter(0.9f)
