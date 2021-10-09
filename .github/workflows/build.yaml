@@ -10,11 +10,8 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v1
-
-    - name: Setup NuGet
-      uses: NuGet/setup-nuget@v1.0.2
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v1
       
     - name: Set working directory
       run: cd "$GITHUB_WORKSPACE/src"
@@ -23,4 +20,4 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build
+      run: dotnet build /warnaserror
