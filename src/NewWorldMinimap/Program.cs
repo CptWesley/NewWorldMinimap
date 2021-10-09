@@ -15,9 +15,13 @@ namespace NewWorldMinimap
         [STAThread]
         public static void Main(string[] args)
         {
+            SetProcessDPIAware();
             Application.EnableVisualStyles();
             using Form map = new MapForm();
             Application.Run(map);
         }
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        private static extern bool SetProcessDPIAware();
     }
 }
