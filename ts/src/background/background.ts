@@ -1,4 +1,4 @@
-import { windowNames, fortniteClassId } from "../consts";
+import { windowNames, portal2ClassId } from "../consts";
 import {
   OWGames,
   OWGameListener,
@@ -15,15 +15,15 @@ import RunningGameInfo = overwolf.games.RunningGameInfo;
 class BackgroundController {
   private static _instance: BackgroundController;
   private _windows = {};
-  private _fortniteGameListener: OWGameListener;
+  private _portal2GameListener: OWGameListener;
 
   private constructor() {
     // Populating the background controller's window dictionary
     this._windows[windowNames.desktop] = new OWWindow(windowNames.desktop);
     this._windows[windowNames.inGame] = new OWWindow(windowNames.inGame);
 
-    // When a Fortnite game is started or is ended, toggle the app's windows
-    this._fortniteGameListener = new OWGameListener({
+    // When a Portal 2 game is started or is ended, toggle the app's windows
+    this._portal2GameListener = new OWGameListener({
       onGameStarted: this.toggleWindows.bind(this),
       onGameEnded: this.toggleWindows.bind(this)
     });
@@ -39,36 +39,36 @@ class BackgroundController {
   }
 
   // When running the app, start listening to games' status and decide which window should
-  // be launched first, based on whether Fortnite is currently running
+  // be launched first, based on whether Portal 2 is currently running
   public async run() {
-    this._fortniteGameListener.start();
-    const currWindow = await this.isFortniteRunning() ? windowNames.inGame : windowNames.desktop;
+    this._portal2GameListener.start();
+    const currWindow = await this.isPortal2Running() ? windowNames.inGame : windowNames.desktop;
     this._windows[currWindow].restore();
   }
 
   private toggleWindows(info) {
-    if (!info || !this.isGameFortnite(info)) {
+    if (!info || !this.isGamePortal2(info)) {
       return;
     }
 
     if (info.isRunning) {
-      this._windows[windowNames.desktop].close();
+      // this._windows[windowNames.desktop].close();
       this._windows[windowNames.inGame].restore();
     } else {
       this._windows[windowNames.inGame].close();
-      this._windows[windowNames.desktop].restore();
+      // this._windows[windowNames.desktop].restore();
     }
   }
 
-  private async isFortniteRunning(): Promise<boolean> {
+  private async isPortal2Running(): Promise<boolean> {
     const info = await OWGames.getRunningGameInfo();
 
-    return info && info.isRunning && this.isGameFortnite(info);
+    return info && info.isRunning && this.isGamePortal2(info);
   }
 
-  // Identify whether the RunningGameInfo object we have references Fortnite
-  private isGameFortnite(info: RunningGameInfo) {
-    return info.classId === fortniteClassId;
+  // Identify whether the RunningGameInfo object we have references Portal 2
+  private isGamePortal2(info: RunningGameInfo) {
+    return info.classId === portal2ClassId;
   }
 }
 

@@ -6,7 +6,8 @@
   "scripts": {
     "build": "webpack --mode=development --env makeOpk",
     "dev": "webpack --watch --mode=development",
-    "watch": "webpack --watch --mode=development"
+    "watch": "webpack --watch --mode=development",
+    "type-check": "tsc --sourcemap false --incremental --skipLibCheck -w --noemit"
   },
   "keywords": [],
   "author": "",

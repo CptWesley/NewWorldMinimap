@@ -1,4 +1,4 @@
-const fortniteClassId = 21216;
+const portal2ClassId = 6670;
 
 const interestingFeatures = [
   'counters',
@@ -28,7 +28,7 @@ const hotkeys = {
 };
 
 export {
-  fortniteClassId,
+  portal2ClassId,
   interestingFeatures,
   windowNames,
   hotkeys
