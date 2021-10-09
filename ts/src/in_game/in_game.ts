@@ -20,8 +20,8 @@ class InGame extends AppWindow {
   private constructor() {
     super(windowNames.inGame);
 
-    this._eventsLog = document.getElementById('eventsLog');
-    this._infoLog = document.getElementById('infoLog');
+    this._eventsLog = document.getElementById('eventsLog')!;
+    this._infoLog = document.getElementById('infoLog')!;
 
     this.setToggleHotkeyBehavior();
     this.setToggleHotkeyText();
@@ -71,7 +71,9 @@ class InGame extends AppWindow {
   private async setToggleHotkeyText() {
     const hotkeyText = await OWHotkeys.getHotkeyText(hotkeys.toggle, portal2ClassId);
     const hotkeyElem = document.getElementById('hotkey');
-    hotkeyElem.textContent = hotkeyText;
+    if (hotkeyElem) {
+      hotkeyElem.textContent = hotkeyText;
+    }
   }
 
   // Sets toggleInGameWindow as the behavior for the Ctrl+F hotkey

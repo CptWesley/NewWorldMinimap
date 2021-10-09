@@ -19,15 +19,15 @@ export class AppWindow {
 
     this.setDrag(header);
 
-    closeButton.addEventListener('click', () => {
+    closeButton?.addEventListener('click', () => {
       this.mainWindow.close();
     });
 
-    minimizeButton.addEventListener('click', () => {
+    minimizeButton?.addEventListener('click', () => {
       this.currWindow.minimize();
     });
 
-    maximizeButton.addEventListener('click', () => {
+    maximizeButton?.addEventListener('click', () => {
       if (!this.maximized) {
         this.currWindow.maximize();
       } else {

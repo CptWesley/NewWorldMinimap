@@ -1,14 +1,14 @@
 {
   "compilerOptions": {
-    "target": "es2017",
     "module": "none",
-    "sourceMap": true,
-    "outDir": "./dist",
     "moduleResolution": "node",
-    "removeComments": true,
-    "strict": true,
     "noImplicitAny": false,
-    "strictNullChecks": false,
+    "outDir": "./dist",
+    "jsx": "react",
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
     "types": [
       "@overwolf/types"
     ],
