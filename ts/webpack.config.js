@@ -1,9 +1,8 @@
-const
-    path = require('path'),
-    HtmlWebpackPlugin = require('html-webpack-plugin'),
-    CopyPlugin = require("copy-webpack-plugin"),
-    { CleanWebpackPlugin } = require('clean-webpack-plugin'),
-    OverwolfPlugin = require('./overwolf.webpack');
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const OverwolfPlugin = require('./overwolf.webpack');
 
 module.exports = env => ({
     entry: {
@@ -25,13 +24,13 @@ module.exports = env => ({
         extensions: ['.ts', '.js']
     },
     output: {
-      path: path.resolve(__dirname, 'dist/'),
-      filename: 'js/[name].js'
+        path: path.resolve(__dirname, 'dist/'),
+        filename: 'js/[name].js'
     },
     plugins: [
         new CleanWebpackPlugin,
         new CopyPlugin({
-            patterns: [ { from: "public", to: "./" } ],
+            patterns: [{ from: "public", to: "./" }],
         }),
         new HtmlWebpackPlugin({
             template: './src/background/background.html',
