@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    },
+    "typescript.preferences.quoteStyle": "single",
+    "editor.tabSize": 4,
+    "importSorter.generalConfiguration.sortOnBeforeSave": true
+}
