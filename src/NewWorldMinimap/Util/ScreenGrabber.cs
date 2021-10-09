@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 using NewWorldMinimap.Core.Util;
@@ -42,6 +43,7 @@ namespace NewWorldMinimap.Util
         /// Gets the index of the primary screen.
         /// </summary>
         /// <returns>The index of the primary screen.</returns>
+        [SuppressMessage("Design", "CA1024", Justification = "Performs a computation.")]
         public static int GetPrimaryScreenIndex()
         {
             Screen[] screens = Screen.AllScreens;

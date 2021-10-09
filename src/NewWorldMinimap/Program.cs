@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
 namespace NewWorldMinimap
@@ -15,13 +16,16 @@ namespace NewWorldMinimap
         [STAThread]
         public static void Main(string[] args)
         {
-            SetProcessDPIAware();
+            NativeMethods.SetProcessDPIAware();
             Application.EnableVisualStyles();
             using Form map = new MapForm();
             Application.Run(map);
         }
 
-        [System.Runtime.InteropServices.DllImport("user32")]
-        private static extern bool SetProcessDPIAware();
+        private static class NativeMethods
+        {
+            [DllImport("user32")]
+            public static extern bool SetProcessDPIAware();
+        }
     }
 }
