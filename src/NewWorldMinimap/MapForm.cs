@@ -176,6 +176,8 @@ namespace NewWorldMinimap
         {
             Stopwatch sw = new Stopwatch();
 
+            Vector2 lastPos = Vector2.Zero;
+            double rotationAngle = 0;
             int i = 0;
             while (true)
             {
@@ -192,7 +194,18 @@ namespace NewWorldMinimap
 
                     baseMap.Mutate(c =>
                     {
-                        c.DrawImage(icons.Get("player"), imageX, imageY);
+                        using Image<Rgba32> playerTriangle = icons.Get("player").Clone();
+                        AffineTransformBuilder builder = new AffineTransformBuilder();
+                        Vector2 posDifference = pos - lastPos;
+
+                        if (posDifference != Vector2.Zero)
+                        {
+                            rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
+                        }
+
+                        builder.AppendRotationRadians((float)rotationAngle);
+                        playerTriangle.Mutate(x => x.Transform(builder));
+                        c.DrawImage(playerTriangle, imageX, imageY);
 
                         foreach (Marker marker in visibleMarkers)
                         {
@@ -212,6 +225,8 @@ namespace NewWorldMinimap
                     });
 
                     prev?.Dispose();
+
+                    lastPos = pos;
                 }
                 else
                 {
