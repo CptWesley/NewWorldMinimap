@@ -83,7 +83,7 @@ export default function DesktopHeader() {
         return () => {
             window.removeEventListener('resize', handleResize);
         };
-    });
+    }, []);
 
     function handleMinimize() {
         desktopWindow.minimize();
