@@ -8,10 +8,6 @@ namespace NewWorldMinimap
     /// </summary>
     public static class Program
     {
-        //https://stackoverflow.com/questions/32438736/taking-a-screenshot-using-graphics-copyfromscreen-with-150-scaling/37800963
-        [System.Runtime.InteropServices.DllImport("user32.dll")]
-        public static extern bool SetProcessDPIAware();
-
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
@@ -24,5 +20,8 @@ namespace NewWorldMinimap
             using Form map = new MapForm();
             Application.Run(map);
         }
+
+        [System.Runtime.InteropServices.DllImport("user32")]
+        private static extern bool SetProcessDPIAware();
     }
 }
