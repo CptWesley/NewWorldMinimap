@@ -1,0 +1,26 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    
+    - name: Setup MSBuild
+      uses: microsoft/setup-msbuild@v1
+
+    - name: Setup NuGet
+      uses: NuGet/setup-nuget@v1.0.2
+      
+    - name: Set working directory
+      run: cd "$GITHUB_WORKSPACE/src"
+      
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build
