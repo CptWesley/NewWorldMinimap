@@ -4,6 +4,16 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OverwolfPlugin = require('./overwolf.webpack');
 
+const appName = "CptWesley's Minimap";
+const appVersion = require('./package.json').version;
+const appDate = new Date().toISOString();
+
+const templateParameters = {
+    appName,
+    appVersion,
+    appDate,
+};
+
 module.exports = env => ({
     entry: {
         background: './src/OverwolfWindows/background/background.ts',
@@ -17,8 +27,12 @@ module.exports = env => ({
                 test: /\.tsx?$/,
                 use: 'ts-loader',
                 exclude: /node_modules/
-            }
-        ]
+            },
+            {
+                test: /\.css$/,
+                use: 'css-loader',
+            },
+        ],
     },
     resolve: {
         extensions: ['.ts', '.tsx', '.js']
@@ -34,16 +48,19 @@ module.exports = env => ({
         }),
         new HtmlWebpackPlugin({
             template: './src/OverwolfWindows/background/background.html',
+            templateParameters,
             filename: path.resolve(__dirname, './dist/background.html'),
             chunks: ['background']
         }),
         new HtmlWebpackPlugin({
             template: './src/OverwolfWindows/desktop/desktop.html',
+            templateParameters,
             filename: path.resolve(__dirname, './dist/desktop.html'),
             chunks: ['desktop']
         }),
         new HtmlWebpackPlugin({
             template: './src/OverwolfWindows/in_game/in_game.html',
+            templateParameters,
             filename: path.resolve(__dirname, './dist/in_game.html'),
             chunks: ['in_game']
         }),
