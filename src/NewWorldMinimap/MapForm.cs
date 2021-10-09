@@ -220,7 +220,7 @@ namespace NewWorldMinimap
                             c.DrawImage(icons.Get(marker), ix, iy);
                         }
 
-                        if (this.debugEnabled)
+                        if (debugImage != null)
                         {
                             debugImage.Mutate(x => x.Resize(debugImage.Width / 2, debugImage.Height / 2));
                             c.DrawImage(debugImage, imageX - (this.Width / 2), imageY - (this.Height / 2));
