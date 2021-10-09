@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Numerics;
@@ -29,6 +30,11 @@ namespace NewWorldMinimap.Core.Util
         /// <returns>The new image.</returns>
         public static Image<Rgba32> Recenter(this Image<Rgba32> bmp, int x, int y)
         {
+            if (bmp is null)
+            {
+                throw new ArgumentNullException(nameof(bmp));
+            }
+
             Image<Rgba32> result = new Image<Rgba32>(bmp.Width, bmp.Height);
             result.Mutate(c => c.DrawImage(bmp, (bmp.Width / 2) - x, (bmp.Height / 2) - y));
             return result;
@@ -41,6 +47,11 @@ namespace NewWorldMinimap.Core.Util
         /// <returns>The ImageSharp image.</returns>
         public static Image<Rgba32> ToImageSharp(this Bitmap bmp)
         {
+            if (bmp is null)
+            {
+                throw new ArgumentNullException(nameof(bmp));
+            }
+
             using MemoryStream ms = new MemoryStream();
             bmp.Save(ms, ImageFormat.Bmp);
             ms.Position = 0;
@@ -54,6 +65,11 @@ namespace NewWorldMinimap.Core.Util
         /// <returns>The System.Drawing image.</returns>
         public static Bitmap ToBitmap(this Image<Rgba32> img)
         {
+            if (img is null)
+            {
+                throw new ArgumentNullException(nameof(img));
+            }
+
             using MemoryStream ms = new MemoryStream();
             img.Save(ms, BmpEncoder);
             ms.Position = 0;

@@ -33,6 +33,11 @@ namespace NewWorldMinimap.Caches
         /// <param name="mapCache">The map cache.</param>
         public void Populate(MapImageCache mapCache)
         {
+            if (mapCache is null)
+            {
+                throw new ArgumentNullException(nameof(mapCache));
+            }
+
             markers.Clear();
             Radius = mapCache.Radius;
             string stringData = http.GetAsync("https://www.newworld-map.com/markers.json").Result.Content.ReadAsStringAsync().Result;

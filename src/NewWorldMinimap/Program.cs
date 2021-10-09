@@ -25,6 +25,7 @@ namespace NewWorldMinimap
         private static class NativeMethods
         {
             [DllImport("user32")]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
             public static extern bool SetProcessDPIAware();
         }
     }

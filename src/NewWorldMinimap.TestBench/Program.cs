@@ -24,6 +24,11 @@ namespace NewWorldMinimap.TestBench
         /// <param name="args">The arguments.</param>
         public static void Main(string[] args)
         {
+            if (args is null)
+            {
+                args = Array.Empty<string>();
+            }
+
             string searchPath = args.Length > 0 ? args[0] : "../../../Data";
 
             Dictionary<string, List<Result>> results = RunAll(searchPath).GroupBy(x => x.Category).ToDictionary(x => x.Key, x => x.ToList());

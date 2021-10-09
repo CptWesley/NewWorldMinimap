@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
@@ -105,6 +106,11 @@ namespace NewWorldMinimap.Caches
         /// <returns>The found icon.</returns>
         public Image<Rgba32> Get(Marker marker)
         {
+            if (marker is null)
+            {
+                throw new ArgumentNullException(nameof(marker));
+            }
+
             if (types.TryGetValue(marker.Type, out Image<Rgba32> result))
             {
                 return result;

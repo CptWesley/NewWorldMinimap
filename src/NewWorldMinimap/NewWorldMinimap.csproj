@@ -7,6 +7,7 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<AnalysisLevel>latest</AnalysisLevel>
+    <WarningLevel>5</WarningLevel>
 		<CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
 		<DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
 		<Authors>Wesley Baartman</Authors>

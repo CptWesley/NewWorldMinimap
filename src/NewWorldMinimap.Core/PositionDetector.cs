@@ -52,6 +52,11 @@ namespace NewWorldMinimap.Core
         /// <returns>The found position.</returns>
         public bool TryGetPosition(Image<Rgba32> bmp, out Vector2 position, bool debugEnabled, out Image<Rgba32> debugImage)
         {
+            if (bmp is null)
+            {
+                throw new ArgumentNullException(nameof(bmp));
+            }
+
             bmp.Mutate(x => x
                 .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
                 .Resize(TextWidth * 4, TextHeight * 4));
