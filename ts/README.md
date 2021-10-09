@@ -69,7 +69,7 @@ Source .html & .ts files for the app
 
 ##### src/background/
 This directory contains files of the background window, which serves as the application's starting point and window orchestrator.
-The window's ```run()``` method detects whether a Fortnite game is currently running, decides which window to launch accordingly, and listens for changes.
+The window's ```run()``` method detects whether a Portal 2 game is currently running, decides which window to launch accordingly, and listens for changes.
 
 The background window has no visual representation, which can be gleaned from the empty background.html file or from the
 [```{ is_background_page: true }```](https://overwolf.github.io/docs/api/manifest-json#is_background_page)
