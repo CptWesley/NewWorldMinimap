@@ -43,14 +43,14 @@ namespace NewWorldMinimap.Caches
             string stringData = http.GetAsync("https://www.newworld-map.com/markers.json").Result.Content.ReadAsStringAsync().Result;
             JObject data = JObject.Parse(stringData);
 
-            PopulateResource(mapCache, data, "ores");
-            PopulateResource(mapCache, data, "woods");
-            PopulateResource(mapCache, data, "chests");
-            PopulateResource(mapCache, data, "plants");
-            PopulateResource(mapCache, data, "documents");
-            PopulateResource(mapCache, data, "fishing");
-            PopulateResource(mapCache, data, "monsters");
-            PopulateResource(mapCache, data, "essences");
+            PopulateResource(data, "ores");
+            PopulateResource(data, "woods");
+            PopulateResource(data, "chests");
+            PopulateResource(data, "plants");
+            PopulateResource(data, "documents");
+            PopulateResource(data, "fishing");
+            PopulateResource(data, "monsters");
+            PopulateResource(data, "essences");
         }
 
         /// <summary>
@@ -101,9 +101,9 @@ namespace NewWorldMinimap.Caches
             }
         }
 
-        private void PopulateResource(MapImageCache mapCache, JObject data, string resourceName)
+        private void PopulateResource(JObject data, string resourceName)
         {
-            JToken? category = data.GetValue(resourceName);
+            JToken? category = data.GetValue(resourceName, StringComparison.InvariantCulture);
 
             if (category is null)
             {

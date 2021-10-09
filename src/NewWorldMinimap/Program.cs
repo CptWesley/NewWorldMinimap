@@ -12,9 +12,8 @@ namespace NewWorldMinimap
         /// <summary>
         /// Defines the entry point of the application.
         /// </summary>
-        /// <param name="args">The arguments.</param>
         [STAThread]
-        public static void Main(string[] args)
+        public static void Main()
         {
             NativeMethods.SetProcessDPIAware();
             Application.EnableVisualStyles();
