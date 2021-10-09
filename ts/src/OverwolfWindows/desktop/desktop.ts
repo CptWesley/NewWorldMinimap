@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../../App';
+import Desktop from '../../Desktop';
 import { AppWindow } from '../AppWindow';
 import { windowNames } from '../consts';
 
@@ -9,7 +10,10 @@ import { windowNames } from '../consts';
 // Therefore, only the generic AppWindow class is called.
 new AppWindow(windowNames.desktop);
 
+export const desktopAppTitle = `${NWMM_APP_NAME} ${NWMM_APP_VERSION}`;
+document.title = desktopAppTitle;
+
 const rootElement = document.getElementById('app');
 if (rootElement) {
-    ReactDOM.render(React.createElement(App), rootElement);
+    ReactDOM.render(React.createElement(Desktop), rootElement);
 }
