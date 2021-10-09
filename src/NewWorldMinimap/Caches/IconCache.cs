@@ -22,7 +22,6 @@ namespace NewWorldMinimap.Caches
         public IconCache()
         {
             Register("player.png", "player", Color.Yellow);
-            Register("playerTriangle.png", "playerTriangle", Color.Yellow);
             Register("unknown.png", "unknown", Color.Red);
 
             Register("ore.png", "ores", Color.Green);

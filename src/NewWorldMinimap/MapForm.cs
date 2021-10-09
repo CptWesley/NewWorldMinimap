@@ -177,6 +177,7 @@ namespace NewWorldMinimap
             Stopwatch sw = new Stopwatch();
 
             Vector2 lastPos = Vector2.Zero;
+            double rotationAngle = 0;
             int i = 0;
             while (true)
             {
@@ -184,8 +185,6 @@ namespace NewWorldMinimap
 
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos))
                 {
-                    Vector2 difference = pos - lastPos;
-
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
                     (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
@@ -195,20 +194,18 @@ namespace NewWorldMinimap
 
                     baseMap.Mutate(c =>
                     {
-                        if (difference == Vector2.Zero)
-                        {
-                            c.DrawImage(icons.Get("player"), imageX, imageY);
-                        }
-                        else
-                        {
-                            using Image<Rgba32> playerTriangle = icons.Get("playerTriangle").Clone();
-                            AffineTransformBuilder builder = new AffineTransformBuilder();
-                            double rotationDegrees = Math.Atan2(difference.X, difference.Y) * (180 / Math.PI);
+                        using Image<Rgba32> playerTriangle = icons.Get("player").Clone();
+                        AffineTransformBuilder builder = new AffineTransformBuilder();
+                        Vector2 posDifference = pos - lastPos;
 
-                            builder.AppendRotationDegrees((float)rotationDegrees);
-                            playerTriangle.Mutate(x => x.Transform(builder));
-                            c.DrawImage(playerTriangle, imageX, imageY);
+                        if (posDifference != Vector2.Zero)
+                        {
+                            rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
                         }
+
+                        builder.AppendRotationRadians((float)rotationAngle);
+                        playerTriangle.Mutate(x => x.Transform(builder));
+                        c.DrawImage(playerTriangle, imageX, imageY);
 
                         foreach (Marker marker in visibleMarkers)
                         {
