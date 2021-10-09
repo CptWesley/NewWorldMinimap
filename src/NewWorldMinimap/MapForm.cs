@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -203,7 +203,10 @@ namespace NewWorldMinimap
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
+                if (!IsActive())
+                {
+                }
+                else if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                 {
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
@@ -281,6 +284,11 @@ namespace NewWorldMinimap
             catch (InvalidOperationException)
             {
             }
+        }
+
+        private static bool IsActive()
+        {
+            return User32.GetActiveWindowTitle() == "New World";
         }
     }
 }
