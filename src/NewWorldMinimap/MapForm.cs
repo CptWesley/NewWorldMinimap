@@ -34,9 +34,11 @@ namespace NewWorldMinimap
         private readonly MenuItem alwaysOnTopButton;
         private readonly List<MenuItem> screenItems = new List<MenuItem>();
         private readonly List<MenuItem> refreshDelayItems = new List<MenuItem>();
+        private readonly MenuItem debugButton;
 
         private int currentScreen;
         private int refreshDelay;
+        private bool debugEnabled;
 
         private Thread? scannerThread;
 
@@ -46,6 +48,8 @@ namespace NewWorldMinimap
         public MapForm()
         {
             alwaysOnTopButton = new MenuItem("Always-on-top", ToggleAlwaysOnTop, Shortcut.None);
+            debugButton = new MenuItem("Debug", ToggleDebug, Shortcut.None);
+            debugEnabled = false;
 
             InitializeComponent();
             StartUpdateLoop();
@@ -103,6 +107,8 @@ namespace NewWorldMinimap
             menu.MenuItems.AddRange(screenItems.ToArray());
             menu.MenuItems.Add("-");
             menu.MenuItems.AddRange(refreshDelayItems.ToArray());
+            menu.MenuItems.Add("-");
+            menu.MenuItems.Add(debugButton);
 
             SelectScreen(ScreenGrabber.GetPrimaryScreenIndex());
             SelectRefreshDelay(2, 350);
@@ -147,6 +153,20 @@ namespace NewWorldMinimap
             }
         }
 
+        private void ToggleDebug(object sender, EventArgs e)
+        {
+            if (debugButton.Checked)
+            {
+                debugButton.Checked = false;
+                this.debugEnabled = false;
+            }
+            else
+            {
+                debugButton.Checked = true;
+                this.debugEnabled = true;
+            }
+        }
+
         private void UpdateSize()
         {
             if (picture.Width != Width)
@@ -181,7 +201,7 @@ namespace NewWorldMinimap
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos))
+                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                 {
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
@@ -198,6 +218,13 @@ namespace NewWorldMinimap
                         {
                             (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
                             c.DrawImage(icons.Get(marker), ix, iy);
+                        }
+
+                        if (this.debugEnabled)
+                        {
+                            debugImage.Mutate(x => x.Resize(debugImage.Width / 2, debugImage.Height / 2));
+                            c.DrawImage(debugImage, imageX - (this.Width / 2), imageY - (this.Height / 2));
+                            debugImage.Dispose();
                         }
                     });
 

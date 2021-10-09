@@ -102,7 +102,7 @@ namespace NewWorldMinimap.TestBench
             using Image<Rgba32> img = Image.Load<Rgba32>(fileName);
 
             Stopwatch sw = Stopwatch.StartNew();
-            pd.TryGetPosition(img, out Vector2 found);
+            pd.TryGetPosition(img, out Vector2 found, false, out Image<Rgba32> debugImage);
             pd.ResetCounter();
             sw.Stop();
 
