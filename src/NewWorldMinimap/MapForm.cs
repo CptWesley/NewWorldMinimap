@@ -205,8 +205,11 @@ namespace NewWorldMinimap
 
                 if (!IsActive())
                 {
+                    Thread.Sleep(refreshDelay);
+                    continue;
                 }
-                else if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
+
+                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                 {
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
