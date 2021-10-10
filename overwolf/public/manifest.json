@@ -92,7 +92,8 @@
       "matches": [
         "http://*.overwolf.com",
         "https://*.overwolf.com",
-        "https://overwolf.github.io"
+        "https://overwolf.github.io",
+        "https://*.newworld-map.com"
       ]
     },
     "force_browser": "user",

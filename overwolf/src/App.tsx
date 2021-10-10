@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
 
@@ -49,6 +50,7 @@ export default function App() {
 
         window.addEventListener('resize', draw);
         window.setPosition = setPosition;
+        window.getMarkers = getMarkers;
         return function () {
             window.removeEventListener('resize', draw);
         };
