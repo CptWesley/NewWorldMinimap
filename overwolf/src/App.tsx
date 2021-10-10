@@ -1,6 +1,8 @@
 import React, { useEffect, useRef } from 'react';
-import { getTileBitmap, getTiles, toMinimapCoordinate } from './logic/tiles';
+import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
+
+let lastPos = { x: 7728.177, y: 1988.299 };
 
 const useStyles = makeStyles()({
     canvas: {
@@ -8,6 +10,11 @@ const useStyles = makeStyles()({
         height: '100%',
     },
 });
+
+export function setPosition(newPos: Vector2) {
+    lastPos = newPos;
+    window.dispatchEvent(new Event('resize', {}));
+}
 
 export default function App() {
     const { classes } = useStyles();
@@ -21,11 +28,8 @@ export default function App() {
                 ctx.canvas.width = ctx.canvas.clientWidth;
                 ctx.canvas.height = ctx.canvas.clientHeight;
 
-                const playerPos = { x: 7728.177, y: 1988.299 };
-                const radius = 1;
-
-                const bitmaps = getTiles(playerPos, ctx.canvas.width, ctx.canvas.height);
-                const offset = toMinimapCoordinate(playerPos, playerPos, ctx.canvas.width, ctx.canvas.height);
+                const bitmaps = getTiles(lastPos, ctx.canvas.width, ctx.canvas.height);
+                const offset = toMinimapCoordinate(lastPos, lastPos, ctx.canvas.width, ctx.canvas.height);
 
                 for (let x = 0; x < bitmaps.length; x++) {
                     const row = bitmaps[x];
