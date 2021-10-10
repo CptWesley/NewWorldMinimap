@@ -32,14 +32,15 @@ export default function App() {
             const centerX = ctx.canvas.width / 2;
             const centerY = ctx.canvas.height / 2;
 
-            const bitmaps = getTiles(position, ctx.canvas.width, ctx.canvas.height);
+            const tiles = getTiles(position, ctx.canvas.width, ctx.canvas.height);
             const offset = toMinimapCoordinate(position, position, ctx.canvas.width, ctx.canvas.height);
 
-            for (let x = 0; x < bitmaps.length; x++) {
-                const row = bitmaps[x];
+            for (let x = 0; x < tiles.length; x++) {
+                const row = tiles[x];
                 for (let y = 0; y < row.length; y++) {
-                    const bitmap = await row[y];
-                    ctx.drawImage(bitmap,
+                    const tile = row[y];
+                    const bitmap = await tile.image;
+                    ctx.drawImage(await tile.image,
                         bitmap.width * x + Math.floor(centerX) - offset.x,
                         bitmap.height * y + Math.floor(centerY) - offset.y
                     );
