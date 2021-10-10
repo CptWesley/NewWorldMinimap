@@ -18,7 +18,7 @@ async function createPlayerDebugIcon() {
 }
 createPlayerDebugIcon();
 
-export default function App() {
+export default function Minimap() {
     const { classes } = useStyles();
 
     const [position, setPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
