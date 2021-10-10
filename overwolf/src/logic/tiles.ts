@@ -44,7 +44,7 @@ export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
 function getDimensions(screenWidth: number, screenHeight: number) {
     const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 1;
     const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 1;
-    return { x: x, y: y };
+    return { x, y };
 }
 
 export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number) {
