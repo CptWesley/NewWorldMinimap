@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function SheepIcon(props: ISvgMapIconProps) {
+export default function SheepIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='M 8,0.5 C 5.7885243,0.5 3.4235398,0.52765999 2.4969708,1.2705825 1.4897809,2.0781468 -0.92686014,7.0584965 1.7456699,10.297243 4.4181999,13.535989 4.1148566,15.5 8,15.5 m 0,-15 c 2.211476,0 4.57646,0.02766 5.503029,0.7705825 1.00719,0.8075643 3.423831,5.787914 0.751301,9.0266605 C 11.5818,13.535989 11.885143,15.5 8,15.5'

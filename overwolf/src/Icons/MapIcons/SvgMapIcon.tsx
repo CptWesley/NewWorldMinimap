@@ -1,12 +1,15 @@
 import React from 'react';
 
-export interface ISvgMapIconProps {
+export interface ISvgMapIconConsumerProps {
     stroke?: string;
     strokeWidth?: string | number;
     fill?: string;
+    scale?: number;
+}
+
+interface ISvgMapIconProps extends ISvgMapIconConsumerProps {
     width?: number;
     height?: number;
-    scale?: number;
 }
 
 export const svgMapIconDefaultProps: ISvgMapIconProps = {

@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function EssensePlusIcon(props: ISvgMapIconProps) {
+export default function EssensePlusIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='M 6.5 2.5 L 6.5 6.5 L 2.5 6.5 L 2.5 9.5 L 6.5 9.5 L 6.5 13.5 L 9.5 13.5 L 9.5 9.5 L 13.5 9.5 L 13.5 6.5 L 9.5 6.5 L 9.5 2.5 L 6.5 2.5 z '

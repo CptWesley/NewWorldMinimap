@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOMServer from 'react-dom/server';
-import { ISvgMapIconProps } from '../Icons/MapIcons/SvgMapIcon';
+import { ISvgMapIconConsumerProps } from '../Icons/MapIcons/SvgMapIcon';
 
-export async function svgMapIconToImageBitmap(component: React.ComponentType<ISvgMapIconProps>, props?: ISvgMapIconProps) {
+export async function svgMapIconToImageBitmap(component: React.ComponentType<ISvgMapIconConsumerProps>, props?: ISvgMapIconConsumerProps) {
     const element = React.createElement(component, props);
     const svgString = ReactDOMServer.renderToStaticMarkup(element);
     const svgUrl = `data:image/svg+xml;utf-8,${encodeURIComponent(svgString)}`;

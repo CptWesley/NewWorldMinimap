@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { getSvgMapIconProps, ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { getSvgMapIconProps, ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function CowIcon(props: ISvgMapIconProps) {
+export default function CowIcon(props: ISvgMapIconConsumerProps) {
     const {
         stroke,
     } = getSvgMapIconProps(props);

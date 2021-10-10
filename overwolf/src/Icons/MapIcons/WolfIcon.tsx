@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function WolfIcon(props: ISvgMapIconProps) {
+export default function WolfIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             style={{ strokeLinejoin: 'round' }}

@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function OreIcon(props: ISvgMapIconProps) {
+export default function OreIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='M 7.6575463,11.664948 13.704628,12.327861 15.067127,9.366851 11.816726,7.563686 14.886091,5.0976084 12.92691,2.9232088 9.9474587,3.1900746 10.235962,0.99545765 c 0,0 -1.9516588,1.14373845 -2.743064,1.96319025 C 6.7014929,3.7780998 6.5850841,4.2867444 6.4274452,5.1462955 6.1121674,6.8653978 7.6575454,11.664948 7.6575463,11.664948 Z'
