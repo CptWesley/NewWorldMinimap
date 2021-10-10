@@ -17,6 +17,10 @@ const useStyles = makeStyles()(theme => ({
 
         background: theme.background,
         color: theme.color,
+
+        '& > :nth-child(2)': {
+            height: '100%',
+        },
     },
 }));
 
@@ -36,6 +40,10 @@ export default function Frame(props: IProps) {
                         fontSize: 16,
                         margin: 0,
                         userSelect: 'none',
+                        height: '100vh',
+                    },
+                    '#app': {
+                        height: '100%',
                     },
                 }}
             />

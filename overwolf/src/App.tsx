@@ -2,10 +2,10 @@ import React from 'react';
 import Minimap from './Minimap';
 import { makeStyles } from './theme';
 
-const useStyles = makeStyles()(theme => ({
+const useStyles = makeStyles()(() => ({
     root: {
         display: 'grid',
-        gridTemplateRows: '32px 1fr',
+        gridTemplateRows: 'auto 1fr',
         gridTemplateColumns: '1fr',
     },
 }));
