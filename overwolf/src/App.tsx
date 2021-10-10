@@ -64,18 +64,20 @@ export default function App() {
     const drawRef = useRef(draw);
     drawRef.current = draw;
 
+    function redraw() {
+        // Use the `draw` in the ref to get the most up-to-date one
+        drawRef.current();
+    }
+
+    useEffect(() => {
+        redraw();
+    }, [position]);
+
     useEffect(() => {
         // Expose the setPosition window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        function redraw() {
-            // Use the `draw` in the ref to get the most up-to-date one
-            drawRef.current();
-        }
-
-        // Draw for the first time
-        draw();
         window.addEventListener('resize', redraw);
 
         return function () {
