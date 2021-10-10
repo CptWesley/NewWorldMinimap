@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using NewWorldMinimap.Core.Util;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
+using Rectangle = SixLabors.ImageSharp.Rectangle;
 
 namespace NewWorldMinimap.Util
 {
@@ -29,11 +30,12 @@ namespace NewWorldMinimap.Util
             Screen[] screens = Screen.AllScreens;
             Screen screen = screenIndex >= 0 && screenIndex < screens.Length ? screens[screenIndex] : Screen.PrimaryScreen;
 
-            using Bitmap bmp = new Bitmap(screen.Bounds.Width, screen.Bounds.Height, PixelFormat.Format32bppRgb);
-
+            var rect = User32.GetActiveWindowRect();
+            var bounds = new Rectangle(rect.Left, rect.Top, rect.Right - rect.Left, rect.Bottom - rect.Top);
+            using Bitmap bmp = new(bounds.Width, bounds.Height, PixelFormat.Format32bppRgb);
             using (Graphics g = Graphics.FromImage(bmp))
             {
-                g.CopyFromScreen(screen.Bounds.X, screen.Bounds.Y, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
+                g.CopyFromScreen(bounds.Left, bounds.Top, 0, 0, screen.Bounds.Size, CopyPixelOperation.SourceCopy);
             }
 
             return bmp.ToImageSharp();
@@ -48,9 +50,9 @@ namespace NewWorldMinimap.Util
         {
             Screen[] screens = Screen.AllScreens;
 
-            for (int i = 0; i < screens.Length; i++)
+            for (var i = 0; i < screens.Length; i++)
             {
-                if (screens[i] == Screen.PrimaryScreen)
+                if (screens[i].Equals(Screen.PrimaryScreen))
                 {
                     return i;
                 }

@@ -1,60 +1,60 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net48</TargetFramework>
-		<LangVersion>9</LangVersion>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-		<AnalysisLevel>latest</AnalysisLevel>
-    <WarningLevel>5</WarningLevel>
-		<CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
-		<DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
-		<Authors>Wesley Baartman</Authors>
-		<PackageProjectUrl>https://github.com/CptWesley/NewWorldMinimap</PackageProjectUrl>
-		<RepositoryUrl>https://github.com/CptWesley/NewWorldMinimap</RepositoryUrl>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<Description>Minimap for New World.</Description>
-		<PackageTags>newworld new world minimap</PackageTags>
-		<AssemblyVersion>$(Version)</AssemblyVersion>
-		<FileVersion>$(Version)</FileVersion>
-		<Version>1.0-preview4</Version>
-		<Copyright></Copyright>
-		<ApplicationIcon>./Resources/icons/app.ico</ApplicationIcon>
-		<PackageIconUrl>https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true</PackageIconUrl>
-		<PackageIcon>./Resources/icons/app_128.png</PackageIcon>
-	</PropertyGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <WarningLevel>5</WarningLevel>
+        <CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
+        <DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
+        <Authors>Wesley Baartman</Authors>
+        <PackageProjectUrl>https://github.com/CptWesley/NewWorldMinimap</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/CptWesley/NewWorldMinimap</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <Description>Minimap for New World.</Description>
+        <PackageTags>newworld new world minimap</PackageTags>
+        <AssemblyVersion>$(Version)</AssemblyVersion>
+        <FileVersion>$(Version)</FileVersion>
+        <Version>1.0-preview4</Version>
+        <Copyright></Copyright>
+        <ApplicationIcon>./Resources/icons/app.ico</ApplicationIcon>
+        <PackageIconUrl>https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true</PackageIconUrl>
+        <PackageIcon>./Resources/icons/app_128.png</PackageIcon>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>compile</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Fody" Version="6.5.3">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Costura.Fody" Version="5.6.0">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="TesserNet.ImageSharp" Version="0.5.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>compile</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Fody" Version="6.5.3">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Costura.Fody" Version="5.6.0">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4"/>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="TesserNet.ImageSharp" Version="0.5.1"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<Reference Include="System.Windows.Forms" />
-	</ItemGroup>
+    <ItemGroup>
+        <Reference Include="System.Windows.Forms"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<EmbeddedResource Include="Resources/**" />
-		<AdditionalFiles Include="../stylecop.json" Link="stylecop.json" />
-	</ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Include="Resources/**"/>
+        <AdditionalFiles Include="../stylecop.json" Link="stylecop.json"/>
+    </ItemGroup>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\NewWorldMinimap.Core\NewWorldMinimap.Core.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\NewWorldMinimap.Core\NewWorldMinimap.Core.csproj"/>
+    </ItemGroup>
 </Project>

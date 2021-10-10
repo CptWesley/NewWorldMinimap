@@ -4,6 +4,7 @@ using System.Numerics;
 using System.Text.RegularExpressions;
 using NewWorldMinimap.Core.Util;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
 using TesserNet;
@@ -18,6 +19,7 @@ namespace NewWorldMinimap.Core
     {
         private const int XOffset = 277;
         private const int YOffset = 18;
+        private const int YWindowOffset = 45;
         private const int TextWidth = 277;
         private const int TextHeight = 18;
         private const int MaxCounter = 5;
@@ -46,11 +48,12 @@ namespace NewWorldMinimap.Core
         /// Tries to get the position from the provided image.
         /// </summary>
         /// <param name="bmp">The image.</param>
+        /// <param name="windowMode">Game Window Mode>.</param>
         /// <param name="position">The position.</param>
         /// <param name="debugEnabled">Determines whether or not the debug functionality is enabled.</param>
         /// <param name="debugImage">The resulting debug image.</param>
         /// <returns>The found position.</returns>
-        public bool TryGetPosition(Image<Rgba32> bmp, out Vector2 position, bool debugEnabled, out Image<Rgba32> debugImage)
+        public bool TryGetPosition(Image<Rgba32> bmp, bool windowMode, out Vector2 position, bool debugEnabled, out Image<Rgba32> debugImage)
         {
             if (bmp is null)
             {
@@ -58,7 +61,7 @@ namespace NewWorldMinimap.Core
             }
 
             bmp.Mutate(x => x
-                .Crop(new Rectangle(bmp.Width - XOffset, YOffset, TextWidth, TextHeight))
+                .Crop(new Rectangle(bmp.Width - XOffset, YOffset + (windowMode ? YWindowOffset : 0), TextWidth, TextHeight))
                 .Resize(TextWidth * 4, TextHeight * 4));
             debugImage = debugEnabled ? bmp.Clone() : null!;
             bmp.Mutate(x => x

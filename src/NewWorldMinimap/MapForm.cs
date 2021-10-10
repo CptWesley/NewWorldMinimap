@@ -34,10 +34,12 @@ namespace NewWorldMinimap
         private readonly MenuItem alwaysOnTopButton;
         private readonly List<MenuItem> screenItems = new List<MenuItem>();
         private readonly List<MenuItem> refreshDelayItems = new List<MenuItem>();
+        private readonly MenuItem windowModeButton;
         private readonly MenuItem debugButton;
 
         private int currentScreen;
         private int refreshDelay;
+        private bool windowMode;
         private bool debugEnabled;
 
         private Thread? scannerThread;
@@ -48,6 +50,7 @@ namespace NewWorldMinimap
         public MapForm()
         {
             alwaysOnTopButton = new MenuItem("Always-on-top", ToggleAlwaysOnTop, Shortcut.None);
+            windowModeButton = new MenuItem("Windowed Mode", ToggleWindowMode, Shortcut.None);
             debugButton = new MenuItem("Debug", ToggleDebug, Shortcut.None);
             debugEnabled = false;
 
@@ -64,37 +67,36 @@ namespace NewWorldMinimap
         private void SetName(Vector2 pos)
         {
             string name = $"CptWesley's Minimap {pos.ToString("0.000", CultureInfo.InvariantCulture)}";
-            this.Name = name;
-            this.Text = name;
+            Name = name;
+            Text = name;
         }
 
         private void InitializeComponent()
         {
-            this.SuspendLayout();
-            this.ClientSize = new System.Drawing.Size(512, 512);
+            SuspendLayout();
+            ClientSize = new System.Drawing.Size(512, 512);
             SetName(Vector2.Zero);
             picture.SizeMode = PictureBoxSizeMode.CenterImage;
-            this.Controls.Add(picture);
-            this.ResumeLayout(false);
-            this.Width = 512;
-            this.Height = 512;
+            Controls.Add(picture);
+            ResumeLayout(false);
+            Width = 512;
+            Height = 512;
             markers.Populate(map);
-            this.Resize += (s, e) => UpdateSize();
-            this.FormClosed += OnClose;
-            this.Icon = LoadIcon();
+            Resize += (s, e) => UpdateSize();
+            FormClosed += OnClose;
+            Icon = LoadIcon();
             BuildMenu();
         }
 
         private void BuildMenu()
         {
-            this.ContextMenu = menu;
-            this.picture.ContextMenu = menu;
+            ContextMenu = menu;
+            picture.ContextMenu = menu;
 
-            for (int i = 0; i < ScreenGrabber.ScreenCount; i++)
+            for (var i = 0; i < ScreenGrabber.ScreenCount; i++)
             {
-                int ic = i;
-                MenuItem item = new MenuItem($"Screen {ic}", (s, e) => SelectScreen(ic), Shortcut.None);
-                screenItems.Add(item);
+                var ic = i;
+                screenItems.Add(new MenuItem($"Screen {ic}", (s, e) => SelectScreen(ic), Shortcut.None));
             }
 
             CreateRefreshMenuItem(0);
@@ -108,6 +110,7 @@ namespace NewWorldMinimap
             menu.MenuItems.Add("-");
             menu.MenuItems.AddRange(refreshDelayItems.ToArray());
             menu.MenuItems.Add("-");
+            menu.MenuItems.Add(windowModeButton);
             menu.MenuItems.Add(debugButton);
 
             SelectScreen(ScreenGrabber.GetPrimaryScreenIndex());
@@ -144,12 +147,26 @@ namespace NewWorldMinimap
             if (alwaysOnTopButton.Checked)
             {
                 alwaysOnTopButton.Checked = false;
-                this.TopMost = false;
+                TopMost = false;
             }
             else
             {
                 alwaysOnTopButton.Checked = true;
-                this.TopMost = true;
+                TopMost = true;
+            }
+        }
+
+        private void ToggleWindowMode(object sender, EventArgs e)
+        {
+            if (windowModeButton.Checked)
+            {
+                windowModeButton.Checked = false;
+                windowMode = false;
+            }
+            else
+            {
+                windowModeButton.Checked = true;
+                windowMode = true;
             }
         }
 
@@ -158,12 +175,12 @@ namespace NewWorldMinimap
             if (debugButton.Checked)
             {
                 debugButton.Checked = false;
-                this.debugEnabled = false;
+                debugEnabled = false;
             }
             else
             {
                 debugButton.Checked = true;
-                this.debugEnabled = true;
+                debugEnabled = true;
             }
         }
 
@@ -194,29 +211,37 @@ namespace NewWorldMinimap
 
         private void UpdateLoop()
         {
-            Stopwatch sw = new Stopwatch();
+            Stopwatch sw = new();
 
-            Vector2 lastPos = Vector2.Zero;
+            var lastPos = Vector2.Zero;
             double rotationAngle = 0;
-            int i = 0;
+            var i = 0;
             while (true)
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
+                if (!IsActive())
+                {
+                    Thread.Sleep(refreshDelay);
+                    continue;
+                }
+
+                var screenshot = ScreenGrabber.TakeScreenshot(currentScreen);
+                if (pd.TryGetPosition(screenshot, windowMode, out Vector2 pos, debugEnabled, out Image<Rgba32> debugImage))
                 {
                     using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
 
-                    (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
+                    var (imageX, imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
 
-                    (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
+                    var (tileX, tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
                     IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
 
+                    var pos1 = lastPos;
                     baseMap.Mutate(c =>
                     {
                         using Image<Rgba32> playerTriangle = icons.Get("player").Clone();
-                        AffineTransformBuilder builder = new AffineTransformBuilder();
-                        Vector2 posDifference = pos - lastPos;
+                        AffineTransformBuilder builder = new();
+                        var posDifference = pos - pos1;
 
                         if (posDifference != Vector2.Zero)
                         {
@@ -229,7 +254,7 @@ namespace NewWorldMinimap
 
                         foreach (Marker marker in visibleMarkers)
                         {
-                            (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
+                            var (ix, iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
                             c.DrawImage(icons.Get(marker), ix, iy);
                         }
 
@@ -281,6 +306,11 @@ namespace NewWorldMinimap
             catch (InvalidOperationException)
             {
             }
+        }
+
+        private bool IsActive()
+        {
+            return User32.GetActiveWindowTitle() == "New World";
         }
     }
 }

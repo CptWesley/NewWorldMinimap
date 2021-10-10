@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<TargetFramework>net48</TargetFramework>
-		<LangVersion>9</LangVersion>
-		<Nullable>enable</Nullable>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
-		<AnalysisLevel>latest</AnalysisLevel>
-		<CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
-		<DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net48</TargetFramework>
+        <LangVersion>9</LangVersion>
+        <Nullable>enable</Nullable>
+        <EnableNETAnalyzers>true</EnableNETAnalyzers>
+        <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+        <AnalysisLevel>latest</AnalysisLevel>
+        <CodeAnalysisRuleSet>../Ruleset.ruleset</CodeAnalysisRuleSet>
+        <DocumentationFile>bin/$(AssemblyName).xml</DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
-			<PrivateAssets>all</PrivateAssets>
-			<IncludeAssets>compile</IncludeAssets>
-		</PackageReference>
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="1.0.4" />
-		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
-			<PrivateAssets>all</PrivateAssets>
-		</PackageReference>
-		<PackageReference Include="TesserNet.ImageSharp" Version="0.5.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BackwardsCompatibleRecords" Version="1.0.0">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>compile</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="SixLabors.ImageSharp" Version="1.0.4"/>
+        <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.354">
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+        <PackageReference Include="TesserNet.ImageSharp" Version="0.5.1"/>
+    </ItemGroup>
 
-	<ItemGroup>
-		<AdditionalFiles Include="../stylecop.json" Link="stylecop.json" />
-	</ItemGroup>
+    <ItemGroup>
+        <AdditionalFiles Include="../stylecop.json" Link="stylecop.json"/>
+    </ItemGroup>
 </Project>

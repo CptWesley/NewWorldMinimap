@@ -99,6 +99,7 @@ namespace NewWorldMinimap.Caches
                 result = Request(x, y);
                 Directory.CreateDirectory("./maps/");
                 result.Save(fileName);
+                Console.WriteLine($"GetChunk: {name}");
             }
 
             queue.Enqueue(name);
