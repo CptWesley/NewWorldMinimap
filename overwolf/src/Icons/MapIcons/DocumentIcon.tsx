@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function DocumentIcon(props: ISvgMapIconProps) {
+export default function DocumentIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='m 12.5,15 c 0,0 3,-1 3,-3 V 4 c 0,-2 -3,-3 -3,-3 H 2.9499172 c 0,0 3,1 3,3 v 8 c 0,2 -3,3 -3,3 z'

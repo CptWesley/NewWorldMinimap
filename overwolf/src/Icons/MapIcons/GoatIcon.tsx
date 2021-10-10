@@ -1,7 +1,7 @@
 import React from 'react';
-import SvgMapIcon, { ISvgMapIconProps } from './SvgMapIcon';
+import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function GoatIcon(props: ISvgMapIconProps) {
+export default function GoatIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='m 5.171875,4.296875 c 0,0 -0.336342,-1.489329 -1.546875,-1.890625 -1.210533,-0.401296 -2.73525546,0.2682106 -2.73525546,0.2682106 0,0 0.21606226,-1.3500772 1.38814876,-1.76375478 C 3.4499798,0.49702822 4.60179,0.36120032 5.649484,1.1958061 6.697178,2.0304119 7.265625,4.8125 7.265625,4.8125 m 3.5625,-0.515625 c 0,0 0.336342,-1.489329 1.546875,-1.890625 1.210533,-0.401296 2.735255,0.2682106 2.735255,0.2682106 0,0 -0.216062,-1.3500772 -1.388148,-1.76375478 C 12.55002,0.49702822 11.39821,0.36120032 10.350516,1.1958061 9.302822,2.0304119 8.734375,4.8125 8.734375,4.8125'
