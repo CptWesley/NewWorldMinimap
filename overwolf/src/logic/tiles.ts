@@ -32,8 +32,13 @@ async function getTileBitmapFromServer(tilePos: Vector2) {
     return bitmap;
 }
 
-function getTileCacheKey(tilePos: Vector2) {
+export function getTileCacheKey(tilePos: Vector2) {
     return `${tilePos.x},${tilePos.y}`;
+}
+
+export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    return getTileCacheKey(tilePos);
 }
 
 function getDimensions(screenWidth: number, screenHeight: number) {

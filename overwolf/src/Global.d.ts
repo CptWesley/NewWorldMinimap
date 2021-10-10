@@ -6,3 +6,15 @@ declare type Vector2 = {
     x: number;
     y: number;
 };
+
+declare type Marker = {
+    //icon: Promise<ImageBitmap>;
+    category: string;
+    type: string;
+    pos: Vector2;
+}
+
+declare type Tile = {
+    image: Promise<ImageBitmap>;
+    markers: Promise<Marker[]>;
+}
