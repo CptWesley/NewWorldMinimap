@@ -1,7 +1,7 @@
 import React from 'react';
 import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function EssenseMinusIcon(props: ISvgMapIconConsumerProps) {
+export default function EssenceMinusIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <rect
             y='6.5'
