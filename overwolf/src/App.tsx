@@ -47,7 +47,7 @@ export default function App() {
             }
 
             if (playerDebugIcon) {
-                ctx.drawImage(playerDebugIcon, Math.round(centerX - playerDebugIcon.width / 2), Math.round(centerY - playerDebugIcon.height / 2));
+                ctx.drawImage(playerDebugIcon, Math.floor(centerX - playerDebugIcon.width / 2), Math.floor(centerY - playerDebugIcon.height / 2));
             }
         }
     };
