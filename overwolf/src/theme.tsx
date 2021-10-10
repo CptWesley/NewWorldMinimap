@@ -4,10 +4,10 @@ export const theme = {
     background: '#333333',
     color: '#ffffff',
 
-    headerBackground: '#555555',
+    headerBackground: '#222222',
     headerColor: '#eeeeee',
-    headerButtonHover: '#777777',
-    headerButtonPress: '#444444',
+    headerButtonHover: '#444444',
+    headerButtonPress: '#666666',
     headerCloseHover: '#ff5a35',
     headerClosePress: '#d62700',
 
