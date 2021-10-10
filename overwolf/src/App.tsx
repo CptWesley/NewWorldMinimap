@@ -1,4 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import PlayerIcon from './Icons/MapIcons/PlayerIcon';
+import { svgMapIconToImageBitmap } from './logic/svg';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
 
@@ -8,6 +10,12 @@ const useStyles = makeStyles()({
         height: '100%',
     },
 });
+
+let playerDebugIcon: ImageBitmap | undefined;
+async function createPlayerDebugIcon() {
+    playerDebugIcon = await svgMapIconToImageBitmap(PlayerIcon);
+}
+createPlayerDebugIcon();
 
 export default function App() {
     const { classes } = useStyles();
@@ -20,6 +28,9 @@ export default function App() {
             ctx.canvas.width = ctx.canvas.clientWidth;
             ctx.canvas.height = ctx.canvas.clientHeight;
 
+            const centerX = ctx.canvas.width / 2;
+            const centerY = ctx.canvas.height / 2;
+
             const bitmaps = getTiles(position, ctx.canvas.width, ctx.canvas.height);
             const offset = toMinimapCoordinate(position, position, ctx.canvas.width, ctx.canvas.height);
 
@@ -28,14 +39,15 @@ export default function App() {
                 for (let y = 0; y < row.length; y++) {
                     const bitmap = await row[y];
                     ctx.drawImage(bitmap,
-                        bitmap.width * x + Math.floor(ctx.canvas.width / 2) - offset.x,
-                        bitmap.height * y + Math.floor(ctx.canvas.height / 2) - offset.y
+                        bitmap.width * x + Math.floor(centerX) - offset.x,
+                        bitmap.height * y + Math.floor(centerY) - offset.y
                     );
                 }
             }
 
-            ctx.fillStyle = 'red';
-            ctx.fillRect(ctx.canvas.width / 2 - 16, ctx.canvas.height / 2 - 16, 32, 32);
+            if (playerDebugIcon) {
+                ctx.drawImage(playerDebugIcon, Math.round(centerX - playerDebugIcon.width / 2), Math.round(centerY - playerDebugIcon.height / 2));
+            }
         }
     };
 
