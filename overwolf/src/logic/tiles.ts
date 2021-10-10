@@ -24,7 +24,6 @@ function getTileImageUrl(tilePos: Vector2) {
 
 async function getTileBitmapFromServer(tilePos: Vector2) {
     const imageUrl = getTileImageUrl(tilePos);
-    console.log(imageUrl);
     const imageRequest = await fetch(imageUrl, {
         method: 'get',
     });
@@ -37,7 +36,14 @@ function getTileCacheKey(tilePos: Vector2) {
     return `${tilePos.x},${tilePos.y}`;
 }
 
-export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, radius: number) {
+function getDimensions(screenWidth: number, screenHeight: number) {
+    const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 1;
+    const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 1;
+    return { x: x, y: y };
+}
+
+export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number) {
+    const dimensions = getDimensions(screenWidth, screenHeight);
     const totalWidth = tileWidth * width;
     const totalHeight = tileHeight * height;
     const { x: tileX, y: tileY } = getTileCoordinatesForWorldCoordinate(playerWorldPos);
@@ -45,8 +51,8 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     const pixelX = Math.floor(worldPos.x / gameMapWidth * totalWidth);
     const pixelY = Math.floor((gameMapHeight - worldPos.y) / gameMapHeight * totalHeight);
 
-    const imageX = pixelX - ((tileX - radius) * tileWidth);
-    const imageY = pixelY - ((tileY - radius + 1) * tileHeight);
+    const imageX = pixelX - ((tileX - Math.floor(dimensions.x / 2)) * tileWidth);
+    const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2) + 1) * tileHeight);
 
     return { x: imageX, y: imageY };
 }
@@ -64,17 +70,17 @@ export async function getTileBitmap(pos: Vector2) {
     return await bitmapPromise;
 }
 
-export function getTiles(worldPos: Vector2, radius: number) {
-    const dimension = radius * 2 + 1;
+export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number) {
+    const dimensions = getDimensions(screenWidth, screenHeight);
     const result: Promise<ImageBitmap>[][] = [];
 
     const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
 
-    for (let x = 0; x < dimension; ++x) {
+    for (let x = 0; x < dimensions.x; ++x) {
         const col: Promise<ImageBitmap>[] = [];
         result.push(col);
-        for (let y = 0; y < dimension; ++y) {
-            col.push(getTileBitmap({ x: tilePos.x - radius + x, y: tilePos.y - radius + y }));
+        for (let y = 0; y < dimensions.y; ++y) {
+            col.push(getTileBitmap({ x: tilePos.x - Math.floor(dimensions.x / 2) + x, y: tilePos.y - Math.floor(dimensions.y / 2) + y }));
         }
     }
 
