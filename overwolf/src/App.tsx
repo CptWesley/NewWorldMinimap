@@ -26,8 +26,8 @@ export default function App() {
 
                 // const bitmap = await getTileBitmap(109, 205);
                 // ctx.drawImage(bitmap, 10, 10);
-                const bitmaps = getTiles(playerPos, radius);
-                const offset = toMinimapCoordinate(playerPos, playerPos, radius);
+                const bitmaps = getTiles(playerPos, ctx.canvas.width, ctx.canvas.height);
+                const offset = toMinimapCoordinate(playerPos, playerPos, ctx.canvas.width, ctx.canvas.height);
                 console.log(offset);
                 console.log('width: ' + ctx.canvas.width + ' height: ' + ctx.canvas.height);
 
@@ -37,7 +37,8 @@ export default function App() {
                         const bitmap = await row[y];
                         ctx.drawImage(bitmap,
                             bitmap.width * x + Math.floor(ctx.canvas.width / 2) - offset.x,
-                            bitmap.height * y + Math.floor(ctx.canvas.height / 2) - offset.y);
+                            bitmap.height * y + Math.floor(ctx.canvas.height / 2) - offset.y
+                        );
                     }
                 }
 
