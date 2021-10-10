@@ -24,12 +24,8 @@ export default function App() {
                 const playerPos = { x: 7728.177, y: 1988.299 };
                 const radius = 1;
 
-                // const bitmap = await getTileBitmap(109, 205);
-                // ctx.drawImage(bitmap, 10, 10);
                 const bitmaps = getTiles(playerPos, ctx.canvas.width, ctx.canvas.height);
                 const offset = toMinimapCoordinate(playerPos, playerPos, ctx.canvas.width, ctx.canvas.height);
-                console.log(offset);
-                console.log('width: ' + ctx.canvas.width + ' height: ' + ctx.canvas.height);
 
                 for (let x = 0; x < bitmaps.length; x++) {
                     const row = bitmaps[x];
