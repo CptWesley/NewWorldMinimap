@@ -61,6 +61,11 @@ namespace NewWorldMinimap
             return new Icon(stream);
         }
 
+        private static bool IsActive()
+        {
+            return User32.GetActiveWindowTitle() == "New World";
+        }
+
         private void SetName(Vector2 pos)
         {
             string name = $"CptWesley's Minimap {pos.ToString("0.000", CultureInfo.InvariantCulture)}";
@@ -287,11 +292,6 @@ namespace NewWorldMinimap
             catch (InvalidOperationException)
             {
             }
-        }
-
-        private static bool IsActive()
-        {
-            return User32.GetActiveWindowTitle() == "New World";
         }
     }
 }
