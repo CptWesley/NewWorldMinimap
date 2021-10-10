@@ -44,6 +44,13 @@ export default function App() {
                         bitmap.width * x + Math.floor(centerX) - offset.x,
                         bitmap.height * y + Math.floor(centerY) - offset.y
                     );
+
+                    for (const marker of await tile.markers) {
+                        const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
+                        const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
+                        ctx.fillStyle = 'red';
+                        ctx.fillRect(imgPosCorrected.x, imgPosCorrected.y, 8, 8);
+                    }
                 }
             }
 
