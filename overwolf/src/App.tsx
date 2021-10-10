@@ -48,6 +48,7 @@ export default function App() {
         }
 
         window.addEventListener('resize', draw);
+        window.setPosition = setPosition;
         return function () {
             window.removeEventListener('resize', draw);
         };
