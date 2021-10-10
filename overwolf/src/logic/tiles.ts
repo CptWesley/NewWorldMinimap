@@ -1,3 +1,5 @@
+import { getMarkers } from './markers';
+
 const width = 224;
 const height = 225;
 const tileWidth = 256;
@@ -77,15 +79,24 @@ export async function getTileBitmap(pos: Vector2) {
 
 export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number) {
     const dimensions = getDimensions(screenWidth, screenHeight);
-    const result: Promise<ImageBitmap>[][] = [];
+    const result: Tile[][] = [];
 
     const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
 
     for (let x = 0; x < dimensions.x; ++x) {
-        const col: Promise<ImageBitmap>[] = [];
+        const col: Tile[] = [];
         result.push(col);
         for (let y = 0; y < dimensions.y; ++y) {
-            col.push(getTileBitmap({ x: tilePos.x - Math.floor(dimensions.x / 2) + x, y: tilePos.y - Math.floor(dimensions.y / 2) + y }));
+            const tileX = tilePos.x - Math.floor(dimensions.x / 2) + x;
+            const tileY = tilePos.y - Math.floor(dimensions.y / 2) + y;
+            const tileCoords: Vector2 = { x: tileX, y: tileY };
+            const image = getTileBitmap(tileCoords);
+            const markers = getMarkers(tileCoords);
+            const tile: Tile = {
+                image: image,
+                markers: markers,
+            };
+            col.push(tile);
         }
     }
 
