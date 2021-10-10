@@ -89,6 +89,33 @@ namespace NewWorldMinimap.Core.Util
             => context.DrawImage(img, new SixLabors.ImageSharp.Point(x, y), 1);
 
         /// <summary>
+        /// Draws a centered icon.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="img">The icon image.</param>
+        /// <param name="x">The x coordinate.</param>
+        /// <param name="y">The y coordinate.</param>
+        /// <returns>The same context.</returns>
+        public static IImageProcessingContext DrawIcon(this IImageProcessingContext context, SixLabors.ImageSharp.Image img, int x, int y)
+        {
+            if (img is null)
+            {
+                throw new ArgumentNullException(nameof(img));
+            }
+
+            try
+            {
+                context.DrawImage(img, x - (img.Width / 2), y - (img.Height / 2));
+            }
+            catch (ImageProcessingException)
+            {
+                // Ignore.
+            }
+
+            return context;
+        }
+
+        /// <summary>
         /// Dilates the binary image with the gives radius.
         /// </summary>
         /// <param name="context">The context.</param>

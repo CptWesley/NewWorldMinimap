@@ -26,7 +26,7 @@ namespace NewWorldMinimap
     {
         private readonly PositionDetector pd = new PositionDetector();
         private readonly PictureBox picture = new PictureBox();
-        private readonly MapImageCache map = new MapImageCache(4);
+        private readonly MapImageCache map = new MapImageCache();
         private readonly MarkerCache markers = new MarkerCache();
         private readonly IconCache icons = new IconCache();
 
@@ -205,12 +205,12 @@ namespace NewWorldMinimap
 
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                 {
-                    using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y);
+                    using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y, picture.Width, picture.Height);
 
-                    (int imageX, int imageY) = map.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y);
+                    (int imageX, int imageY) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y, picture.Width, picture.Height);
 
                     (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
-                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY);
+                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY, picture.Width, picture.Height);
 
                     baseMap.Mutate(c =>
                     {
@@ -225,12 +225,12 @@ namespace NewWorldMinimap
 
                         builder.AppendRotationRadians((float)rotationAngle);
                         playerTriangle.Mutate(x => x.Transform(builder));
-                        c.DrawImage(playerTriangle, imageX, imageY);
+                        c.DrawIcon(playerTriangle, imageX, imageY);
 
                         foreach (Marker marker in visibleMarkers)
                         {
-                            (int ix, int iy) = map.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y);
-                            c.DrawImage(icons.Get(marker), ix, iy);
+                            (int ix, int iy) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y, picture.Width, picture.Height);
+                            c.DrawIcon(icons.Get(marker), ix, iy);
                         }
 
                         if (debugImage != null)
