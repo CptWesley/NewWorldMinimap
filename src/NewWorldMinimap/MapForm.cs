@@ -39,6 +39,8 @@ namespace NewWorldMinimap
         private int currentScreen;
         private int refreshDelay;
         private bool debugEnabled;
+        private Vector2 lastPos = Vector2.Zero;
+        private double rotationAngle = 0;
 
         private Thread? scannerThread;
 
@@ -196,8 +198,6 @@ namespace NewWorldMinimap
         {
             Stopwatch sw = new Stopwatch();
 
-            Vector2 lastPos = Vector2.Zero;
-            double rotationAngle = 0;
             int i = 0;
             while (true)
             {
@@ -205,59 +205,25 @@ namespace NewWorldMinimap
 
                 if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                 {
-                    using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y, picture.Width, picture.Height);
+                    Vector2 posDifference = pos - lastPos;
 
-                    (int imageX, int imageY) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y, picture.Width, picture.Height);
-
-                    (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
-                    IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY, picture.Width, picture.Height);
-
-                    baseMap.Mutate(c =>
+                    if (posDifference != Vector2.Zero)
                     {
-                        using Image<Rgba32> playerTriangle = icons.Get("player").Clone();
-                        AffineTransformBuilder builder = new AffineTransformBuilder();
-                        Vector2 posDifference = pos - lastPos;
+                        rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
+                    }
 
-                        if (posDifference != Vector2.Zero)
-                        {
-                            rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
-                        }
-
-                        builder.AppendRotationRadians((float)rotationAngle);
-                        playerTriangle.Mutate(x => x.Transform(builder));
-                        c.DrawIcon(playerTriangle, imageX, imageY);
-
-                        foreach (Marker marker in visibleMarkers)
-                        {
-                            (int ix, int iy) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y, picture.Width, picture.Height);
-                            c.DrawIcon(icons.Get(marker), ix, iy);
-                        }
-
-                        if (debugImage != null)
-                        {
-                            debugImage.Mutate(x => x.Resize(debugImage.Width / 2, debugImage.Height / 2));
-                            c.DrawImage(debugImage, imageX - (this.Width / 2), imageY - (this.Height / 2));
-                            debugImage.Dispose();
-                        }
-                    });
-
-                    using Image<Rgba32> newMap = baseMap.Recenter(imageX, imageY);
-                    System.Drawing.Image prev = picture.Image;
-
-                    SafeInvoke(() =>
-                    {
-                        SetName(pos);
-                        picture.Image = newMap.ToBitmap();
-                        UpdateSize();
-                    });
-
-                    prev?.Dispose();
+                    Redraw(pos, rotationAngle);
 
                     lastPos = pos;
                 }
                 else
                 {
                     Console.WriteLine($"{i}: Failure");
+                }
+
+                if (debugImage != null)
+                {
+                    DrawDebugImage(debugImage);
                 }
 
                 i++;
@@ -269,6 +235,63 @@ namespace NewWorldMinimap
                 {
                     Thread.Sleep(refreshDelay - (int)elapsed);
                 }
+            }
+        }
+
+        private void Redraw(Vector2 pos, double rotationAngle)
+        {
+            using Image<Rgba32> baseMap = map.GetTileForCoordinate(pos.X, pos.Y, picture.Width, picture.Height);
+
+            (int imageX, int imageY) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, pos.X, pos.Y, picture.Width, picture.Height);
+
+            (int tileX, int tileY) = MapImageCache.GetTileCoordinatesForCoordinate(pos.X, pos.Y);
+            IEnumerable<Marker> visibleMarkers = markers.Get(tileX, tileY, picture.Width, picture.Height);
+
+            baseMap.Mutate(c =>
+            {
+                using Image<Rgba32> playerTriangle = icons.Get("player").Clone();
+                AffineTransformBuilder builder = new AffineTransformBuilder();
+
+                builder.AppendRotationRadians((float)rotationAngle);
+                playerTriangle.Mutate(x => x.Transform(builder));
+                c.DrawIcon(playerTriangle, imageX, imageY);
+
+                foreach (Marker marker in visibleMarkers)
+                {
+                    (int ix, int iy) = MapImageCache.ToMinimapCoordinate(pos.X, pos.Y, marker.X, marker.Y, picture.Width, picture.Height);
+                    c.DrawIcon(icons.Get(marker), ix, iy);
+                }
+            });
+
+            using Image<Rgba32> newMap = baseMap.Recenter(imageX, imageY);
+            System.Drawing.Image prev = picture.Image;
+
+            SafeInvoke(() =>
+            {
+                SetName(pos);
+                picture.Image = newMap.ToBitmap();
+                UpdateSize();
+            });
+
+            prev?.Dispose();
+        }
+
+        private void DrawDebugImage(Image<Rgba32> img)
+        {
+            img.Mutate(x => x.Resize(img.Width / 2, img.Height / 2));
+            Bitmap bmp = img.ToBitmap();
+
+            if (picture.Image is null)
+            {
+                picture.Image = bmp;
+            }
+            else
+            {
+                using Graphics g = Graphics.FromImage(picture.Image);
+                g.DrawImage(bmp, 0, 0);
+                img.Dispose();
+                bmp.Dispose();
+                picture.Image = picture.Image;
             }
         }
 

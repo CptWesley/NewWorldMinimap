@@ -21,6 +21,7 @@ namespace NewWorldMinimap.Caches
         private const int GameMapWidth = 14336;
         private const int GameMapHeight = 14400;
         private const int MaxQueueSize = 2048;
+        private static readonly object Lock = new object();
 
         private bool disposedValue;
         private HttpClient http = new HttpClient();
@@ -124,15 +125,18 @@ namespace NewWorldMinimap.Caches
             string fileName = ToFileName(x, y);
             Image<Rgba32> result;
 
-            if (File.Exists(fileName))
+            lock (Lock)
             {
-                result = Image.Load<Rgba32>(fileName);
-            }
-            else
-            {
-                result = Request(x, y);
-                Directory.CreateDirectory("./maps/");
-                result.Save(fileName);
+                if (File.Exists(fileName))
+                {
+                    result = Image.Load<Rgba32>(fileName);
+                }
+                else
+                {
+                    result = Request(x, y);
+                    Directory.CreateDirectory("./maps/");
+                    result.Save(fileName);
+                }
             }
 
             queue.Enqueue(name);
