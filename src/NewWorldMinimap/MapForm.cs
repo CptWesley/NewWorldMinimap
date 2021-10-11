@@ -8,10 +8,12 @@ using System.Numerics;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+using System.Windows.Input;
 using NewWorldMinimap.Caches;
 using NewWorldMinimap.Core;
 using NewWorldMinimap.Core.Util;
 using NewWorldMinimap.Util;
+using NonInvasiveKeyboardHookLibrary;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;
@@ -29,6 +31,8 @@ namespace NewWorldMinimap
         private readonly MapImageCache map = new MapImageCache();
         private readonly MarkerCache markers = new MarkerCache();
         private readonly IconCache icons = new IconCache();
+        private readonly KeyboardHookManager khm = new KeyboardHookManager();
+
 
         private readonly ContextMenu menu = new ContextMenu();
         private readonly MenuItem alwaysOnTopButton;
@@ -72,6 +76,8 @@ namespace NewWorldMinimap
 
         private void InitializeComponent()
         {
+            khm.Start();
+            SetupHotkeys();
             this.SuspendLayout();
             this.ClientSize = new System.Drawing.Size(512, 512);
             SetName(Vector2.Zero);
@@ -85,6 +91,16 @@ namespace NewWorldMinimap
             this.FormClosed += OnClose;
             this.Icon = LoadIcon();
             BuildMenu();
+        }
+
+        private void SetupHotkeys()
+        {
+            khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.D), ToggleInteractivity);
+        }
+
+        private void ToggleInteractivity()
+        {
+            Enabled = !Enabled;
         }
 
         private void BuildMenu()
@@ -184,6 +200,8 @@ namespace NewWorldMinimap
 
         private void OnClose(object sender, EventArgs e)
         {
+            khm.UnregisterAll();
+            khm.Stop();
             Environment.Exit(0);
         }
 
