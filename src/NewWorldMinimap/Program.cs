@@ -24,7 +24,7 @@ namespace NewWorldMinimap
             // the `|=` operator.
             // This line should be removed if we decide to not support older systems, or when TLS 1.2 is no longer supported by
             // the service.
-            ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= SecurityProtocolType.Tls12;
 
             NativeMethods.SetProcessDPIAware();
             Application.EnableVisualStyles();
