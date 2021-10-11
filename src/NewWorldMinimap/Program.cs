@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
@@ -13,7 +14,6 @@ namespace NewWorldMinimap
         /// Defines the entry point of the application.
         /// </summary>
         [STAThread]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5386:Avoid hardcoding SecurityProtocolType value", Justification = "See comment below.")]
         public static void Main()
         {
             // Explicitly add TLS 1.2 to the list of protocols that can be used. On some older systems, most notably Windows 7,
@@ -24,7 +24,7 @@ namespace NewWorldMinimap
             // the `|=` operator.
             // This line should be removed if we decide to not support older systems, or when TLS 1.2 is no longer supported by
             // the service.
-            System.Net.ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
+            ServicePointManager.SecurityProtocol |= System.Net.SecurityProtocolType.Tls12;
 
             NativeMethods.SetProcessDPIAware();
             Application.EnableVisualStyles();
