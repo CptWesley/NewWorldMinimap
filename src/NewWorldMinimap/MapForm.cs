@@ -221,10 +221,7 @@ namespace NewWorldMinimap
                     Console.WriteLine($"{i}: Failure");
                 }
 
-                if (debugImage != null)
-                {
-                    DrawDebugImage(debugImage);
-                }
+                DrawDebugImage(debugImage);
 
                 i++;
 
@@ -278,20 +275,28 @@ namespace NewWorldMinimap
 
         private void DrawDebugImage(Image<Rgba32> img)
         {
-            img.Mutate(x => x.Resize(img.Width / 2, img.Height / 2));
-            Bitmap bmp = img.ToBitmap();
+            if (img is not null)
+            {
+                img.Mutate(x => x.Resize(img.Width / 2, img.Height / 2));
+                Bitmap bmp = img.ToBitmap();
 
-            if (picture.Image is null)
-            {
-                picture.Image = bmp;
-            }
-            else
-            {
-                using Graphics g = Graphics.FromImage(picture.Image);
-                g.DrawImage(bmp, 0, 0);
-                img.Dispose();
-                bmp.Dispose();
-                picture.Image = picture.Image;
+                if (picture.Image is null)
+                {
+                    picture.Image = bmp;
+                }
+                else
+                {
+                    SafeInvoke(() =>
+                    {
+                        using Graphics g = Graphics.FromImage(picture.Image);
+                        g.DrawImage(bmp, (picture.Image.Width / 2) - (this.Width / 2), (picture.Image.Height / 2) - (this.Height / 2));
+                        g.Save();
+                        picture.Image = picture.Image;
+                    });
+
+                    img.Dispose();
+                    bmp.Dispose();
+                }
             }
         }
 
