@@ -40,7 +40,7 @@ namespace NewWorldMinimap
         private int refreshDelay;
         private bool debugEnabled;
         private Vector2 lastPos = Vector2.Zero;
-        private double rotationAngle = 0;
+        private double rotationAngle;
 
         private Thread? scannerThread;
 
