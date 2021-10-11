@@ -23,6 +23,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Allow overlaying (always-on-top) flag.
 - Support for multiple monitors.
 - Configure refresh rate of minimap to spare your CPU.
+- CTRL + D hotkey to active/inactivate interactivity with window
 
 ## Planned Features
 - Better OCR results.
