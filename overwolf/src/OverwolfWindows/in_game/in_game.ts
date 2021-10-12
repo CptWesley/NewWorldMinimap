@@ -4,14 +4,14 @@ import { hotkeys, interestingFeatures, newWorldId, windowNames } from '../consts
 
 import WindowState = overwolf.windows.WindowStateEx;
 
-// The window displayed in-game while a Portal 2 game is running.
+// The window displayed in-game while a New World game is running.
 // It listens to all info events and to the game events listed in the consts.ts file
 // and writes them to the relevant log using <pre> tags.
 // The window also sets up Ctrl+F as the minimize/restore hotkey.
 // Like the background window, it also implements the Singleton design pattern.
 class InGame extends AppWindow {
     private static _instance: InGame;
-    private _portal2GameEventsListener: OWGamesEvents;
+    private _NewWorldGameEventsListener: OWGamesEvents;
     private _eventsLog: HTMLElement;
     private _infoLog: HTMLElement;
 
@@ -24,7 +24,7 @@ class InGame extends AppWindow {
         this.setToggleHotkeyBehavior();
         this.setToggleHotkeyText();
 
-        this._portal2GameEventsListener = new OWGamesEvents({
+        this._NewWorldGameEventsListener = new OWGamesEvents({
             onInfoUpdates: this.onInfoUpdates.bind(this),
             onNewEvents: this.onNewEvents.bind(this),
         }, interestingFeatures);
@@ -39,7 +39,7 @@ class InGame extends AppWindow {
     }
 
     public run() {
-        this._portal2GameEventsListener.start();
+        this._NewWorldGameEventsListener.start();
     }
 
     private onInfoUpdates(info) {
