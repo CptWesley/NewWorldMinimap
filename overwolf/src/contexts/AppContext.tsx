@@ -1,9 +1,10 @@
 import React from 'react';
 
 export interface IAppContextData {
-    allowTransparentHeader: boolean;
     showHeader: boolean;
     showToolbar: boolean;
+    transparentHeader: boolean;
+    transparentToolbar: boolean;
 }
 
 export interface IAppContext {
@@ -13,9 +14,10 @@ export interface IAppContext {
 
 export const defaultAppContext: IAppContext = {
     value: {
-        allowTransparentHeader: true,
         showHeader: true,
         showToolbar: true,
+        transparentHeader: true,
+        transparentToolbar: true,
     },
     update: () => { },
 };

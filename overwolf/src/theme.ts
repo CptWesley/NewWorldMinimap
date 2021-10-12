@@ -14,6 +14,11 @@ export const theme = {
     frameMenuBackground: 'rgba(51, 51, 51, 0.75)',
     frameMenuColor: '#ffffff',
 
+    toolbarBackground: '#333333',
+    toolbarColor: '#ffffff',
+    toolbarBackdropFilter: 'blur(5px)',
+    toolbarTransparentBackground: 'rgba(51, 51, 51, 0.67)',
+
     spacing: (...spacings: number[]) => spacings.map(s => `${s * 10}px`).join(' '),
 } as const;
 

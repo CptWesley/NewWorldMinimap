@@ -1,4 +1,5 @@
 import '@fontsource/lato/400.css';
+import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import { AppContext, defaultAppContext, IAppContext, IAppContextData } from './contexts/AppContext';
@@ -8,6 +9,7 @@ import { makeStyles } from './theme';
 interface IProps {
     header: React.ReactNode;
     content: React.ReactNode;
+    isTransparentSurface?: boolean;
 }
 
 const useStyles = makeStyles()(theme => ({
@@ -23,12 +25,16 @@ const useStyles = makeStyles()(theme => ({
             flexGrow: 1,
         },
     },
+    transparent: {
+        background: 'transparent',
+    },
 }));
 
 export default function Frame(props: IProps) {
     const {
         header,
         content,
+        isTransparentSurface,
     } = props;
     const { classes } = useStyles();
 
@@ -66,7 +72,10 @@ export default function Frame(props: IProps) {
                     },
                 }}
             />
-            <div className={classes.root} onContextMenuCapture={handleContext}>
+            <div
+                className={clsx(classes.root, isTransparentSurface && classes.transparent)}
+                onContextMenuCapture={handleContext}
+            >
                 <FrameMenu
                     visible={frameMenuVisible}
                     onClose={() => setFrameMenuVisible(false)}

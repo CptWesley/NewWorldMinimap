@@ -7,5 +7,6 @@ export default function Desktop() {
     return <Frame
         header={<InGameHeader />}
         content={<App />}
+        isTransparentSurface
     />;
 }
