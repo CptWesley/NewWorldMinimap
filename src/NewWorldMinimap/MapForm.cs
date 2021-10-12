@@ -99,7 +99,7 @@ namespace NewWorldMinimap
         private void SetupHotkeys()
         {
             khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.D), ToggleInteractivity);
-            khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.V), ToggleVisibility);
+            khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.S), ToggleVisibility);
         }
 
         private void ToggleInteractivity()
