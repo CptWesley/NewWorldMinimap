@@ -7,6 +7,7 @@ import CloseIcon from './Icons/CloseIcon';
 import MaximizeIcon from './Icons/MaximizeIcon';
 import Minimizeicon from './Icons/MinimizeIcon';
 import RestoreIcon from './Icons/RestoreIcon';
+import SettingsIcon from './Icons/SettingsIcon';
 import { windowNames } from './OverwolfWindows/consts';
 import { desktopAppTitle } from './OverwolfWindows/desktop/desktop';
 import { makeStyles } from './theme';
@@ -118,6 +119,9 @@ export default function DesktopHeader() {
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>
+        <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>
+            <SettingsIcon />
+        </button>
         <button className={clsx(classes.controlButton)} onClick={handleMinimize}>
             <Minimizeicon />
         </button>

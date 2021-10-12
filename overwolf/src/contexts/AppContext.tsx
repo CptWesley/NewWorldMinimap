@@ -10,6 +10,7 @@ export interface IAppContextData {
 export interface IAppContext {
     value: IAppContextData;
     update: (delta: Partial<IAppContextData>) => void;
+    toggleFrameMenu: () => void;
 }
 
 export const defaultAppContext: IAppContext = {
@@ -20,6 +21,7 @@ export const defaultAppContext: IAppContext = {
         transparentToolbar: true,
     },
     update: () => { },
+    toggleFrameMenu: () => { };
 };
 
 export const AppContext = React.createContext<IAppContext>(defaultAppContext);

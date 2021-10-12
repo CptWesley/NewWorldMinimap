@@ -13,11 +13,11 @@ interface IProps {
 const useStyles = makeStyles()(theme => ({
     root: {
         display: 'grid',
-        padding: theme.spacing(1),
-        gap: theme.spacing(1),
-        gridTemplateRows: '40px 1fr',
+        padding: theme.spacing(2),
+        gap: theme.spacing(2),
+        gridTemplateRows: '40px 1fr auto',
         gridTemplateColumns: '40px 1fr',
-        gridTemplateAreas: '"return title" ". content"',
+        gridTemplateAreas: '"return title" ". content" ". footer"',
 
         background: theme.frameMenuBackground,
         color: theme.frameMenuColor,
@@ -50,6 +50,9 @@ const useStyles = makeStyles()(theme => ({
     content: {
         gridArea: 'content',
     },
+    footer: {
+        gridArea: 'footer',
+    },
     checkbox: {
         '& > input[type="checkbox"]': {
             margin: theme.spacing(0, 1, 0, 0),
@@ -70,6 +73,7 @@ export default function FrameMenu(props: IProps) {
             <ReturnIcon />
         </button>
         <h2 className={classes.title}>Options</h2>
+        <span className={classes.footer}>Open this menu at any time by right-clicking in the application.</span>
         <div className={classes.content}>
             <p>
                 <label className={classes.checkbox}>

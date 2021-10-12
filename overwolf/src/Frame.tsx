@@ -42,15 +42,17 @@ export default function Frame(props: IProps) {
     const [appContextState, setAppContextState] = useState<IAppContextData>(defaultAppContext.value);
 
     const updateAppContext = useCallback((e: Partial<IAppContextData>) => setAppContextState(prev => ({ ...prev, ...e })), []);
+    const toggleFrameMenu = useCallback(() => setFrameMenuVisible(prev => !prev), []);
 
     const appContextValue: IAppContext = {
         update: updateAppContext,
         value: appContextState,
+        toggleFrameMenu,
     };
 
     function handleContext(e: React.MouseEvent<HTMLDivElement>) {
         e.preventDefault();
-        setFrameMenuVisible(!frameMenuVisible);
+        toggleFrameMenu();
     }
 
     return (
