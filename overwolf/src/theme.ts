@@ -11,6 +11,9 @@ export const theme = {
     headerCloseHover: '#ff5a35',
     headerClosePress: '#d62700',
 
+    frameMenuBackground: 'rgba(51, 51, 51, 0.75)',
+    frameMenuColor: '#ffffff',
+
     spacing: (...spacings: number[]) => spacings.map(s => `${s * 10}px`).join(' '),
 } as const;
 
