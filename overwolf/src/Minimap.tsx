@@ -73,7 +73,7 @@ export default function Minimap() {
                 return;
             }
 
-            ctx.drawImage(marker.icon, imgPosCorrected.x, imgPosCorrected.y);
+            ctx.drawImage(marker.icon, imgPosCorrected.x - marker.icon.width / 2, imgPosCorrected.y - marker.icon.height / 2);
         }
 
         const playerIcon = await GetPlayerIcon();
