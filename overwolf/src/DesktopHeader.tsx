@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { AppContext } from './contexts/AppContext';
 import CloseIcon from './Icons/CloseIcon';
 import MaximizeIcon from './Icons/MaximizeIcon';
 import Minimizeicon from './Icons/MinimizeIcon';
@@ -17,6 +18,17 @@ const useStyles = makeStyles()(theme => ({
         color: theme.headerColor,
         height: 32,
         overflow: 'hidden',
+        zIndex: 950,
+    },
+    transparent: {
+        background: 'transparent',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+    },
+    hidden: {
+        display: 'none !important',
     },
     draggable: {
         flexGrow: 1,
@@ -61,6 +73,7 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 export default function DesktopHeader() {
+    const context = useContext(AppContext);
     const { classes } = useStyles();
     const [desktopWindow] = useState(() => {
         return new OWWindow(windowNames.desktop);
@@ -68,6 +81,9 @@ export default function DesktopHeader() {
 
     const draggable = useRef<HTMLDivElement | null>(null);
     const [maximized, setMaximized] = React.useState(false);
+    const canBeTransparent = context.value.allowTransparentHeader
+        && context.value.showHeader
+        && !context.value.showToolbar;
 
     useEffect(() => {
         if (draggable.current) {
@@ -104,7 +120,10 @@ export default function DesktopHeader() {
         desktopWindow.close();
     }
 
-    return <header className={classes.root}>
+    console.log(canBeTransparent);
+    console.log(context.value);
+
+    return <header className={clsx(classes.root, canBeTransparent && classes.transparent, !context.value.showHeader && classes.hidden)}>
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>

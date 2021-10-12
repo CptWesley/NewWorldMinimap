@@ -1,6 +1,7 @@
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { AppContext } from './contexts/AppContext';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
 import { windowNames } from './OverwolfWindows/consts';
@@ -17,6 +18,17 @@ const useStyles = makeStyles()(theme => ({
         color: theme.headerColor,
         height: 32,
         overflow: 'hidden',
+        zIndex: 950,
+    },
+    transparent: {
+        background: 'rgba(0, 0, 0, 0.01)',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+    },
+    hidden: {
+        display: 'none !important',
     },
     draggable: {
         flexGrow: 1,
@@ -60,13 +72,11 @@ const useStyles = makeStyles()(theme => ({
         },
     },
     resize: {
-        '& > *': {
-            position: 'fixed',
-            zIndex: 999,
-            background: 'rgba(0, 0, 0, 0.01)',
-        },
+        position: 'fixed',
+        zIndex: 999,
+        background: 'rgba(0, 0, 0, 0.01)',
 
-        '& > .n': {
+        '&.n': {
             top: 0,
             left: resizeMargin,
             right: resizeMargin,
@@ -74,7 +84,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'n-resize',
         },
 
-        '& > .nw': {
+        '&.nw': {
             top: 0,
             left: 0,
             width: resizeMargin,
@@ -82,7 +92,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'nw-resize',
         },
 
-        '& > .ne': {
+        '&.ne': {
             top: 0,
             right: 0,
             width: resizeMargin,
@@ -90,7 +100,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'ne-resize',
         },
 
-        '& > .w': {
+        '&.w': {
             top: resizeMargin,
             left: 0,
             width: resizeMargin,
@@ -98,7 +108,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'w-resize',
         },
 
-        '& > .e': {
+        '&.e': {
             top: resizeMargin,
             right: 0,
             width: resizeMargin,
@@ -106,7 +116,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'e-resize',
         },
 
-        '& > .sw': {
+        '&.sw': {
             left: 0,
             width: resizeMargin,
             height: resizeMargin,
@@ -114,7 +124,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'sw-resize',
         },
 
-        '& > .se': {
+        '&.se': {
             right: 0,
             width: resizeMargin,
             height: resizeMargin,
@@ -122,7 +132,7 @@ const useStyles = makeStyles()(theme => ({
             cursor: 'se-resize',
         },
 
-        '& > .s': {
+        '&.s': {
             left: resizeMargin,
             right: resizeMargin,
             height: resizeMargin,
@@ -133,6 +143,7 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 export default function InGameHeader() {
+    const context = useContext(AppContext);
     const { classes } = useStyles();
     const [inGameWindow] = useState(() => {
         return new OWWindow(windowNames.inGame);
@@ -143,6 +154,10 @@ export default function InGameHeader() {
     });
 
     const draggable = useRef<HTMLDivElement | null>(null);
+
+    const canBeTransparent = context.value.allowTransparentHeader
+        && context.value.showHeader
+        && !context.value.showToolbar;
 
     useEffect(() => {
         overwolf.windows.getCurrentWindow(windowResult => {
@@ -175,25 +190,25 @@ export default function InGameHeader() {
         inGameWindow.close();
     }
 
-    return <header className={classes.root}>
-        <div ref={draggable} className={classes.draggable}>
-            <span>{inGameAppTitle}</span>
-        </div>
-        <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow}>
-            <DesktopWindowIcon />
-        </button>
-        <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
-            <CloseIcon />
-        </button>
-        <div className={classes.resize}>
-            <div className='n' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Top)} />
-            <div className='nw' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.TopLeft)} />
-            <div className='ne' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.TopRight)} />
-            <div className='w' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Left)} />
-            <div className='e' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Right)} />
-            <div className='sw' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.BottomLeft)} />
-            <div className='se' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.BottomRight)} />
-            <div className='s' onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Bottom)} />
-        </div>
-    </header>;
+    return <>
+        <header className={clsx(classes.root, canBeTransparent && classes.transparent, !context.value.showHeader && classes.hidden)}>
+            <div ref={draggable} className={classes.draggable}>
+                <span>{inGameAppTitle}</span>
+            </div>
+            <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow}>
+                <DesktopWindowIcon />
+            </button>
+            <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
+                <CloseIcon />
+            </button>
+        </header>
+        <div className={clsx(classes.resize, 'n')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Top)} />
+        <div className={clsx(classes.resize, 'nw')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.TopLeft)} />
+        <div className={clsx(classes.resize, 'ne')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.TopRight)} />
+        <div className={clsx(classes.resize, 'w')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Left)} />
+        <div className={clsx(classes.resize, 'e')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Right)} />
+        <div className={clsx(classes.resize, 'sw')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.BottomLeft)} />
+        <div className={clsx(classes.resize, 'se')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.BottomRight)} />
+        <div className={clsx(classes.resize, 's')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Bottom)} />
+    </>;
 }

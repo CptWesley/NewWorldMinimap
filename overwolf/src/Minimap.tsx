@@ -1,9 +1,14 @@
+import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { registerEventCallback } from './logic/hooks';
 import { GetPlayerIcon } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
+
+interface IProps {
+    className?: string;
+}
 
 const useStyles = makeStyles()({
     canvas: {
@@ -12,7 +17,10 @@ const useStyles = makeStyles()({
     },
 });
 
-export default function Minimap() {
+export default function Minimap(props: IProps) {
+    const {
+        className,
+    } = props;
     const { classes } = useStyles();
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
@@ -136,6 +144,6 @@ export default function Minimap() {
 
     return <canvas
         ref={canvas}
-        className={classes.canvas}
+        className={clsx(classes.canvas, className)}
     />;
 }
