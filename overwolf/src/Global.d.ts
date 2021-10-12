@@ -8,7 +8,7 @@ declare type Vector2 = {
 };
 
 declare type Marker = {
-    //icon: Promise<ImageBitmap>;
+    icon: ImageBitmap;
     category: string;
     type: string;
     pos: Vector2;

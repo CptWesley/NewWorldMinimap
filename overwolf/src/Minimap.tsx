@@ -73,14 +73,13 @@ export default function Minimap() {
                 for (const marker of await tile.markers) {
                     const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
                     const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
-                    ctx.fillStyle = 'red';
 
                     if (interrupt) {
                         interrupt = false;
                         return;
                     }
 
-                    ctx.fillRect(imgPosCorrected.x, imgPosCorrected.y, 8, 8);
+                    ctx.drawImage(marker.icon, imgPosCorrected.x, imgPosCorrected.y);
                 }
             }
         }
