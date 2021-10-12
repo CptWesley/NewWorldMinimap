@@ -24,6 +24,8 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Support for multiple monitors.
 - Configure refresh rate of minimap to spare your CPU.
 - CTRL + D hotkey to enable/disable Overlay Mode (upcoming release).
+- CTRL + S hotkey to hide/show the map (upcoming release).
+- circle shape mode (upcoming release).
 
 ## Planned Features
 - Better OCR results.

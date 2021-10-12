@@ -28,7 +28,7 @@ namespace NewWorldMinimap
     public class MapForm : Form
     {
         private readonly PositionDetector pd = new PositionDetector();
-        private readonly PictureBox picture = new PictureBox();
+        private readonly MapControl picture = new MapControl();
         private readonly MapImageCache map = new MapImageCache();
         private readonly MarkerCache markers = new MarkerCache();
         private readonly IconCache icons = new IconCache();
@@ -36,6 +36,7 @@ namespace NewWorldMinimap
 
         private readonly ContextMenu menu = new ContextMenu();
         private readonly MenuItem alwaysOnTopButton;
+        private readonly MenuItem circularModeButton;
         private readonly List<MenuItem> screenItems = new List<MenuItem>();
         private readonly List<MenuItem> refreshDelayItems = new List<MenuItem>();
         private readonly MenuItem debugButton;
@@ -55,6 +56,7 @@ namespace NewWorldMinimap
         public MapForm()
         {
             alwaysOnTopButton = new MenuItem("Always-on-top", ToggleAlwaysOnTop, Shortcut.None);
+            circularModeButton = new MenuItem("Circle Shape", ToggleShape, Shortcut.None);
             debugButton = new MenuItem("Debug", ToggleDebug, Shortcut.None);
             debugEnabled = false;
 
@@ -97,34 +99,46 @@ namespace NewWorldMinimap
         private void SetupHotkeys()
         {
             khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.D), ToggleInteractivity);
+            khm.RegisterHotkey(NonInvasiveKeyboardHookLibrary.ModifierKeys.Control, KeyInterop.VirtualKeyFromKey(Key.V), ToggleVisibility);
         }
 
         private void ToggleInteractivity()
         {
             overlayMode = !overlayMode;
-
-            if (overlayMode)
+            SafeInvoke(() =>
             {
-                SafeInvoke(() =>
+                this.TransparencyKey = System.Drawing.Color.Empty;
+
+                if (overlayMode)
                 {
                     this.TopMost = true;
                     this.FormBorderStyle = FormBorderStyle.None;
+                    this.TransparencyKey = BackColor;
+
                     int style = (int)NativeMethods.GetWindowLongPtr(this.Handle, -20);
                     int newStyle = style | 0x80000 | 0x20;
                     NativeMethods.SetWindowLongPtr(this.Handle, -20, new IntPtr(newStyle));
-                });
-            }
-            else
-            {
-                SafeInvoke(() =>
+                }
+                else
                 {
                     this.TopMost = alwaysOnTopButton.Checked;
                     this.FormBorderStyle = FormBorderStyle.Sizable;
                     int style = (int)NativeMethods.GetWindowLongPtr(this.Handle, -20);
                     int newStyle = style & ~0x80000 & ~0x20;
                     NativeMethods.SetWindowLongPtr(this.Handle, -20, new IntPtr(newStyle));
-                });
-            }
+                }
+
+                if (!overlayMode && picture.IsCircular)
+                {
+                    this.TransparencyKey = BackColor;
+                }
+            });
+
+        }
+
+        private void ToggleVisibility()
+        {
+            SafeInvoke(() => this.Opacity = this.Opacity == 1.0 ? 0 : 1.0);
         }
 
         private void BuildMenu()
@@ -145,6 +159,7 @@ namespace NewWorldMinimap
             CreateRefreshMenuItem(1000);
 
             menu.MenuItems.Add(alwaysOnTopButton);
+            menu.MenuItems.Add(circularModeButton);
             menu.MenuItems.Add("-");
             menu.MenuItems.AddRange(screenItems.ToArray());
             menu.MenuItems.Add("-");
@@ -193,6 +208,25 @@ namespace NewWorldMinimap
                 alwaysOnTopButton.Checked = true;
                 this.TopMost = true;
             }
+        }
+
+        private void ToggleShape(object sender, EventArgs e)
+        {
+            circularModeButton.Checked = !circularModeButton.Checked;
+            SafeInvoke(() =>
+            {
+                if (circularModeButton.Checked)
+                {
+                    picture.IsCircular = true;
+                }
+                else
+                {
+                    picture.IsCircular = false;
+                }
+                this.TransparencyKey = System.Drawing.Color.Empty;
+                this.TransparencyKey = BackColor;
+
+            });
         }
 
         private void ToggleDebug(object sender, EventArgs e)
