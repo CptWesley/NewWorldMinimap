@@ -1,8 +1,7 @@
-import { createMapIconCache } from '../Icons/MapIcons/mapIconCache';
+import { getIcon } from './icons';
 import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
-const iconCachePromise = createMapIconCache(5);
 
 async function getJson() {
     const req = await fetch(markersUrl, {
@@ -42,24 +41,6 @@ async function fillCache() {
     }
 
     return;
-}
-
-async function getIcon(type: string, category: string) {
-    const iconCache = await iconCachePromise;
-    const typeImage = iconCache[type] as ImageBitmap;
-
-    if (typeImage) {
-        return typeImage;
-    }
-
-    const catImage = iconCache[category] as ImageBitmap;
-
-    if (catImage) {
-        return catImage;
-    }
-
-    const unknownImage = iconCache['unknown'];
-    return unknownImage;
 }
 
 const cache = new Map<string, Marker[]>();

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { GetPlayerIcon } from './logic/icons';
 import { getMarkers } from './logic/markers';
-import PlayerIcon from './Icons/MapIcons/PlayerIcon';
-import { svgMapIconToImageBitmap } from './logic/svg';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
 
@@ -11,12 +10,6 @@ const useStyles = makeStyles()({
         height: '100%',
     },
 });
-
-let playerDebugIcon: ImageBitmap | undefined;
-async function createPlayerDebugIcon() {
-    playerDebugIcon = await svgMapIconToImageBitmap(PlayerIcon);
-}
-createPlayerDebugIcon();
 
 export default function Minimap() {
     const { classes } = useStyles();
@@ -54,6 +47,8 @@ export default function Minimap() {
         const tiles = getTiles(position, ctx.canvas.width, ctx.canvas.height);
         const offset = toMinimapCoordinate(position, position, ctx.canvas.width, ctx.canvas.height);
 
+        let toDraw: Marker[] = [];
+
         for (let x = 0; x < tiles.length; x++) {
             const row = tiles[x];
             for (let y = 0; y < row.length; y++) {
@@ -70,28 +65,29 @@ export default function Minimap() {
                     bitmap.height * y + Math.floor(centerY) - offset.y
                 );
 
-                for (const marker of await tile.markers) {
-                    const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
-                    const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
-
-                    if (interrupt) {
-                        interrupt = false;
-                        return;
-                    }
-
-                    ctx.drawImage(marker.icon, imgPosCorrected.x, imgPosCorrected.y);
-                }
+                toDraw = toDraw.concat(await tile.markers);
             }
         }
+        for (const marker of toDraw) {
+            const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
+            const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
 
-        if (playerDebugIcon) {
             if (interrupt) {
                 interrupt = false;
                 return;
             }
 
-            ctx.drawImage(playerDebugIcon, Math.floor(centerX - playerDebugIcon.width / 2), Math.floor(centerY - playerDebugIcon.height / 2));
+            ctx.drawImage(marker.icon, imgPosCorrected.x, imgPosCorrected.y);
         }
+
+        const playerIcon = await GetPlayerIcon();
+
+        if (interrupt) {
+            interrupt = false;
+            return;
+        }
+
+        ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
 
         drawing = false;
         interrupt = false;
@@ -111,7 +107,7 @@ export default function Minimap() {
     }, [position]);
 
     useEffect(() => {
-        // Expose the setPosition window on the global Window object
+        // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
