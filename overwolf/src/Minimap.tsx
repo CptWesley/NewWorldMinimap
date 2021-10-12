@@ -26,9 +26,6 @@ export default function Minimap() {
         const currentDraw = Date.now();
         lastDraw.current = currentDraw;
 
-        console.log('xDif: ' + (currentPosition.x - lastPosition.x));
-        console.log('yDif: ' + (currentPosition.y - lastPosition.y));
-
         const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
 
         if (!ctx) {
@@ -86,7 +83,6 @@ export default function Minimap() {
         }
 
         ctx.save();
-        console.log(angle / Math.PI * 180);
         ctx.translate(centerX, centerY);
         ctx.rotate(angle);
         ctx.translate(-centerX, -centerY);
@@ -124,11 +120,9 @@ export default function Minimap() {
         window.addEventListener('resize', redraw);
 
         const callbackUnregister = registerEventCallback(info => {
-            console.log(info);
             if (info.success) {
                 if (info.res && info.res.game_info && info.res.game_info.location) {
                     const location = JSON.parse(info.res.game_info.location) as Vector2;
-                    console.log(location);
                     setPosition(location);
                 }
             }
