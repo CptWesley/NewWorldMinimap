@@ -1,7 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { registerEventCallback } from './logic/hooks';
 import { GetPlayerIcon } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
+import { interestingFeatures } from './OverwolfWindows/consts';
 import { makeStyles } from './theme';
 
 const useStyles = makeStyles()({
@@ -105,6 +107,17 @@ export default function Minimap() {
             window.removeEventListener('resize', redraw);
         };
     }, []);
+
+    registerEventCallback(info => {
+        console.log(info);
+        if (info.success) {
+            if (info.res && info.res.game_info && info.res.game_info.location) {
+                const location = JSON.parse(info.res.game_info.location) as Vector2;
+                console.log(location);
+                setPosition(location);
+            }
+        }
+    });
 
     return <canvas
         ref={canvas}
