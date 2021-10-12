@@ -104,6 +104,9 @@ namespace NewWorldMinimap
 
         private void ToggleInteractivity()
         {
+            if (this.Opacity == 0)
+                return;
+
             overlayMode = !overlayMode;
             SafeInvoke(() =>
             {
