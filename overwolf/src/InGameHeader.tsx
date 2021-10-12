@@ -61,6 +61,7 @@ const useStyles = makeStyles()(theme => ({
         '& > *': {
             position: 'fixed',
             zIndex: 999,
+            background: 'rgba(0, 0, 0, 0.01)',
         },
 
         '& > .n': {
