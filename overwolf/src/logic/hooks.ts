@@ -20,10 +20,9 @@ export function registerEventCallback(callback: cb) {
 }
 
 function onUpdate(info: any) {
-    console.log('On update!');
     for (const cb of callbacks) {
         cb(info);
     }
 }
 
-setInterval(() => overwolf.games.events.getInfo(onUpdate), 1000);
+setInterval(() => overwolf.games.events.getInfo(onUpdate), 500);
