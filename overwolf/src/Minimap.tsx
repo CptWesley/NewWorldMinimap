@@ -17,26 +17,20 @@ export default function Minimap() {
     const [position, setPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
     const canvas = useRef<HTMLCanvasElement>(null);
 
-    let drawing = false;
-    let interrupt = false;
+    let lastDraw = 0;
 
     const draw = async () => {
         const ctx = canvas.current?.getContext('2d');
+        const currentDraw = Date.now();
+        lastDraw = currentDraw;
 
         if (!ctx) {
             return;
         }
 
-        if (!drawing) {
-            drawing = false;
-            interrupt = false;
+        if (lastDraw !== currentDraw) {
+            return;
         }
-
-        if (drawing) {
-            interrupt = true;
-        }
-
-        drawing = true;
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
@@ -55,8 +49,7 @@ export default function Minimap() {
                 const tile = row[y];
                 const bitmap = await tile.image;
 
-                if (interrupt) {
-                    interrupt = false;
+                if (lastDraw !== currentDraw) {
                     return;
                 }
 
@@ -72,8 +65,7 @@ export default function Minimap() {
             const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
             const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
 
-            if (interrupt) {
-                interrupt = false;
+            if (lastDraw !== currentDraw) {
                 return;
             }
 
@@ -82,15 +74,11 @@ export default function Minimap() {
 
         const playerIcon = await GetPlayerIcon();
 
-        if (interrupt) {
-            interrupt = false;
+        if (lastDraw !== currentDraw) {
             return;
         }
 
         ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
-
-        drawing = false;
-        interrupt = false;
     };
 
     // Store the `draw` function in a ref object, so we can always access the latest one.
