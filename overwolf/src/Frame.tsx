@@ -11,7 +11,7 @@ interface IProps {
 const useStyles = makeStyles()(theme => ({
     root: {
         display: 'grid',
-        gridTemplateRows: '32px 1fr',
+        gridTemplateRows: 'auto 1fr',
         gridTemplateColumns: '1fr',
         height: '100vh',
 

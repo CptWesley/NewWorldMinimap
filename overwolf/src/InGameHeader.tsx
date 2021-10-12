@@ -15,6 +15,8 @@ const useStyles = makeStyles()(theme => ({
 
         background: theme.headerBackground,
         color: theme.headerColor,
+        height: 32,
+        overflow: 'hidden',
     },
     draggable: {
         flexGrow: 1,
