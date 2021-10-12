@@ -21,7 +21,7 @@ export const defaultAppContext: IAppContext = {
         transparentToolbar: true,
     },
     update: () => { },
-    toggleFrameMenu: () => { };
+    toggleFrameMenu: () => { },
 };
 
 export const AppContext = React.createContext<IAppContext>(defaultAppContext);
