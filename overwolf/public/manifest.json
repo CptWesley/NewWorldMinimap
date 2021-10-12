@@ -2,16 +2,16 @@
   "manifest_version": 1,
   "type": "WebApp",
   "meta": {
-    "name": "Sample App",
-    "author": "Overwolf",
-    "version": "3.0.2",
+    "name": "CptWesley's Minimap",
+    "author": "Wesley Baartman",
+    "version": "1.0.0",
     "minimum-overwolf-version": "0.160.0",
     "description": "An example app for developers new to Overwolf",
-    "dock_button_title": "Sample - TS",
-    "icon": "icons/IconMouseOver.png",
-    "icon_gray": "icons/IconMouseNormal.png",
-    "launcher_icon": "icons/DesktopIcon.ico",
-    "window_icon": "icons/TaskbarIcon.png"
+    "dock_button_title": "CptWesley's Minimap",
+    "icon": "icons/app_256.png",
+    "icon_gray": "icons/app_256_gray.png",
+    "launcher_icon": "icons/app.ico",
+    "window_icon": "icons/app_256.png"
   },
   "permissions": [
     "Hotkeys",

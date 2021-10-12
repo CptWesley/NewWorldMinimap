@@ -1,6 +1,6 @@
 {
-  "name": "example-ts",
-  "version": "3.0.0",
+  "name": "cptwesley-minimap",
+  "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
