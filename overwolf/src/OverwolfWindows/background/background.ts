@@ -1,5 +1,5 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
-import { portal2ClassId, windowNames } from '../consts';
+import { newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
 
@@ -65,7 +65,7 @@ class BackgroundController {
 
     // Identify whether the RunningGameInfo object we have references Portal 2
     private isGamePortal2(info: RunningGameInfo) {
-        return info.classId === portal2ClassId;
+        return info.classId === newWorldId;
     }
 }
 

@@ -1,6 +1,6 @@
 import { OWGamesEvents, OWHotkeys } from '@overwolf/overwolf-api-ts';
 import { AppWindow } from '../AppWindow';
-import { hotkeys, interestingFeatures, portal2ClassId, windowNames } from '../consts';
+import { hotkeys, interestingFeatures, newWorldId, windowNames } from '../consts';
 
 import WindowState = overwolf.windows.WindowStateEx;
 
@@ -66,7 +66,7 @@ class InGame extends AppWindow {
 
     // Displays the toggle minimize/restore hotkey in the window header
     private async setToggleHotkeyText() {
-        const hotkeyText = await OWHotkeys.getHotkeyText(hotkeys.toggle, portal2ClassId);
+        const hotkeyText = await OWHotkeys.getHotkeyText(hotkeys.toggle, newWorldId);
         const hotkeyElem = document.getElementById('hotkey');
         if (hotkeyElem) {
             hotkeyElem.textContent = hotkeyText;
