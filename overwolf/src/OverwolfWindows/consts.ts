@@ -1,21 +1,7 @@
 const newWorldId = 21816;
 
 const interestingFeatures = [
-    'counters',
-    'death',
-    'items',
-    'kill',
-    'killed',
-    'killer',
     'location',
-    'match_info',
-    'match',
-    'me',
-    'phase',
-    'rank',
-    'revived',
-    'roster',
-    'team',
 ];
 
 const windowNames = {
