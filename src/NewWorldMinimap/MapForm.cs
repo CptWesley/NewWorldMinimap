@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Numerics;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -44,6 +45,7 @@ namespace NewWorldMinimap
         private bool debugEnabled;
         private Vector2 lastPos = Vector2.Zero;
         private double rotationAngle;
+        private bool overlayMode;
 
         private Thread? scannerThread;
 
@@ -99,7 +101,30 @@ namespace NewWorldMinimap
 
         private void ToggleInteractivity()
         {
-            Enabled = !Enabled;
+            overlayMode = !overlayMode;
+
+            if (overlayMode)
+            {
+                SafeInvoke(() =>
+                {
+                    this.TopMost = true;
+                    this.FormBorderStyle = FormBorderStyle.None;
+                    int style = (int)NativeMethods.GetWindowLongPtr(this.Handle, -20);
+                    int newStyle = style | 0x80000 | 0x20;
+                    NativeMethods.SetWindowLongPtr(this.Handle, -20, new IntPtr(newStyle));
+                });
+            }
+            else
+            {
+                SafeInvoke(() =>
+                {
+                    this.TopMost = alwaysOnTopButton.Checked;
+                    this.FormBorderStyle = FormBorderStyle.Sizable;
+                    int style = (int)NativeMethods.GetWindowLongPtr(this.Handle, -20);
+                    int newStyle = style & ~0x80000 & ~0x20;
+                    NativeMethods.SetWindowLongPtr(this.Handle, -20, new IntPtr(newStyle));
+                });
+            }
         }
 
         private void BuildMenu()
@@ -326,6 +351,17 @@ namespace NewWorldMinimap
             catch (InvalidOperationException)
             {
             }
+        }
+
+        private static class NativeMethods
+        {
+            [DllImport("user32")]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+            public static extern IntPtr GetWindowLongPtr(IntPtr hWnd, int nIndex);
+
+            [DllImport("user32")]
+            [DefaultDllImportSearchPaths(DllImportSearchPath.System32)]
+            public static extern IntPtr SetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
         }
     }
 }
