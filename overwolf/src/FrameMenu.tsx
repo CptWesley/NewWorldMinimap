@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
+import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/Returnicon';
 import { makeStyles } from './theme';
 
@@ -25,7 +26,7 @@ const useStyles = makeStyles()(theme => ({
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 975,
+        zIndex: globalLayers.frameMenu,
         backdropFilter: 'blur(10px)',
     },
     hidden: {
@@ -74,10 +75,20 @@ export default function FrameMenu(props: IProps) {
                 <label className={classes.checkbox}>
                     <input
                         type='checkbox'
-                        checked={context.value.allowTransparentHeader}
-                        onChange={e => context.update({ allowTransparentHeader: e.currentTarget.checked })}
+                        checked={context.value.transparentHeader}
+                        onChange={e => context.update({ transparentHeader: e.currentTarget.checked })}
                     />
-                    Allow transparent header
+                    Transparent header
+                </label>
+            </p>
+            <p>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={context.value.transparentToolbar}
+                        onChange={e => context.update({ transparentToolbar: e.currentTarget.checked })}
+                    />
+                    Transparent toolbar
                 </label>
             </p>
             <p>

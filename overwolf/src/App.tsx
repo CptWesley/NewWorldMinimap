@@ -1,7 +1,6 @@
-import clsx from 'clsx';
-import React, { useContext } from 'react';
-import { AppContext } from './contexts/AppContext';
+import React from 'react';
 import Minimap from './Minimap';
+import MinimapToolbar from './MinimapToolbar';
 import { makeStyles } from './theme';
 
 const useStyles = makeStyles()(() => ({
@@ -10,9 +9,6 @@ const useStyles = makeStyles()(() => ({
         gridTemplateRows: 'auto 1fr',
         gridTemplateColumns: '1fr',
         gridTemplateAreas: '"toolbar" "minimap"',
-    },
-    hidden: {
-        display: 'none !important',
     },
     toolbar: {
         gridArea: 'toolbar',
@@ -23,12 +19,11 @@ const useStyles = makeStyles()(() => ({
 }));
 
 export default function App() {
-    const context = useContext(AppContext);
     const { classes } = useStyles();
     return <div className={classes.root}>
-        <div className={clsx(classes.toolbar, !context.value.showToolbar && classes.hidden)}>
+        <MinimapToolbar>
             Toolbar
-        </div>
-        {<Minimap className={classes.minimap} />}
+        </MinimapToolbar>
+        <Minimap className={classes.minimap} />
     </div>;
 }

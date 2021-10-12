@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
+import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
 import { GetPlayerIcon } from './logic/icons';
 import { getMarkers } from './logic/markers';
@@ -14,6 +15,12 @@ const useStyles = makeStyles()({
     canvas: {
         width: '100%',
         height: '100%',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: globalLayers.minimapCanvas,
     },
 });
 
