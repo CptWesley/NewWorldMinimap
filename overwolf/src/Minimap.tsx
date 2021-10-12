@@ -3,7 +3,6 @@ import { registerEventCallback } from './logic/hooks';
 import { GetPlayerIcon } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
-import { interestingFeatures } from './OverwolfWindows/consts';
 import { makeStyles } from './theme';
 
 const useStyles = makeStyles()({
@@ -16,21 +15,27 @@ const useStyles = makeStyles()({
 export default function Minimap() {
     const { classes } = useStyles();
 
-    const [position, setPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
+    const [currentPosition, setCurrentPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
+    const [lastPosition, setLastPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
     const canvas = useRef<HTMLCanvasElement>(null);
 
-    let lastDraw = 0;
+    const lastDraw = useRef(0);
 
     const draw = async () => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = Date.now();
-        lastDraw = currentDraw;
+        lastDraw.current = currentDraw;
+
+        console.log('xDif: ' + (currentPosition.x - lastPosition.x));
+        console.log('yDif: ' + (currentPosition.y - lastPosition.y));
+
+        const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
 
         if (!ctx) {
             return;
         }
 
-        if (lastDraw !== currentDraw) {
+        if (lastDraw.current !== currentDraw) {
             return;
         }
 
@@ -40,8 +45,8 @@ export default function Minimap() {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(position, ctx.canvas.width, ctx.canvas.height);
-        const offset = toMinimapCoordinate(position, position, ctx.canvas.width, ctx.canvas.height);
+        const tiles = getTiles(currentPosition, ctx.canvas.width, ctx.canvas.height);
+        const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width, ctx.canvas.height);
 
         let toDraw: Marker[] = [];
 
@@ -51,7 +56,7 @@ export default function Minimap() {
                 const tile = row[y];
                 const bitmap = await tile.image;
 
-                if (lastDraw !== currentDraw) {
+                if (lastDraw.current !== currentDraw) {
                     return;
                 }
 
@@ -64,10 +69,10 @@ export default function Minimap() {
             }
         }
         for (const marker of toDraw) {
-            const imgPos = toMinimapCoordinate(position, marker.pos, ctx.canvas.width, ctx.canvas.height);
+            const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width, ctx.canvas.height);
             const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
 
-            if (lastDraw !== currentDraw) {
+            if (lastDraw.current !== currentDraw) {
                 return;
             }
 
@@ -76,11 +81,17 @@ export default function Minimap() {
 
         const playerIcon = await GetPlayerIcon();
 
-        if (lastDraw !== currentDraw) {
+        if (lastDraw.current !== currentDraw) {
             return;
         }
 
+        ctx.save();
+        console.log(angle / Math.PI * 180);
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle);
+        ctx.translate(-centerX, -centerY);
         ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
+        ctx.restore();
     };
 
     // Store the `draw` function in a ref object, so we can always access the latest one.
@@ -92,9 +103,18 @@ export default function Minimap() {
         drawRef.current();
     }
 
+    function setPosition(pos: Vector2) {
+        if (pos.x === currentPosition.x && pos.y === currentPosition.y) {
+            return;
+        }
+
+        setLastPosition(currentPosition);
+        setCurrentPosition(pos);
+    }
+
     useEffect(() => {
         redraw();
-    }, [position]);
+    }, [currentPosition]);
 
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
@@ -103,7 +123,7 @@ export default function Minimap() {
 
         window.addEventListener('resize', redraw);
 
-        registerEventCallback(info => {
+        const callbackUnregister = registerEventCallback(info => {
             console.log(info);
             if (info.success) {
                 if (info.res && info.res.game_info && info.res.game_info.location) {
@@ -116,8 +136,9 @@ export default function Minimap() {
 
         return function () {
             window.removeEventListener('resize', redraw);
+            callbackUnregister();
         };
-    }, []);
+    }, [currentPosition]);
 
     return <canvas
         ref={canvas}
