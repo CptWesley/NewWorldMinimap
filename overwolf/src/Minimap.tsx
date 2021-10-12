@@ -103,21 +103,21 @@ export default function Minimap() {
 
         window.addEventListener('resize', redraw);
 
+        registerEventCallback(info => {
+            console.log(info);
+            if (info.success) {
+                if (info.res && info.res.game_info && info.res.game_info.location) {
+                    const location = JSON.parse(info.res.game_info.location) as Vector2;
+                    console.log(location);
+                    setPosition(location);
+                }
+            }
+        });
+
         return function () {
             window.removeEventListener('resize', redraw);
         };
     }, []);
-
-    registerEventCallback(info => {
-        console.log(info);
-        if (info.success) {
-            if (info.res && info.res.game_info && info.res.game_info.location) {
-                const location = JSON.parse(info.res.game_info.location) as Vector2;
-                console.log(location);
-                setPosition(location);
-            }
-        }
-    });
 
     return <canvas
         ref={canvas}

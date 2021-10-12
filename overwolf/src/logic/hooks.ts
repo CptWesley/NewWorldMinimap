@@ -23,4 +23,4 @@ function onUpdate(info: any) {
     }
 }
 
-setInterval(() => overwolf.games.events.getInfo(onUpdate), 10000);
+setInterval(() => overwolf.games.events.getInfo(onUpdate), 100);
