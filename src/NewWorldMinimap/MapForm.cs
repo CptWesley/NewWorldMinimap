@@ -33,7 +33,6 @@ namespace NewWorldMinimap
         private readonly IconCache icons = new IconCache();
         private readonly KeyboardHookManager khm = new KeyboardHookManager();
 
-
         private readonly ContextMenu menu = new ContextMenu();
         private readonly MenuItem alwaysOnTopButton;
         private readonly List<MenuItem> screenItems = new List<MenuItem>();
