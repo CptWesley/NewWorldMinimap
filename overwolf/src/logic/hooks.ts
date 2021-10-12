@@ -10,10 +10,13 @@ listener.start();
 
 type cb = (info: any) => void;
 
-const callbacks: cb[] = [];
+const callbacks: Set<cb> = new Set();
 
 export function registerEventCallback(callback: cb) {
-    callbacks.push(callback);
+    callbacks.add(callback);
+    return () => {
+        callbacks.delete(callback);
+    };
 }
 
 function onUpdate(info: any) {
@@ -23,4 +26,4 @@ function onUpdate(info: any) {
     }
 }
 
-setInterval(() => overwolf.games.events.getInfo(onUpdate), 100);
+setInterval(() => overwolf.games.events.getInfo(onUpdate), 1000);
