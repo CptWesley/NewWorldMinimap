@@ -93,8 +93,8 @@ export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: n
             const image = getTileBitmap(tileCoords);
             const markers = getMarkers(tileCoords);
             const tile: Tile = {
-                image: image,
-                markers: markers,
+                image,
+                markers,
             };
             col.push(tile);
         }
