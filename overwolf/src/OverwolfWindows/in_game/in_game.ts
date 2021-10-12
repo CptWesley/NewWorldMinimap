@@ -1,4 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { OWGamesEvents, OWHotkeys } from '@overwolf/overwolf-api-ts';
+import InGameComponent from '../../InGame';
 import { AppWindow } from '../AppWindow';
 import { hotkeys, interestingFeatures, newWorldId, windowNames } from '../consts';
 
@@ -112,4 +115,15 @@ class InGame extends AppWindow {
     }
 }
 
-InGame.instance().run();
+// to prevent the unused error
+InGame.toString();
+// InGame.instance().run();
+
+export const inGameAppTitle = `${NWMM_APP_NAME}`;
+document.title = inGameAppTitle;
+
+const rootElement = document.getElementById('app');
+if (rootElement) {
+    ReactDOM.render(React.createElement(InGameComponent), rootElement);
+}
+
