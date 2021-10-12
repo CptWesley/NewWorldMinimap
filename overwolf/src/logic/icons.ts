@@ -16,7 +16,7 @@ export async function getIcon(type: string, category: string) {
         return catImage;
     }
 
-    const unknownImage = iconCache['unknown'];
+    const unknownImage = iconCache.unknown;
     return unknownImage;
 }
 
