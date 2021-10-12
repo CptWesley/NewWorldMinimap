@@ -1,4 +1,4 @@
-const portal2ClassId = 6670;
+const newWorldId = 21816;
 
 const interestingFeatures = [
     'counters',
@@ -28,7 +28,7 @@ const hotkeys = {
 } as const;
 
 export {
-    portal2ClassId,
+    newWorldId,
     interestingFeatures,
     windowNames,
     hotkeys,

@@ -5,7 +5,7 @@
     "name": "CptWesley's Minimap",
     "author": "Wesley Baartman",
     "version": "1.0.0",
-    "minimum-overwolf-version": "0.160.0",
+    "minimum-overwolf-version": "0.92.300.0",
     "description": "An example app for developers new to Overwolf",
     "dock_button_title": "CptWesley's Minimap",
     "icon": "icons/app_256.png",
@@ -61,18 +61,18 @@
     "game_targeting": {
       "type": "dedicated",
       "game_ids": [
-        6670
+        21816
       ]
     },
     "game_events": [
-      6670
+      21816
     ],
     "launch_events": [
       {
         "event": "GameLaunch",
         "event_data": {
           "game_ids": [
-            6670
+            21816
           ]
         },
         "start_minimized": false
