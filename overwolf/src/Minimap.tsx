@@ -150,7 +150,7 @@ export default function Minimap(props: IProps) {
 
     useEffect(() => {
         redraw();
-    }, [currentPosition]);
+    }, [currentPosition, appContext]);
 
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
