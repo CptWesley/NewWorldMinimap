@@ -23,11 +23,6 @@ namespace NewWorldMinimap.Caches
             => Dispose(false);
 
         /// <summary>
-        /// Gets the map radius.
-        /// </summary>
-        public int Radius { get; private set; }
-
-        /// <summary>
         /// Populates the specified map cache.
         /// </summary>
         /// <param name="mapCache">The map cache.</param>
@@ -39,7 +34,6 @@ namespace NewWorldMinimap.Caches
             }
 
             markers.Clear();
-            Radius = mapCache.Radius;
             string stringData = http.GetAsync("https://www.newworld-map.com/markers.json").Result.Content.ReadAsStringAsync().Result;
             JObject data = JObject.Parse(stringData);
 
@@ -58,14 +52,19 @@ namespace NewWorldMinimap.Caches
         /// </summary>
         /// <param name="x">The x coordinate.</param>
         /// <param name="y">The y coordinate.</param>
+        /// <param name="screenWidth">The width of the render target.</param>
+        /// <param name="screenHeight">The height of the render target.</param>
         /// <returns>The list of markers.</returns>
-        public IEnumerable<Marker> Get(int x, int y)
+        public IEnumerable<Marker> Get(int x, int y, int screenWidth, int screenHeight)
         {
+            (int xDimension, int yDimension) = MapImageCache.GetDimensions(screenWidth, screenHeight);
+            int xRadius = xDimension / 2;
+            int yRadius = yDimension / 2;
             IEnumerable<Marker> result = Array.Empty<Marker>();
 
-            for (int dx = x - Radius; dx <= x + Radius; dx++)
+            for (int dx = x - xRadius; dx <= x + xRadius; dx++)
             {
-                for (int dy = y - Radius; dy <= y + Radius; dy++)
+                for (int dy = y - yRadius; dy <= y + yRadius; dy++)
                 {
                     result = result.Concat(GetInternal(dx, dy));
                 }

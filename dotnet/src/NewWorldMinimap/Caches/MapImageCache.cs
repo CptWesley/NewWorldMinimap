@@ -21,6 +21,7 @@ namespace NewWorldMinimap.Caches
         private const int GameMapWidth = 14336;
         private const int GameMapHeight = 14400;
         private const int MaxQueueSize = 2048;
+        private static readonly object Lock = new object();
 
         private bool disposedValue;
         private HttpClient http = new HttpClient();
@@ -30,10 +31,8 @@ namespace NewWorldMinimap.Caches
         /// <summary>
         /// Initializes a new instance of the <see cref="MapImageCache"/> class.
         /// </summary>
-        /// <param name="radius">The radius of tiles around the center tile that are visible.</param>
-        public MapImageCache(int radius)
+        public MapImageCache()
         {
-            Radius = radius;
             map["blank"] = new Image<Rgba32>(TileWidth, TileHeight);
         }
 
@@ -42,11 +41,6 @@ namespace NewWorldMinimap.Caches
         /// </summary>
         ~MapImageCache()
             => Dispose(false);
-
-        /// <summary>
-        /// Gets the radius.
-        /// </summary>
-        public int Radius { get; }
 
         /// <summary>
         /// Gets the tile coordinates for world coordinate.
@@ -66,6 +60,47 @@ namespace NewWorldMinimap.Caches
             int tileY = imageY / TileHeight;
 
             return (tileX, tileY - 1);
+        }
+
+        /// <summary>
+        /// Gets the dimensions in number of tiles per axis.
+        /// </summary>
+        /// <param name="screenWidth">Width of the screen.</param>
+        /// <param name="screenHeight">Height of the screen.</param>
+        /// <returns>The dimensions.</returns>
+        public static (int X, int Y) GetDimensions(int screenWidth, int screenHeight)
+        {
+            int x = ((int)Math.Ceiling(screenWidth / (TileWidth * 2f)) * 2) + 1;
+            int y = ((int)Math.Ceiling(screenHeight / (TileHeight * 2f)) * 2) + 1;
+
+            return (x, y);
+        }
+
+        /// <summary>
+        /// Converts to minimap coordinates.
+        /// </summary>
+        /// <param name="playerX">The player x world coordinate.</param>
+        /// <param name="playerY">The player y world coordinate.</param>
+        /// <param name="x">The x world coordinate.</param>
+        /// <param name="y">The y world coordinate.</param>
+        /// <param name="screenWidth">The width of the render target.</param>
+        /// <param name="screenHeight">The height of the render target.</param>
+        /// <returns>The pixel coordinates.</returns>
+        public static (int X, int Y) ToMinimapCoordinate(double playerX, double playerY, double x, double y, int screenWidth, int screenHeight)
+        {
+            (int xDimension, int yDimension) = GetDimensions(screenWidth, screenHeight);
+
+            int totalWidth = TileWidth * Width;
+            int totalHeight = TileHeight * Height;
+            (int tileX, int tileY) = GetTileCoordinatesForCoordinate(playerX, playerY);
+
+            int pixelX = (int)(x / GameMapWidth * totalWidth);
+            int pixelY = (int)((GameMapHeight - y) / GameMapHeight * totalHeight);
+
+            int imageX = pixelX - ((tileX - (xDimension / 2)) * TileWidth);
+            int imageY = pixelY - ((tileY - (yDimension / 2) + 1) * TileHeight);
+
+            return (imageX, imageY);
         }
 
         /// <summary>
@@ -90,15 +125,18 @@ namespace NewWorldMinimap.Caches
             string fileName = ToFileName(x, y);
             Image<Rgba32> result;
 
-            if (File.Exists(fileName))
+            lock (Lock)
             {
-                result = Image.Load<Rgba32>(fileName);
-            }
-            else
-            {
-                result = Request(x, y);
-                Directory.CreateDirectory("./maps/");
-                result.Save(fileName);
+                if (File.Exists(fileName))
+                {
+                    result = Image.Load<Rgba32>(fileName);
+                }
+                else
+                {
+                    result = Request(x, y);
+                    Directory.CreateDirectory("./maps/");
+                    result.Save(fileName);
+                }
             }
 
             queue.Enqueue(name);
@@ -119,50 +157,32 @@ namespace NewWorldMinimap.Caches
         /// </summary>
         /// <param name="x">The x world coordinate.</param>
         /// <param name="y">The y world coordinate.</param>
+        /// <param name="screenWidth">The width of the render target.</param>
+        /// <param name="screenHeight">The height of the render target.</param>
         /// <returns>The joined map.</returns>
-        public Image<Rgba32> GetTileForCoordinate(double x, double y)
+        public Image<Rgba32> GetTileForCoordinate(double x, double y, int screenWidth, int screenHeight)
         {
+            (int xDimension, int yDimension) = GetDimensions(screenWidth, screenHeight);
             (int tileX, int tileY) = GetTileCoordinatesForCoordinate(x, y);
-            Image<Rgba32> result = new Image<Rgba32>(TileWidth * (1 + (2 * Radius)), TileHeight * (1 + (2 * Radius)));
+            Image<Rgba32> result = new Image<Rgba32>(TileWidth * xDimension, TileHeight * yDimension);
 
             result.Mutate(c =>
             {
                 c.BackgroundColor(Color.LightSteelBlue);
 
-                for (int xt = 0; xt < 1 + (Radius * 2); xt++)
+                for (int xt = 0; xt < xDimension; xt++)
                 {
-                    for (int yt = 0; yt < 1 + (Radius * 2); yt++)
+                    for (int yt = 0; yt < yDimension; yt++)
                     {
-                        Image<Rgba32> temp = Get(tileX - Radius + xt, tileY - Radius + yt);
+                        int curTileX = tileX - (xDimension / 2) + xt;
+                        int curTileY = tileY - (yDimension / 2) + yt;
+                        Image<Rgba32> temp = Get(curTileX, curTileY);
                         c.DrawImage(temp, new Point(xt * TileWidth, yt * TileHeight), 1);
                     }
                 }
             });
 
             return result;
-        }
-
-        /// <summary>
-        /// Converts to minimap coordinates.
-        /// </summary>
-        /// <param name="playerX">The player x world coordinate.</param>
-        /// <param name="playerY">The player y world coordinate.</param>
-        /// <param name="x">The x world coordinate.</param>
-        /// <param name="y">The y world coordinate.</param>
-        /// <returns>The pixel coordinates.</returns>
-        public (int X, int Y) ToMinimapCoordinate(double playerX, double playerY, double x, double y)
-        {
-            int totalWidth = TileWidth * Width;
-            int totalHeight = TileHeight * Height;
-            (int tileX, int tileY) = GetTileCoordinatesForCoordinate(playerX, playerY);
-
-            int pixelX = (int)(x / GameMapWidth * totalWidth);
-            int pixelY = (int)((GameMapHeight - y) / GameMapHeight * totalHeight);
-
-            int imageX = pixelX - ((tileX - Radius) * TileWidth);
-            int imageY = pixelY - ((tileY - Radius + 1) * TileHeight);
-
-            return (imageX, imageY);
         }
 
         /// <inheritdoc/>
