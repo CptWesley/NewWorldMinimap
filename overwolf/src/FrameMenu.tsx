@@ -155,13 +155,13 @@ export default function FrameMenu(props: IProps) {
                     Overlay Opacity
                 </label>
             </p>
-            <p hidden>
+            <p>
                 <label className={classes.select}>
                     <select
                         value={context.value.shape}
                         onChange={e => context.update({ shape: e.currentTarget.value })}
                     >
-                        <option value='inset(0%)'>Rectangular</option>
+                        <option value='none'>Rectangular</option>
                         <option value='ellipse(50% 50%)'>Ellipse</option>
                         <option value='polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'>Diamond</option>
                     </select>

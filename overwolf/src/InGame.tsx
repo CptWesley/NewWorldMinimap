@@ -6,7 +6,7 @@ import InGameHeader from './InGameHeader';
 export default function Desktop() {
     return <Frame
         header={<InGameHeader />}
-        content={<App />}
+        content={<App isTransparentSurface />}
         isTransparentSurface
     />;
 }

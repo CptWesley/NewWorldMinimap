@@ -10,6 +10,7 @@ import { makeStyles } from './theme';
 
 interface IProps {
     className?: string;
+    isTransparentSurface?: boolean;
 }
 
 const useStyles = makeStyles()({
@@ -28,6 +29,7 @@ const useStyles = makeStyles()({
 export default function Minimap(props: IProps) {
     const {
         className,
+        isTransparentSurface,
     } = props;
     const { classes } = useStyles();
 
@@ -37,6 +39,11 @@ export default function Minimap(props: IProps) {
 
     const lastDraw = useRef(0);
     const appContext = useContext(AppContext);
+
+    const dynamicStyling: React.CSSProperties = {};
+    if (isTransparentSurface) {
+        dynamicStyling.clipPath = appContext.value.shape;
+    }
 
     const draw = async () => {
         const ctx = canvas.current?.getContext('2d');
@@ -186,5 +193,6 @@ export default function Minimap(props: IProps) {
     return <canvas
         ref={canvas}
         className={clsx(classes.canvas, className)}
+        style={dynamicStyling}
     />;
 }

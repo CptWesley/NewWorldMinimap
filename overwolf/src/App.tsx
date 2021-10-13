@@ -5,6 +5,10 @@ import Minimap from './Minimap';
 import MinimapToolbar from './MinimapToolbar';
 import { makeStyles } from './theme';
 
+interface IProps {
+    isTransparentSurface?: boolean;
+}
+
 const useStyles = makeStyles()(() => ({
     root: {
         display: 'grid',
@@ -20,8 +24,12 @@ const useStyles = makeStyles()(() => ({
     },
 }));
 
-export default function App() {
+export default function App(props: IProps) {
     const { classes } = useStyles();
+
+    const {
+        isTransparentSurface,
+    } = props;
 
     const context = useContext(AppContext);
     getDefaultIconSettings().then(x => {
@@ -34,6 +42,6 @@ export default function App() {
         <MinimapToolbar>
             Toolbar
         </MinimapToolbar>
-        <Minimap className={classes.minimap} />
+        <Minimap className={classes.minimap} isTransparentSurface={isTransparentSurface} />
     </div>;
 }
