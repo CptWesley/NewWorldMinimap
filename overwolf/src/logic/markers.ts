@@ -63,21 +63,18 @@ export async function getDefaultIconSettings() {
     }
 
     const categories: any = {};
-    const types: any = {};
-
-    const result = {
-        categories,
-        types,
-    };
+    const result = { categories };
 
     cache.forEach(value => {
         value.forEach(marker => {
             if (!categories[marker.category]) {
-                categories[marker.category] = { name: marker.category, value: true };
+                categories[marker.category] = { name: marker.category, value: true, types: {} };
             }
 
-            if (!types[marker.type]) {
-                types[marker.type] = { name: marker.type, value: true };
+            const category = categories[marker.category];
+
+            if (!category.types[marker.type]) {
+                category.types[marker.type] = { name: marker.type, value: true };
             }
         });
     });

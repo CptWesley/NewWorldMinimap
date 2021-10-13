@@ -23,4 +23,11 @@ declare type IconSetting = {
     value: boolean;
 }
 
-declare type IconSettings = Promise<{ categories: any; types: any; }>
+declare type IconCategorySetting = {
+    name: string;
+    value: boolean;
+    types: any;
+}
+
+declare type IconSettings = Promise<{ categories: any; }>
+
