@@ -182,6 +182,16 @@ export default function FrameMenu(props: IProps) {
                 </label>
             </p>
             <p>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={context.value.showText}
+                        onChange={e => context.update({ showText: e.currentTarget.checked })}
+                    />
+                    Show text
+                </label>
+            </p>
+            <p>
                 <details>
                     <summary>Icon Categories</summary>
                     <div className={classes.indent}>

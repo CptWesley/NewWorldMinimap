@@ -114,6 +114,12 @@ export default function Minimap(props: IProps) {
             }
 
             ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+
+            if (appContext.value.showText) {
+                ctx.textAlign = 'center';
+                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.fillText(marker.type, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+            }
         }
 
         const playerIcon = await GetPlayerIcon();
