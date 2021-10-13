@@ -16,7 +16,7 @@ export interface IAppContext {
 export const defaultAppContext: IAppContext = {
     value: {
         showHeader: true,
-        showToolbar: true,
+        showToolbar: false,
         transparentHeader: true,
         transparentToolbar: true,
     },
