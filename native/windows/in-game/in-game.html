@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="../../css/general.css" />
+    <link rel="stylesheet" href="../../css/header.css" />
+    <link rel="stylesheet" href="../../css/ingame.css" />
+    <link rel="stylesheet" href="../../css/modal.css" />
+    <title>Overwolf Sample App - In-Game page</title>
+  </head>
+  <body class="in-game">
+    <!-- -------------------------------- Header ------------------------------- -->
+
+    <header class="app-header">
+      <img src="../../img/header_icon.svg" />
+      <h1>Sample App / in-game window</h1>
+      <h1 style="margin: auto;">
+        Show/Hide Hotkey:
+        <span id="hotkey" style="font-weight: bold; color: white;"></span>
+      </h1>
+      <div class="window-controls-group">
+        <button class="icon window-control" id="minimizeButton">
+          <svg>
+            <use xlink:href="/img/header_icons.svg#window-control_minimize" />
+          </svg>
+        </button>
+        <button
+          class="icon window-control window-control-close"
+          id="closeButton"
+        >
+          <svg>
+            <use xlink:href="/img/header_icons.svg#window-control_close" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- --------------------------------- Main -------------------------------- -->
+    <main>
+      <div id="logs">
+        <div id="events" class="logColumn">
+          <h1>Game Events</h1>
+          <div id="eventsLog" class="dataText">
+          </div>
+          <button id="copyEvents" class="logCopy">
+            COPY GAME EVENTS
+          </button>
+        </div>
+        <div id="infoUpdates" class="logColumn">
+          <h1>Info Updates</h1>
+          <div id="infoLog" class="dataText"></div>
+          <button id="copyInfo" class="logCopy">
+            COPY INFO UPDATES
+          </button>
+        </div>
+      </div>
+      <div id="other">
+        <h1>Real time Game Data</h1>
+        <p id="infoParagraph">
+          The background controller of this app is listening to all the game
+          events and info updates, and sends them to this window, that prints
+          them to the screen. Some specific events (startMatch, Kill and Death)
+          are painted in <span style="color: #00DEFA">teal</span> and logged to
+          the developers console.
+        </p>
+      </div>
+    </main>
+
+    <script src="../../lib/require.js"></script>
+    <script>
+      require(["in-game-controller"], function(InGameController) {
+        console.log(`[INIT] in-game module loaded`);
+        const inGameController = new InGameController();
+        inGameController.run();
+      }, function(error) {
+        console.log(`[INIT] failed to load in-game module ${error}`);
+      });
+    </script>
+  </body>
+</html>

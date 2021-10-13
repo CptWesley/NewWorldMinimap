@@ -1,0 +1,117 @@
+{
+  "manifest_version": 1,
+  "type": "WebApp",
+  "meta": {
+    "name": "Sample App",
+    "version": "1.2.0",
+    "minimum-overwolf-version": "0.120.0",
+    "author": "Overwolf",
+    "icon": "IconMouseOver.png",
+    "icon_gray": "IconMouseNormal.png",
+    "launcher_icon": "desktop-icon.ico",
+    "window_icon": "TaskbarIcon.png",
+    "description": "Sample app for new developers"
+  },
+  "permissions": [
+    "Hotkeys",
+    "Extensions",
+    "Streaming",
+    "Profile",
+    "GameInfo",
+    "DesktopStreaming"
+  ],
+  "data": {
+    "game_targeting": {
+      "type": "dedicated",
+      "game_ids": [21216]
+    },
+    "launch_events": [
+      {
+        "event": "GameLaunch",
+        "event_data": {
+          "game_ids": [21216]
+        },
+        "start_minimized": true
+      }
+    ],
+    "hotkeys": {
+      "sample_app_showhide": {
+        "title": "Show/Hide In-Game Window",
+        "action-type": "toggle",
+        "default": "Ctrl+F"
+      }
+    },
+    "game_events": [21216],
+    "start_window": "background",
+    "windows": {
+      "background": {
+        "file": "windows/background/background.html",
+        "background_optimization": false,
+        "is_background_page": true
+      },
+      "desktop": {
+        "file": "windows/desktop/desktop.html",
+        "native_window": true,
+        "transparent": true,
+        "resizable": true,
+        "size": {
+          "width": 1212,
+          "height": 699
+        },
+        "min_size": {
+          "width": 1212,
+          "height": 699
+        },
+        "max_size": {
+          "width": 1212,
+          "height": 699
+        },
+        "desktop_only": true
+      },
+      "in_game": {
+        "file": "windows/in-game/in-game.html",
+        "in_game_only": true,
+        "focus_game_takeover": "ReleaseOnHidden",
+        "focus_game_takeover_release_hotkey": "sample_app_showhide",
+        "transparent": true,
+        "resizable": true,
+        "size": {
+          "width": 1212,
+          "height": 699
+        },
+        "min_size": {
+          "width": 1212,
+          "height": 699
+        },
+        "max_size": {
+          "width": 1212,
+          "height": 699
+        }
+      }
+    },
+    "protocol_override_domains": { "googlesyndication": "http" },
+    "block_top_window_navigation": true,
+    "popup_blocker": true,
+    "mute": true,
+    "externally_connectable": {
+      "matches": [
+        "http://*.overwolf.com",
+        "https://*.overwolf.com",
+        "https://overwolf.github.io",
+        "https://*.google-analytics.com",
+        "http://*.google-analytics.com",
+        "https://www.googleapis.com",
+        "https://discord.gg/v5cfBTq",
+        "https://twitter.com/",
+        "https://www.facebook.com",
+        "https://www.reddit.com"
+      ]
+    },
+    "force_browser": "user",
+    "developer": {
+      "enable_auto_refresh": true,
+      "reload_delay": 1000,
+      "filter": "*.*"
+    }
+  }
+}
