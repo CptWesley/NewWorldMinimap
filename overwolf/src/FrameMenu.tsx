@@ -49,6 +49,8 @@ const useStyles = makeStyles()(theme => ({
     },
     content: {
         gridArea: 'content',
+        overflowY: 'auto',
+        maxHeight: '100%',
     },
     footer: {
         gridArea: 'footer',
