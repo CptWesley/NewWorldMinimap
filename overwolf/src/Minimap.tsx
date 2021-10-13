@@ -117,7 +117,10 @@ export default function Minimap(props: IProps) {
 
             if (appContext.value.showText) {
                 ctx.textAlign = 'center';
-                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.font = Math.round(icon.height / 1.5) + 'px "Lato"';
+                ctx.strokeStyle = '#000';
+                ctx.strokeText(marker.type, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                ctx.fillStyle = '#fff';
                 ctx.fillText(marker.type, imgPosCorrected.x, imgPosCorrected.y + icon.height);
             }
         }
