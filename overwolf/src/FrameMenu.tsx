@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext } from 'react';
-import { AppContext } from './contexts/AppContext';
+import { AppContext, IAppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
 import { makeStyles } from './theme';
@@ -77,6 +77,7 @@ export default function FrameMenu(props: IProps) {
     } = props;
     const context = useContext(AppContext);
     const { classes } = useStyles();
+    const iconSettings = getIconSettingsMenu(context, classes, context.value.iconSettings);
 
     return <div className={clsx(classes.root, !visible && classes.hidden)}>
         <button className={classes.return} onClick={onClose}>
@@ -164,6 +165,43 @@ export default function FrameMenu(props: IProps) {
                     Shape
                 </label>
             </p>
+            <p>
+                Icon Categories
+                {iconSettings}
+            </p>
         </div>
     </div>;
+}
+
+function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconSettings | undefined) {
+    if (!settings) {
+        return <div></div>;
+    }
+
+    const children: JSX.Element[] = [];
+
+    for (const [key, value] of Object.entries(settings.categories)) {
+        const cat = value as IconCategorySetting;
+
+        const element =
+            <p>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={cat.value}
+                        onChange={e => context.update({ iconSettings: updateIconCategorySettings(settings, key, e.currentTarget.checked) })}
+                    />
+                    {cat.name}
+                </label>
+            </p>;
+
+        children.push(element);
+    }
+
+    return <div>{children}</div>;
+}
+
+function updateIconCategorySettings(settings: IconSettings, name: string, value: boolean) {
+    settings.categories[name].value = value;
+    return settings;
 }
