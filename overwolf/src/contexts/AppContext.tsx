@@ -8,6 +8,7 @@ export interface IAppContextData {
     showText: boolean;
     iconScale: number;
     zoomLevel: number;
+    opacity: number;
     shape: string;
     iconSettings: IconSettings | undefined;
 }
@@ -27,6 +28,7 @@ export const defaultAppContext: IAppContext = {
         showText: false,
         iconScale: 1.5,
         zoomLevel: 2,
+        opacity: 1,
         shape: 'inset(0%)',
         iconSettings: undefined,
     },

@@ -55,6 +55,11 @@ export default function Frame(props: IProps) {
         toggleFrameMenu();
     }
 
+    const dynamicStyling: React.CSSProperties = {};
+    if (isTransparentSurface) {
+        dynamicStyling.opacity = appContextState.opacity;
+    }
+
     return (
         <AppContext.Provider value={appContextValue}>
             <GlobalStyles
@@ -77,6 +82,7 @@ export default function Frame(props: IProps) {
             <div
                 className={clsx(classes.root, isTransparentSurface && classes.transparent)}
                 onContextMenuCapture={handleContext}
+                style={dynamicStyling}
             >
                 <FrameMenu
                     visible={frameMenuVisible}

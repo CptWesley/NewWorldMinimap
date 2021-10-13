@@ -146,6 +146,19 @@ export default function FrameMenu(props: IProps) {
                 <label className={classes.range}>
                     <input
                         type='range'
+                        value={context.value.opacity}
+                        min='0.1'
+                        max='1'
+                        step='0.05'
+                        onChange={e => context.update({ opacity: e.currentTarget.valueAsNumber })}
+                    />
+                    Overlay Opacity
+                </label>
+            </p>
+            <p>
+                <label className={classes.range}>
+                    <input
+                        type='range'
                         value={context.value.iconScale}
                         min='0.5'
                         max='5'
