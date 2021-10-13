@@ -44,6 +44,7 @@ export default function Minimap(props: IProps) {
         lastDraw.current = currentDraw;
 
         const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
+        const zoomLevel = appContext.value.zoomLevel;
 
         setIconScale(appContext.value.iconScale);
 
@@ -61,8 +62,8 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(currentPosition, ctx.canvas.width, ctx.canvas.height);
-        const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width, ctx.canvas.height);
+        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
 
@@ -77,22 +78,23 @@ export default function Minimap(props: IProps) {
                 }
 
                 ctx.drawImage(await tile.image,
-                    bitmap.width * x + Math.floor(centerX) - offset.x,
-                    bitmap.height * y + Math.floor(centerY) - offset.y
+                    bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
+                    bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
+                    bitmap.width / zoomLevel,
+                    bitmap.height / zoomLevel
                 );
 
                 toDraw = toDraw.concat(await tile.markers);
             }
         }
         for (const marker of toDraw) {
-            const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width, ctx.canvas.height);
-            const imgPosCorrected = { x: imgPos.x - offset.x + centerX, y: imgPos.y - offset.y + centerY };
+            const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const icon = await getIcon(marker.type, marker.category);
+            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
 
             if (lastDraw.current !== currentDraw) {
                 return;
             }
-
-            const icon = await getIcon(marker.type, marker.category);
 
             ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
         }
