@@ -1,33 +1,37 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
-import { newWorldId, windowNames } from '../consts';
+import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
 
-// The background controller holds all of the app's background logic - hence its name. it has
-// many possible use cases, for example sharing data between windows, or, in our case,
-// managing which window is currently presented to the user. To that end, it holds a dictionary
-// of the windows available in the app.
-// Our background controller implements the Singleton design pattern, since only one
-// instance of it should exist.
+export type BackgroundControllerWindow = typeof window & {
+    backgroundController: BackgroundController;
+}
+
+type GameRunningEventListener = (gameRunning: boolean) => void;
+
 export class BackgroundController {
     private static _instance: BackgroundController;
-    private _windows = {};
+    private _windows: Record<BackgroundWindow | ConcreteWindow, OWWindow>;
+    private _openWindows = new Set<ConcreteWindow>();
     private _NewWorldGameListener: OWGameListener;
+    private _gameRunning = false;
+    private _gameRunningEventListeners = new Set<GameRunningEventListener>();
 
     private constructor() {
-        // Populating the background controller's window dictionary
-        this._windows[windowNames.desktop] = new OWWindow(windowNames.desktop);
-        this._windows[windowNames.inGame] = new OWWindow(windowNames.inGame);
+        this._windows = {
+            background: new OWWindow(windowNames.background),
+            desktop: new OWWindow(windowNames.desktop),
+            inGame: new OWWindow(windowNames.inGame),
+        };
 
-        // When a New World game is started or is ended, toggle the app's windows
         this._NewWorldGameListener = new OWGameListener({
-            onGameStarted: this.toggleWindows.bind(this),
-            onGameEnded: this.toggleWindows.bind(this),
+            onGameStarted: this.onGameStarted,
+            onGameEnded: this.onGameEnded,
         });
     }
 
     // Implementing the Singleton design pattern
-    public static instance(): BackgroundController {
+    public static get instance(): BackgroundController {
         if (!BackgroundController._instance) {
             BackgroundController._instance = new BackgroundController();
         }
@@ -35,40 +39,78 @@ export class BackgroundController {
         return BackgroundController._instance;
     }
 
-    // When running the app, start listening to games' status and decide which window should
-    // be launched first, based on whether New World is currently running
-    public async run() {
+    public get gameRunning() {
+        return this._gameRunning;
+    }
+
+    public run = async () => {
         this._NewWorldGameListener.start();
+        // Decide whether to start the in-game or desktop window when running
         const currWindow = await this.isNewWorldRunning()
             ? windowNames.inGame
             : windowNames.desktop;
         this._windows[currWindow].restore();
     }
 
-    private toggleWindows(info) {
+    public openWindow(window: ConcreteWindow) {
+        if (this._openWindows.has(window)) {
+            overwolf.windows.obtainDeclaredWindow(window, wnd => {
+                if (wnd.success) {
+                    overwolf.windows.bringToFront(wnd.window.id, () => { /* Ignore the result of bringToFront */ });
+                }
+            });
+        } else {
+            this._windows[window].restore();
+        }
+
+        this._openWindows.add(window);
+    }
+
+    public closeWindow(window: ConcreteWindow) {
+        this._openWindows.delete(window);
+        this._windows[window].close();
+
+        if (this._openWindows.size === 0) {
+            this._windows.background.close();
+        }
+    }
+
+    public listenOnGameRunningChange = (listener: GameRunningEventListener) => {
+        this._gameRunningEventListeners.add(listener);
+        return () => {
+            this._gameRunningEventListeners.delete(listener);
+        };
+    }
+
+    private onGameStarted = async (info: RunningGameInfo) => {
         if (!info || !this.isGameNewWorld(info)) {
             return;
         }
 
-        if (info.isRunning) {
-            // this._windows[windowNames.desktop].close();
-            this._windows[windowNames.inGame].restore();
-        } else {
-            this._windows[windowNames.inGame].close();
-            // this._windows[windowNames.desktop].restore();
+        this._gameRunning = true;
+        this.openWindow('inGame');
+        this._gameRunningEventListeners.forEach(l => l(true));
+    };
+
+    private onGameEnded = async (info: RunningGameInfo) => {
+        if (!info || !this.isGameNewWorld(info)) {
+            return;
         }
-    }
+
+        this._gameRunning = false;
+        this.closeWindow('inGame');
+        this._gameRunningEventListeners.forEach(l => l(false));
+    };
 
     private async isNewWorldRunning(): Promise<boolean> {
         const info = await OWGames.getRunningGameInfo();
-
         return info && info.isRunning && this.isGameNewWorld(info);
     }
 
-    // Identify whether the RunningGameInfo object we have references New World
-    private isGameNewWorld(info: RunningGameInfo) {
+    private isGameNewWorld = (info: RunningGameInfo) => {
         return info.classId === newWorldId;
     }
 }
 
-BackgroundController.instance().run();
+BackgroundController.instance.run();
+(window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;

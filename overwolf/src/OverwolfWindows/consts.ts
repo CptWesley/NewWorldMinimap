@@ -7,7 +7,11 @@ const interestingFeatures = [
 const windowNames = {
     inGame: 'in_game',
     desktop: 'desktop',
+    background: 'background',
 } as const;
+
+export type BackgroundWindow = 'background';
+export type ConcreteWindow = Exclude<keyof typeof windowNames, BackgroundWindow>;
 
 const hotkeys = {
     toggle: 'showhide',
