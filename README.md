@@ -23,9 +23,9 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Filter on certain resources.
 - Configurable transparency.
 - Resizeable and moveable overlay.
+- Different minimap shapes.
 
 ## Planned Features
-- Different minimap shapes.
 - Saving settings.
 
 ## Known Issues
