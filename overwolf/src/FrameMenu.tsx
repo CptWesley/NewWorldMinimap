@@ -68,6 +68,12 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    indent: {
+        marginLeft: '20px',
+    },
+    indent2: {
+        marginLeft: '30px',
+    },
 }));
 
 export default function FrameMenu(props: IProps) {
@@ -168,7 +174,9 @@ export default function FrameMenu(props: IProps) {
             <p>
                 <details>
                     <summary>Icon Categories</summary>
-                    {iconSettings}
+                    <div className={classes.indent}>
+                        {iconSettings}
+                    </div>
                 </details>
             </p>
         </div>
@@ -218,7 +226,9 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
                             {cat.name}
                         </label>
                     </summary>
-                    {typeChildren}
+                    <div className={classes.indent2}>
+                        {typeChildren}
+                    </div>
                 </details>
             </p>;
 
