@@ -1,0 +1,15 @@
+{
+    "generalConfiguration": {
+        "sortOnBeforeSave": true
+    },
+    "importStringConfiguration": {
+        "maximumNumberOfImportExpressionsPerLine": {
+            "count": 9999
+        }
+    },
+    "sortConfiguration": {
+        "customOrderingRules": {
+            "defaultNumberOfEmptyLinesAfterGroup": 0
+        }
+    }
+}

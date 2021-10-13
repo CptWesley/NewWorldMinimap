@@ -1,0 +1,24 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "none",
+    "moduleResolution": "node",
+    "noImplicitAny": false,
+    "outDir": "./dist",
+    "jsx": "react",
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "target": "es2017",
+    "types": [
+      "@overwolf/types"
+    ],
+    "rootDirs": [
+      "./src"
+    ],
+  },
+  "exclude": [
+    "node_modules"
+  ]
+}
