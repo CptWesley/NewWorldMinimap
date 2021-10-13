@@ -1,6 +1,6 @@
 [![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet)  
 
-# Note: I tried reaching out to AGS for their opinion. I will keep you posted on their answer.
+# Note: The project is currently being rewritten to use Overwolf. This should allow us to read the characters through an approved API rather than performing non-approved OCR. This also means more accurate results.
 
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true" width="128" height="128">
 
@@ -23,9 +23,9 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Allow overlaying (always-on-top) flag.
 - Support for multiple monitors.
 - Configure refresh rate of minimap to spare your CPU.
-- CTRL + D hotkey to enable/disable Overlay Mode (upcoming release).
-- CTRL + S hotkey to hide/show the map (upcoming release).
-- circle shape mode (upcoming release).
+- CTRL + D hotkey to enable/disable Overlay Mode.
+- CTRL + S hotkey to hide/show the map.
+- Circle shape mode.
 
 ## Planned Features
 - Better OCR results.
@@ -51,5 +51,3 @@ The license files of the dependencies can be found in the `./dependency_licenses
 
 ## Contribution
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
-
-# Note: I tried reaching out to AGS for their opinion. I will keep you posted on their answer.

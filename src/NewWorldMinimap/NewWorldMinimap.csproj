@@ -18,7 +18,7 @@
 		<PackageTags>newworld new world minimap</PackageTags>
 		<AssemblyVersion>$(Version)</AssemblyVersion>
 		<FileVersion>$(Version)</FileVersion>
-		<Version>1.0-preview4</Version>
+		<Version>1.0-preview5</Version>
 		<Copyright></Copyright>
 		<ApplicationIcon>./Resources/icons/app.ico</ApplicationIcon>
 		<PackageIconUrl>https://github.com/CptWesley/NewWorldMinimap/blob/master/src/NewWorldMinimap/Resources/icons/app_128.png?raw=true</PackageIconUrl>
