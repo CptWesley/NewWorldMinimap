@@ -19,6 +19,8 @@ export const theme = {
     toolbarBackdropFilter: 'blur(5px)',
     toolbarTransparentBackground: 'rgba(51, 51, 51, 0.67)',
 
+    scrollbarColor: '#ffffff',
+
     spacing: (...spacings: number[]) => spacings.map(s => `${s * 10}px`).join(' '),
 } as const;
 
