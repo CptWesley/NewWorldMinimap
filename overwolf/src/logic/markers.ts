@@ -1,4 +1,3 @@
-import { getIcon } from './icons';
 import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
@@ -28,12 +27,11 @@ async function fillCache() {
                     markerList = [];
                     cache.set(tileString, markerList);
                 }
-                const icon = await getIcon(type, category);
+
                 const marker = {
                     category,
                     type,
                     pos,
-                    icon,
                 };
                 markerList.push(marker);
             }

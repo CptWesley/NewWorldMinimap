@@ -1,6 +1,16 @@
 import { createMapIconCache } from '../Icons/MapIcons/mapIconCache';
 
-const iconCachePromise = createMapIconCache(2.5);
+let iconCachePromise = createMapIconCache(2.5);
+let currentScale = 2.5;
+
+export async function setIconScale(newScale: number) {
+    if (currentScale === newScale) {
+        return;
+    }
+
+    currentScale = newScale;
+    iconCachePromise = createMapIconCache(newScale);
+}
 
 export async function getIcon(type: string, category: string) {
     const iconCache = await iconCachePromise;
