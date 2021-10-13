@@ -104,8 +104,10 @@ namespace NewWorldMinimap
 
         private void ToggleInteractivity()
         {
-            if (this.Opacity == 0)
+            if (!this.Visible)
+            {
                 return;
+            }
 
             overlayMode = !overlayMode;
             SafeInvoke(() =>
@@ -136,12 +138,11 @@ namespace NewWorldMinimap
                     this.TransparencyKey = BackColor;
                 }
             });
-
         }
 
         private void ToggleVisibility()
         {
-            SafeInvoke(() => this.Opacity = this.Opacity == 1.0 ? 0 : 1.0);
+            SafeInvoke(() => this.Visible = !this.Visible);
         }
 
         private void BuildMenu()
@@ -226,9 +227,9 @@ namespace NewWorldMinimap
                 {
                     picture.IsCircular = false;
                 }
+
                 this.TransparencyKey = System.Drawing.Color.Empty;
                 this.TransparencyKey = BackColor;
-
             });
         }
 
@@ -282,27 +283,30 @@ namespace NewWorldMinimap
             {
                 sw.Restart();
 
-                if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
+                if (Visible && WindowState != FormWindowState.Minimized)
                 {
-                    Vector2 posDifference = pos - lastPos;
-
-                    if (posDifference != Vector2.Zero)
+                    if (pd.TryGetPosition(ScreenGrabber.TakeScreenshot(currentScreen), out Vector2 pos, this.debugEnabled, out Image<Rgba32> debugImage))
                     {
-                        rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
+                        Vector2 posDifference = pos - lastPos;
+
+                        if (posDifference != Vector2.Zero)
+                        {
+                            rotationAngle = Math.Atan2(posDifference.X, posDifference.Y);
+                        }
+
+                        Redraw(pos, rotationAngle);
+
+                        lastPos = pos;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"{i}: Failure");
                     }
 
-                    Redraw(pos, rotationAngle);
+                    DrawDebugImage(debugImage);
 
-                    lastPos = pos;
+                    i++;
                 }
-                else
-                {
-                    Console.WriteLine($"{i}: Failure");
-                }
-
-                DrawDebugImage(debugImage);
-
-                i++;
 
                 sw.Stop();
                 long elapsed = sw.ElapsedMilliseconds;
