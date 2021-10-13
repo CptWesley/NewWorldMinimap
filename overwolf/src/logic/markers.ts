@@ -78,9 +78,23 @@ export async function getDefaultIconSettings() {
             }
         });
     });
-
-    (categories.npc as IconSetting).value = false;
-    (categories.pois as IconSetting).value = false;
+    configureDefaultValues(result);
 
     return result;
+}
+
+function configureDefaultValues(settings: IconSettings) {
+    settings.categories.npc.value = false;
+    settings.categories.pois.value = false;
+
+    settings.categories.npc.name = 'NPCs';
+    settings.categories.chests.name = 'Chests';
+    settings.categories.documents.name = 'Documents';
+    settings.categories.essences.name = 'Essences';
+    settings.categories.fishing.name = 'Fish';
+    settings.categories.monsters.name = 'Creatures';
+    settings.categories.ores.name = 'Ores';
+    settings.categories.plants.name = 'Plants';
+    settings.categories.pois.name = 'Places of Interest';
+    settings.categories.woods.name = 'Trees';
 }
