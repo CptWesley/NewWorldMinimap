@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import ReturnIcon from './Icons/Returnicon';
+import ReturnIcon from './Icons/ReturnIcon';
 import { makeStyles } from './theme';
 
 interface IProps {
