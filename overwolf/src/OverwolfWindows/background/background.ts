@@ -53,8 +53,17 @@ export class BackgroundController {
     }
 
     public openWindow(window: ConcreteWindow) {
+        if (this._openWindows.has(window)) {
+            overwolf.windows.obtainDeclaredWindow(window, wnd => {
+                if (wnd.success) {
+                    overwolf.windows.bringToFront(wnd.window.id, () => { /* Ignore the result of bringToFront */ });
+                }
+            });
+        } else {
+            this._windows[window].restore();
+        }
+
         this._openWindows.add(window);
-        this._windows[window].restore();
     }
 
     public closeWindow(window: ConcreteWindow) {
