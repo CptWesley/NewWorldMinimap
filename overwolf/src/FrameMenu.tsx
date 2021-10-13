@@ -57,7 +57,7 @@ const useStyles = makeStyles()(theme => ({
         },
 
         '&::-webkit-scrollbar-thumb': {
-            background: 'rgb(80,80,80)',
+            background: theme.scrollbarColor,
         },
     },
     footer: {
