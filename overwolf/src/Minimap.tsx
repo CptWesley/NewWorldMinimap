@@ -87,7 +87,20 @@ export default function Minimap(props: IProps) {
                 toDraw = toDraw.concat(await tile.markers);
             }
         }
+
+        const iconSettings = await appContext.value.iconSettings;
+
         for (const marker of toDraw) {
+            const catSettings = iconSettings.categories[marker.category] as IconSetting;
+            if (!catSettings || !catSettings.value) {
+                continue;
+            }
+
+            const typeSettings = iconSettings.types[marker.type] as IconSetting;
+            if (typeSettings && !typeSettings.value) {
+                continue;
+            }
+
             const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = await getIcon(marker.type, marker.category);
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };

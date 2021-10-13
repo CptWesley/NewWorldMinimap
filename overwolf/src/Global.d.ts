@@ -17,3 +17,10 @@ declare type Tile = {
     image: Promise<ImageBitmap>;
     markers: Promise<Marker[]>;
 }
+
+declare type IconSetting = {
+    name: string;
+    value: boolean;
+}
+
+declare type IconSettings = Promise<{ categories: any; types: any; }>
