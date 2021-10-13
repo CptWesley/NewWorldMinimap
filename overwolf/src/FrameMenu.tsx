@@ -142,11 +142,11 @@ export default function FrameMenu(props: IProps) {
                 <label className={classes.range}>
                     <input
                         type='range'
-                        value={context.value.zoomLevel}
-                        min='1'
-                        max='5'
+                        value={4 - context.value.zoomLevel}
+                        min='0'
+                        max='3'
                         step='0.1'
-                        onChange={e => context.update({ zoomLevel: e.currentTarget.valueAsNumber })}
+                        onChange={e => context.update({ zoomLevel: 4 - e.currentTarget.valueAsNumber })}
                     />
                     Zoom Level
                 </label>
