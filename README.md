@@ -11,9 +11,6 @@ It then utilizes data obtained from [StudioLoot's New World Interactive Map](htt
 
 Join the [Discord](https://discord.gg/dCgStTDaet)!
 
-## Examples
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example2.png?raw=true" width="512" height="288">
-
 ## Current Features
 - Render surroundings of the player (including resources).
 - Track the player (including direction).
@@ -24,12 +21,19 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Changing icon sizes.
 - Showing icon text (can be turned off).
 - Filter on certain resources.
+- Configurable transparency.
+- Resizeable and moveable overlay.
 
 ## Planned Features
 - Different minimap shapes.
+- Saving settings.
 
 ## Known Issues
 - Nothing yet.
+
+## Examples
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example2.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example3.gif?raw=true" width="512" height="288"><br>In-game semi-transparent (configureable) overlay.
 
 ## Usage
 - Currently not yet available, see the [legacy version](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet) if you want a working application.
