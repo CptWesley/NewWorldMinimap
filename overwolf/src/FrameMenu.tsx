@@ -155,17 +155,17 @@ export default function FrameMenu(props: IProps) {
                     Overlay Opacity
                 </label>
             </p>
-            <p>
-                <label className={classes.range}>
-                    <input
-                        type='range'
-                        value={context.value.iconScale}
-                        min='0.5'
-                        max='5'
-                        step='0.1'
-                        onChange={e => context.update({ iconScale: e.currentTarget.valueAsNumber })}
-                    />
-                    Icon Scale
+            <p hidden>
+                <label className={classes.select}>
+                    <select
+                        value={context.value.shape}
+                        onChange={e => context.update({ shape: e.currentTarget.value })}
+                    >
+                        <option value='inset(0%)'>Rectangular</option>
+                        <option value='ellipse(50% 50%)'>Ellipse</option>
+                        <option value='polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'>Diamond</option>
+                    </select>
+                    Overlay Shape
                 </label>
             </p>
             <p>
@@ -181,17 +181,17 @@ export default function FrameMenu(props: IProps) {
                     Zoom Level
                 </label>
             </p>
-            <p hidden>
-                <label className={classes.select}>
-                    <select
-                        value={context.value.shape}
-                        onChange={e => context.update({ shape: e.currentTarget.value })}
-                    >
-                        <option value='inset(0%)'>Rectangular</option>
-                        <option value='ellipse(50% 50%)'>Ellipse</option>
-                        <option value='polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'>Diamond</option>
-                    </select>
-                    Shape
+            <p>
+                <label className={classes.range}>
+                    <input
+                        type='range'
+                        value={context.value.iconScale}
+                        min='0.5'
+                        max='5'
+                        step='0.1'
+                        onChange={e => context.update({ iconScale: e.currentTarget.valueAsNumber })}
+                    />
+                    Icon Scale
                 </label>
             </p>
             <p>
