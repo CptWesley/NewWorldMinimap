@@ -5,6 +5,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
+import { BackgroundControllerWindow } from './OverwolfWindows/background/background';
 import { windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
@@ -146,8 +147,8 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const [desktopWindow] = useState(() => {
-        return new OWWindow(windowNames.desktop);
+    const [backgroundController] = useState(() => {
+        return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
     });
 
     const draggable = useRef<HTMLDivElement | null>(null);
@@ -176,11 +177,11 @@ export default function InGameHeader() {
     }
 
     function handleShowDesktopWindow() {
-        desktopWindow.restore();
+        backgroundController.openWindow('desktop');
     }
 
     function handleClose() {
-        inGameWindow.close();
+        backgroundController.closeWindow('inGame');
     }
 
     return <>
