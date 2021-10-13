@@ -6,6 +6,8 @@ export interface IAppContextData {
     transparentHeader: boolean;
     transparentToolbar: boolean;
     iconScale: number;
+    zoomLevel: number;
+    shape: string;
 }
 
 export interface IAppContext {
@@ -21,6 +23,8 @@ export const defaultAppContext: IAppContext = {
         transparentHeader: true,
         transparentToolbar: true,
         iconScale: 2.5,
+        zoomLevel: 1,
+        shape: 'inset(0%)',
     },
     update: () => { },
     toggleFrameMenu: () => { },
