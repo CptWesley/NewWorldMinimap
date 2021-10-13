@@ -56,3 +56,34 @@ export async function getMarkers(tilePos: Vector2) {
 
     return result;
 }
+
+export async function getDefaultIconSettings() {
+    if (cache.size <= 0) {
+        await fillCache();
+    }
+
+    const categories: any = {};
+    const types: any = {};
+
+    const result = {
+        categories,
+        types,
+    };
+
+    cache.forEach(value => {
+        value.forEach(marker => {
+            if (!categories[marker.category]) {
+                categories[marker.category] = { name: marker.category, value: true };
+            }
+
+            if (!types[marker.type]) {
+                types[marker.type] = { name: marker.type, value: true };
+            }
+        });
+    });
+
+    (categories.npc as IconSetting).value = false;
+    (categories.pois as IconSetting).value = false;
+
+    return result;
+}
