@@ -148,6 +148,8 @@ export default function InGameHeader() {
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
     const [backgroundController] = useState(() => {
+        // Each window has its own BackgroundController, due to how modules are loaded with webpack
+        // Make sure to get the instance from the background window, as that is the one with the correct state
         return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
     });
 
