@@ -166,8 +166,10 @@ export default function FrameMenu(props: IProps) {
                 </label>
             </p>
             <p>
-                Icon Categories
-                {iconSettings}
+                <details>
+                    <summary>Icon Categories</summary>
+                    {iconSettings}
+                </details>
             </p>
         </div>
     </div>;
@@ -183,16 +185,41 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
     for (const [key, value] of Object.entries(settings.categories)) {
         const cat = value as IconCategorySetting;
 
+        const typeChildren: JSX.Element[] = [];
+
+        for (const [typeKey, typeValue] of Object.entries(cat.types)) {
+            const type = typeValue as IconSetting;
+
+            const typeElement =
+                <p>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={type.value}
+                            onChange={e => context.update({ iconSettings: updateIconSettings(settings, key, typeKey, e.currentTarget.checked) })}
+                        />
+                        {type.name}
+                    </label>
+                </p>;
+
+            typeChildren.push(typeElement);
+        }
+
         const element =
             <p>
-                <label className={classes.checkbox}>
-                    <input
-                        type='checkbox'
-                        checked={cat.value}
-                        onChange={e => context.update({ iconSettings: updateIconCategorySettings(settings, key, e.currentTarget.checked) })}
-                    />
-                    {cat.name}
-                </label>
+                <details>
+                    <summary>
+                        <label className={classes.checkbox}>
+                            <input
+                                type='checkbox'
+                                checked={cat.value}
+                                onChange={e => context.update({ iconSettings: updateIconCategorySettings(settings, key, e.currentTarget.checked) })}
+                            />
+                            {cat.name}
+                        </label>
+                    </summary>
+                    {typeChildren}
+                </details>
             </p>;
 
         children.push(element);
@@ -203,5 +230,10 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
 
 function updateIconCategorySettings(settings: IconSettings, name: string, value: boolean) {
     settings.categories[name].value = value;
+    return settings;
+}
+
+function updateIconSettings(settings: IconSettings, catName: string, name: string, value: boolean) {
+    settings.categories[catName].types[name].value = value;
     return settings;
 }
