@@ -1,5 +1,4 @@
 import React from 'react';
-import { getDefaultIconSettings } from '../logic/markers';
 
 export interface IAppContextData {
     showHeader: boolean;
@@ -9,7 +8,7 @@ export interface IAppContextData {
     iconScale: number;
     zoomLevel: number;
     shape: string;
-    iconSettings: IconSettings;
+    iconSettings: IconSettings | undefined;
 }
 
 export interface IAppContext {
@@ -27,7 +26,7 @@ export const defaultAppContext: IAppContext = {
         iconScale: 1.5,
         zoomLevel: 2,
         shape: 'inset(0%)',
-        iconSettings: getDefaultIconSettings(),
+        iconSettings: undefined,
     },
     update: () => { },
     toggleFrameMenu: () => { },

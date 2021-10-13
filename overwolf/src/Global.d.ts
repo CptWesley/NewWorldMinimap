@@ -29,5 +29,5 @@ declare type IconCategorySetting = {
     types: any;
 }
 
-declare type IconSettings = Promise<{ categories: any; }>
+declare type IconSettings = { categories: any; }
 
