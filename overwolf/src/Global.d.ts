@@ -8,7 +8,6 @@ declare type Vector2 = {
 };
 
 declare type Marker = {
-    icon: ImageBitmap;
     category: string;
     type: string;
     pos: Vector2;

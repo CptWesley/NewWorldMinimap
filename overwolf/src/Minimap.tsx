@@ -1,8 +1,9 @@
 import clsx from 'clsx';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
-import { GetPlayerIcon } from './logic/icons';
+import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
@@ -35,6 +36,7 @@ export default function Minimap(props: IProps) {
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
+    const appContext = useContext(AppContext);
 
     const draw = async () => {
         const ctx = canvas.current?.getContext('2d');
@@ -42,6 +44,8 @@ export default function Minimap(props: IProps) {
         lastDraw.current = currentDraw;
 
         const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
+
+        setIconScale(appContext.value.iconScale);
 
         if (!ctx) {
             return;
@@ -88,7 +92,9 @@ export default function Minimap(props: IProps) {
                 return;
             }
 
-            ctx.drawImage(marker.icon, imgPosCorrected.x - marker.icon.width / 2, imgPosCorrected.y - marker.icon.height / 2);
+            const icon = await getIcon(marker.type, marker.category);
+
+            ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
         }
 
         const playerIcon = await GetPlayerIcon();

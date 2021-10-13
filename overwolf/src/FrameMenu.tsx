@@ -58,6 +58,11 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    range: {
+        '& > input[type="range"]': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
 }));
 
 export default function FrameMenu(props: IProps) {
@@ -113,6 +118,19 @@ export default function FrameMenu(props: IProps) {
                         onChange={e => context.update({ showToolbar: e.currentTarget.checked })}
                     />
                     Show toolbar
+                </label>
+            </p>
+            <p>
+                <label className={classes.range}>
+                    <input
+                        type='range'
+                        value={context.value.iconScale}
+                        min='0.5'
+                        max='5'
+                        step='0.1'
+                        onChange={e => context.update({ iconScale: e.currentTarget.valueAsNumber })}
+                    />
+                    Icon Scale
                 </label>
             </p>
         </div>
