@@ -63,6 +63,11 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    select: {
+        '& > select': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
 }));
 
 export default function FrameMenu(props: IProps) {
@@ -90,7 +95,7 @@ export default function FrameMenu(props: IProps) {
                     Transparent header
                 </label>
             </p>
-            <p>
+            <p hidden>
                 <label className={classes.checkbox}>
                     <input
                         type='checkbox'
@@ -110,7 +115,7 @@ export default function FrameMenu(props: IProps) {
                     Show header
                 </label>
             </p>
-            <p>
+            <p hidden>
                 <label className={classes.checkbox}>
                     <input
                         type='checkbox'
@@ -131,6 +136,32 @@ export default function FrameMenu(props: IProps) {
                         onChange={e => context.update({ iconScale: e.currentTarget.valueAsNumber })}
                     />
                     Icon Scale
+                </label>
+            </p>
+            <p>
+                <label className={classes.range}>
+                    <input
+                        type='range'
+                        value={context.value.zoomLevel}
+                        min='1'
+                        max='5'
+                        step='0.1'
+                        onChange={e => context.update({ zoomLevel: e.currentTarget.valueAsNumber })}
+                    />
+                    Zoom Level
+                </label>
+            </p>
+            <p hidden>
+                <label className={classes.select}>
+                    <select
+                        value={context.value.shape}
+                        onChange={e => context.update({ shape: e.currentTarget.value })}
+                    >
+                        <option value='inset(0%)'>Rectangular</option>
+                        <option value='ellipse(50% 50%)'>Ellipse</option>
+                        <option value='polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'>Diamond</option>
+                    </select>
+                    Shape
                 </label>
             </p>
         </div>
