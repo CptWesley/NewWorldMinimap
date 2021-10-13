@@ -51,6 +51,14 @@ const useStyles = makeStyles()(theme => ({
         gridArea: 'content',
         overflowY: 'auto',
         maxHeight: '100%',
+
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+
+        '&::-webkit-scrollbar-thumb': {
+            background: 'rgb(80,80,80)',
+        },
     },
     footer: {
         gridArea: 'footer',
