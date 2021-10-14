@@ -8,6 +8,11 @@ import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
 
+const debugLocations = {
+    default: { x: 7728.177, y: 1988.299 } as Vector2,
+    city: { x: 8912, y: 5783 } as Vector2,
+};
+
 interface IProps {
     className?: string;
 }
@@ -31,8 +36,8 @@ export default function Minimap(props: IProps) {
     } = props;
     const { classes } = useStyles();
 
-    const [currentPosition, setCurrentPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
-    const [lastPosition, setLastPosition] = useState<Vector2>({ x: 7728.177, y: 1988.299 });
+    const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
+    const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
