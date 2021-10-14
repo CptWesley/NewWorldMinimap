@@ -216,6 +216,12 @@ export default function FrameMenu(props: IProps) {
     </div>;
 }
 
+function compareNames([, v1]: [string, any], [, v2]: [string, any]) {
+    const s1 = v1 as IconSetting;
+    const s2 = v2 as IconSetting;
+    return s1.name.localeCompare(s2.name);
+}
+
 function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconSettings | undefined) {
     if (!settings) {
         return <div></div>;
@@ -223,12 +229,12 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
 
     const children: JSX.Element[] = [];
 
-    for (const [key, value] of Object.entries(settings.categories)) {
+    for (const [key, value] of Object.entries(settings.categories).sort(compareNames)) {
         const cat = value as IconCategorySetting;
 
         const typeChildren: JSX.Element[] = [];
 
-        for (const [typeKey, typeValue] of Object.entries(cat.types)) {
+        for (const [typeKey, typeValue] of Object.entries(cat.types).sort(compareNames)) {
             const type = typeValue as IconSetting;
 
             const typeElement =
