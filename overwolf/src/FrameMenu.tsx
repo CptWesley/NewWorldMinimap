@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
+import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
 interface IProps {
@@ -286,10 +287,4 @@ export default function FrameMenu(props: IProps) {
             </details>
         </div>
     </div>;
-}
-
-function compareNames([, v1]: [string, any], [, v2]: [string, any]) {
-    const s1 = v1 as IconTypeSetting;
-    const s2 = v2 as IconTypeSetting;
-    return s1.name.localeCompare(s2.name);
 }
