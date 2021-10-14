@@ -24,9 +24,14 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Configurable transparency.
 - Resizeable and moveable overlay.
 - Different minimap shapes.
+- Saving settings.
 
 ## Planned Features
-- Saving settings.
+- Compass mode (rotate minimap around player instead of other way around).
+- Private markers.
+- Paths along private markers.
+- View live location of friends.
+- (Speculative) GPS that points you to a marker following known roads.
 
 ## Known Issues
 - Nothing yet.
