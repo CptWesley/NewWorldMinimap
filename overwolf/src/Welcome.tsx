@@ -26,6 +26,8 @@ const useStyles = makeStyles()(theme => ({
         opacity: 0.1,
         objectFit: 'cover',
         pointerEvents: 'none',
+        // Fancy gradient effect
+        maskImage: 'linear-gradient(to bottom right, rgba(0,0,0,0), rgba(0,0,0,1))',
     },
     discordLink: {
         color: theme.linkColor,
