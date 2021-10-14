@@ -2,12 +2,15 @@ import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
+import WindowState = overwolf.windows.WindowStateEx;
 
 export type BackgroundControllerWindow = typeof window & {
     backgroundController: BackgroundController;
 }
 
 type GameRunningEventListener = (gameRunning: boolean) => void;
+
+const bringToFrontWindowStates: string[] = [WindowState.MAXIMIZED, WindowState.NORMAL];
 
 export class BackgroundController {
     private static _instance: BackgroundController;
@@ -67,13 +70,20 @@ export class BackgroundController {
         this.openWindow(currWindow);
     }
 
-    public openWindow(window: ConcreteWindow) {
+    public async openWindow(window: ConcreteWindow) {
         if (this._openWindows.has(window)) {
-            overwolf.windows.obtainDeclaredWindow(window, wnd => {
-                if (wnd.success) {
-                    overwolf.windows.bringToFront(wnd.window.id, () => { /* Ignore the result of bringToFront */ });
-                }
-            });
+            const windowState = await this._windows[window].getWindowState();
+            if (windowState.window_state && bringToFrontWindowStates.includes(windowState.window_state)) {
+                overwolf.windows.obtainDeclaredWindow(window, wnd => {
+                    if (wnd.success) {
+                        overwolf.windows.bringToFront(wnd.window.id, () => { /* Ignore the result of bringToFront */ });
+                    } else {
+                        this._windows[window].restore();
+                    }
+                });
+            } else {
+                this._windows[window].restore();
+            }
         } else {
             this._windows[window].restore();
         }

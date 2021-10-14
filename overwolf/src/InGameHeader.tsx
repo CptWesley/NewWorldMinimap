@@ -1,14 +1,16 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { OWHotkeys, OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
 import { getBackgroundController } from './OverwolfWindows/background/background';
-import { windowNames } from './OverwolfWindows/consts';
+import { hotkeys, newWorldId, windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
+
+import WindowState = overwolf.windows.WindowStateEx;
 
 const resizeMargin = 5;
 
@@ -36,6 +38,10 @@ const useStyles = makeStyles()(theme => ({
         alignItems: 'center',
         paddingLeft: theme.spacing(1),
         cursor: 'move',
+    },
+    hotkey: {
+        marginLeft: '0.5em',
+        opacity: 0.5,
     },
     controlButton: {
         width: 42,
@@ -149,8 +155,8 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-
     const useTransparency = context.value.transparentHeader && context.gameRunning;
+    const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);
 
@@ -159,6 +165,20 @@ export default function InGameHeader() {
             if (windowResult.success) {
                 setInGameWindowId(windowResult.window.id);
             }
+        });
+
+        OWHotkeys.onHotkeyDown(hotkeys.toggleInGame, async function () {
+            const inGameState = await inGameWindow.getWindowState();
+
+            if (inGameState.window_state === WindowState.NORMAL || inGameState.window_state === WindowState.MAXIMIZED) {
+                inGameWindow.minimize();
+            } else if (inGameState.window_state === WindowState.MINIMIZED || inGameState.window_state === WindowState.CLOSED) {
+                backgroundController.openWindow('inGame');
+            }
+        });
+
+        OWHotkeys.getHotkeyText(hotkeys.toggleInGame, newWorldId).then(hotkeyText => {
+            setHotkeyText(hotkeyText);
         });
     }, []);
 
@@ -189,6 +209,7 @@ export default function InGameHeader() {
         <header className={clsx(classes.root, useTransparency && classes.transparent, !context.value.showHeader && classes.hidden)}>
             <div ref={draggable} className={classes.draggable}>
                 <span>{inGameAppTitle}</span>
+                {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}
             </div>
             <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow}>
                 <DesktopWindowIcon />
