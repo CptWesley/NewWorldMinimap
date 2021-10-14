@@ -75,5 +75,14 @@ function predictCorrectName(str: string) {
 }
 
 export function getIconName(type: string) {
-    return iconNameOverrides[type] ?? predictCorrectName(type);
+    const lookup = iconNameOverrides[type];
+
+    if (lookup) {
+        return lookup;
+    }
+
+    const prediction = predictCorrectName(type);
+    iconNameOverrides[type] = prediction;
+
+    return prediction;
 }

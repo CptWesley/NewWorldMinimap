@@ -13,6 +13,7 @@ declare type Marker = {
     category: string;
     type: string;
     pos: Vector2;
+    text: string;
 }
 
 declare type Tile = {

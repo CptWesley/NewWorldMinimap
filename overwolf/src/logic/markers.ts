@@ -33,6 +33,7 @@ async function fillCache() {
                     category,
                     type,
                     pos,
+                    text: getIconName(type),
                 };
                 markerList.push(marker);
             }
