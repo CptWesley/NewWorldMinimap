@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import produce from 'immer';
 import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
@@ -114,7 +115,9 @@ export default function FrameMenu(props: IProps) {
     function updateIconCategorySettings(name: string, value: boolean) {
         const settings = context.value.iconSettings;
         if (settings) {
-            settings.categories[name].value = value;
+            return produce(settings, draft => {
+                draft.categories[name].value = value;
+            });
         }
         return settings;
     }
@@ -122,7 +125,9 @@ export default function FrameMenu(props: IProps) {
     function updateIconSettings(catName: string, name: string, value: boolean) {
         const settings = context.value.iconSettings;
         if (settings) {
-            settings.categories[catName].types[name].value = value;
+            return produce(settings, draft => {
+                draft.categories[catName].types[name].value = value;
+            });
         }
         return settings;
     }
