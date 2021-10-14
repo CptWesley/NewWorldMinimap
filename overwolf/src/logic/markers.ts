@@ -58,6 +58,12 @@ export async function getMarkers(tilePos: Vector2) {
     return result;
 }
 
+function predictCorrectName(str: string) {
+    const parts = str.split('_');
+    const capitalizedParts = parts.map(x => x.charAt(0).toUpperCase() + x.slice(1));
+    return capitalizedParts.join(' ');
+}
+
 export async function getDefaultIconSettings() {
     if (cache.size <= 0) {
         await fillCache();
@@ -69,13 +75,13 @@ export async function getDefaultIconSettings() {
     cache.forEach(value => {
         value.forEach(marker => {
             if (!categories[marker.category]) {
-                categories[marker.category] = { name: iconNames[marker.category] ?? marker.category, value: true, types: {} };
+                categories[marker.category] = { name: iconNames[marker.category] ?? predictCorrectName(marker.category), value: true, types: {} };
             }
 
             const category = categories[marker.category];
 
             if (!category.types[marker.type]) {
-                category.types[marker.type] = { name: iconNames[marker.type] ?? marker.type, value: true };
+                category.types[marker.type] = { name: iconNames[marker.type] ?? predictCorrectName(marker.type), value: true };
             }
         });
     });
