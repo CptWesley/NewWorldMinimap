@@ -78,7 +78,6 @@ export class BackgroundController {
             this._windows[window].restore();
         }
 
-        console.log('opened ' + window);
         this._openWindows.add(window);
     }
 
