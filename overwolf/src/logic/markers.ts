@@ -1,3 +1,4 @@
+import { iconNames } from '../Icons/MapIcons/iconNames';
 import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
@@ -68,13 +69,13 @@ export async function getDefaultIconSettings() {
     cache.forEach(value => {
         value.forEach(marker => {
             if (!categories[marker.category]) {
-                categories[marker.category] = { name: marker.category, value: true, types: {} };
+                categories[marker.category] = { name: iconNames[marker.category] ?? marker.category, value: true, types: {} };
             }
 
             const category = categories[marker.category];
 
             if (!category.types[marker.type]) {
-                category.types[marker.type] = { name: marker.type, value: true };
+                category.types[marker.type] = { name: iconNames[marker.type] ?? marker.type, value: true };
             }
         });
     });
@@ -86,15 +87,4 @@ export async function getDefaultIconSettings() {
 function configureDefaultValues(settings: IconSettings) {
     settings.categories.npc.value = false;
     settings.categories.pois.value = false;
-
-    settings.categories.npc.name = 'NPCs';
-    settings.categories.chests.name = 'Chests';
-    settings.categories.documents.name = 'Documents';
-    settings.categories.essences.name = 'Essences';
-    settings.categories.fishing.name = 'Fish';
-    settings.categories.monsters.name = 'Creatures';
-    settings.categories.ores.name = 'Ores';
-    settings.categories.plants.name = 'Plants';
-    settings.categories.pois.name = 'Places of Interest';
-    settings.categories.woods.name = 'Trees';
 }
