@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { getDefaultIconSettings } from './logic/markers';
 import Minimap from './Minimap';
@@ -27,11 +27,12 @@ export default function App() {
     const { classes } = useStyles();
 
     const context = useContext(AppContext);
-    getDefaultIconSettings().then(x => {
-        if (!context.value.iconSettings) {
-            context.value.iconSettings = x;
-        }
-    });
+
+    useEffect(() => {
+        getDefaultIconSettings().then(x => {
+            context.update({ iconSettings: x });
+        });
+    }, []);
 
     if (!context.gameRunning) {
         return <Welcome />;
