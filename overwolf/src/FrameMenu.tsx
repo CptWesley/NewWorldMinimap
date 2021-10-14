@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
-import { store } from './logic/storage';
+import { store, storeIconCategory, storeIconType } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -116,6 +116,7 @@ export default function FrameMenu(props: IProps) {
 
     function updateIconCategorySettings(name: string, value: boolean) {
         const settings = context.value.iconSettings;
+        storeIconCategory(name, value);
         if (settings) {
             return produce(settings, draft => {
                 draft.categories[name].value = value;
@@ -126,6 +127,7 @@ export default function FrameMenu(props: IProps) {
 
     function updateIconSettings(catName: string, name: string, value: boolean) {
         const settings = context.value.iconSettings;
+        storeIconType(name, value);
         if (settings) {
             return produce(settings, draft => {
                 draft.categories[catName].types[name].value = value;
