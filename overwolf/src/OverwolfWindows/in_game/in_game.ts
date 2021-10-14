@@ -9,4 +9,3 @@ const rootElement = document.getElementById('app');
 if (rootElement) {
     ReactDOM.render(React.createElement(InGameComponent), rootElement);
 }
-
