@@ -5,7 +5,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
-import { BackgroundControllerWindow } from './OverwolfWindows/background/background';
+import { getBackgroundController } from './OverwolfWindows/background/background';
 import { hotkeys, newWorldId, windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
@@ -21,6 +21,7 @@ const useStyles = makeStyles()(theme => ({
         background: theme.headerBackground,
         color: theme.headerColor,
         height: 32,
+        flexShrink: 0,
         overflow: 'hidden',
         zIndex: globalLayers.header,
     },
@@ -146,6 +147,7 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
+const backgroundController = getBackgroundController();
 export default function InGameHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
@@ -153,11 +155,7 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const [backgroundController] = useState(() => {
-        // Each window has its own BackgroundController, due to how modules are loaded with webpack
-        // Make sure to get the instance from the background window, as that is the one with the correct state
-        return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
-    });
+    const useTransparency = context.value.transparentHeader && context.gameRunning;
     const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);
@@ -208,7 +206,7 @@ export default function InGameHeader() {
     }
 
     return <>
-        <header className={clsx(classes.root, context.value.transparentHeader && classes.transparent, !context.value.showHeader && classes.hidden)}>
+        <header className={clsx(classes.root, useTransparency && classes.transparent, !context.value.showHeader && classes.hidden)}>
             <div ref={draggable} className={classes.draggable}>
                 <span>{inGameAppTitle}</span>
                 {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}

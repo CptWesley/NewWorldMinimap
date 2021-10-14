@@ -1,9 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title></title>
 </head>
+
 <body>
+  <script>
+    const NWMM_APP_WINDOW = 'background';
+    const NWMM_APP_NAME = `<%= appName %>`;
+    const NWMM_APP_VERSION = `<%= appVersion %>`;
+    const NWMM_APP_BUILD_DATE = `<%= appDate %>`;
+    const NWMM_APP_BUILD_OPK = `<%= makeOpk %>` === true.toString();
+  </script>
 </body>
+
 </html>

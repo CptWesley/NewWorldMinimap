@@ -31,10 +31,25 @@ export class BackgroundController {
             onGameStarted: this.onGameStarted,
             onGameEnded: this.onGameEnded,
         });
+
+        if (!NWMM_APP_BUILD_OPK) {
+            this.debug_setGameRunning = (running: boolean) => {
+                this._gameRunning = true;
+                this._gameRunningEventListeners.forEach(l => l(running));
+            };
+        }
+    }
+
+    public static get isSupported() {
+        return NWMM_APP_WINDOW === 'background';
     }
 
     // Implementing the Singleton design pattern
     public static get instance(): BackgroundController {
+        if (!this.isSupported) {
+            throw new Error('Using BackgroundController directly in this window is not supported.');
+        }
+
         if (!BackgroundController._instance) {
             BackgroundController._instance = new BackgroundController();
         }
@@ -49,10 +64,10 @@ export class BackgroundController {
     public run = async () => {
         this._NewWorldGameListener.start();
         // Decide whether to start the in-game or desktop window when running
-        const currWindow = await this.isNewWorldRunning()
-            ? windowNames.inGame
-            : windowNames.desktop;
-        this._windows[currWindow].restore();
+        const currWindow: ConcreteWindow = await this.isNewWorldRunning()
+            ? 'inGame'
+            : 'desktop';
+        this.openWindow(currWindow);
     }
 
     public async openWindow(window: ConcreteWindow) {
@@ -92,6 +107,10 @@ export class BackgroundController {
         };
     }
 
+    public debug_setGameRunning = (running: boolean) => {
+        console.log(`Attempted to set gameRunning to ${running}, but this was a no-op.`);
+    }
+
     private onGameStarted = async (info: RunningGameInfo) => {
         if (!info || !this.isGameNewWorld(info)) {
             return;
@@ -122,5 +141,13 @@ export class BackgroundController {
     }
 }
 
-BackgroundController.instance.run();
-(window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
+export function getBackgroundController() {
+    // Each window has its own BackgroundController, due to how modules are loaded with webpack
+    // Make sure to get the instance from the background window, as that is the one with the correct state
+    return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
+}
+
+if (BackgroundController.isSupported) {
+    BackgroundController.instance.run();
+    (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
+}

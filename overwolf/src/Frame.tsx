@@ -1,14 +1,16 @@
 import '@fontsource/lato/400.css';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
-import { AppContext, defaultAppContext, IAppContext, IAppContextData } from './contexts/AppContext';
+import App from './App';
+import { AppContext, defaultAppContext, IAppContext, IAppContextData, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
-import { makeStyles } from './theme';
+import { getBackgroundController } from './OverwolfWindows/background/background';
+import { makeStyles, theme } from './theme';
 
 interface IProps {
     header: React.ReactNode;
-    content: React.ReactNode;
+    minimapWindowType: MinimapWindowType;
     isTransparentSurface?: boolean;
 }
 
@@ -30,24 +32,37 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
+const backgroundController = getBackgroundController();
+
 export default function Frame(props: IProps) {
     const {
         header,
-        content,
         isTransparentSurface,
+        minimapWindowType,
     } = props;
     const { classes } = useStyles();
 
     const [frameMenuVisible, setFrameMenuVisible] = useState(false);
     const [appContextState, setAppContextState] = useState<IAppContextData>(defaultAppContext.value);
+    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
     const updateAppContext = useCallback((e: Partial<IAppContextData>) => setAppContextState(prev => ({ ...prev, ...e })), []);
     const toggleFrameMenu = useCallback(() => setFrameMenuVisible(prev => !prev), []);
+
+    useEffect(() => {
+        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
+        return () => {
+            gameRunningListenRegistration();
+        };
+    }, []);
 
     const appContextValue: IAppContext = {
         update: updateAppContext,
         value: appContextState,
         toggleFrameMenu,
+        gameRunning,
+        isTransparentSurface,
+        minimapWindowType,
     };
 
     function handleContext(e: React.MouseEvent<HTMLDivElement>) {
@@ -65,8 +80,8 @@ export default function Frame(props: IProps) {
             <GlobalStyles
                 styles={{
                     body: {
-                        fontFamily: 'Lato, sans-serif',
-                        fontSize: 16,
+                        fontFamily: theme.bodyFontFamily,
+                        fontSize: theme.bodyFontSize,
                         margin: 0,
                         userSelect: 'none',
                         height: '100vh',
@@ -76,6 +91,11 @@ export default function Frame(props: IProps) {
                     },
                     'p, h1, h2, h3, h4, h5, h6': {
                         margin: 0,
+                    },
+                    hr: {
+                        width: '100%',
+                        border: 'none',
+                        borderTop: '1px solid',
                     },
                 }}
             />
@@ -89,7 +109,7 @@ export default function Frame(props: IProps) {
                     onClose={() => setFrameMenuVisible(false)}
                 />
                 {header}
-                {content}
+                <App />
             </div>
         </AppContext.Provider>
     );
