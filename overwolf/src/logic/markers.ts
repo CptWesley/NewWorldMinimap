@@ -18,7 +18,7 @@ async function fillCache() {
         }
 
         for (const [type, typeContent] of Object.entries(catContent as any)) {
-            for (const [entry, entryContent] of Object.entries(typeContent as any)) {
+            for (const [, entryContent] of Object.entries(typeContent as any)) {
                 const pos = entryContent as Vector2;
                 const tileString = getTileCacheKeyFromWorldCoordinate(pos);
 
