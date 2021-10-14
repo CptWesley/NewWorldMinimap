@@ -129,23 +129,21 @@ export default function FrameMenu(props: IProps) {
                 </p>;
             });
 
-            return <span key={'FrameMenuCat' + categoryKey}>
-                <details>
-                    <summary>
-                        <label className={classes.checkbox}>
-                            <input
-                                type='checkbox'
-                                checked={category.value}
-                                onChange={e => context.update({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
-                            />
-                            {category.name}
-                        </label>
-                    </summary>
-                    <div className={classes.indent2}>
-                        {typeChildren}
-                    </div>
-                </details>
-            </span>;
+            return <details key={'FrameMenuCat' + categoryKey}>
+                <summary>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={category.value}
+                            onChange={e => context.update({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
+                        />
+                        {category.name}
+                    </label>
+                </summary>
+                <div className={classes.indent2}>
+                    {typeChildren}
+                </div>
+            </details>;
         });
     }
 
