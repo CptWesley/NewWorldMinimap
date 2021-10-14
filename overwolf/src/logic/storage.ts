@@ -13,12 +13,33 @@ export const simpleStorageDefaultSettings = {
 
 export type SimpleStorageSettings = typeof simpleStorageDefaultSettings;
 
+const scopedSettings: (keyof SimpleStorageSettings)[] = [
+    'iconScale',
+    'showHeader',
+    'showText',
+    'showToolbar',
+    'transparentHeader',
+    'transparentToolbar',
+    'zoomLevel',
+];
+
 export function store<TKey extends keyof SimpleStorageSettings>(key: TKey, value: SimpleStorageSettings[TKey]) {
-    localStorage.setItem(key, JSON.stringify(value));
+    let storageKey: string = key;
+    if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
+        storageKey = NWMM_APP_WINDOW + '::' + key;
+    }
+
+    localStorage.setItem(storageKey, JSON.stringify(value));
 }
 
 export function load<TKey extends keyof SimpleStorageSettings>(key: TKey) {
-    const retrieved = localStorage.getItem(key);
+    let storageKey: string = key;
+
+    if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
+        storageKey = NWMM_APP_WINDOW + '::' + key;
+    }
+
+    const retrieved = localStorage.getItem(storageKey);
 
     if (retrieved) {
         return JSON.parse(retrieved);
