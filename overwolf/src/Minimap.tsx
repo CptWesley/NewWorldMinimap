@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
-import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
+import { getIcon, getIconName, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { makeStyles } from './theme';
@@ -129,9 +129,10 @@ export default function Minimap(props: IProps) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
-                ctx.strokeText(marker.type, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                const text = getIconName(marker.type);
+                ctx.strokeText(text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                 ctx.fillStyle = '#fff';
-                ctx.fillText(marker.type, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                ctx.fillText(text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
             }
         }
 
