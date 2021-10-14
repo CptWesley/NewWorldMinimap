@@ -5,7 +5,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
-import { BackgroundControllerWindow } from './OverwolfWindows/background/background';
+import { getBackgroundController } from './OverwolfWindows/background/background';
 import { windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
@@ -140,6 +140,7 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
+const backgroundController = getBackgroundController();
 export default function InGameHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
@@ -147,14 +148,8 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const [backgroundController] = useState(() => {
-        // Each window has its own BackgroundController, due to how modules are loaded with webpack
-        // Make sure to get the instance from the background window, as that is the one with the correct state
-        return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
-    });
-    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
-    const useTransparency = context.value.transparentHeader && gameRunning;
+    const useTransparency = context.value.transparentHeader && context.gameRunning;
 
     const draggable = useRef<HTMLDivElement | null>(null);
 
@@ -164,11 +159,6 @@ export default function InGameHeader() {
                 setInGameWindowId(windowResult.window.id);
             }
         });
-
-        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
-        return () => {
-            gameRunningListenRegistration();
-        };
     }, []);
 
     useEffect(() => {

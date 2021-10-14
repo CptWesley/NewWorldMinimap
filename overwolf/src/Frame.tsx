@@ -1,10 +1,11 @@
 import '@fontsource/lato/400.css';
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import App from './App';
 import { AppContext, defaultAppContext, IAppContext, IAppContextData, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
+import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles } from './theme';
 
 interface IProps {
@@ -31,6 +32,8 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
+const backgroundController = getBackgroundController();
+
 export default function Frame(props: IProps) {
     const {
         header,
@@ -41,14 +44,23 @@ export default function Frame(props: IProps) {
 
     const [frameMenuVisible, setFrameMenuVisible] = useState(false);
     const [appContextState, setAppContextState] = useState<IAppContextData>(defaultAppContext.value);
+    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
     const updateAppContext = useCallback((e: Partial<IAppContextData>) => setAppContextState(prev => ({ ...prev, ...e })), []);
     const toggleFrameMenu = useCallback(() => setFrameMenuVisible(prev => !prev), []);
+
+    useEffect(() => {
+        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
+        return () => {
+            gameRunningListenRegistration();
+        };
+    }, []);
 
     const appContextValue: IAppContext = {
         update: updateAppContext,
         value: appContextState,
         toggleFrameMenu,
+        gameRunning,
         isTransparentSurface,
         minimapWindowType,
     };

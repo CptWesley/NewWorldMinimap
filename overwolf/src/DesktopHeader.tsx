@@ -9,7 +9,7 @@ import MaximizeIcon from './Icons/MaximizeIcon';
 import Minimizeicon from './Icons/MinimizeIcon';
 import RestoreIcon from './Icons/RestoreIcon';
 import SettingsIcon from './Icons/SettingsIcon';
-import { BackgroundControllerWindow } from './OverwolfWindows/background/background';
+import { getBackgroundController } from './OverwolfWindows/background/background';
 import { windowNames } from './OverwolfWindows/consts';
 import { desktopAppTitle } from './OverwolfWindows/desktop/desktop';
 import { makeStyles } from './theme';
@@ -72,23 +72,18 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
+const backgroundController = getBackgroundController();
 export default function DesktopHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
     const [desktopWindow] = useState(() => {
         return new OWWindow(windowNames.desktop);
     });
-    const [backgroundController] = useState(() => {
-        // Each window has its own BackgroundController, due to how modules are loaded with webpack
-        // Make sure to get the instance from the background window, as that is the one with the correct state
-        return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
-    });
 
     const draggable = useRef<HTMLDivElement | null>(null);
     const [maximized, setMaximized] = useState(false);
-    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
-    const useTransparency = context.value.transparentHeader && gameRunning;
+    const useTransparency = context.value.transparentHeader && context.gameRunning;
 
     useEffect(() => {
         if (draggable.current) {
@@ -102,12 +97,9 @@ export default function DesktopHeader() {
             setMaximized(windowState.window_state === 'maximized');
         }
 
-        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
-
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
-            gameRunningListenRegistration();
         };
     }, []);
 
@@ -136,7 +128,7 @@ export default function DesktopHeader() {
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>
-        {gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow}>
+        {context.gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow}>
             <DesktopWindowIcon />
         </button>}
         <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>

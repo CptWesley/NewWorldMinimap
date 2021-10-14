@@ -112,5 +112,11 @@ export class BackgroundController {
     }
 }
 
+export function getBackgroundController() {
+    // Each window has its own BackgroundController, due to how modules are loaded with webpack
+    // Make sure to get the instance from the background window, as that is the one with the correct state
+    return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
+}
+
 BackgroundController.instance.run();
 (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;

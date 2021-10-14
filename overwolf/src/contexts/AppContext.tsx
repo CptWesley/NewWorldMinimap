@@ -19,6 +19,7 @@ export interface IAppContext {
     value: IAppContextData;
     update: (delta: Partial<IAppContextData>) => void;
     toggleFrameMenu: () => void;
+    gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
     minimapWindowType: MinimapWindowType | undefined;
 }
@@ -38,6 +39,7 @@ export const defaultAppContext: IAppContext = {
     },
     update: () => { },
     toggleFrameMenu: () => { },
+    gameRunning: false,
     isTransparentSurface: undefined,
     minimapWindowType: undefined,
 };
