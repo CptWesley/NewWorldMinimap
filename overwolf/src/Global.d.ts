@@ -1,6 +1,8 @@
+declare const NWMM_APP_WINDOW: 'background' | 'desktop' | 'inGame';
 declare const NWMM_APP_NAME: string;
 declare const NWMM_APP_VERSION: string;
 declare const NWMM_APP_BUILD_DATE: string;
+declare const NWMM_APP_BUILD_OPK: boolean;
 
 declare type Vector2 = {
     x: number;

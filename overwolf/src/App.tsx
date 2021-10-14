@@ -4,10 +4,7 @@ import { getDefaultIconSettings } from './logic/markers';
 import Minimap from './Minimap';
 import MinimapToolbar from './MinimapToolbar';
 import { makeStyles } from './theme';
-
-interface IProps {
-    isTransparentSurface?: boolean;
-}
+import Welcome from './Welcome';
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -15,6 +12,8 @@ const useStyles = makeStyles()(() => ({
         gridTemplateRows: 'auto 1fr',
         gridTemplateColumns: '1fr',
         gridTemplateAreas: '"toolbar" "minimap"',
+        minWidth: 0,
+        minHeight: 0,
     },
     toolbar: {
         gridArea: 'toolbar',
@@ -24,12 +23,8 @@ const useStyles = makeStyles()(() => ({
     },
 }));
 
-export default function App(props: IProps) {
+export default function App() {
     const { classes } = useStyles();
-
-    const {
-        isTransparentSurface,
-    } = props;
 
     const context = useContext(AppContext);
     getDefaultIconSettings().then(x => {
@@ -38,10 +33,14 @@ export default function App(props: IProps) {
         }
     });
 
+    if (!context.gameRunning) {
+        return <Welcome />;
+    }
+
     return <div className={classes.root}>
         <MinimapToolbar>
             Toolbar
         </MinimapToolbar>
-        <Minimap className={classes.minimap} isTransparentSurface={isTransparentSurface} />
+        <Minimap className={classes.minimap} />
     </div>;
 }
