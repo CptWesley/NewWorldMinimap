@@ -152,6 +152,9 @@ export default function InGameHeader() {
         // Make sure to get the instance from the background window, as that is the one with the correct state
         return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
     });
+    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
+
+    const useTransparency = context.value.transparentHeader && gameRunning;
 
     const draggable = useRef<HTMLDivElement | null>(null);
 
@@ -161,6 +164,11 @@ export default function InGameHeader() {
                 setInGameWindowId(windowResult.window.id);
             }
         });
+
+        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
+        return () => {
+            gameRunningListenRegistration();
+        };
     }, []);
 
     useEffect(() => {
@@ -187,7 +195,7 @@ export default function InGameHeader() {
     }
 
     return <>
-        <header className={clsx(classes.root, context.value.transparentHeader && classes.transparent, !context.value.showHeader && classes.hidden)}>
+        <header className={clsx(classes.root, useTransparency && classes.transparent, !context.value.showHeader && classes.hidden)}>
             <div ref={draggable} className={classes.draggable}>
                 <span>{inGameAppTitle}</span>
             </div>

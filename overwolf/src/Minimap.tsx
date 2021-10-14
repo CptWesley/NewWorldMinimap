@@ -10,7 +10,6 @@ import { makeStyles } from './theme';
 
 interface IProps {
     className?: string;
-    isTransparentSurface?: boolean;
 }
 
 const useStyles = makeStyles()({
@@ -29,7 +28,6 @@ const useStyles = makeStyles()({
 export default function Minimap(props: IProps) {
     const {
         className,
-        isTransparentSurface,
     } = props;
     const { classes } = useStyles();
 
@@ -41,7 +39,7 @@ export default function Minimap(props: IProps) {
     const appContext = useContext(AppContext);
 
     const dynamicStyling: React.CSSProperties = {};
-    if (isTransparentSurface) {
+    if (appContext.isTransparentSurface) {
         dynamicStyling.clipPath = appContext.value.shape;
     }
 

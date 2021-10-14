@@ -2,13 +2,14 @@ import '@fontsource/lato/400.css';
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
-import { AppContext, defaultAppContext, IAppContext, IAppContextData } from './contexts/AppContext';
+import App from './App';
+import { AppContext, defaultAppContext, IAppContext, IAppContextData, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
 import { makeStyles } from './theme';
 
 interface IProps {
     header: React.ReactNode;
-    content: React.ReactNode;
+    minimapWindowType: MinimapWindowType;
     isTransparentSurface?: boolean;
 }
 
@@ -33,8 +34,8 @@ const useStyles = makeStyles()(theme => ({
 export default function Frame(props: IProps) {
     const {
         header,
-        content,
         isTransparentSurface,
+        minimapWindowType,
     } = props;
     const { classes } = useStyles();
 
@@ -48,6 +49,8 @@ export default function Frame(props: IProps) {
         update: updateAppContext,
         value: appContextState,
         toggleFrameMenu,
+        isTransparentSurface,
+        minimapWindowType,
     };
 
     function handleContext(e: React.MouseEvent<HTMLDivElement>) {
@@ -89,7 +92,7 @@ export default function Frame(props: IProps) {
                     onClose={() => setFrameMenuVisible(false)}
                 />
                 {header}
-                {content}
+                <App />
             </div>
         </AppContext.Provider>
     );
