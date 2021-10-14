@@ -1,8 +1,8 @@
-export function store(key: string, value: any) {
+export function store<T>(key: string, value: T) {
     localStorage.setItem(key, JSON.stringify(value));
 }
 
-export function load(key: string, defaultValue: any) {
+export function load<T>(key: string, defaultValue: T) {
     const retrieved = localStorage.getItem(key);
 
     if (retrieved) {
