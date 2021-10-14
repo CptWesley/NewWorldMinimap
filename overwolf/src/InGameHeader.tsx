@@ -19,6 +19,7 @@ const useStyles = makeStyles()(theme => ({
         background: theme.headerBackground,
         color: theme.headerColor,
         height: 32,
+        flexShrink: 0,
         overflow: 'hidden',
         zIndex: globalLayers.header,
     },

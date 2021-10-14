@@ -4,6 +4,7 @@ import { getDefaultIconSettings } from './logic/markers';
 import Minimap from './Minimap';
 import MinimapToolbar from './MinimapToolbar';
 import { makeStyles } from './theme';
+import Welcome from './Welcome';
 
 const useStyles = makeStyles()(() => ({
     root: {
@@ -11,6 +12,8 @@ const useStyles = makeStyles()(() => ({
         gridTemplateRows: 'auto 1fr',
         gridTemplateColumns: '1fr',
         gridTemplateAreas: '"toolbar" "minimap"',
+        minWidth: 0,
+        minHeight: 0,
     },
     toolbar: {
         gridArea: 'toolbar',
@@ -29,6 +32,10 @@ export default function App() {
             context.value.iconSettings = x;
         }
     });
+
+    if (!context.gameRunning) {
+        return <Welcome />;
+    }
 
     return <div className={classes.root}>
         <MinimapToolbar>

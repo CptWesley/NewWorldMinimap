@@ -92,6 +92,11 @@ export default function Frame(props: IProps) {
                     'p, h1, h2, h3, h4, h5, h6': {
                         margin: 0,
                     },
+                    hr: {
+                        width: '100%',
+                        border: 'none',
+                        borderTop: '1px solid',
+                    },
                 }}
             />
             <div

@@ -1,9 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title></title>
 </head>
+
 <body>
+  <script>
+    var NWMM_APP_NAME = `<%= appName %>`;
+    var NWMM_APP_VERSION = `<%= appVersion %>`;
+    var NWMM_APP_BUILD_DATE = `<%= appDate %>`;
+    var NWMM_APP_BUILD_OPK = `<%= makeOpk %>` === true.toString();
+  </script>
 </body>
+
 </html>

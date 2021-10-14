@@ -28,6 +28,13 @@ export class BackgroundController {
             onGameStarted: this.onGameStarted,
             onGameEnded: this.onGameEnded,
         });
+
+        if (!NWMM_APP_BUILD_OPK) {
+            this.debug_setGameRunning = (running: boolean) => {
+                this._gameRunning = true;
+                this._gameRunningEventListeners.forEach(l => l(running));
+            };
+        }
     }
 
     // Implementing the Singleton design pattern
@@ -80,6 +87,10 @@ export class BackgroundController {
         return () => {
             this._gameRunningEventListeners.delete(listener);
         };
+    }
+
+    public debug_setGameRunning = (running: boolean) => {
+        console.log(`Attempted to set gameRunning to ${running}, but this was a no-op.`);
     }
 
     private onGameStarted = async (info: RunningGameInfo) => {
