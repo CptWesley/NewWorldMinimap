@@ -204,14 +204,14 @@ export default function FrameMenu(props: IProps) {
                     Show text
                 </label>
             </p>
-            <p>
+            <span>
                 <details>
                     <summary>Icon Categories</summary>
                     <div className={classes.indent}>
                         {iconSettings}
                     </div>
                 </details>
-            </p>
+            </span>
         </div>
     </div>;
 }
@@ -232,7 +232,7 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
             const type = typeValue as IconSetting;
 
             const typeElement =
-                <p>
+                <p key={'FrameMenuType' + typeKey}>
                     <label className={classes.checkbox}>
                         <input
                             type='checkbox'
@@ -247,7 +247,7 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
         }
 
         const element =
-            <p>
+            <span key={'FrameMenuCat' + key}>
                 <details>
                     <summary>
                         <label className={classes.checkbox}>
@@ -263,7 +263,7 @@ function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconS
                         {typeChildren}
                     </div>
                 </details>
-            </p>;
+            </span>;
 
         children.push(element);
     }
