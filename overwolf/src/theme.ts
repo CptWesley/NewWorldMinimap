@@ -3,6 +3,10 @@ import { createMakeStyles } from 'tss-react';
 export const theme = {
     background: '#333333',
     color: '#ffffff',
+    linkColor: '#a8ceff',
+
+    bodyFontFamily: 'Lato',
+    bodyFontSize: 16,
 
     headerBackground: '#222222',
     headerColor: '#eeeeee',

@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from './Button';
+import { discordUrl } from './links';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles } from './theme';
 
@@ -26,6 +27,9 @@ const useStyles = makeStyles()(theme => ({
         objectFit: 'cover',
         pointerEvents: 'none',
     },
+    discordLink: {
+        color: theme.linkColor,
+    },
 }));
 
 const backgroundController = getBackgroundController();
@@ -41,6 +45,7 @@ export default function Welcome() {
         <h2>Welcome to {NWMM_APP_NAME}</h2>
         <p>Launch New World to access the minimap.</p>
         <p>You may also access the application settings while the game is not running.</p>
+        <p>Feel free to join our Discord server for questions, help, and suggestions you might have: <a className={classes.discordLink} href={discordUrl} target='_blank'>{discordUrl}</a>.</p>
         {!NWMM_APP_BUILD_OPK && <>
             <hr />
             <p>This appears to be a development build. Use the button below to access the minimap at a debug location.</p>

@@ -10,6 +10,8 @@ const useStyles = makeStyles()(theme => ({
         borderRadius: 40,
         color: theme.buttonColor,
         padding: theme.spacing(1, 2),
+        fontFamily: theme.bodyFontFamily,
+        fontSize: theme.bodyFontSize,
 
         '&:hover, &:focus': {
             background: theme.buttonBackgroundHover,

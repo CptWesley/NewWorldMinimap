@@ -6,7 +6,7 @@ import App from './App';
 import { AppContext, defaultAppContext, IAppContext, IAppContextData, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
 import { getBackgroundController } from './OverwolfWindows/background/background';
-import { makeStyles } from './theme';
+import { makeStyles, theme } from './theme';
 
 interface IProps {
     header: React.ReactNode;
@@ -80,8 +80,8 @@ export default function Frame(props: IProps) {
             <GlobalStyles
                 styles={{
                     body: {
-                        fontFamily: 'Lato, sans-serif',
-                        fontSize: 16,
+                        fontFamily: theme.bodyFontFamily,
+                        fontSize: theme.bodyFontSize,
                         margin: 0,
                         userSelect: 'none',
                         height: '100vh',
