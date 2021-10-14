@@ -9,4 +9,12 @@ export const iconNames = {
     'plants': 'Plants',
     'pois': 'Places of Interest',
     'woods': 'Trees',
+
+    'bear_elemental': 'Elemental Bear',
+    'elk_elemental': 'Elemental Elk',
+    'named': 'Boss',
+    'turkey_nest': 'Turkey Nest',
+    'wolf_elemental': 'Elemental Wolf',
+
+    'monarchs_bluffs': 'Monarch\'s Bluffs',
 };
