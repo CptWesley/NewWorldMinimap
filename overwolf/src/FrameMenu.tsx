@@ -137,8 +137,8 @@ export default function FrameMenu(props: IProps) {
             return null;
         }
 
-        return Object.entries(context.value.iconSettings.categories).map(([categoryKey, category]) => {
-            const typeChildren = Object.entries(category.types).map(([typeKey, type]) => {
+        return Object.entries(context.value.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
+            const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
                 return <p key={'FrameMenuType' + typeKey}>
                     <label className={classes.checkbox}>
                         <input
@@ -286,4 +286,10 @@ export default function FrameMenu(props: IProps) {
             </details>
         </div>
     </div>;
+}
+
+function compareNames([, v1]: [string, any], [, v2]: [string, any]) {
+    const s1 = v1 as IconTypeSetting;
+    const s2 = v2 as IconTypeSetting;
+    return s1.name.localeCompare(s2.name);
 }
