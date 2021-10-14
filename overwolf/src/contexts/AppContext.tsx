@@ -1,4 +1,5 @@
 import React from 'react';
+import { load } from '../logic/storage';
 
 export type MinimapWindowType = 'desktop' | 'inGame';
 
@@ -26,15 +27,15 @@ export interface IAppContext {
 
 export const defaultAppContext: IAppContext = {
     value: {
-        showHeader: true,
-        showToolbar: false,
-        transparentHeader: true,
-        transparentToolbar: true,
-        showText: false,
-        iconScale: 1.5,
-        zoomLevel: 2,
-        opacity: 1,
-        shape: 'inset(0%)',
+        showHeader: load('showHeader', true),
+        showToolbar: load('showToolbar', false),
+        transparentHeader: load('transparentHeader', true),
+        transparentToolbar: load('transparentToolbar', true),
+        showText: load('showText', false),
+        iconScale: load('iconScale', 1.5),
+        zoomLevel: load('zoomLevel', 2),
+        opacity: load('opacity', 1),
+        shape: load('shape', 'none'),
         iconSettings: undefined,
     },
     update: () => { },

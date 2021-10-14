@@ -1,4 +1,5 @@
 import { getIconName } from './icons';
+import { load, loadIconCategory, loadIconType } from './storage';
 import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
@@ -70,22 +71,16 @@ export async function getDefaultIconSettings() {
     cache.forEach(value => {
         value.forEach(marker => {
             if (!categories[marker.category]) {
-                categories[marker.category] = { name: getIconName(marker.category), value: true, types: {} };
+                categories[marker.category] = { name: getIconName(marker.category), value: loadIconCategory(marker.category), types: {} };
             }
 
             const category = categories[marker.category];
 
             if (!category.types[marker.type]) {
-                category.types[marker.type] = { name: getIconName(marker.type), value: true };
+                category.types[marker.type] = { name: getIconName(marker.type), value: loadIconType(marker.type) };
             }
         });
     });
-    configureDefaultValues(result);
 
     return result;
-}
-
-function configureDefaultValues(settings: IconSettings) {
-    settings.categories.npc.value = false;
-    settings.categories.pois.value = false;
 }
