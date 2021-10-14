@@ -20,16 +20,18 @@ declare type Tile = {
     markers: Promise<Marker[]>;
 }
 
-declare type IconSetting = {
+declare type IconTypeSetting = {
     name: string;
     value: boolean;
 }
 
 declare type IconCategorySetting = {
-    name: string;
-    value: boolean;
-    types: any;
+    name: string,
+    value: boolean,
+    types: Record<string, IconTypeSetting>,
 }
 
-declare type IconSettings = { categories: any; }
+declare type IconSettings = {
+    categories: Record<string, IconCategorySetting>,
+}
 

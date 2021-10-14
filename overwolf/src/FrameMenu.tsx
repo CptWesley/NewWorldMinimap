@@ -1,6 +1,7 @@
 import clsx from 'clsx';
+import produce from 'immer';
 import React, { useContext } from 'react';
-import { AppContext, IAppContext } from './contexts/AppContext';
+import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
 import { makeStyles } from './theme';
@@ -78,11 +79,28 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    summary: {
+        outline: 'none',
+        borderRadius: 3,
+        padding: 2,
+
+        '&:hover': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.33)',
+        },
+
+        '&:focus': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.15)',
+        },
+    },
     indent: {
         marginLeft: '20px',
     },
     indent2: {
         marginLeft: '30px',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
     },
 }));
 
@@ -93,7 +111,63 @@ export default function FrameMenu(props: IProps) {
     } = props;
     const context = useContext(AppContext);
     const { classes } = useStyles();
-    const iconSettings = getIconSettingsMenu(context, classes, context.value.iconSettings);
+
+    function updateIconCategorySettings(name: string, value: boolean) {
+        const settings = context.value.iconSettings;
+        if (settings) {
+            return produce(settings, draft => {
+                draft.categories[name].value = value;
+            });
+        }
+        return settings;
+    }
+
+    function updateIconSettings(catName: string, name: string, value: boolean) {
+        const settings = context.value.iconSettings;
+        if (settings) {
+            return produce(settings, draft => {
+                draft.categories[catName].types[name].value = value;
+            });
+        }
+        return settings;
+    }
+
+    function renderIconFilterSettings() {
+        if (!context.value.iconSettings) {
+            return null;
+        }
+
+        return Object.entries(context.value.iconSettings.categories).map(([categoryKey, category]) => {
+            const typeChildren = Object.entries(category.types).map(([typeKey, type]) => {
+                return <p key={'FrameMenuType' + typeKey}>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={type.value}
+                            onChange={e => context.update({ iconSettings: updateIconSettings(categoryKey, typeKey, e.currentTarget.checked) })}
+                        />
+                        {type.name}
+                    </label>
+                </p>;
+            });
+
+            return <details key={'FrameMenuCat' + categoryKey}>
+                <summary className={classes.summary}>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={category.value}
+                            onChange={e => context.update({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
+                        />
+                        {category.name}
+                    </label>
+                </summary>
+                <div className={classes.indent2}>
+                    {typeChildren}
+                </div>
+            </details>;
+        });
+    }
 
     return <div className={clsx(classes.root, !visible && classes.hidden)}>
         <button className={classes.return} onClick={onClose}>
@@ -204,79 +278,12 @@ export default function FrameMenu(props: IProps) {
                     Show text
                 </label>
             </p>
-            <span>
-                <details>
-                    <summary>Icon Categories</summary>
-                    <div className={classes.indent}>
-                        {iconSettings}
-                    </div>
-                </details>
-            </span>
+            <details>
+                <summary className={classes.summary}>Icon Categories</summary>
+                <div className={classes.indent}>
+                    {renderIconFilterSettings()}
+                </div>
+            </details>
         </div>
     </div>;
-}
-
-function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconSettings | undefined) {
-    if (!settings) {
-        return <div></div>;
-    }
-
-    const children: JSX.Element[] = [];
-
-    for (const [key, value] of Object.entries(settings.categories)) {
-        const cat = value as IconCategorySetting;
-
-        const typeChildren: JSX.Element[] = [];
-
-        for (const [typeKey, typeValue] of Object.entries(cat.types)) {
-            const type = typeValue as IconSetting;
-
-            const typeElement =
-                <p key={'FrameMenuType' + typeKey}>
-                    <label className={classes.checkbox}>
-                        <input
-                            type='checkbox'
-                            checked={type.value}
-                            onChange={e => context.update({ iconSettings: updateIconSettings(settings, key, typeKey, e.currentTarget.checked) })}
-                        />
-                        {type.name}
-                    </label>
-                </p>;
-
-            typeChildren.push(typeElement);
-        }
-
-        const element =
-            <span key={'FrameMenuCat' + key}>
-                <details>
-                    <summary>
-                        <label className={classes.checkbox}>
-                            <input
-                                type='checkbox'
-                                checked={cat.value}
-                                onChange={e => context.update({ iconSettings: updateIconCategorySettings(settings, key, e.currentTarget.checked) })}
-                            />
-                            {cat.name}
-                        </label>
-                    </summary>
-                    <div className={classes.indent2}>
-                        {typeChildren}
-                    </div>
-                </details>
-            </span>;
-
-        children.push(element);
-    }
-
-    return <div>{children}</div>;
-}
-
-function updateIconCategorySettings(settings: IconSettings, name: string, value: boolean) {
-    settings.categories[name].value = value;
-    return settings;
-}
-
-function updateIconSettings(settings: IconSettings, catName: string, name: string, value: boolean) {
-    settings.categories[catName].types[name].value = value;
-    return settings;
 }
