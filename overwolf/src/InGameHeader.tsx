@@ -5,13 +5,13 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
+import SettingsIcon from './Icons/SettingsIcon';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { hotkeys, newWorldId, windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
 
 import WindowState = overwolf.windows.WindowStateEx;
-
 const resizeMargin = 5;
 
 const useStyles = makeStyles()(theme => ({
@@ -213,6 +213,9 @@ export default function InGameHeader() {
             </div>
             <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow}>
                 <DesktopWindowIcon />
+            </button>
+            <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>
+                <SettingsIcon />
             </button>
             <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
                 <CloseIcon />
