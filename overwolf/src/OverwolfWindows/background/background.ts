@@ -37,8 +37,16 @@ export class BackgroundController {
         }
     }
 
+    public static get isSupported() {
+        return NWMM_APP_WINDOW === 'background';
+    }
+
     // Implementing the Singleton design pattern
     public static get instance(): BackgroundController {
+        if (!this.isSupported) {
+            throw new Error('Using BackgroundController directly in this window is not supported.');
+        }
+
         if (!BackgroundController._instance) {
             BackgroundController._instance = new BackgroundController();
         }
@@ -53,10 +61,10 @@ export class BackgroundController {
     public run = async () => {
         this._NewWorldGameListener.start();
         // Decide whether to start the in-game or desktop window when running
-        const currWindow = await this.isNewWorldRunning()
-            ? windowNames.inGame
-            : windowNames.desktop;
-        this._windows[currWindow].restore();
+        const currWindow: ConcreteWindow = await this.isNewWorldRunning()
+            ? 'inGame'
+            : 'desktop';
+        this.openWindow(currWindow);
     }
 
     public openWindow(window: ConcreteWindow) {
@@ -70,6 +78,7 @@ export class BackgroundController {
             this._windows[window].restore();
         }
 
+        console.log('opened ' + window);
         this._openWindows.add(window);
     }
 
@@ -129,5 +138,7 @@ export function getBackgroundController() {
     return (overwolf.windows.getMainWindow().window as BackgroundControllerWindow).backgroundController;
 }
 
-BackgroundController.instance.run();
-(window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
+if (BackgroundController.isSupported) {
+    BackgroundController.instance.run();
+    (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
+}
