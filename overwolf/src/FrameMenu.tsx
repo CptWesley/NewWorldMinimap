@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
+import { store } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -182,7 +183,10 @@ export default function FrameMenu(props: IProps) {
                     <input
                         type='checkbox'
                         checked={context.value.transparentHeader}
-                        onChange={e => context.update({ transparentHeader: e.currentTarget.checked })}
+                        onChange={e => {
+                            store('transparentHeader', e.currentTarget.checked);
+                            context.update({ transparentHeader: e.currentTarget.checked });
+                        }}
                     />
                     Transparent header
                 </label>
@@ -192,7 +196,10 @@ export default function FrameMenu(props: IProps) {
                     <input
                         type='checkbox'
                         checked={context.value.transparentToolbar}
-                        onChange={e => context.update({ transparentToolbar: e.currentTarget.checked })}
+                        onChange={e => {
+                            store('transparentToolbar', e.currentTarget.checked);
+                            context.update({ transparentToolbar: e.currentTarget.checked });
+                        }}
                     />
                     Transparent toolbar
                 </label>
@@ -202,7 +209,10 @@ export default function FrameMenu(props: IProps) {
                     <input
                         type='checkbox'
                         checked={context.value.showHeader}
-                        onChange={e => context.update({ showHeader: e.currentTarget.checked })}
+                        onChange={e => {
+                            store('showHeader', e.currentTarget.checked);
+                            context.update({ showHeader: e.currentTarget.checked });
+                        }}
                     />
                     Show header
                 </label>
@@ -212,7 +222,10 @@ export default function FrameMenu(props: IProps) {
                     <input
                         type='checkbox'
                         checked={context.value.showToolbar}
-                        onChange={e => context.update({ showToolbar: e.currentTarget.checked })}
+                        onChange={e => {
+                            store('showToolbar', e.currentTarget.checked);
+                            context.update({ showToolbar: e.currentTarget.checked });
+                        }}
                     />
                     Show toolbar
                 </label>
@@ -225,7 +238,10 @@ export default function FrameMenu(props: IProps) {
                         min='0.1'
                         max='1'
                         step='0.05'
-                        onChange={e => context.update({ opacity: e.currentTarget.valueAsNumber })}
+                        onChange={e => {
+                            store('opacity', e.currentTarget.valueAsNumber);
+                            context.update({ opacity: e.currentTarget.valueAsNumber });
+                        }}
                     />
                     Overlay Opacity
                 </label>
@@ -234,7 +250,10 @@ export default function FrameMenu(props: IProps) {
                 <label className={classes.select}>
                     <select
                         value={context.value.shape}
-                        onChange={e => context.update({ shape: e.currentTarget.value })}
+                        onChange={e => {
+                            store('shape', e.currentTarget.value);
+                            context.update({ shape: e.currentTarget.value });
+                        }}
                     >
                         <option value='none'>Rectangular</option>
                         <option value='ellipse(50% 50%)'>Ellipse</option>
@@ -251,7 +270,11 @@ export default function FrameMenu(props: IProps) {
                         min='0'
                         max='6.5'
                         step='0.1'
-                        onChange={e => context.update({ zoomLevel: 7 - e.currentTarget.valueAsNumber })}
+                        onChange={e => {
+                            const newValue = 7 - e.currentTarget.valueAsNumber;
+                            store('zoomLevel', newValue);
+                            context.update({ zoomLevel: newValue });
+                        }}
                     />
                     Zoom Level
                 </label>
@@ -264,7 +287,10 @@ export default function FrameMenu(props: IProps) {
                         min='0.5'
                         max='5'
                         step='0.1'
-                        onChange={e => context.update({ iconScale: e.currentTarget.valueAsNumber })}
+                        onChange={e => {
+                            store('iconScale', e.currentTarget.valueAsNumber);
+                            context.update({ iconScale: e.currentTarget.valueAsNumber });
+                        }}
                     />
                     Icon Scale
                 </label>
@@ -274,7 +300,10 @@ export default function FrameMenu(props: IProps) {
                     <input
                         type='checkbox'
                         checked={context.value.showText}
-                        onChange={e => context.update({ showText: e.currentTarget.checked })}
+                        onChange={e => {
+                            store('showText', e.currentTarget.checked);
+                            context.update({ showText: e.currentTarget.checked });
+                        }}
                     />
                     Show text
                 </label>
