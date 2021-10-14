@@ -13,6 +13,7 @@ export interface IAppContextData {
     zoomLevel: number;
     opacity: number;
     shape: string;
+    compassMode: boolean;
     iconSettings: IconSettings | undefined;
 }
 
@@ -36,6 +37,7 @@ export const defaultAppContext: IAppContext = {
         zoomLevel: load('zoomLevel', 2),
         opacity: load('opacity', 1),
         shape: load('shape', 'none'),
+        compassMode: load('compassMode', true),
         iconSettings: undefined,
     },
     update: () => { },

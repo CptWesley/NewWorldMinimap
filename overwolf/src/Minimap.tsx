@@ -6,6 +6,7 @@ import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
+import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -87,12 +88,26 @@ export default function Minimap(props: IProps) {
                     return;
                 }
 
-                ctx.drawImage(await tile.image,
-                    bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
-                    bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
-                    bitmap.width / zoomLevel,
-                    bitmap.height / zoomLevel
-                );
+                if (appContext.value.compassMode) {
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(-angle);
+                    ctx.translate(-centerX, -centerY);
+                    ctx.drawImage(await tile.image,
+                        bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel,
+                        bitmap.height / zoomLevel
+                    );
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(await tile.image,
+                        bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel,
+                        bitmap.height / zoomLevel
+                    );
+                }
 
                 toDraw = toDraw.concat(await tile.markers);
             }
@@ -123,7 +138,12 @@ export default function Minimap(props: IProps) {
                 return;
             }
 
-            ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            if (appContext.value.compassMode) {
+                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
+            } else {
+                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            }
 
             if (appContext.value.showText) {
                 ctx.textAlign = 'center';
@@ -141,12 +161,16 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(angle);
-        ctx.translate(-centerX, -centerY);
-        ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
-        ctx.restore();
+        if (appContext.value.compassMode) {
+            ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
+        } else {
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+            ctx.translate(-centerX, -centerY);
+            ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
+            ctx.restore();
+        }
     };
 
     // Store the `draw` function in a ref object, so we can always access the latest one.
