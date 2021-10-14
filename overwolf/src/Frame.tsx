@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import App from './App';
-import { AppContext, AppContextSettings, defaultAppContext, IAppContext, MinimapWindowType } from './contexts/AppContext';
+import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles, theme } from './theme';
@@ -43,7 +43,7 @@ export default function Frame(props: IProps) {
     const { classes } = useStyles();
 
     const [frameMenuVisible, setFrameMenuVisible] = useState(false);
-    const [appContextSettings, setAppContextSettings] = useState<AppContextSettings>(defaultAppContext.settings);
+    const [appContextSettings, setAppContextSettings] = useState<AppContextSettings>(loadAppContextSettings);
     const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
     const updateAppContext = useCallback((e: Partial<AppContextSettings>) => setAppContextSettings(prev => ({ ...prev, ...e })), []);
