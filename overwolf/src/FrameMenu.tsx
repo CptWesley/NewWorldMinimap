@@ -78,6 +78,21 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    summary: {
+        outline: 'none',
+        borderRadius: 3,
+        padding: 2,
+
+        '&:hover': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.33)',
+        },
+
+        '&:focus': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.15)',
+        },
+    },
     indent: {
         marginLeft: '20px',
     },
@@ -130,7 +145,7 @@ export default function FrameMenu(props: IProps) {
             });
 
             return <details key={'FrameMenuCat' + categoryKey}>
-                <summary>
+                <summary className={classes.summary}>
                     <label className={classes.checkbox}>
                         <input
                             type='checkbox'
@@ -256,14 +271,12 @@ export default function FrameMenu(props: IProps) {
                     Show text
                 </label>
             </p>
-            <span>
-                <details>
-                    <summary>Icon Categories</summary>
-                    <div className={classes.indent}>
-                        {renderIconFilterSettings()}
-                    </div>
-                </details>
-            </span>
+            <details>
+                <summary className={classes.summary}>Icon Categories</summary>
+                <div className={classes.indent}>
+                    {renderIconFilterSettings()}
+                </div>
+            </details>
         </div>
     </div>;
 }
