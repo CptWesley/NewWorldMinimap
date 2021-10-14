@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext } from 'react';
-import { AppContext, IAppContext } from './contexts/AppContext';
+import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
 import { makeStyles } from './theme';
@@ -93,7 +93,61 @@ export default function FrameMenu(props: IProps) {
     } = props;
     const context = useContext(AppContext);
     const { classes } = useStyles();
-    const iconSettings = getIconSettingsMenu(context, classes, context.value.iconSettings);
+
+    function updateIconCategorySettings(name: string, value: boolean) {
+        const settings = context.value.iconSettings;
+        if (settings) {
+            settings.categories[name].value = value;
+        }
+        return settings;
+    }
+
+    function updateIconSettings(catName: string, name: string, value: boolean) {
+        const settings = context.value.iconSettings;
+        if (settings) {
+            settings.categories[catName].types[name].value = value;
+        }
+        return settings;
+    }
+
+    function renderIconFilterSettings() {
+        if (!context.value.iconSettings) {
+            return null;
+        }
+
+        return Object.entries(context.value.iconSettings.categories).map(([categoryKey, category]) => {
+            const typeChildren = Object.entries(category.types).map(([typeKey, type]) => {
+                return <p key={'FrameMenuType' + typeKey}>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={type.value}
+                            onChange={e => context.update({ iconSettings: updateIconSettings(categoryKey, typeKey, e.currentTarget.checked) })}
+                        />
+                        {type.name}
+                    </label>
+                </p>;
+            });
+
+            return <span key={'FrameMenuCat' + categoryKey}>
+                <details>
+                    <summary>
+                        <label className={classes.checkbox}>
+                            <input
+                                type='checkbox'
+                                checked={category.value}
+                                onChange={e => context.update({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
+                            />
+                            {category.name}
+                        </label>
+                    </summary>
+                    <div className={classes.indent2}>
+                        {typeChildren}
+                    </div>
+                </details>
+            </span>;
+        });
+    }
 
     return <div className={clsx(classes.root, !visible && classes.hidden)}>
         <button className={classes.return} onClick={onClose}>
@@ -208,75 +262,10 @@ export default function FrameMenu(props: IProps) {
                 <details>
                     <summary>Icon Categories</summary>
                     <div className={classes.indent}>
-                        {iconSettings}
+                        {renderIconFilterSettings()}
                     </div>
                 </details>
             </span>
         </div>
     </div>;
-}
-
-function getIconSettingsMenu(context: IAppContext, classes: any, settings: IconSettings | undefined) {
-    if (!settings) {
-        return <div></div>;
-    }
-
-    const children: JSX.Element[] = [];
-
-    for (const [key, value] of Object.entries(settings.categories)) {
-        const cat = value as IconCategorySetting;
-
-        const typeChildren: JSX.Element[] = [];
-
-        for (const [typeKey, typeValue] of Object.entries(cat.types)) {
-            const type = typeValue as IconSetting;
-
-            const typeElement =
-                <p key={'FrameMenuType' + typeKey}>
-                    <label className={classes.checkbox}>
-                        <input
-                            type='checkbox'
-                            checked={type.value}
-                            onChange={e => context.update({ iconSettings: updateIconSettings(settings, key, typeKey, e.currentTarget.checked) })}
-                        />
-                        {type.name}
-                    </label>
-                </p>;
-
-            typeChildren.push(typeElement);
-        }
-
-        const element =
-            <span key={'FrameMenuCat' + key}>
-                <details>
-                    <summary>
-                        <label className={classes.checkbox}>
-                            <input
-                                type='checkbox'
-                                checked={cat.value}
-                                onChange={e => context.update({ iconSettings: updateIconCategorySettings(settings, key, e.currentTarget.checked) })}
-                            />
-                            {cat.name}
-                        </label>
-                    </summary>
-                    <div className={classes.indent2}>
-                        {typeChildren}
-                    </div>
-                </details>
-            </span>;
-
-        children.push(element);
-    }
-
-    return <div>{children}</div>;
-}
-
-function updateIconCategorySettings(settings: IconSettings, name: string, value: boolean) {
-    settings.categories[name].value = value;
-    return settings;
-}
-
-function updateIconSettings(settings: IconSettings, catName: string, name: string, value: boolean) {
-    settings.categories[catName].types[name].value = value;
-    return settings;
 }
