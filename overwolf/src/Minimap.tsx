@@ -149,9 +149,16 @@ export default function Minimap(props: IProps) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
-                ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                 ctx.fillStyle = '#fff';
-                ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+
+                if (appContext.value.compassMode) {
+                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    ctx.strokeText(marker.text, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(marker.text, rotated.x, rotated.y + icon.height);
+                } else {
+                    ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                }
             }
         }
 
