@@ -105,12 +105,12 @@ export default function Minimap(props: IProps) {
         }
 
         for (const marker of toDraw) {
-            const catSettings = iconSettings.categories[marker.category] as IconCategorySetting;
+            const catSettings = iconSettings.categories[marker.category];
             if (!catSettings || !catSettings.value) {
                 continue;
             }
 
-            const typeSettings = catSettings.types[marker.type] as IconSetting;
+            const typeSettings = catSettings.types[marker.type];
             if (typeSettings && !typeSettings.value) {
                 continue;
             }
