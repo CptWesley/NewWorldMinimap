@@ -21,6 +21,10 @@ export const customMarkers = {
                 x: 11009,
                 y: 3265,
             },
+            'everfall': {
+                x: 8863,
+                y: 4200,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -42,6 +46,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10959,
                 y: 3284,
+            },
+            'everfall': {
+                x: 8965,
+                y: 4255,
             },
         },
         'marauder_commander': {
@@ -65,6 +73,10 @@ export const customMarkers = {
                 x: 11020,
                 y: 3306,
             },
+            'everfall': {
+                x: 8840,
+                y: 4243,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -86,6 +98,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10980,
                 y: 3282,
+            },
+            'everfall': {
+                x: 8889,
+                y: 4215,
             },
         },
         'forge': {
@@ -109,6 +125,10 @@ export const customMarkers = {
                 x: 11010,
                 y: 3294,
             },
+            'everfall': {
+                x: 8859,
+                y: 4260,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -130,6 +150,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10940,
                 y: 3304,
+            },
+            'everfall': {
+                x: 8913,
+                y: 4207,
             },
         },
         'loom': {
@@ -153,6 +177,10 @@ export const customMarkers = {
                 x: 10986,
                 y: 3309,
             },
+            'everfall': {
+                x: 8885,
+                y: 4181,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -174,6 +202,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10982,
                 y: 3304,
+            },
+            'everfall': {
+                x: 8874,
+                y: 4185,
             },
         },
         'stonecutting_table': {
@@ -197,6 +229,10 @@ export const customMarkers = {
                 x: 11024,
                 y: 3300,
             },
+            'everfall': {
+                x: 8822,
+                y: 4241,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -218,6 +254,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10963,
                 y: 3248,
+            },
+            'everfall': {
+                x: 8950,
+                y: 4186,
             },
         },
         'trading_post': {
@@ -241,6 +281,10 @@ export const customMarkers = {
                 x: 10976,
                 y: 3340,
             },
+            'everfall': {
+                x: 8914,
+                y: 4234,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -262,6 +306,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 11011,
                 y: 3332,
+            },
+            'everfall': {
+                x: 8837,
+                y: 4251,
             },
         },
         'governors_desk': {
@@ -285,6 +333,10 @@ export const customMarkers = {
                 x: 10973,
                 y: 3246,
             },
+            'everfall': {
+                x: 8960,
+                y: 4192,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -307,6 +359,10 @@ export const customMarkers = {
                 x: 11021,
                 y: 3274,
             },
+            'everfall': {
+                x: 8882,
+                y: 4197,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -328,6 +384,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 11013,
                 y: 3318,
+            },
+            'everfall': {
+                x: 8849,
+                y: 4259,
             },
         },
         'storage_shed': {
@@ -371,6 +431,14 @@ export const customMarkers = {
                 x: 10952,
                 y: 3260,
             },
+            'everfall_1': {
+                x: 8819,
+                y: 4235,
+            },
+            'everfall_2': {
+                x: 8920,
+                y: 4212,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -392,6 +460,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 10984,
                 y: 3272,
+            },
+            'everfall': {
+                x: 8904,
+                y: 4189,
             },
         },
         'town_project_board': {
@@ -434,6 +506,14 @@ export const customMarkers = {
             'reekwater_2': {
                 x: 10974,
                 y: 3237,
+            },
+            'everfall_1': {
+                x: 8966,
+                y: 4187,
+            },
+            'everfall_2': {
+                x: 8948,
+                y: 4206,
             },
         },
         'war_board': {
@@ -497,6 +577,18 @@ export const customMarkers = {
                 x: 10972,
                 y: 3263,
             },
+            'everfall_1': {
+                x: 8949,
+                y: 4229,
+            },
+            'everfall_2': {
+                x: 8489,
+                y: 4894,
+            },
+            'everfall_3': {
+                x: 8557,
+                y: 5017,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -518,6 +610,10 @@ export const customMarkers = {
             'reekwater': {
                 x: 11018,
                 y: 3315,
+            },
+            'everfall': {
+                x: 8831,
+                y: 4248,
             },
         },
     },
