@@ -261,7 +261,7 @@ export default function Minimap(props: IProps) {
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
-                <p>Downloading {tilesDownloading} tiles</p>
+                <p>Loading {tilesDownloading} tiles</p>
             }
         </div>
     </div>;
