@@ -1,9 +1,9 @@
 import React from 'react';
-import { load, simpleStorageDefaultSettings, SimpleStorageSettings } from '../logic/storage';
+import { load, simpleStorageDefaultSettings, SimpleStorageSetting } from '../logic/storage';
 
 export type MinimapWindowType = 'desktop' | 'inGame';
 
-export type AppContextSettings = SimpleStorageSettings & {
+export type AppContextSettings = SimpleStorageSetting & {
     iconSettings: IconSettings | undefined;
 }
 

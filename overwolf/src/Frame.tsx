@@ -1,10 +1,12 @@
 import '@fontsource/lato/400.css';
 import clsx from 'clsx';
+import produce from 'immer';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import App from './App';
 import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings, MinimapWindowType } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
+import { deconstructIconStorageKey, getStorageKeyScope, load, loadIconCategory, loadIconType, scopedSettings, simpleStorageDefaultSettings, SimpleStorageSetting } from './logic/storage';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles, theme } from './theme';
 
@@ -50,8 +52,42 @@ export default function Frame(props: IProps) {
     const toggleFrameMenu = useCallback(() => setFrameMenuVisible(prev => !prev), []);
 
     useEffect(() => {
+        function handleStorageEvent(e: StorageEvent) {
+            if (!e.key || !e.newValue) { return; }
+
+            const [keyScope, identifier] = getStorageKeyScope(e.key);
+            if (keyScope === NWMM_APP_WINDOW && scopedSettings.includes(identifier as keyof SimpleStorageSetting)) {
+                updateAppContext({ [identifier as keyof SimpleStorageSetting]: load(identifier as keyof SimpleStorageSetting) });
+            } else if (keyScope === 'icon') {
+                const categoryType = deconstructIconStorageKey(identifier);
+                if (typeof categoryType === 'string') {
+                    setAppContextSettings(prev => prev.iconSettings?.categories[categoryType] !== undefined
+                        ? produce(prev, draft => {
+                            if (draft.iconSettings) {
+                                draft.iconSettings.categories[categoryType].value = loadIconCategory(categoryType);
+                            }
+                        })
+                        : prev);
+                } else {
+                    setAppContextSettings(prev => prev.iconSettings?.categories[categoryType[0]]?.types[categoryType[1]] !== undefined
+                        ? produce(prev, draft => {
+                            if (draft.iconSettings) {
+                                draft.iconSettings.categories[categoryType[0]].types[categoryType[1]].value = loadIconType(categoryType[0], categoryType[1]);
+                            }
+                        })
+                        : prev);
+                }
+            } else if (keyScope === undefined && simpleStorageDefaultSettings.hasOwnProperty(identifier) && !scopedSettings.includes(identifier as keyof SimpleStorageSetting)) {
+                updateAppContext({ [identifier as keyof SimpleStorageSetting]: load(identifier as keyof SimpleStorageSetting) });
+            }
+        }
+
+        window.addEventListener('storage', handleStorageEvent);
+
         const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
+
         return () => {
+            window.removeEventListener('storage', handleStorageEvent);
             gameRunningListenRegistration();
         };
     }, []);

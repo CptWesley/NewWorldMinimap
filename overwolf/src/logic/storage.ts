@@ -1,3 +1,5 @@
+import { ConcreteWindow } from '../OverwolfWindows/consts';
+
 export const simpleStorageDefaultSettings = {
     showHeader: true,
     showToolbar: false,
@@ -11,9 +13,9 @@ export const simpleStorageDefaultSettings = {
     compassMode: true,
 };
 
-export type SimpleStorageSettings = typeof simpleStorageDefaultSettings;
+export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
 
-const scopedSettings: (keyof SimpleStorageSettings)[] = [
+export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'iconScale',
     'showHeader',
     'showText',
@@ -23,10 +25,12 @@ const scopedSettings: (keyof SimpleStorageSettings)[] = [
     'zoomLevel',
 ];
 
-export const iconSettingStorageScope = 'icon::';
+export const iconSettingStorageScope = 'icon';
+export type KnownStorageScope = ConcreteWindow | typeof iconSettingStorageScope;
+export const knownStorageScopes: KnownStorageScope[] = ['desktop', 'icon', 'inGame'];
 const defaultHiddenIconCategories = ['npc', 'pois'];
 
-export function store<TKey extends keyof SimpleStorageSettings>(key: TKey, value: SimpleStorageSettings[TKey]) {
+export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {
     let storageKey: string = key;
     if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
         storageKey = NWMM_APP_WINDOW + '::' + key;
@@ -35,7 +39,7 @@ export function store<TKey extends keyof SimpleStorageSettings>(key: TKey, value
     localStorage.setItem(storageKey, JSON.stringify(value));
 }
 
-export function load<TKey extends keyof SimpleStorageSettings>(key: TKey) {
+export function load<TKey extends keyof SimpleStorageSetting>(key: TKey) {
     let storageKey: string = key;
 
     if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
@@ -66,21 +70,42 @@ function loadUntyped<T>(key: string, defaultValue: T) {
 }
 
 export function storeIconCategory(category: string, value: boolean) {
-    const key = `${iconSettingStorageScope}.${category}.visible`;
+    const key = `${iconSettingStorageScope}::${category}.visible`;
     return storeUntyped(key, value);
 }
 
 export function storeIconType(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}.${category}-${type}.visible`;
+    const key = `${iconSettingStorageScope}::${category}-${type}.visible`;
     return storeUntyped(key, value);
 }
 
 export function loadIconCategory(category: string) {
-    const key = `${iconSettingStorageScope}.${category}.visible`;
+    const key = `${iconSettingStorageScope}::${category}.visible`;
     return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
 }
 
 export function loadIconType(category: string, type: string) {
-    const key = `${iconSettingStorageScope}.${category}-${type}.visible`;
+    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
     return loadUntyped(key, true) as boolean;
+}
+
+export function getStorageKeyScope(key: string): [KnownStorageScope | undefined, string] {
+    const potentialScope = key.split('::', 2) as [KnownStorageScope, string];
+    return knownStorageScopes.includes(potentialScope[0])
+        ? [potentialScope[0], potentialScope[1] ?? '']
+        : [undefined, key];
+}
+
+/**
+ * Obtains the category (and optionally, type) of an icon setting storage key.
+ * @param identifier The identifier of the key, without the scope.
+ */
+export function deconstructIconStorageKey(identifier: string): string | [string, string] {
+    const withoutProperty = identifier.split('.')[0];
+    const categoryAndType = withoutProperty.split('--');
+    if (categoryAndType.length === 2) {
+        return [categoryAndType[0], categoryAndType[1]];
+    } else {
+        return categoryAndType[0];
+    }
 }

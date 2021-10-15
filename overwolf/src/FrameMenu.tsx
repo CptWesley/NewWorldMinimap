@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
-import { SimpleStorageSettings, store, storeIconCategory, storeIconType } from './logic/storage';
+import { SimpleStorageSetting, store, storeIconCategory, storeIconType } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -137,7 +137,7 @@ export default function FrameMenu(props: IProps) {
         return settings;
     }
 
-    function updateSimpleSetting<TKey extends keyof SimpleStorageSettings>(key: TKey, value: SimpleStorageSettings[TKey]) {
+    function updateSimpleSetting<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {
         store(key, value);
         context.update({ [key]: value });
     }
