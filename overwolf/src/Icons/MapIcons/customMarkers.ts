@@ -30,6 +30,10 @@ export const customMarkers = {
                 x: 7277,
                 y: 5370,
             },
+            'brightwood': {
+                x: 9614,
+                y: 6346,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -59,6 +63,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7270,
                 y: 5397,
+            },
+            'brightwood': {
+                x: 9605,
+                y: 6370,
             },
         },
         'marauder_commander': {
@@ -90,6 +98,10 @@ export const customMarkers = {
                 x: 7301,
                 y: 5397,
             },
+            'brightwood': {
+                x: 9554,
+                y: 6312,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -119,6 +131,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7231,
                 y: 5374,
+            },
+            'brightwood': {
+                x: 9605,
+                y: 6337,
             },
         },
         'forge': {
@@ -150,6 +166,10 @@ export const customMarkers = {
                 x: 7241,
                 y: 5366,
             },
+            'brightwood': {
+                x: 9557,
+                y: 6325,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -179,6 +199,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7292,
                 y: 5335,
+            },
+            'brightwood': {
+                x: 9588,
+                y: 6314,
             },
         },
         'loom': {
@@ -210,6 +234,10 @@ export const customMarkers = {
                 x: 7259,
                 y: 5371,
             },
+            'brightwood': {
+                x: 9584,
+                y: 6360,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -239,6 +267,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7268,
                 y: 5366,
+            },
+            'brightwood': {
+                x: 9576,
+                y: 6362,
             },
         },
         'stonecutting_table': {
@@ -270,6 +302,10 @@ export const customMarkers = {
                 x: 7251,
                 y: 5359,
             },
+            'brightwood': {
+                x: 9549,
+                y: 6309,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -299,6 +335,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7306,
                 y: 5421,
+            },
+            'brightwood': {
+                x: 9562,
+                y: 6419,
             },
         },
         'trading_post': {
@@ -330,6 +370,10 @@ export const customMarkers = {
                 x: 7262,
                 y: 5408,
             },
+            'brightwood': {
+                x: 9565,
+                y: 6340,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -359,6 +403,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7256,
                 y: 5387,
+            },
+            'brightwood': {
+                x: 9585,
+                y: 6337,
             },
         },
         'governors_desk': {
@@ -390,6 +438,10 @@ export const customMarkers = {
                 x: 7307,
                 y: 5413,
             },
+            'brightwood': {
+                x: 9549,
+                y: 6413,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -420,6 +472,10 @@ export const customMarkers = {
                 x: 7231,
                 y: 5383,
             },
+            'brightwood': {
+                x: 9591,
+                y: 6345,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -449,6 +505,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7258,
                 y: 5358,
+            },
+            'brightwood': {
+                x: 9579,
+                y: 6347,
             },
         },
         'storage_shed': {
@@ -508,6 +568,14 @@ export const customMarkers = {
                 x: 7254,
                 y: 5392,
             },
+            'brightwood_1': {
+                x: 9597,
+                y: 6324,
+            },
+            'brightwood_2': {
+                x: 9633,
+                y: 6334,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -537,6 +605,10 @@ export const customMarkers = {
             'ebonscale_reach': {
                 x: 7259,
                 y: 5391,
+            },
+            'brightwood': {
+                x: 9593,
+                y: 6357,
             },
         },
         'town_project_board': {
@@ -595,6 +667,14 @@ export const customMarkers = {
             'ebonscale_reach_2': {
                 x: 7306,
                 y: 5416,
+            },
+            'brightwood_1': {
+                x: 9555,
+                y: 6398,
+            },
+            'brightwood_2': {
+                x: 9546,
+                y: 6424,
             },
         },
         'war_board': {
@@ -682,6 +762,18 @@ export const customMarkers = {
                 x: 7295,
                 y: 5407,
             },
+            'brightwood_1': {
+                x: 8944,
+                y: 5783,
+            },
+            'brightwood_2': {
+                x: 9056,
+                y: 5814,
+            },
+            'brightwood_3': {
+                x: 9540,
+                y: 6400,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -709,8 +801,12 @@ export const customMarkers = {
                 y: 4248,
             },
             'ebonscale_reach': {
-                x: 7240,
-                y: 5365,
+                x: 7248,
+                y: 5387,
+            },
+            'brightwood': {
+                x: 9593,
+                y: 6331,
             },
         },
     },
