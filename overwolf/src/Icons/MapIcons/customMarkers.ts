@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 export const customMarkers = {
     'town': {
         'syndicate_alchemist': {
@@ -25,6 +26,10 @@ export const customMarkers = {
                 x: 8863,
                 y: 4200,
             },
+            'ebonscale_reach': {
+                x: 7277,
+                y: 5370,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -50,6 +55,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8965,
                 y: 4255,
+            },
+            'ebonscale_reach': {
+                x: 7270,
+                y: 5397,
             },
         },
         'marauder_commander': {
@@ -77,6 +86,10 @@ export const customMarkers = {
                 x: 8840,
                 y: 4243,
             },
+            'ebonscale_reach': {
+                x: 7301,
+                y: 5397,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -102,6 +115,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8889,
                 y: 4215,
+            },
+            'ebonscale_reach': {
+                x: 7231,
+                y: 5374,
             },
         },
         'forge': {
@@ -129,6 +146,10 @@ export const customMarkers = {
                 x: 8859,
                 y: 4260,
             },
+            'ebonscale_reach': {
+                x: 7241,
+                y: 5366,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -154,6 +175,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8913,
                 y: 4207,
+            },
+            'ebonscale_reach': {
+                x: 7292,
+                y: 5335,
             },
         },
         'loom': {
@@ -181,6 +206,10 @@ export const customMarkers = {
                 x: 8885,
                 y: 4181,
             },
+            'ebonscale_reach': {
+                x: 7259,
+                y: 5371,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -206,6 +235,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8874,
                 y: 4185,
+            },
+            'ebonscale_reach': {
+                x: 7268,
+                y: 5366,
             },
         },
         'stonecutting_table': {
@@ -233,6 +266,10 @@ export const customMarkers = {
                 x: 8822,
                 y: 4241,
             },
+            'ebonscale_reach': {
+                x: 7251,
+                y: 5359,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -258,6 +295,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8950,
                 y: 4186,
+            },
+            'ebonscale_reach': {
+                x: 7306,
+                y: 5421,
             },
         },
         'trading_post': {
@@ -285,6 +326,10 @@ export const customMarkers = {
                 x: 8914,
                 y: 4234,
             },
+            'ebonscale_reach': {
+                x: 7262,
+                y: 5408,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -310,6 +355,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8837,
                 y: 4251,
+            },
+            'ebonscale_reach': {
+                x: 7256,
+                y: 5387,
             },
         },
         'governors_desk': {
@@ -337,6 +386,10 @@ export const customMarkers = {
                 x: 8960,
                 y: 4192,
             },
+            'ebonscale_reach': {
+                x: 7307,
+                y: 5413,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -363,6 +416,10 @@ export const customMarkers = {
                 x: 8882,
                 y: 4197,
             },
+            'ebonscale_reach': {
+                x: 7231,
+                y: 5383,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -388,6 +445,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8849,
                 y: 4259,
+            },
+            'ebonscale_reach': {
+                x: 7258,
+                y: 5358,
             },
         },
         'storage_shed': {
@@ -439,6 +500,14 @@ export const customMarkers = {
                 x: 8920,
                 y: 4212,
             },
+            'ebonscale_reach_1': {
+                x: 7294,
+                y: 5392,
+            },
+            'ebonscale_reach_2': {
+                x: 7254,
+                y: 5392,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -464,6 +533,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8904,
                 y: 4189,
+            },
+            'ebonscale_reach': {
+                x: 7259,
+                y: 5391,
             },
         },
         'town_project_board': {
@@ -514,6 +587,14 @@ export const customMarkers = {
             'everfall_2': {
                 x: 8948,
                 y: 4206,
+            },
+            'ebonscale_reach_1': {
+                x: 7313,
+                y: 5406,
+            },
+            'ebonscale_reach_2': {
+                x: 7306,
+                y: 5416,
             },
         },
         'war_board': {
@@ -589,6 +670,18 @@ export const customMarkers = {
                 x: 8557,
                 y: 5017,
             },
+            'ebonscale_reach_1': {
+                x: 5919,
+                y: 5402,
+            },
+            'ebonscale_reach_2': {
+                x: 5993,
+                y: 5313,
+            },
+            'ebonscale_reach_3': {
+                x: 7295,
+                y: 5407,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -614,6 +707,10 @@ export const customMarkers = {
             'everfall': {
                 x: 8831,
                 y: 4248,
+            },
+            'ebonscale_reach': {
+                x: 7240,
+                y: 5365,
             },
         },
     },
