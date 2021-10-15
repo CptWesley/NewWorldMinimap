@@ -4,9 +4,11 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
+import { getMapTiles } from './logic/map';
+import { getTileMarkerCache } from './logic/markerCache';
 import { getMarkers } from './logic/markers';
 import { getTileCache } from './logic/tileCache';
-import { getTiles, toMinimapCoordinate } from './logic/tiles';
+import { toMinimapCoordinate } from './logic/tiles';
 import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -44,6 +46,7 @@ const useStyles = makeStyles()({
 });
 
 const tileCache = getTileCache();
+const markerCache = getTileMarkerCache();
 
 export default function Minimap(props: IProps) {
     const {
@@ -89,7 +92,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+        const tiles = getMapTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
@@ -129,7 +132,7 @@ export default function Minimap(props: IProps) {
                     );
                 }
 
-                toDraw = toDraw.concat(await tile.markers);
+                toDraw = toDraw.concat(tile.markers);
             }
         }
 
@@ -230,9 +233,15 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        function handleMarkersLoaded() {
+            redraw();
+        }
+
         const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
+        const markerRegistration = markerCache.registerOnMarkersLoaded(handleMarkersLoaded);
         return () => {
             tileRegistration();
+            markerRegistration();
         };
     }, []);
 

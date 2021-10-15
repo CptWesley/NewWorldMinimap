@@ -1,5 +1,5 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
-import { initializeMarkerCache } from '../../logic/markerCache';
+import { initializeTileMarkerCache } from '../../logic/markerCache';
 import { initializeTileCache } from '../../logic/tileCache';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
@@ -155,4 +155,4 @@ if (BackgroundController.isSupported) {
 }
 
 initializeTileCache();
-initializeMarkerCache();
+initializeTileMarkerCache();

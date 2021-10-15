@@ -24,7 +24,7 @@ declare type Marker = {
 
 declare type Tile = {
     image: ImageBitmap | null;
-    markers: Promise<Marker[]>;
+    markers: Marker[];
 }
 
 declare type IconTypeSetting = {

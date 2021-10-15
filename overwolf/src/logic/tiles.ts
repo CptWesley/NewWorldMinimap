@@ -1,5 +1,4 @@
-import { getMarkers } from './markers';
-import { getTileCache, getTileCacheKey } from './tileCache';
+import { getTileCacheKey } from './tileCache';
 
 const width = 224;
 const height = 225;
@@ -7,8 +6,6 @@ const tileWidth = 256;
 const tileHeight = 256;
 const gameMapWidth = 14336;
 const gameMapHeight = 14400;
-
-const tileCache = getTileCache();
 
 export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2) {
     const totalWidth = width * tileWidth;
@@ -28,7 +25,7 @@ export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
     return getTileCacheKey(tilePos);
 }
 
-function getDimensions(screenWidth: number, screenHeight: number, angle?: number) {
+export function getDimensions(screenWidth: number, screenHeight: number, angle?: number) {
     if (!angle) {
         angle = 0;
     }
@@ -58,30 +55,4 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2) + 1) * tileHeight);
 
     return { x: imageX, y: imageY };
-}
-
-export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number) {
-    const dimensions = getDimensions(screenWidth, screenHeight, angle);
-    const result: Tile[][] = [];
-
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
-
-    for (let x = 0; x < dimensions.x; ++x) {
-        const col: Tile[] = [];
-        result.push(col);
-        for (let y = 0; y < dimensions.y; ++y) {
-            const tileX = tilePos.x - Math.floor(dimensions.x / 2) + x;
-            const tileY = tilePos.y - Math.floor(dimensions.y / 2) + y;
-            const tileCoords: Vector2 = { x: tileX, y: tileY };
-            const image = tileCache.getTileBitmap(tileCoords);
-            const markers = getMarkers(tileCoords);
-            const tile: Tile = {
-                image: image.hit ? image.bitmap : null,
-                markers,
-            };
-            col.push(tile);
-        }
-    }
-
-    return result;
 }
