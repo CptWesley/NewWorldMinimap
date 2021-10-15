@@ -20,7 +20,7 @@ const useStyles = makeStyles()(theme => ({
         gap: theme.spacing(1),
         gridTemplateRows: '30px 1fr auto',
         gridTemplateColumns: '1fr 30px',
-        gridTemplateAreas: '"title return" "content ." "footer ."',
+        gridTemplateAreas: '"title return" "content content" "footer footer"',
 
         background: theme.frameMenuBackground,
         color: theme.frameMenuColor,
