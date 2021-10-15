@@ -6,6 +6,7 @@ import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
+import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -55,6 +56,7 @@ export default function Minimap(props: IProps) {
 
         const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
         const zoomLevel = appContext.value.zoomLevel;
+        const renderAsCompass = appContext.value.compassMode && (appContext.isTransparentSurface ?? false);
 
         setIconScale(appContext.value.iconScale);
 
@@ -72,7 +74,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
@@ -87,12 +89,26 @@ export default function Minimap(props: IProps) {
                     return;
                 }
 
-                ctx.drawImage(await tile.image,
-                    bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
-                    bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
-                    bitmap.width / zoomLevel,
-                    bitmap.height / zoomLevel
-                );
+                if (renderAsCompass) {
+                    ctx.save();
+                    ctx.translate(centerX, centerY);
+                    ctx.rotate(-angle);
+                    ctx.translate(-centerX, -centerY);
+                    ctx.drawImage(await tile.image,
+                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel,
+                        bitmap.height / zoomLevel
+                    );
+                    ctx.restore();
+                } else {
+                    ctx.drawImage(await tile.image,
+                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel,
+                        bitmap.height / zoomLevel
+                    );
+                }
 
                 toDraw = toDraw.concat(await tile.markers);
             }
@@ -123,15 +139,27 @@ export default function Minimap(props: IProps) {
                 return;
             }
 
-            ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            if (renderAsCompass) {
+                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
+            } else {
+                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            }
 
             if (appContext.value.showText) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
-                ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                 ctx.fillStyle = '#fff';
-                ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+
+                if (renderAsCompass) {
+                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    ctx.strokeText(marker.text, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(marker.text, rotated.x, rotated.y + icon.height);
+                } else {
+                    ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                }
             }
         }
 
@@ -141,12 +169,16 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        ctx.save();
-        ctx.translate(centerX, centerY);
-        ctx.rotate(angle);
-        ctx.translate(-centerX, -centerY);
-        ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
-        ctx.restore();
+        if (renderAsCompass) {
+            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+        } else {
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+            ctx.translate(-centerX, -centerY);
+            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+            ctx.restore();
+        }
     };
 
     // Store the `draw` function in a ref object, so we can always access the latest one.

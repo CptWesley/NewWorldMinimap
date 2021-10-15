@@ -233,6 +233,19 @@ export default function FrameMenu(props: IProps) {
                 </label>
             </p>
             <p>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={context.value.compassMode}
+                        onChange={e => {
+                            store('compassMode', e.currentTarget.checked);
+                            context.update({ compassMode: e.currentTarget.checked });
+                        }}
+                    />
+                    Overlay Compass Mode
+                </label>
+            </p>
+            <p>
                 <label className={classes.range}>
                     <input
                         type='range'

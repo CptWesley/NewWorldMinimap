@@ -43,9 +43,20 @@ export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
     return getTileCacheKey(tilePos);
 }
 
-function getDimensions(screenWidth: number, screenHeight: number) {
+function getDimensions(screenWidth: number, screenHeight: number, angle?: number) {
+    if (!angle) {
+        angle = 0;
+    }
+
     const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 1;
     const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 1;
+
+    if (angle === 0) {
+        return { x, y };
+    }
+
+    // TODO: Improve map loading.
+
     return { x, y };
 }
 
@@ -77,8 +88,8 @@ export async function getTileBitmap(pos: Vector2) {
     return await bitmapPromise;
 }
 
-export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number) {
-    const dimensions = getDimensions(screenWidth, screenHeight);
+export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number) {
+    const dimensions = getDimensions(screenWidth, screenHeight, angle);
     const result: Tile[][] = [];
 
     const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
