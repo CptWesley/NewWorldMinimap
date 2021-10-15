@@ -94,16 +94,16 @@ export default function Minimap(props: IProps) {
                     ctx.rotate(-angle);
                     ctx.translate(-centerX, -centerY);
                     ctx.drawImage(await tile.image,
-                        bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
                         bitmap.height / zoomLevel
                     );
                     ctx.restore();
                 } else {
                     ctx.drawImage(await tile.image,
-                        bitmap.width / zoomLevel * x + Math.floor(centerX) - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + Math.floor(centerY) - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
                         bitmap.height / zoomLevel
                     );
@@ -169,13 +169,13 @@ export default function Minimap(props: IProps) {
         }
 
         if (appContext.value.compassMode) {
-            ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
+            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
         } else {
             ctx.save();
             ctx.translate(centerX, centerY);
             ctx.rotate(angle);
             ctx.translate(-centerX, -centerY);
-            ctx.drawImage(playerIcon, Math.floor(centerX - playerIcon.width / 2), Math.floor(centerY - playerIcon.height / 2));
+            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
             ctx.restore();
         }
     };
