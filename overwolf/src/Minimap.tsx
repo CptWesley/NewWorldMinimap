@@ -263,11 +263,15 @@ export default function Minimap(props: IProps) {
         };
     }, []);
 
-    useEffect(() => {
-        const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5));
-        const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5));
-        return () => { zoomInRegistration(); zoomOutRegistration(); };
-    }, [appContext.settings.zoomLevel]);
+    if (NWMM_APP_WINDOW === 'inGame') {
+        // This is alright, because the app window descriptor does not change.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5));
+            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5));
+            return () => { zoomInRegistration(); zoomOutRegistration(); };
+        }, [appContext.settings.zoomLevel]);
+    }
 
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
