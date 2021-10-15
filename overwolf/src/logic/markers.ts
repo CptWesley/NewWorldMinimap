@@ -1,57 +1,11 @@
 import { getIconName } from './icons';
 import { loadIconCategory, loadIconType } from './storage';
-import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
+import { getTileMarkerCache } from './tileMarkerCache';
 
-const markersUrl = 'https://www.newworld-map.com/markers.json';
+const tileMarkerCache = getTileMarkerCache();
 
-async function getJson() {
-    const req = await fetch(markersUrl, {
-        method: 'get',
-    });
-    return await req.json();
-}
-
-const fillingPromise = fillCache();
-
-async function fillCache() {
-    const tree = await getJson();
-
-    for (const [category, catContent] of Object.entries(tree)) {
-        if (category === 'areas') {
-            continue;
-        }
-
-        for (const [type, typeContent] of Object.entries(catContent as any)) {
-            for (const [, entryContent] of Object.entries(typeContent as any)) {
-                const pos = entryContent as Vector2;
-                const tileString = getTileCacheKeyFromWorldCoordinate(pos);
-
-                let markerList = cache.get(tileString);
-                if (!markerList) {
-                    markerList = [];
-                    cache.set(tileString, markerList);
-                }
-
-                const marker = {
-                    category,
-                    type,
-                    pos,
-                    text: getIconName(type),
-                };
-                markerList.push(marker);
-            }
-        }
-    }
-
-    return;
-}
-
-const cache = new Map<string, Marker[]>();
-export async function getMarkers(tilePos: Vector2) {
-    await fillingPromise;
-
-    const key = getTileCacheKey(tilePos);
-    const result = cache.get(key);
+export function getMarkers(tilePos: Vector2) {
+    const result = tileMarkerCache.get(tilePos);
 
     if (!result) {
         return [];
@@ -61,7 +15,7 @@ export async function getMarkers(tilePos: Vector2) {
 }
 
 export async function getDefaultIconSettings() {
-    await fillingPromise;
+    const cache = await tileMarkerCache.markerLoadPromise;
 
     const categories: any = {};
     const result = { categories };

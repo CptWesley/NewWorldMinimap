@@ -1,4 +1,6 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
+import { initializeTileCache } from '../../logic/tileCache';
+import { initializeTileMarkerCache } from '../../logic/tileMarkerCache';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
@@ -151,3 +153,6 @@ if (BackgroundController.isSupported) {
     BackgroundController.instance.run();
     (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
 }
+
+initializeTileCache();
+initializeTileMarkerCache();
