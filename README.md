@@ -34,7 +34,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - (Speculative) GPS that points you to a marker following known roads.
 
 ## Known Issues
-- Nothing yet.
+- Compass mode might not show some corners of the map, depending on the size of the window.
 
 ## Examples
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example2.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
