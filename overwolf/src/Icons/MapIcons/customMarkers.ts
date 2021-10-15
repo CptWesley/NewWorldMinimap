@@ -46,6 +46,10 @@ export const customMarkers = {
                 x: 13203,
                 y: 6946,
             },
+            'edengrove': {
+                x: 11127,
+                y: 7292,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -92,6 +96,10 @@ export const customMarkers = {
                 x: 13203,
                 y: 6975,
             },
+            'edengrove': {
+                x: 11144,
+                y: 7326,
+            },
         },
         'marauder_commander': {
             'cutlass_keys': {
@@ -137,6 +145,10 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13159,
                 y: 6990,
+            },
+            'edengrove': {
+                x: 11150,
+                y: 7303,
             },
         },
         'arcane_repository': {
@@ -230,6 +242,10 @@ export const customMarkers = {
                 x: 13206,
                 y: 7004,
             },
+            'edengrove': {
+                x: 12083,
+                y: 8539,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -276,6 +292,14 @@ export const customMarkers = {
                 x: 13185,
                 y: 6932,
             },
+            'edengrove_1': {
+                x: 11162,
+                y: 7295,
+            },
+            'edengrove_2': {
+                x: 12086,
+                y: 8507,
+            },
         },
         'loom': {
             'cutlass_keys': {
@@ -321,6 +345,10 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13175,
                 y: 6979,
+            },
+            'edengrove': {
+                x: 12056,
+                y: 8526,
             },
         },
         'outfitting_station': {
@@ -510,6 +538,22 @@ export const customMarkers = {
                 x: 13159,
                 y: 6958,
             },
+            'edengrove_1': {
+                x: 11128,
+                y: 7321,
+            },
+            'edengrove_2': {
+                x: 11143,
+                y: 7310,
+            },
+            'edengrove_3': {
+                x: 11143,
+                y: 7315,
+            },
+            'edengrove_4': {
+                x: 12079,
+                y: 8522,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -555,6 +599,14 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13173,
                 y: 6967,
+            },
+            'edengrove_1': {
+                x: 11127,
+                y: 7336,
+            },
+            'edengrove_2': {
+                x: 12092,
+                y: 8532,
             },
         },
         'governors_desk': {
@@ -648,6 +700,14 @@ export const customMarkers = {
                 x: 13175,
                 y: 6958,
             },
+            'edengrove_1': {
+                x: 11120,
+                y: 7306,
+            },
+            'edengrove_2': {
+                x: 12066,
+                y: 8501,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -693,6 +753,14 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13184,
                 y: 6965,
+            },
+            'edengrove_1': {
+                x: 11135,
+                y: 7289,
+            },
+            'edengrove_2': {
+                x: 12070,
+                y: 8519,
             },
         },
         'storage_shed': {
@@ -784,6 +852,14 @@ export const customMarkers = {
                 x: 13151,
                 y: 6916,
             },
+            'edengrove_1': {
+                x: 11139,
+                y: 7331,
+            },
+            'edengrove_2': {
+                x: 12093,
+                y: 8510,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -829,6 +905,14 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13185,
                 y: 6976,
+            },
+            'edengrove_1': {
+                x: 11143,
+                y: 7287,
+            },
+            'edengrove_2': {
+                x: 12097,
+                y: 8517,
             },
         },
         'town_project_board': {
@@ -1099,6 +1183,10 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13192,
                 y: 6987,
+            },
+            'edengrove': {
+                x: 11115,
+                y: 7317,
             },
         },
     },
