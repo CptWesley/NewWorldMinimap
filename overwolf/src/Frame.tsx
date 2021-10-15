@@ -57,10 +57,14 @@ export default function Frame(props: IProps) {
 
             const [keyScope, identifier] = getStorageKeyScope(e.key);
             if (keyScope === NWMM_APP_WINDOW && scopedSettings.includes(identifier as keyof SimpleStorageSetting)) {
+                // The setting is scoped to the current window, and is listed as a scoped setting
                 updateAppContext({ [identifier as keyof SimpleStorageSetting]: load(identifier as keyof SimpleStorageSetting) });
             } else if (keyScope === 'icon') {
+                // It is an icon setting. First, determine if it's just a category, or a category and an icon
                 const categoryType = deconstructIconStorageKey(identifier);
                 if (typeof categoryType === 'string') {
+                    // It is just a category. If the iconSettings are loaded, and the category exists, produce a new iconSettings
+                    // with the category value set to the new setting value.
                     setAppContextSettings(prev => prev.iconSettings?.categories[categoryType] !== undefined
                         ? produce(prev, draft => {
                             if (draft.iconSettings) {
@@ -69,6 +73,8 @@ export default function Frame(props: IProps) {
                         })
                         : prev);
                 } else {
+                    // It is a category and type. If the iconSettings are loaded, and the category and type exist,
+                    // produce a new iconSettings with the category.types.type value set to the new setting value.
                     setAppContextSettings(prev => prev.iconSettings?.categories[categoryType[0]]?.types[categoryType[1]] !== undefined
                         ? produce(prev, draft => {
                             if (draft.iconSettings) {
@@ -78,6 +84,7 @@ export default function Frame(props: IProps) {
                         : prev);
                 }
             } else if (keyScope === undefined && simpleStorageDefaultSettings.hasOwnProperty(identifier) && !scopedSettings.includes(identifier as keyof SimpleStorageSetting)) {
+                // The setting is not scoped to the current window, and exists, but is not listed as a scoped setting.
                 updateAppContext({ [identifier as keyof SimpleStorageSetting]: load(identifier as keyof SimpleStorageSetting) });
             }
         }

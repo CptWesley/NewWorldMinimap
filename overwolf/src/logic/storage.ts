@@ -30,6 +30,7 @@ export type KnownStorageScope = ConcreteWindow | typeof iconSettingStorageScope;
 export const knownStorageScopes: KnownStorageScope[] = ['desktop', 'icon', 'inGame'];
 const defaultHiddenIconCategories = ['npc', 'pois'];
 
+/** Stores a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */
 export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {
     let storageKey: string = key;
     if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
@@ -39,6 +40,7 @@ export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value:
     localStorage.setItem(storageKey, JSON.stringify(value));
 }
 
+/** Loads a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */
 export function load<TKey extends keyof SimpleStorageSetting>(key: TKey) {
     let storageKey: string = key;
 
@@ -69,26 +71,31 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
+/** Stores whether the icon category is visible. */
 export function storeIconCategory(category: string, value: boolean) {
     const key = `${iconSettingStorageScope}::${category}.visible`;
     return storeUntyped(key, value);
 }
 
+/** Stores whether the icon type (part of a category) is visible. */
 export function storeIconType(category: string, type: string, value: boolean) {
     const key = `${iconSettingStorageScope}::${category}-${type}.visible`;
     return storeUntyped(key, value);
 }
 
+/** Loads whether the icon category is visible. */
 export function loadIconCategory(category: string) {
     const key = `${iconSettingStorageScope}::${category}.visible`;
     return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
 }
 
+/** Loads whether the icon type (part of a category) is visible. */
 export function loadIconType(category: string, type: string) {
     const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
     return loadUntyped(key, true) as boolean;
 }
 
+/** Splits a storage key into its scope (if it exists and is known), and the rest of the key (which is called the identifier). */
 export function getStorageKeyScope(key: string): [KnownStorageScope | undefined, string] {
     const potentialScope = key.split('::', 2) as [KnownStorageScope, string];
     return knownStorageScopes.includes(potentialScope[0])
@@ -99,6 +106,7 @@ export function getStorageKeyScope(key: string): [KnownStorageScope | undefined,
 /**
  * Obtains the category (and optionally, type) of an icon setting storage key.
  * @param identifier The identifier of the key, without the scope.
+ * @returns a string if it's just a category; or an array of two strings, containing category and type.
  */
 export function deconstructIconStorageKey(identifier: string): string | [string, string] {
     const withoutProperty = identifier.split('.')[0];
