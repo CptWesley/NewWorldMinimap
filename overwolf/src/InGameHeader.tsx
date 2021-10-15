@@ -6,6 +6,7 @@ import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
 import SettingsIcon from './Icons/SettingsIcon';
+import { getHotkeyManager } from './logic/hotkeyManager';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { hotkeys, newWorldId, windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
@@ -148,6 +149,7 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 const backgroundController = getBackgroundController();
+const hotkeyManager = getHotkeyManager();
 export default function InGameHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
@@ -156,9 +158,9 @@ export default function InGameHeader() {
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
     const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.frameMenuVisible;
-    const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);
+    const hotkeyText = hotkeyManager.getHotkeyText('toggleInGame');
 
     useEffect(() => {
         overwolf.windows.getCurrentWindow(windowResult => {
@@ -167,7 +169,7 @@ export default function InGameHeader() {
             }
         });
 
-        OWHotkeys.onHotkeyDown(hotkeys.toggleInGame, async function () {
+        return hotkeyManager.registerHotkey('toggleInGame', async function () {
             const inGameState = await inGameWindow.getWindowState();
 
             if (inGameState.window_state === WindowState.NORMAL || inGameState.window_state === WindowState.MAXIMIZED) {
@@ -175,10 +177,6 @@ export default function InGameHeader() {
             } else if (inGameState.window_state === WindowState.MINIMIZED || inGameState.window_state === WindowState.CLOSED) {
                 backgroundController.openWindow('inGame');
             }
-        });
-
-        OWHotkeys.getHotkeyText(hotkeys.toggleInGame, newWorldId).then(hotkeyText => {
-            setHotkeyText(hotkeyText);
         });
     }, []);
 

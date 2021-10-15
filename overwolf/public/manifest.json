@@ -83,6 +83,16 @@
         "title": "Show/Hide In-Game Window",
         "action-type": "toggle",
         "default": "Ctrl+F"
+      },
+      "zoomIn": {
+        "title": "Zoom in (in-game only)",
+        "action-type": "toggle",
+        "default": "Ctrl+["
+      },
+      "zoomOut": {
+        "title": "Zoom out (in-game only)",
+        "action-type": "toggle",
+        "default": "Ctrl+]"
       }
     },
     "protocol_override_domains": {
