@@ -54,6 +54,10 @@ export const customMarkers = {
                 x: 10073,
                 y: 7496,
             },
+            'shattered_mountain': {
+                x: 9225,
+                y: 9076,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -108,6 +112,10 @@ export const customMarkers = {
                 x: 10062,
                 y: 7505,
             },
+            'shattered_mountain': {
+                x: 9209,
+                y: 9044,
+            },
         },
         'marauder_commander': {
             'cutlass_keys': {
@@ -161,6 +169,10 @@ export const customMarkers = {
             'great_cleave': {
                 x: 10048,
                 y: 7524,
+            },
+            'shattered_mountain': {
+                x: 9205,
+                y: 9062,
             },
         },
         'arcane_repository': {
@@ -328,6 +340,14 @@ export const customMarkers = {
                 x: 8854,
                 y: 7966,
             },
+            'shattered_mountain_1': {
+                x: 9222,
+                y: 9051,
+            },
+            'shattered_mountain_2': {
+                x: 10346,
+                y: 8908,
+            },
         },
         'loom': {
             'cutlass_keys': {
@@ -386,6 +406,10 @@ export const customMarkers = {
                 x: 8850,
                 y: 7943,
             },
+            'shattered_mountain': {
+                x: 10319,
+                y: 8956,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -431,6 +455,10 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13166,
                 y: 6983,
+            },
+            'shattered_mountain': {
+                x: 10305,
+                y: 8940,
             },
         },
         'stonecutting_table': {
@@ -598,6 +626,22 @@ export const customMarkers = {
                 x: 8873,
                 y: 7954,
             },
+            'shattered_mountain_1': {
+                x: 9216,
+                y: 9062,
+            },
+            'shattered_mountain_2': {
+                x: 10317,
+                y: 8943,
+            },
+            'shattered_mountain_3': {
+                x: 10329,
+                y: 8926,
+            },
+            'shattered_mountain_4': {
+                x: 10331,
+                y: 8932,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -655,6 +699,10 @@ export const customMarkers = {
             'great_cleave': {
                 x: 8884,
                 y: 7943,
+            },
+            'shattered_mountain': {
+                x: 9219,
+                y: 9081,
             },
         },
         'governors_desk': {
@@ -760,6 +808,14 @@ export const customMarkers = {
                 x: 8879,
                 y: 7975,
             },
+            'shattered_mountain_1': {
+                x: 9204,
+                y: 9042,
+            },
+            'shattered_mountain_2': {
+                x: 10305,
+                y: 8928,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -821,6 +877,14 @@ export const customMarkers = {
             'great_cleave_2': {
                 x: 8867,
                 y: 7945,
+            },
+            'shattered_mountain_1': {
+                x: 9204,
+                y: 9058,
+            },
+            'shattered_mountain_2': {
+                x: 10317,
+                y: 8910,
             },
         },
         'storage_shed': {
@@ -928,6 +992,14 @@ export const customMarkers = {
                 x: 8845,
                 y: 7960,
             },
+            'shattered_mountain_1': {
+                x: 9227,
+                y: 9054,
+            },
+            'shattered_mountain_2': {
+                x: 10332,
+                y: 8948,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -989,6 +1061,14 @@ export const customMarkers = {
             'great_cleave_2': {
                 x: 8900,
                 y: 7954,
+            },
+            'shattered_mountain_1': {
+                x: 9234,
+                y: 9064,
+            },
+            'shattered_mountain_2': {
+                x: 10326,
+                y: 8905,
             },
         },
         'town_project_board': {
@@ -1267,6 +1347,10 @@ export const customMarkers = {
             'great_cleave': {
                 x: 8846,
                 y: 7953,
+            },
+            'shattered_mountain': {
+                x: 9191,
+                y: 9064,
             },
         },
     },
