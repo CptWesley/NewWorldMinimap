@@ -48,7 +48,6 @@ function transformData(info: any): PlayerData | undefined {
     }
 
     const locationParts = (info.location as string).trim().split(',');
-    console.log(locationParts);
 
     const position = {
         x: parseFloat(locationParts[1]),
