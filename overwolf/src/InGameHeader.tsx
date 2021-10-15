@@ -155,7 +155,7 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const useTransparency = context.value.transparentHeader && context.gameRunning && !context.frameMenuVisible;
+    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.frameMenuVisible;
     const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);
@@ -206,7 +206,7 @@ export default function InGameHeader() {
     }
 
     return <>
-        <header className={clsx(classes.root, useTransparency && classes.transparent, !context.value.showHeader && classes.hidden)}>
+        <header className={clsx(classes.root, useTransparency && classes.transparent, !context.settings.showHeader && classes.hidden)}>
             <div ref={draggable} className={classes.draggable}>
                 <span>{inGameAppTitle}</span>
                 {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}

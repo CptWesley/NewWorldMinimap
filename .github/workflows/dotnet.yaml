@@ -14,9 +14,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       
     - name: Restore
-      working-directory: ./src
+      working-directory: ./dotnet/src
       run: dotnet restore
 
     - name: Build
-      working-directory: ./src
+      working-directory: ./dotnet/src
       run: dotnet build /warnaserror
