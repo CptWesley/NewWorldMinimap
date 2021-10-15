@@ -6,6 +6,7 @@ import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import { getMarkers } from './logic/markers';
+import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
@@ -221,6 +222,21 @@ export default function Minimap(props: IProps) {
         setCurrentPosition(pos);
     }
 
+    function zoomBy(delta: number) {
+        const nextZoomLevel = Math.max(
+            zoomLevelSettingBounds[0],
+            Math.min(
+                zoomLevelSettingBounds[1],
+                appContext.settings.zoomLevel + delta));
+        appContext.update({ zoomLevel: nextZoomLevel });
+        store('zoomLevel', nextZoomLevel);
+    }
+
+    function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
+        console.log(e.deltaY);
+        zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
+    }
+
     useEffect(() => {
         redraw();
     }, [currentPosition, appContext]);
@@ -267,6 +283,7 @@ export default function Minimap(props: IProps) {
             ref={canvas}
             className={clsx(classes.canvas)}
             style={dynamicStyling}
+            onWheel={handleWheel}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
