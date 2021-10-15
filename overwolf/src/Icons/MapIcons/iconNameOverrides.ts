@@ -17,4 +17,5 @@ export const iconNameOverrides = {
     'wolf_elemental': 'Elemental Wolf',
 
     'monarchs_bluffs': 'Monarch\'s Bluffs',
+    'weavers_fen': 'Weaver\'s Fen',
 };
