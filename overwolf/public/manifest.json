@@ -86,12 +86,12 @@
       },
       "zoomIn": {
         "title": "Zoom in (in-game only)",
-        "action-type": "toggle",
+        "action-type": "custom",
         "default": "Ctrl+["
       },
       "zoomOut": {
         "title": "Zoom out (in-game only)",
-        "action-type": "toggle",
+        "action-type": "custom",
         "default": "Ctrl+]"
       }
     },
