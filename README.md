@@ -54,10 +54,10 @@ Currently, the Overwolf version of the application is the only supported one. Th
 1. Ensure you have [NodeJS](https://nodejs.org) installed. Verify whether you can use npm by running <kbd>npm -v</kbd>. If it doesn't print an error, proceed with the next step.
 2. Install [Yarn](https://yarnpkg.com/). While npm works as a package manager, Yarn is just better. Run <kbd>npm install -g yarn</kbd> to install it.
 3. Open a terminal in the `overwolf` directory of this repository.
-4. Run `yarn install` to download and install the required dependencies.
+4. Run <kbd>yarn install</kbd> to download and install the required dependencies.
 5. To build the application, you have two options:
-  a. `yarn watch` will continuously build the application whenever there is an update. This is the recommended command.
-  b. `yarn build` will build the application once, and also produce an .opk (Overwolf package) file.
+    1. <kbd>yarn watch</kbd> will continuously build the application whenever there is an update. This is the recommended command.
+    2. <kbd>yarn build</kbd> will build the application once, and also produce an .opk (Overwolf package) file.
 6. Go to Overwolf Settings - About - Development options to open the Overwolf developer tools.
 7. Select _Load unpacked extension..._ and navigate to the `overwolf/dist` directory of this repository. It contains the build output if the build was successful. You may get an error at this step, see below for more information.
 8. Launch the application from the Overwolf dock, or launch the game to see the app in action.
