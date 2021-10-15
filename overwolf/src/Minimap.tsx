@@ -5,6 +5,7 @@ import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
+import { getTileCache } from './logic/tileCache';
 import { getTiles, toMinimapCoordinate } from './logic/tiles';
 import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
@@ -19,6 +20,17 @@ interface IProps {
 }
 
 const useStyles = makeStyles()({
+    minimap: {
+        position: 'relative',
+    },
+    cacheStatus: {
+        background: 'rgba(0, 0, 0, 0.5)',
+        color: '#ffffff',
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        zIndex: globalLayers.minimapCacheStatus,
+    },
     canvas: {
         width: '100%',
         height: '100%',
@@ -31,6 +43,8 @@ const useStyles = makeStyles()({
     },
 });
 
+const tileCache = getTileCache();
+
 export default function Minimap(props: IProps) {
     const {
         className,
@@ -39,6 +53,7 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [currentRotation, setCurrentRotation] = useState<number>(0);
+    const [tilesDownloading, setTilesDownloading] = useState(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
@@ -83,10 +98,14 @@ export default function Minimap(props: IProps) {
             const row = tiles[x];
             for (let y = 0; y < row.length; y++) {
                 const tile = row[y];
-                const bitmap = await tile.image;
+                const bitmap = tile.image;
 
                 if (lastDraw.current !== currentDraw) {
                     return;
+                }
+
+                if (!bitmap) {
+                    continue;
                 }
 
                 if (renderAsCompass) {
@@ -94,7 +113,7 @@ export default function Minimap(props: IProps) {
                     ctx.translate(centerX, centerY);
                     ctx.rotate(-angle);
                     ctx.translate(-centerX, -centerY);
-                    ctx.drawImage(await tile.image,
+                    ctx.drawImage(bitmap,
                         bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
                         bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
@@ -102,7 +121,7 @@ export default function Minimap(props: IProps) {
                     );
                     ctx.restore();
                 } else {
-                    ctx.drawImage(await tile.image,
+                    ctx.drawImage(bitmap,
                         bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
                         bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
@@ -204,6 +223,20 @@ export default function Minimap(props: IProps) {
     }, [currentPosition, appContext]);
 
     useEffect(() => {
+        function handleTileDownloadingCountChange(count: number) {
+            setTilesDownloading(count);
+            if (count === 0) {
+                redraw();
+            }
+        }
+
+        const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
+        return () => {
+            tileRegistration();
+        };
+    }, []);
+
+    useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
@@ -220,9 +253,16 @@ export default function Minimap(props: IProps) {
         };
     }, [currentPosition]);
 
-    return <canvas
-        ref={canvas}
-        className={clsx(classes.canvas, className)}
-        style={dynamicStyling}
-    />;
+    return <div className={clsx(classes.minimap, className)}>
+        <canvas
+            ref={canvas}
+            className={clsx(classes.canvas)}
+            style={dynamicStyling}
+        />
+        <div className={classes.cacheStatus}>
+            {tilesDownloading > 0 &&
+                <p>Downloading {tilesDownloading} tiles</p>
+            }
+        </div>
+    </div>;
 }

@@ -1,4 +1,5 @@
 import { getMarkers } from './markers';
+import { getTileCache, getTileCacheKey } from './tileCache';
 
 const width = 224;
 const height = 225;
@@ -6,6 +7,8 @@ const tileWidth = 256;
 const tileHeight = 256;
 const gameMapWidth = 14336;
 const gameMapHeight = 14400;
+
+const tileCache = getTileCache();
 
 export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2) {
     const totalWidth = width * tileWidth;
@@ -18,24 +21,6 @@ export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2) {
     const tileY = Math.floor(imageY / tileHeight);
 
     return { x: tileX, y: tileY - 1 };
-}
-
-function getTileImageUrl(tilePos: Vector2) {
-    return `https://cdn.newworldfans.com/newworldmap/8/${tilePos.x}/${tilePos.y}.png`;
-}
-
-async function getTileBitmapFromServer(tilePos: Vector2) {
-    const imageUrl = getTileImageUrl(tilePos);
-    const imageRequest = await fetch(imageUrl, {
-        method: 'get',
-    });
-    const imageBlob = await imageRequest.blob();
-    const bitmap = await createImageBitmap(imageBlob);
-    return bitmap;
-}
-
-export function getTileCacheKey(tilePos: Vector2) {
-    return `${tilePos.x},${tilePos.y}`;
 }
 
 export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
@@ -75,19 +60,6 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     return { x: imageX, y: imageY };
 }
 
-const tileBitmapCache = new Map<string, Promise<ImageBitmap>>();
-export async function getTileBitmap(pos: Vector2) {
-    const key = getTileCacheKey(pos);
-
-    let bitmapPromise = tileBitmapCache.get(key);
-    if (!bitmapPromise) {
-        bitmapPromise = getTileBitmapFromServer(pos);
-        tileBitmapCache.set(key, bitmapPromise);
-    }
-
-    return await bitmapPromise;
-}
-
 export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number) {
     const dimensions = getDimensions(screenWidth, screenHeight, angle);
     const result: Tile[][] = [];
@@ -101,10 +73,10 @@ export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: n
             const tileX = tilePos.x - Math.floor(dimensions.x / 2) + x;
             const tileY = tilePos.y - Math.floor(dimensions.y / 2) + y;
             const tileCoords: Vector2 = { x: tileX, y: tileY };
-            const image = getTileBitmap(tileCoords);
+            const image = tileCache.getTileBitmap(tileCoords);
             const markers = getMarkers(tileCoords);
             const tile: Tile = {
-                image,
+                image: image.hit ? image.bitmap : null,
                 markers,
             };
             col.push(tile);

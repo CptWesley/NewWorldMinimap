@@ -1,6 +1,7 @@
 import { getIconName } from './icons';
 import { loadIconCategory, loadIconType } from './storage';
-import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
+import { getTileCacheKey } from './tileCache';
+import { getTileCacheKeyFromWorldCoordinate } from './tiles';
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
 
