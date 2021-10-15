@@ -12,6 +12,7 @@ import FishIcon from './FishIcon';
 import ForgeIcon from './ForgeIcon';
 import GoatIcon from './GoatIcon';
 import GovernorDeskIcon from './GovernorDeskIcon';
+import HempIcon from './HempIcon';
 import InnIcon from './InnIcon';
 import KitchenIcon from './KitchenIcon';
 import LeopardIcon from './LeopardIcon';
@@ -74,6 +75,9 @@ export async function createMapIcons(scale: number) {
         documents: await svgMapIconToImageBitmap(DocumentIcon, { fill: 'lightyellow', scale }),
 
         plants: await svgMapIconToImageBitmap(PlantIcon, { fill: 'lawngreen', scale }),
+        hemp: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'green', scale, viewBox: '0 0 512 512' }),
+        hemp_t4: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
+        hemp_t5: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
 
         monsters: await svgMapIconToImageBitmap(SkullIcon, { fill: 'green', scale }),
 
