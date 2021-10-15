@@ -16,14 +16,14 @@ jobs:
           node-version: '>=14.18.0'
 
       - name: Install dependencies
-        run: npm install
+        run: yarn install
         working-directory: ./overwolf
          
       - name: Linter
-        run: npm run lint
+        run: yarn run lint
         working-directory: ./overwolf
       
       - name: Build
-        run: npm run build
+        run: yarn run build
         working-directory: ./overwolf
         
