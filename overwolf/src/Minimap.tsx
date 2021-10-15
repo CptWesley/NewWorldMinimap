@@ -1,11 +1,11 @@
 import clsx from 'clsx';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { MouseEventHandler, useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMarkers } from './logic/markers';
-import { getTiles, toMinimapCoordinate } from './logic/tiles';
+import { getTiles, toMinimapCoordinate, toWorldCoordinate } from './logic/tiles';
 import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -220,9 +220,27 @@ export default function Minimap(props: IProps) {
         };
     }, [currentPosition]);
 
+    function onClick(e: React.MouseEvent<HTMLCanvasElement>) {
+        const ctx = canvas.current?.getContext('2d');
+
+        if (!ctx) {
+            return;
+        }
+
+        const zoomLevel = appContext.value.zoomLevel;
+        const screenPos = { x: e.clientX, y: e.clientY };
+        const worldPos = toWorldCoordinate(currentPosition, screenPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+
+        console.log('Screen: ');
+        console.log(screenPos);
+        console.log('World: ');
+        console.log(worldPos);
+    }
+
     return <canvas
         ref={canvas}
         className={clsx(classes.canvas, className)}
         style={dynamicStyling}
+        onClick={onClick}
     />;
 }

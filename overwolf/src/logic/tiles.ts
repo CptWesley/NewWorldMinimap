@@ -113,3 +113,18 @@ export function getTiles(worldPos: Vector2, screenWidth: number, screenHeight: n
 
     return result;
 }
+
+export function toWorldCoordinate(playerWorldPos: Vector2, screenPos: Vector2, screenWidth: number, screenHeight: number) {
+    const dimensions = getDimensions(screenWidth, screenHeight);
+    const totalWidth = tileWidth * width;
+    const totalHeight = tileHeight * height;
+    const { x: tileX, y: tileY } = getTileCoordinatesForWorldCoordinate(playerWorldPos);
+
+    const pixelX = Math.floor(screenPos.x * gameMapWidth / totalWidth);
+    const pixelY = Math.floor((screenHeight - screenPos.y) * gameMapHeight / totalHeight);
+
+    const worldX = pixelX - ((tileX - Math.floor(dimensions.x / 2)) / tileWidth);
+    const worldY = pixelY - ((tileY - Math.floor(dimensions.y / 2) + 1) / tileHeight);
+
+    return { x: pixelX, y: pixelY };
+}
