@@ -155,7 +155,7 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const useTransparency = context.value.transparentHeader && context.gameRunning;
+    const useTransparency = context.value.transparentHeader && context.gameRunning && !context.frameMenuVisible;
     const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);

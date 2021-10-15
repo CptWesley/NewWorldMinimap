@@ -24,6 +24,7 @@ export interface IAppContext {
     gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
     minimapWindowType: MinimapWindowType | undefined;
+    frameMenuVisible: boolean;
 }
 
 export const defaultAppContext: IAppContext = {
@@ -45,6 +46,7 @@ export const defaultAppContext: IAppContext = {
     gameRunning: false,
     isTransparentSurface: undefined,
     minimapWindowType: undefined,
+    frameMenuVisible: false,
 };
 
 export const AppContext = React.createContext<IAppContext>(defaultAppContext);
