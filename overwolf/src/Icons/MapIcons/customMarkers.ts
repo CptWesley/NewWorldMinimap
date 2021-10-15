@@ -34,6 +34,10 @@ export const customMarkers = {
                 x: 9614,
                 y: 6346,
             },
+            'weavers_fen': {
+                x: 11474,
+                y: 5338,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -67,6 +71,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9605,
                 y: 6370,
+            },
+            'weavers_fen': {
+                x: 11439,
+                y: 5289,
             },
         },
         'marauder_commander': {
@@ -102,6 +110,10 @@ export const customMarkers = {
                 x: 9554,
                 y: 6312,
             },
+            'weavers_fen': {
+                x: 11401,
+                y: 5329,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -135,6 +147,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9605,
                 y: 6337,
+            },
+            'weavers_fen': {
+                x: 11431,
+                y: 5326,
             },
         },
         'forge': {
@@ -170,6 +186,10 @@ export const customMarkers = {
                 x: 9557,
                 y: 6325,
             },
+            'weavers_fen': {
+                x: 11471,
+                y: 5376,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -203,6 +223,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9588,
                 y: 6314,
+            },
+            'weavers_fen': {
+                x: 11442,
+                y: 5272,
             },
         },
         'loom': {
@@ -238,6 +262,10 @@ export const customMarkers = {
                 x: 9584,
                 y: 6360,
             },
+            'weavers_fen': {
+                x: 11452,
+                y: 5334,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -271,6 +299,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9576,
                 y: 6362,
+            },
+            'weavers_fen': {
+                x: 11448,
+                y: 5327,
             },
         },
         'stonecutting_table': {
@@ -306,6 +338,10 @@ export const customMarkers = {
                 x: 9549,
                 y: 6309,
             },
+            'weavers_fen': {
+                x: 11460,
+                y: 5377,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -339,6 +375,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9562,
                 y: 6419,
+            },
+            'weavers_fen': {
+                x: 11484,
+                y: 5316,
             },
         },
         'trading_post': {
@@ -374,6 +414,14 @@ export const customMarkers = {
                 x: 9565,
                 y: 6340,
             },
+            'weavers_fen_1': {
+                x: 11400,
+                y: 5333,
+            },
+            'weavers_fen_2': {
+                x: 11407,
+                y: 5339,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -407,6 +455,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9585,
                 y: 6337,
+            },
+            'weavers_fen': {
+                x: 11486,
+                y: 5345,
             },
         },
         'governors_desk': {
@@ -442,6 +494,10 @@ export const customMarkers = {
                 x: 9549,
                 y: 6413,
             },
+            'weavers_fen': {
+                x: 11482,
+                y: 5325,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -476,6 +532,10 @@ export const customMarkers = {
                 x: 9591,
                 y: 6345,
             },
+            'weavers_fen': {
+                x: 11438,
+                y: 5328,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -509,6 +569,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9579,
                 y: 6347,
+            },
+            'weavers_fen': {
+                x: 11465,
+                y: 5362,
             },
         },
         'storage_shed': {
@@ -576,6 +640,14 @@ export const customMarkers = {
                 x: 9633,
                 y: 6334,
             },
+            'weavers_fen_1': {
+                x: 11475,
+                y: 5370,
+            },
+            'weavers_fen_2': {
+                x: 11431,
+                y: 5265,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -609,6 +681,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9593,
                 y: 6357,
+            },
+            'weavers_fen': {
+                x: 11473,
+                y: 5351,
             },
         },
         'town_project_board': {
@@ -675,6 +751,14 @@ export const customMarkers = {
             'brightwood_2': {
                 x: 9546,
                 y: 6424,
+            },
+            'weavers_fen_1': {
+                x: 11468,
+                y: 5319,
+            },
+            'weavers_fen_2': {
+                x: 11492,
+                y: 5325,
             },
         },
         'war_board': {
@@ -774,6 +858,18 @@ export const customMarkers = {
                 x: 9540,
                 y: 6400,
             },
+            'weavers_fen_1': {
+                x: 11006,
+                y: 5936,
+            },
+            'weavers_fen_2': {
+                x: 10942,
+                y: 6032,
+            },
+            'weavers_fen_3': {
+                x: 11456,
+                y: 5319,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -807,6 +903,10 @@ export const customMarkers = {
             'brightwood': {
                 x: 9593,
                 y: 6331,
+            },
+            'weavers_fen': {
+                x: 11471,
+                y: 5377,
             },
         },
     },
