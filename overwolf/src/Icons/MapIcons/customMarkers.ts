@@ -17,6 +17,10 @@ export const customMarkers = {
                 x: 9368,
                 y: 2651,
             },
+            'reekwater': {
+                x: 11009,
+                y: 3265,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -34,6 +38,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9371,
                 y: 2691,
+            },
+            'reekwater': {
+                x: 10959,
+                y: 3284,
             },
         },
         'marauder_commander': {
@@ -53,6 +61,10 @@ export const customMarkers = {
                 x: 9350,
                 y: 2719,
             },
+            'reekwater': {
+                x: 11020,
+                y: 3306,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -70,6 +82,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9376,
                 y: 2653,
+            },
+            'reekwater': {
+                x: 10980,
+                y: 3282,
             },
         },
         'forge': {
@@ -89,6 +105,10 @@ export const customMarkers = {
                 x: 9338,
                 y: 2719,
             },
+            'reekwater': {
+                x: 11010,
+                y: 3294,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -106,6 +126,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9320,
                 y: 2666,
+            },
+            'reekwater': {
+                x: 10940,
+                y: 3304,
             },
         },
         'loom': {
@@ -125,6 +149,10 @@ export const customMarkers = {
                 x: 9356,
                 y: 2693,
             },
+            'reekwater': {
+                x: 10986,
+                y: 3309,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -142,6 +170,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9352,
                 y: 2704,
+            },
+            'reekwater': {
+                x: 10982,
+                y: 3304,
             },
         },
         'stonecutting_table': {
@@ -161,6 +193,10 @@ export const customMarkers = {
                 x: 9349,
                 y: 2712,
             },
+            'reekwater': {
+                x: 11024,
+                y: 3300,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -178,6 +214,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9383,
                 y: 2757,
+            },
+            'reekwater': {
+                x: 10963,
+                y: 3248,
             },
         },
         'trading_post': {
@@ -197,6 +237,10 @@ export const customMarkers = {
                 x: 9322,
                 y: 2704,
             },
+            'reekwater': {
+                x: 10976,
+                y: 3340,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -214,6 +258,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9340,
                 y: 2700,
+            },
+            'reekwater': {
+                x: 11011,
+                y: 3332,
             },
         },
         'governors_desk': {
@@ -233,6 +281,10 @@ export const customMarkers = {
                 x: 9373,
                 y: 2766,
             },
+            'reekwater': {
+                x: 10973,
+                y: 3246,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -251,6 +303,10 @@ export const customMarkers = {
                 x: 9341,
                 y: 2688,
             },
+            'reekwater': {
+                x: 11021,
+                y: 3274,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -268,6 +324,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9329,
                 y: 2691,
+            },
+            'reekwater': {
+                x: 11013,
+                y: 3318,
             },
         },
         'storage_shed': {
@@ -303,6 +363,14 @@ export const customMarkers = {
                 x: 9346,
                 y: 2656,
             },
+            'reekwater_1': {
+                x: 11012,
+                y: 3301,
+            },
+            'reekwater_2': {
+                x: 10952,
+                y: 3260,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -320,6 +388,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9362,
                 y: 2656,
+            },
+            'reekwater': {
+                x: 10984,
+                y: 3272,
             },
         },
         'town_project_board': {
@@ -354,6 +426,14 @@ export const customMarkers = {
             'windsward_2': {
                 x: 9377,
                 y: 2772,
+            },
+            'reekwater_1': {
+                x: 10967,
+                y: 3259,
+            },
+            'reekwater_2': {
+                x: 10974,
+                y: 3237,
             },
         },
         'war_board': {
@@ -405,6 +485,18 @@ export const customMarkers = {
                 x: 9069,
                 y: 3203,
             },
+            'reekwater_1': {
+                x: 10965,
+                y: 2381,
+            },
+            'reekwater_2': {
+                x: 10879,
+                y: 2450,
+            },
+            'reekwater_3': {
+                x: 10972,
+                y: 3263,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -422,6 +514,10 @@ export const customMarkers = {
             'windsward': {
                 x: 9354,
                 y: 2661,
+            },
+            'reekwater': {
+                x: 11018,
+                y: 3315,
             },
         },
     },
