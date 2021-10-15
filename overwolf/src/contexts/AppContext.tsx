@@ -1,25 +1,15 @@
 import React from 'react';
-import { load } from '../logic/storage';
+import { load, simpleStorageDefaultSettings, SimpleStorageSetting } from '../logic/storage';
 
 export type MinimapWindowType = 'desktop' | 'inGame';
 
-export interface IAppContextData {
-    showHeader: boolean;
-    showToolbar: boolean;
-    transparentHeader: boolean;
-    transparentToolbar: boolean;
-    showText: boolean;
-    iconScale: number;
-    zoomLevel: number;
-    opacity: number;
-    shape: string;
-    compassMode: boolean;
+export type AppContextSettings = SimpleStorageSetting & {
     iconSettings: IconSettings | undefined;
 }
 
 export interface IAppContext {
-    value: IAppContextData;
-    update: (delta: Partial<IAppContextData>) => void;
+    settings: AppContextSettings;
+    update: (delta: Partial<AppContextSettings>) => void;
     toggleFrameMenu: () => void;
     gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
@@ -27,18 +17,25 @@ export interface IAppContext {
     frameMenuVisible: boolean;
 }
 
+export function loadAppContextSettings(): AppContextSettings {
+    return {
+        showHeader: load('showHeader'),
+        showToolbar: load('showToolbar'),
+        transparentHeader: load('transparentHeader'),
+        transparentToolbar: load('transparentToolbar'),
+        showText: load('showText'),
+        iconScale: load('iconScale'),
+        zoomLevel: load('zoomLevel'),
+        opacity: load('opacity'),
+        shape: load('shape'),
+        compassMode: load('compassMode'),
+        iconSettings: undefined,
+    };
+}
+
 export const defaultAppContext: IAppContext = {
-    value: {
-        showHeader: load('showHeader', true),
-        showToolbar: load('showToolbar', false),
-        transparentHeader: load('transparentHeader', true),
-        transparentToolbar: load('transparentToolbar', true),
-        showText: load('showText', false),
-        iconScale: load('iconScale', 1.5),
-        zoomLevel: load('zoomLevel', 2),
-        opacity: load('opacity', 1),
-        shape: load('shape', 'none'),
-        compassMode: load('compassMode', true),
+    settings: {
+        ...simpleStorageDefaultSettings,
         iconSettings: undefined,
     },
     update: () => { },

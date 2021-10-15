@@ -17,19 +17,26 @@ export function getMarkers(tilePos: Vector2) {
 export async function getDefaultIconSettings() {
     const cache = await tileMarkerCache.markerLoadPromise;
 
-    const categories: any = {};
-    const result = { categories };
+    const categories: IconSettings['categories'] = {};
+    const result: IconSettings = { categories };
 
     cache.forEach(value => {
         value.forEach(marker => {
             if (!categories[marker.category]) {
-                categories[marker.category] = { name: getIconName(marker.category), value: loadIconCategory(marker.category), types: {} };
+                categories[marker.category] = {
+                    name: getIconName(marker.category),
+                    value: loadIconCategory(marker.category),
+                    types: {},
+                };
             }
 
             const category = categories[marker.category];
 
             if (!category.types[marker.type]) {
-                category.types[marker.type] = { name: getIconName(marker.type), value: loadIconType(marker.type) };
+                category.types[marker.type] = {
+                    name: getIconName(marker.type),
+                    value: loadIconType(marker.category, marker.type),
+                };
             }
         });
     });

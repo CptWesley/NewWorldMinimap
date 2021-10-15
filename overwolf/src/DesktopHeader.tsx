@@ -84,7 +84,7 @@ export default function DesktopHeader() {
     const draggable = useRef<HTMLDivElement | null>(null);
     const [maximized, setMaximized] = useState(false);
 
-    const useTransparency = context.value.transparentHeader && context.gameRunning && !context.frameMenuVisible;
+    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.frameMenuVisible;
 
     useEffect(() => {
         if (draggable.current) {
@@ -125,7 +125,7 @@ export default function DesktopHeader() {
         backgroundController.closeWindow('desktop');
     }
 
-    return <header className={clsx(classes.root, useTransparency && classes.transparent, !context.value.showHeader && classes.hidden)}>
+    return <header className={clsx(classes.root, useTransparency && classes.transparent, !context.settings.showHeader && classes.hidden)}>
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>

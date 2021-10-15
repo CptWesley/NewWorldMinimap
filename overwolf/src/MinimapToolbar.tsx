@@ -32,7 +32,7 @@ export default function MinimapToolbar(props: React.PropsWithChildren<{}>) {
     const { classes } = useStyles();
 
     return (
-        <div className={clsx(classes.toolbar, context.value.transparentToolbar && classes.transparent, !context.value.showToolbar && classes.hidden)}>
+        <div className={clsx(classes.toolbar, context.settings.transparentToolbar && classes.transparent, !context.settings.showToolbar && classes.hidden)}>
             {children}
         </div>
     );
