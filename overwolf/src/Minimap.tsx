@@ -38,7 +38,6 @@ export default function Minimap(props: IProps) {
     const { classes } = useStyles();
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
-    const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
     const [currentRotation, setCurrentRotation] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
@@ -196,7 +195,6 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        setLastPosition(currentPosition);
         setCurrentPosition(pos);
         setCurrentRotation(rot);
     }
