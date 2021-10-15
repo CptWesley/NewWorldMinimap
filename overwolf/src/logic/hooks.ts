@@ -55,7 +55,7 @@ function transformData(info: any): PlayerData | undefined {
     const rotation = {
         x: parseFloat(locationParts[7]),
         y: parseFloat(locationParts[9]),
-        z: parseFloat(locationParts[11]) - 90, // OW North is 90
+        z: parseFloat(locationParts[11]),
     };
 
     const compass = locationParts[13].trim();
