@@ -211,12 +211,7 @@ export default function Minimap(props: IProps) {
         window.addEventListener('resize', redraw);
 
         const callbackUnregister = registerEventCallback(info => {
-            if (info.success) {
-                if (info.res && info.res.game_info && info.res.game_info.location) {
-                    const location = JSON.parse(info.res.game_info.location) as Vector2;
-                    setPosition(location);
-                }
-            }
+            setPosition(info.position);
         });
 
         return function () {

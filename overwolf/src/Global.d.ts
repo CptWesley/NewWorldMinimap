@@ -9,6 +9,12 @@ declare type Vector2 = {
     y: number;
 };
 
+declare type Vector3 = {
+    x: number;
+    y: number;
+    z: number;
+}
+
 declare type Marker = {
     category: string;
     type: string;
@@ -36,3 +42,11 @@ declare type IconSettings = {
     categories: Record<string, IconCategorySetting>,
 }
 
+declare type PlayerData = {
+    position: Vector3,
+    rotation: Vector3,
+    compass: string,
+    map: string,
+    name: string,
+    world: string,
+}

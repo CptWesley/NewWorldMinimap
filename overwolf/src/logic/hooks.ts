@@ -8,7 +8,7 @@ const listener = new OWGamesEvents({
 
 listener.start();
 
-type cb = (info: any) => void;
+type cb = (info: PlayerData) => void;
 
 const callbacks: Set<cb> = new Set();
 
@@ -20,9 +20,58 @@ export function registerEventCallback(callback: cb) {
 }
 
 function onUpdate(info: any) {
-    for (const cb of callbacks) {
-        cb(info);
+    const playerData = transformData(info);
+
+    if (!playerData) {
+        return;
     }
+
+    console.log(playerData);
+
+    for (const cb of callbacks) {
+        cb(playerData);
+    }
+}
+
+function transformData(info: any): PlayerData | undefined {
+    if (info.success && info.res && info.res.game_info) {
+        info = info.res.game_info;
+    }
+
+    if (!info.location
+        || !info.map
+        || !info.player_name
+        || !info.world_name) {
+        console.error('Unsuccesful poll attempt!');
+        console.error(info);
+        return undefined;
+    }
+
+    const locationParts = (info.location as string).trim().split(',');
+    console.log(locationParts);
+
+    const position = {
+        x: parseFloat(locationParts[1]),
+        y: parseFloat(locationParts[3]),
+        z: parseFloat(locationParts[5]),
+    };
+
+    const rotation = {
+        x: parseFloat(locationParts[7]),
+        y: parseFloat(locationParts[9]),
+        z: parseFloat(locationParts[11]),
+    };
+
+    const compass = locationParts[13].trim();
+
+    return {
+        position,
+        rotation,
+        compass,
+        map: (info.map as string).trim(),
+        name: (info.player_name as string).trim(),
+        world: (info.world_name as string).trim(),
+    };
 }
 
 setInterval(() => overwolf.games.events.getInfo(onUpdate), 500);
