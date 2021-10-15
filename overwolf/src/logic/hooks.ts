@@ -1,6 +1,8 @@
 import { OWGamesEvents } from '@overwolf/overwolf-api-ts/dist';
 import { interestingFeatures } from '../OverwolfWindows/consts';
 
+export const positionUpdateRate = 1000;
+
 const listener = new OWGamesEvents({
     onInfoUpdates: onUpdate,
     onNewEvents: onUpdate,
@@ -70,4 +72,4 @@ function transformData(info: any): PlayerData | undefined {
     };
 }
 
-setInterval(() => overwolf.games.events.getInfo(onUpdate), 500);
+setInterval(() => overwolf.games.events.getInfo(onUpdate), positionUpdateRate);

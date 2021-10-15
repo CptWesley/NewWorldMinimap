@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import { registerEventCallback } from './logic/hooks';
+import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import { getMarkers } from './logic/markers';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
-import { rotateAround } from './logic/util';
+import { getAngle, interpolate, interpolateVectors, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -56,7 +56,9 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
+    const [lastPositionUpdate, setLastPositionUpdate] = useState<number>(Date.now());
     const [tilesDownloading, setTilesDownloading] = useState(0);
+    const [lastAngle, setLastAngle] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
@@ -67,12 +69,11 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
-    const draw = async () => {
+    const draw = async (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = Date.now();
         lastDraw.current = currentDraw;
 
-        const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
         const zoomLevel = appContext.settings.zoomLevel;
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
@@ -92,8 +93,8 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getMapTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
-        const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const tiles = getMapTiles(pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+        const offset = toMinimapCoordinate(pos, pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
 
@@ -153,7 +154,7 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(pos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = await getIcon(marker.type, marker.category);
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
 
@@ -208,8 +209,19 @@ export default function Minimap(props: IProps) {
     drawRef.current = draw;
 
     function redraw() {
+        const curTime = Date.now();
+        const timeDif = curTime - lastPositionUpdate;
+        const currentAngle = getAngle(lastPosition, currentPosition);
+        if (timeDif > positionUpdateRate || squaredDistance(lastPosition, currentPosition) > 1000) {
+            drawRef.current(currentPosition, currentAngle);
+            return;
+        }
+
+        const percentage = timeDif / positionUpdateRate;
+        const interpolatedPosition = interpolateVectors(lastPosition, currentPosition, percentage);
+        const interpolatedAngle = interpolate(lastAngle, currentAngle, percentage);
         // Use the `draw` in the ref to get the most up-to-date one
-        drawRef.current();
+        drawRef.current(interpolatedPosition, interpolatedAngle);
     }
 
     function setPosition(pos: Vector2) {
@@ -217,6 +229,8 @@ export default function Minimap(props: IProps) {
             return;
         }
 
+        setLastAngle(getAngle(lastPosition, currentPosition));
+        setLastPositionUpdate(Date.now());
         setLastPosition(currentPosition);
         setCurrentPosition(pos);
     }
@@ -256,9 +270,12 @@ export default function Minimap(props: IProps) {
             setPosition(info.position);
         });
 
+        const interval = setInterval(() => redraw(), 100);
+
         return function () {
             window.removeEventListener('resize', redraw);
             callbackUnregister();
+            clearInterval(interval);
         };
     }, [currentPosition]);
 
