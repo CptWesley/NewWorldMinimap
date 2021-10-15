@@ -17,10 +17,10 @@ const useStyles = makeStyles()(theme => ({
     root: {
         display: 'grid',
         padding: theme.spacing(2),
-        gap: theme.spacing(2),
-        gridTemplateRows: '40px 1fr auto',
-        gridTemplateColumns: '40px 1fr',
-        gridTemplateAreas: '"return title" ". content" ". footer"',
+        gap: theme.spacing(1),
+        gridTemplateRows: '30px 1fr auto',
+        gridTemplateColumns: '1fr 30px',
+        gridTemplateAreas: '"title return" "content ." "footer ."',
 
         background: theme.frameMenuBackground,
         color: theme.frameMenuColor,
@@ -31,6 +31,7 @@ const useStyles = makeStyles()(theme => ({
         bottom: 0,
         zIndex: globalLayers.frameMenu,
         backdropFilter: 'blur(10px)',
+        marginTop: theme.headerHeight,
     },
     hidden: {
         display: 'none !important',

@@ -20,7 +20,7 @@ const useStyles = makeStyles()(theme => ({
 
         background: theme.headerBackground,
         color: theme.headerColor,
-        height: 32,
+        height: theme.headerHeight,
         flexShrink: 0,
         overflow: 'hidden',
         zIndex: globalLayers.header,
@@ -84,7 +84,7 @@ export default function DesktopHeader() {
     const draggable = useRef<HTMLDivElement | null>(null);
     const [maximized, setMaximized] = useState(false);
 
-    const useTransparency = context.value.transparentHeader && context.gameRunning;
+    const useTransparency = context.value.transparentHeader && context.gameRunning && !context.frameMenuVisible;
 
     useEffect(() => {
         if (draggable.current) {

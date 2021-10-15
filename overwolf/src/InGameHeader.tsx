@@ -20,7 +20,7 @@ const useStyles = makeStyles()(theme => ({
 
         background: theme.headerBackground,
         color: theme.headerColor,
-        height: 32,
+        height: theme.headerHeight,
         flexShrink: 0,
         overflow: 'hidden',
         zIndex: globalLayers.header,
@@ -155,7 +155,7 @@ export default function InGameHeader() {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const useTransparency = context.value.transparentHeader && context.gameRunning;
+    const useTransparency = context.value.transparentHeader && context.gameRunning && !context.frameMenuVisible;
     const [hotkeyText, setHotkeyText] = useState<string>();
 
     const draggable = useRef<HTMLDivElement | null>(null);

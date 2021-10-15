@@ -63,6 +63,7 @@ export default function Frame(props: IProps) {
         gameRunning,
         isTransparentSurface,
         minimapWindowType,
+        frameMenuVisible,
     };
 
     function handleContext(e: React.MouseEvent<HTMLDivElement>) {

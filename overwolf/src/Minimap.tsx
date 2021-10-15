@@ -1,11 +1,14 @@
 import clsx from 'clsx';
-import React, { MouseEventHandler, useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
+import { getMapTiles } from './logic/map';
 import { getMarkers } from './logic/markers';
-import { getTiles, toMinimapCoordinate, toWorldCoordinate } from './logic/tiles';
+import { getTileCache } from './logic/tileCache';
+import { getTileMarkerCache } from './logic/tileMarkerCache';
+import { toMinimapCoordinate } from './logic/tiles';
 import { rotateAround } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -19,6 +22,17 @@ interface IProps {
 }
 
 const useStyles = makeStyles()({
+    minimap: {
+        position: 'relative',
+    },
+    cacheStatus: {
+        background: 'rgba(0, 0, 0, 0.5)',
+        color: '#ffffff',
+        position: 'absolute',
+        left: 0,
+        bottom: 0,
+        zIndex: globalLayers.minimapCacheStatus,
+    },
     canvas: {
         width: '100%',
         height: '100%',
@@ -31,6 +45,9 @@ const useStyles = makeStyles()({
     },
 });
 
+const tileCache = getTileCache();
+const markerCache = getTileMarkerCache();
+
 export default function Minimap(props: IProps) {
     const {
         className,
@@ -39,6 +56,7 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
+    const [tilesDownloading, setTilesDownloading] = useState(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
@@ -74,7 +92,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+        const tiles = getMapTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
@@ -83,10 +101,14 @@ export default function Minimap(props: IProps) {
             const row = tiles[x];
             for (let y = 0; y < row.length; y++) {
                 const tile = row[y];
-                const bitmap = await tile.image;
+                const bitmap = tile.image;
 
                 if (lastDraw.current !== currentDraw) {
                     return;
+                }
+
+                if (!bitmap) {
+                    continue;
                 }
 
                 if (renderAsCompass) {
@@ -94,7 +116,7 @@ export default function Minimap(props: IProps) {
                     ctx.translate(centerX, centerY);
                     ctx.rotate(-angle);
                     ctx.translate(-centerX, -centerY);
-                    ctx.drawImage(await tile.image,
+                    ctx.drawImage(bitmap,
                         bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
                         bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
@@ -102,7 +124,7 @@ export default function Minimap(props: IProps) {
                     );
                     ctx.restore();
                 } else {
-                    ctx.drawImage(await tile.image,
+                    ctx.drawImage(bitmap,
                         bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
                         bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
@@ -110,7 +132,7 @@ export default function Minimap(props: IProps) {
                     );
                 }
 
-                toDraw = toDraw.concat(await tile.markers);
+                toDraw = toDraw.concat(tile.markers);
             }
         }
 
@@ -204,6 +226,26 @@ export default function Minimap(props: IProps) {
     }, [currentPosition, appContext]);
 
     useEffect(() => {
+        function handleTileDownloadingCountChange(count: number) {
+            setTilesDownloading(count);
+            if (count === 0) {
+                redraw();
+            }
+        }
+
+        function handleMarkersLoaded() {
+            redraw();
+        }
+
+        const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
+        const markerRegistration = markerCache.registerOnMarkersLoaded(handleMarkersLoaded);
+        return () => {
+            tileRegistration();
+            markerRegistration();
+        };
+    }, []);
+
+    useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
@@ -220,27 +262,16 @@ export default function Minimap(props: IProps) {
         };
     }, [currentPosition]);
 
-    function onClick(e: React.MouseEvent<HTMLCanvasElement>) {
-        const ctx = canvas.current?.getContext('2d');
-
-        if (!ctx) {
-            return;
-        }
-
-        const zoomLevel = appContext.value.zoomLevel;
-        const screenPos = { x: e.clientX, y: e.clientY };
-        const worldPos = toWorldCoordinate(currentPosition, screenPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-
-        console.log('Screen: ');
-        console.log(screenPos);
-        console.log('World: ');
-        console.log(worldPos);
-    }
-
-    return <canvas
-        ref={canvas}
-        className={clsx(classes.canvas, className)}
-        style={dynamicStyling}
-        onClick={onClick}
-    />;
+    return <div className={clsx(classes.minimap, className)}>
+        <canvas
+            ref={canvas}
+            className={clsx(classes.canvas)}
+            style={dynamicStyling}
+        />
+        <div className={classes.cacheStatus}>
+            {tilesDownloading > 0 &&
+                <p>Loading {tilesDownloading} tiles</p>
+            }
+        </div>
+    </div>;
 }

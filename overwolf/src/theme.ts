@@ -8,6 +8,7 @@ export const theme = {
     bodyFontFamily: 'Lato',
     bodyFontSize: 16,
 
+    headerHeight: 32,
     headerBackground: '#222222',
     headerColor: '#eeeeee',
     headerButtonHover: '#444444',
