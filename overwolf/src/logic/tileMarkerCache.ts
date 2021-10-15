@@ -1,3 +1,4 @@
+import { customMarkers } from '../Icons/MapIcons/customMarkers';
 import { getIconName } from './icons';
 import { getTileCacheKey } from './tileCache';
 import { getTileCacheKeyFromWorldCoordinate } from './tiles';
@@ -69,7 +70,17 @@ class TileMarkerCache {
         const tree = await this.getMarkerJson();
 
         const nextCache = new Map<string, Marker[]>();
+        this.fillCacheWithTree(nextCache, tree);
+        this.fillCacheWithTree(nextCache, customMarkers);
 
+        this.cache = nextCache;
+        this.onMarkersLoadedListeners.forEach(l => {
+            l();
+        });
+        return nextCache as ReadonlyMap<string, Marker[]>;
+    }
+
+    private fillCacheWithTree(nextCache: Map<string, Marker[]>, tree: any) {
         for (const [category, catContent] of Object.entries(tree)) {
             if (category === 'areas') {
                 continue;
@@ -96,12 +107,6 @@ class TileMarkerCache {
                 }
             }
         }
-
-        this.cache = nextCache;
-        this.onMarkersLoadedListeners.forEach(l => {
-            l();
-        });
-        return nextCache as ReadonlyMap<string, Marker[]>;
     }
 
     private getMarkerJson = async () => {
