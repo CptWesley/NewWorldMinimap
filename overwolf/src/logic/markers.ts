@@ -1,4 +1,3 @@
-import { customMarkers } from '../Icons/MapIcons/customMarkers';
 import { getIconName } from './icons';
 import { loadIconCategory, loadIconType } from './storage';
 import { getTileMarkerCache } from './tileMarkerCache';
