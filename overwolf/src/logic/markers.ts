@@ -11,6 +11,8 @@ async function getJson() {
     return await req.json();
 }
 
+const fillingPromise = fillCache();
+
 async function fillCache() {
     const tree = await getJson();
 
@@ -46,9 +48,7 @@ async function fillCache() {
 
 const cache = new Map<string, Marker[]>();
 export async function getMarkers(tilePos: Vector2) {
-    if (cache.size <= 0) {
-        await fillCache();
-    }
+    await fillingPromise;
 
     const key = getTileCacheKey(tilePos);
     const result = cache.get(key);
@@ -61,9 +61,7 @@ export async function getMarkers(tilePos: Vector2) {
 }
 
 export async function getDefaultIconSettings() {
-    if (cache.size <= 0) {
-        await fillCache();
-    }
+    await fillingPromise;
 
     const categories: any = {};
     const result = { categories };
