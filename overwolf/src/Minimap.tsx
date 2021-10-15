@@ -56,6 +56,7 @@ export default function Minimap(props: IProps) {
 
         const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
         const zoomLevel = appContext.value.zoomLevel;
+        const renderAsCompass = appContext.value.compassMode && (appContext.isTransparentSurface ?? false);
 
         setIconScale(appContext.value.iconScale);
 
@@ -73,7 +74,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const tiles = getTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
@@ -88,7 +89,7 @@ export default function Minimap(props: IProps) {
                     return;
                 }
 
-                if (appContext.value.compassMode) {
+                if (renderAsCompass) {
                     ctx.save();
                     ctx.translate(centerX, centerY);
                     ctx.rotate(-angle);
@@ -138,7 +139,7 @@ export default function Minimap(props: IProps) {
                 return;
             }
 
-            if (appContext.value.compassMode) {
+            if (renderAsCompass) {
                 const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
                 ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
             } else {
@@ -151,7 +152,7 @@ export default function Minimap(props: IProps) {
                 ctx.strokeStyle = '#000';
                 ctx.fillStyle = '#fff';
 
-                if (appContext.value.compassMode) {
+                if (renderAsCompass) {
                     const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
                     ctx.strokeText(marker.text, rotated.x, rotated.y + icon.height);
                     ctx.fillText(marker.text, rotated.x, rotated.y + icon.height);
@@ -168,7 +169,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (appContext.value.compassMode) {
+        if (renderAsCompass) {
             ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
         } else {
             ctx.save();
