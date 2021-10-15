@@ -38,10 +38,7 @@ function transformData(info: any): PlayerData | undefined {
         info = info.res.game_info;
     }
 
-    if (!info.location
-        || !info.map
-        || !info.player_name
-        || !info.world_name) {
+    if (!info.location) {
         console.error('Unsuccesful poll attempt!');
         console.error(info);
         return undefined;
@@ -67,9 +64,9 @@ function transformData(info: any): PlayerData | undefined {
         position,
         rotation,
         compass,
-        map: (info.map as string).trim(),
-        name: (info.player_name as string).trim(),
-        world: (info.world_name as string).trim(),
+        map: info.map ? (info.map as string).trim() : undefined,
+        name: info.player_name ? (info.player_name as string).trim() : undefined,
+        world: info.world_name ? (info.world_name as string).trim() : undefined,
     };
 }
 

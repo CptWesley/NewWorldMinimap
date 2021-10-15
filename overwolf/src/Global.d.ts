@@ -46,7 +46,7 @@ declare type PlayerData = {
     position: Vector3,
     rotation: Vector3,
     compass: string,
-    map: string,
-    name: string,
-    world: string,
+    map: string | undefined,
+    name: string | undefined,
+    world: string | undefined,
 }
