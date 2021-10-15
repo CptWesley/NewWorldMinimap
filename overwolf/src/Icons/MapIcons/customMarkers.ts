@@ -13,6 +13,10 @@ export const customMarkers = {
                 x: 7318,
                 y: 3746,
             },
+            'windsward': {
+                x: 9368,
+                y: 2651,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -26,6 +30,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7423,
                 y: 3703,
+            },
+            'windsward': {
+                x: 9371,
+                y: 2691,
             },
         },
         'marauder_commander': {
@@ -41,6 +49,10 @@ export const customMarkers = {
                 x: 7286,
                 y: 3753,
             },
+            'windsward': {
+                x: 9350,
+                y: 2719,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -54,6 +66,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7401,
                 y: 3712,
+            },
+            'windsward': {
+                x: 9376,
+                y: 2653,
             },
         },
         'forge': {
@@ -69,6 +85,10 @@ export const customMarkers = {
                 x: 7391,
                 y: 3642,
             },
+            'windsward': {
+                x: 9338,
+                y: 2719,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -82,6 +102,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7384,
                 y: 3733,
+            },
+            'windsward': {
+                x: 9320,
+                y: 2666,
             },
         },
         'loom': {
@@ -97,6 +121,10 @@ export const customMarkers = {
                 x: 7434,
                 y: 3707,
             },
+            'windsward': {
+                x: 9356,
+                y: 2693,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -110,6 +138,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7436,
                 y: 3700,
+            },
+            'windsward': {
+                x: 9352,
+                y: 2704,
             },
         },
         'stonecutting_table': {
@@ -125,6 +157,10 @@ export const customMarkers = {
                 x: 7384,
                 y: 3651,
             },
+            'windsward': {
+                x: 9349,
+                y: 2712,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -138,6 +174,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7313,
                 y: 3769,
+            },
+            'windsward': {
+                x: 9383,
+                y: 2757,
             },
         },
         'trading_post': {
@@ -153,6 +193,10 @@ export const customMarkers = {
                 x: 7347,
                 y: 3742,
             },
+            'windsward': {
+                x: 9322,
+                y: 2704,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -166,6 +210,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7358,
                 y: 3645,
+            },
+            'windsward': {
+                x: 9340,
+                y: 2700,
             },
         },
         'governors_desk': {
@@ -181,6 +229,10 @@ export const customMarkers = {
                 x: 7323,
                 y: 3779,
             },
+            'windsward': {
+                x: 9373,
+                y: 2766,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -195,6 +247,10 @@ export const customMarkers = {
                 x: 7335,
                 y: 3731,
             },
+            'windsward': {
+                x: 9341,
+                y: 2688,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -208,6 +264,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7371,
                 y: 3634,
+            },
+            'windsward': {
+                x: 9329,
+                y: 2691,
             },
         },
         'storage_shed': {
@@ -235,6 +295,14 @@ export const customMarkers = {
                 x: 7354,
                 y: 3720,
             },
+            'windsward_1': {
+                x: 9287,
+                y: 2681,
+            },
+            'windsward_2': {
+                x: 9346,
+                y: 2656,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -248,6 +316,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7417,
                 y: 3712,
+            },
+            'windsward': {
+                x: 9362,
+                y: 2656,
             },
         },
         'town_project_board': {
@@ -274,6 +346,14 @@ export const customMarkers = {
             'monarchs_bluff_2': {
                 x: 7329,
                 y: 3768,
+            },
+            'windsward_1': {
+                x: 9363,
+                y: 2752,
+            },
+            'windsward_2': {
+                x: 9377,
+                y: 2772,
             },
         },
         'war_board': {
@@ -313,6 +393,18 @@ export const customMarkers = {
                 x: 7336,
                 y: 3762,
             },
+            'windsward_1': {
+                x: 9355,
+                y: 2760,
+            },
+            'windsward_2': {
+                x: 8952,
+                y: 3268,
+            },
+            'windsward_3': {
+                x: 9069,
+                y: 3203,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -326,6 +418,10 @@ export const customMarkers = {
             'monarchs_bluffs': {
                 x: 7350,
                 y: 3652,
+            },
+            'windsward': {
+                x: 9354,
+                y: 2661,
             },
         },
     },
