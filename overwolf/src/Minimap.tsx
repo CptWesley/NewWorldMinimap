@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
+import { getHotkeyManager } from './logic/hotkeyManager';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import { getMarkers } from './logic/markers';
@@ -49,6 +50,7 @@ const useStyles = makeStyles()({
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
 
+const hotkeyManager = getHotkeyManager();
 export default function Minimap(props: IProps) {
     const {
         className,
@@ -260,6 +262,12 @@ export default function Minimap(props: IProps) {
             markerRegistration();
         };
     }, []);
+
+    useEffect(() => {
+        const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5));
+        const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5));
+        return () => { zoomInRegistration(); zoomOutRegistration(); };
+    }, [appContext.settings.zoomLevel]);
 
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
