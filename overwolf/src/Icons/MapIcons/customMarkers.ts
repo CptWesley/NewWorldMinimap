@@ -42,6 +42,10 @@ export const customMarkers = {
                 x: 13069,
                 y: 4438,
             },
+            'mourningdale': {
+                x: 13203,
+                y: 6946,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -83,6 +87,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12972,
                 y: 4400,
+            },
+            'mourningdale': {
+                x: 13203,
+                y: 6975,
             },
         },
         'marauder_commander': {
@@ -126,6 +134,10 @@ export const customMarkers = {
                 x: 13012,
                 y: 4433,
             },
+            'mourningdale': {
+                x: 13159,
+                y: 6990,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -167,6 +179,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12979,
                 y: 4446,
+            },
+            'mourningdale': {
+                x: 13155,
+                y: 6976,
             },
         },
         'forge': {
@@ -210,6 +226,10 @@ export const customMarkers = {
                 x: 13028,
                 y: 4471,
             },
+            'mourningdale': {
+                x: 13206,
+                y: 7004,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -251,6 +271,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12968,
                 y: 4393,
+            },
+            'mourningdale': {
+                x: 13185,
+                y: 6932,
             },
         },
         'loom': {
@@ -294,6 +318,10 @@ export const customMarkers = {
                 x: 12970,
                 y: 4441,
             },
+            'mourningdale': {
+                x: 13175,
+                y: 6979,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -335,6 +363,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12967,
                 y: 4432,
+            },
+            'mourningdale': {
+                x: 13166,
+                y: 6983,
             },
         },
         'stonecutting_table': {
@@ -378,6 +410,10 @@ export const customMarkers = {
                 x: 12991,
                 y: 4471,
             },
+            'mourningdale': {
+                x: 13210,
+                y: 6993,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -419,6 +455,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12958,
                 y: 4395,
+            },
+            'mourningdale': {
+                x: 13149,
+                y: 7038,
             },
         },
         'trading_post': {
@@ -466,6 +506,10 @@ export const customMarkers = {
                 x: 12995,
                 y: 4496,
             },
+            'mourningdale': {
+                x: 13159,
+                y: 6958,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -507,6 +551,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12981,
                 y: 4514,
+            },
+            'mourningdale': {
+                x: 13173,
+                y: 6967,
             },
         },
         'governors_desk': {
@@ -550,6 +598,10 @@ export const customMarkers = {
                 x: 12968,
                 y: 4393,
             },
+            'mourningdale': {
+                x: 13139,
+                y: 7032,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -592,6 +644,10 @@ export const customMarkers = {
                 x: 12945,
                 y: 4439,
             },
+            'mourningdale': {
+                x: 13175,
+                y: 6958,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -633,6 +689,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12971,
                 y: 4517,
+            },
+            'mourningdale': {
+                x: 13184,
+                y: 6965,
             },
         },
         'storage_shed': {
@@ -716,6 +776,14 @@ export const customMarkers = {
                 x: 13001,
                 y: 4350,
             },
+            'mourningdale_1': {
+                x: 13192,
+                y: 7002,
+            },
+            'mourningdale_2': {
+                x: 13151,
+                y: 6916,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -757,6 +825,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12991,
                 y: 4450,
+            },
+            'mourningdale': {
+                x: 13185,
+                y: 6976,
             },
         },
         'town_project_board': {
@@ -839,6 +911,14 @@ export const customMarkers = {
             'restless_shore_2': {
                 x: 13022,
                 y: 4343,
+            },
+            'mourningdale_1': {
+                x: 13132,
+                y: 7018,
+            },
+            'mourningdale_2': {
+                x: 13136,
+                y: 7041,
             },
         },
         'war_board': {
@@ -962,6 +1042,18 @@ export const customMarkers = {
                 x: 13009,
                 y: 4371,
             },
+            'mourningdale_1': {
+                x: 13682,
+                y: 6344,
+            },
+            'mourningdale_2': {
+                x: 13612,
+                y: 6453,
+            },
+            'mourningdale_3': {
+                x: 13147,
+                y: 7018,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -1003,6 +1095,10 @@ export const customMarkers = {
             'restless_shore': {
                 x: 12965,
                 y: 4458,
+            },
+            'mourningdale': {
+                x: 13192,
+                y: 6987,
             },
         },
     },
