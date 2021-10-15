@@ -8,8 +8,8 @@
     "dev": "webpack --watch --mode=development",
     "watch": "webpack --watch --mode=development",
     "type-check": "tsc --sourcemap false --incremental --skipLibCheck -w --noemit",
-    "lint": "./node_modules/.bin/eslint . --ext ts,tsx",
-    "lint:fix": "yarn lint --fix"
+    "lint": "eslint --ext ts,tsx",
+    "lint:fix": "eslint --ext ts,tsx --fix"
   },
   "keywords": [],
   "author": "",
