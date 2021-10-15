@@ -1,3 +1,4 @@
+import { customMarkers } from '../Icons/MapIcons/customMarkers';
 import { getIconName } from './icons';
 import { loadIconCategory, loadIconType } from './storage';
 import { getTileCacheKey, getTileCacheKeyFromWorldCoordinate } from './tiles';
@@ -16,6 +17,11 @@ const fillingPromise = fillCache();
 async function fillCache() {
     const tree = await getJson();
 
+    fillCacheWithTree(tree);
+    fillCacheWithTree(customMarkers);
+}
+
+function fillCacheWithTree(tree: any) {
     for (const [category, catContent] of Object.entries(tree)) {
         if (category === 'areas') {
             continue;
@@ -42,8 +48,6 @@ async function fillCache() {
             }
         }
     }
-
-    return;
 }
 
 const cache = new Map<string, Marker[]>();
