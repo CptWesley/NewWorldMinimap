@@ -38,6 +38,10 @@ export const customMarkers = {
                 x: 11474,
                 y: 5338,
             },
+            'restless_shore': {
+                x: 13069,
+                y: 4438,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -75,6 +79,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11439,
                 y: 5289,
+            },
+            'restless_shore': {
+                x: 12972,
+                y: 4400,
             },
         },
         'marauder_commander': {
@@ -114,6 +122,10 @@ export const customMarkers = {
                 x: 11401,
                 y: 5329,
             },
+            'restless_shore': {
+                x: 13012,
+                y: 4433,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -151,6 +163,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11431,
                 y: 5326,
+            },
+            'restless_shore': {
+                x: 12979,
+                y: 4446,
             },
         },
         'forge': {
@@ -190,6 +206,10 @@ export const customMarkers = {
                 x: 11471,
                 y: 5376,
             },
+            'restless_shore': {
+                x: 13028,
+                y: 4471,
+            },
         },
         'inn': {
             'cutlass_keys': {
@@ -227,6 +247,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11442,
                 y: 5272,
+            },
+            'restless_shore': {
+                x: 12968,
+                y: 4393,
             },
         },
         'loom': {
@@ -266,6 +290,10 @@ export const customMarkers = {
                 x: 11452,
                 y: 5334,
             },
+            'restless_shore': {
+                x: 12970,
+                y: 4441,
+            },
         },
         'outfitting_station': {
             'cutlass_keys': {
@@ -303,6 +331,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11448,
                 y: 5327,
+            },
+            'restless_shore': {
+                x: 12967,
+                y: 4432,
             },
         },
         'stonecutting_table': {
@@ -342,6 +374,10 @@ export const customMarkers = {
                 x: 11460,
                 y: 5377,
             },
+            'restless_shore': {
+                x: 12991,
+                y: 4471,
+            },
         },
         'territory_planning_board': {
             'cutlass_keys': {
@@ -379,6 +415,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11484,
                 y: 5316,
+            },
+            'restless_shore': {
+                x: 12958,
+                y: 4395,
             },
         },
         'trading_post': {
@@ -422,6 +462,10 @@ export const customMarkers = {
                 x: 11407,
                 y: 5339,
             },
+            'restless_shore': {
+                x: 12995,
+                y: 4496,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -459,6 +503,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11486,
                 y: 5345,
+            },
+            'restless_shore': {
+                x: 12981,
+                y: 4514,
             },
         },
         'governors_desk': {
@@ -498,6 +546,10 @@ export const customMarkers = {
                 x: 11482,
                 y: 5325,
             },
+            'restless_shore': {
+                x: 12968,
+                y: 4393,
+            },
         },
         'kitchen': {
             'cutlass_keys': {
@@ -536,6 +588,10 @@ export const customMarkers = {
                 x: 11438,
                 y: 5328,
             },
+            'restless_shore': {
+                x: 12945,
+                y: 4439,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -573,6 +629,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11465,
                 y: 5362,
+            },
+            'restless_shore': {
+                x: 12971,
+                y: 4517,
             },
         },
         'storage_shed': {
@@ -648,6 +708,14 @@ export const customMarkers = {
                 x: 11431,
                 y: 5265,
             },
+            'restless_shore_1': {
+                x: 13026,
+                y: 4459,
+            },
+            'restless_shore_2': {
+                x: 13001,
+                y: 4350,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -685,6 +753,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11473,
                 y: 5351,
+            },
+            'restless_shore': {
+                x: 12991,
+                y: 4450,
             },
         },
         'town_project_board': {
@@ -759,6 +831,14 @@ export const customMarkers = {
             'weavers_fen_2': {
                 x: 11492,
                 y: 5325,
+            },
+            'restless_shore_1': {
+                x: 13006,
+                y: 4358,
+            },
+            'restless_shore_2': {
+                x: 13022,
+                y: 4343,
             },
         },
         'war_board': {
@@ -870,6 +950,18 @@ export const customMarkers = {
                 x: 11456,
                 y: 5319,
             },
+            'restless_shore_1': {
+                x: 14050,
+                y: 4851,
+            },
+            'restless_shore_2': {
+                x: 14033,
+                y: 4971,
+            },
+            'restless_shore_3': {
+                x: 13009,
+                y: 4371,
+            },
         },
         'workshop': {
             'cutlass_keys': {
@@ -907,6 +999,10 @@ export const customMarkers = {
             'weavers_fen': {
                 x: 11471,
                 y: 5377,
+            },
+            'restless_shore': {
+                x: 12965,
+                y: 4458,
             },
         },
     },
