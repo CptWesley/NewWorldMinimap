@@ -23,6 +23,9 @@ const scopedSettings: (keyof SimpleStorageSettings)[] = [
     'zoomLevel',
 ];
 
+export const iconSettingStorageScope = 'icon::';
+const defaultHiddenIconCategories = ['npc', 'pois'];
+
 export function store<TKey extends keyof SimpleStorageSettings>(key: TKey, value: SimpleStorageSettings[TKey]) {
     let storageKey: string = key;
     if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {
@@ -62,22 +65,22 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
-export function storeIconCategory(name: string, value: boolean) {
-    const key = 'icon.category.' + name + '.visible';
+export function storeIconCategory(category: string, value: boolean) {
+    const key = `${iconSettingStorageScope}.${category}.visible`;
     return storeUntyped(key, value);
 }
 
-export function storeIconType(name: string, value: boolean) {
-    const key = 'icon.type.' + name + '.visible';
+export function storeIconType(category: string, type: string, value: boolean) {
+    const key = `${iconSettingStorageScope}.${category}-${type}.visible`;
     return storeUntyped(key, value);
 }
 
-export function loadIconCategory(name: string) {
-    const key = 'icon.category.' + name + '.visible';
-    return loadUntyped(key, name !== 'npc' && name !== 'pois') as boolean;
+export function loadIconCategory(category: string) {
+    const key = `${iconSettingStorageScope}.${category}.visible`;
+    return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
 }
 
-export function loadIconType(name: string) {
-    const key = 'icon.type.' + name + '.visible';
+export function loadIconType(category: string, type: string) {
+    const key = `${iconSettingStorageScope}.${category}-${type}.visible`;
     return loadUntyped(key, true) as boolean;
 }

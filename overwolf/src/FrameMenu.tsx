@@ -142,12 +142,12 @@ export default function FrameMenu(props: IProps) {
         context.update({ [key]: value });
     }
 
-    function updateIconSettings(catName: string, name: string, value: boolean) {
+    function updateIconSettings(category: string, type: string, value: boolean) {
         const settings = context.settings.iconSettings;
-        storeIconType(name, value);
+        storeIconType(category, type, value);
         if (settings) {
             return produce(settings, draft => {
-                draft.categories[catName].types[name].value = value;
+                draft.categories[category].types[type].value = value;
             });
         }
         return settings;

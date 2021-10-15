@@ -35,7 +35,7 @@ export async function getDefaultIconSettings() {
             if (!category.types[marker.type]) {
                 category.types[marker.type] = {
                     name: getIconName(marker.type),
-                    value: loadIconType(marker.type),
+                    value: loadIconType(marker.category, marker.type),
                 };
             }
         });
