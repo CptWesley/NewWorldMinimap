@@ -65,9 +65,9 @@ function transformData(info: any): PlayerData | undefined {
         position,
         rotation,
         compass,
-        map: info.map ? (info.map as string).trim() : null,
-        name: info.player_name ? (info.player_name as string).trim() : null,
-        world: info.world_name ? (info.world_name as string).trim() : null,
+        map: info.map ? (info.map as string).trim() : undefined,
+        name: info.player_name ? (info.player_name as string).trim() : undefined,
+        world: info.world_name ? (info.world_name as string).trim() : undefined,
     };
 }
 
