@@ -1,6 +1,6 @@
 import { getIconName } from './icons';
-import { getTileMarkerCache } from './markerCache';
 import { loadIconCategory, loadIconType } from './storage';
+import { getTileMarkerCache } from './tileMarkerCache';
 
 const tileMarkerCache = getTileMarkerCache();
 

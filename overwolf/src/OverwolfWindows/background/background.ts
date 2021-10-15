@@ -1,6 +1,6 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
-import { initializeTileMarkerCache } from '../../logic/markerCache';
 import { initializeTileCache } from '../../logic/tileCache';
+import { initializeTileMarkerCache } from '../../logic/tileMarkerCache';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
