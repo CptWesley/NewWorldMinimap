@@ -39,6 +39,7 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
+    const [currentRotation, setCurrentRotation] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
@@ -54,7 +55,7 @@ export default function Minimap(props: IProps) {
         const currentDraw = Date.now();
         lastDraw.current = currentDraw;
 
-        const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
+        const angle = -currentRotation * Math.PI / 180;
         const zoomLevel = appContext.value.zoomLevel;
         const renderAsCompass = appContext.value.compassMode && (appContext.isTransparentSurface ?? false);
 
@@ -190,13 +191,14 @@ export default function Minimap(props: IProps) {
         drawRef.current();
     }
 
-    function setPosition(pos: Vector2) {
-        if (pos.x === currentPosition.x && pos.y === currentPosition.y) {
+    function setPosition(pos: Vector2, rot: number) {
+        if (pos.x === currentPosition.x && pos.y === currentPosition.y && rot === currentRotation) {
             return;
         }
 
         setLastPosition(currentPosition);
         setCurrentPosition(pos);
+        setCurrentRotation(rot);
     }
 
     useEffect(() => {
@@ -211,7 +213,7 @@ export default function Minimap(props: IProps) {
         window.addEventListener('resize', redraw);
 
         const callbackUnregister = registerEventCallback(info => {
-            setPosition(info.position);
+            setPosition(info.position, info.rotation.z);
         });
 
         return function () {
