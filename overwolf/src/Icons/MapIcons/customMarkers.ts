@@ -50,6 +50,10 @@ export const customMarkers = {
                 x: 11127,
                 y: 7292,
             },
+            'great_cleave': {
+                x: 10073,
+                y: 7496,
+            },
         },
         'covenant_adjudicator': {
             'cutlass_keys': {
@@ -99,6 +103,10 @@ export const customMarkers = {
             'edengrove': {
                 x: 11144,
                 y: 7326,
+            },
+            'great_cleave': {
+                x: 10062,
+                y: 7505,
             },
         },
         'marauder_commander': {
@@ -150,6 +158,10 @@ export const customMarkers = {
                 x: 11150,
                 y: 7303,
             },
+            'great_cleave': {
+                x: 10048,
+                y: 7524,
+            },
         },
         'arcane_repository': {
             'cutlass_keys': {
@@ -195,6 +207,10 @@ export const customMarkers = {
             'mourningdale': {
                 x: 13155,
                 y: 6976,
+            },
+            'great_cleave': {
+                x: 10076,
+                y: 7491,
             },
         },
         'forge': {
@@ -245,6 +261,10 @@ export const customMarkers = {
             'edengrove': {
                 x: 12083,
                 y: 8539,
+            },
+            'great_cleave': {
+                x: 8870,
+                y: 7920,
             },
         },
         'inn': {
@@ -300,6 +320,14 @@ export const customMarkers = {
                 x: 12086,
                 y: 8507,
             },
+            'great_cleave_1': {
+                x: 10072,
+                y: 7513,
+            },
+            'great_cleave_2': {
+                x: 8854,
+                y: 7966,
+            },
         },
         'loom': {
             'cutlass_keys': {
@@ -349,6 +377,14 @@ export const customMarkers = {
             'edengrove': {
                 x: 12056,
                 y: 8526,
+            },
+            'great_cleave_1': {
+                x: 10049,
+                y: 7489,
+            },
+            'great_cleave_2': {
+                x: 8850,
+                y: 7943,
             },
         },
         'outfitting_station': {
@@ -554,6 +590,14 @@ export const customMarkers = {
                 x: 12079,
                 y: 8522,
             },
+            'great_cleave_1': {
+                x: 10055,
+                y: 7511,
+            },
+            'great_cleave_2': {
+                x: 8873,
+                y: 7954,
+            },
         },
         'woodshop': {
             'cutlass_keys': {
@@ -607,6 +651,10 @@ export const customMarkers = {
             'edengrove_2': {
                 x: 12092,
                 y: 8532,
+            },
+            'great_cleave': {
+                x: 8884,
+                y: 7943,
             },
         },
         'governors_desk': {
@@ -708,6 +756,10 @@ export const customMarkers = {
                 x: 12066,
                 y: 8501,
             },
+            'great_cleave': {
+                x: 8879,
+                y: 7975,
+            },
         },
         'smelter': {
             'cutlass_keys': {
@@ -761,6 +813,14 @@ export const customMarkers = {
             'edengrove_2': {
                 x: 12070,
                 y: 8519,
+            },
+            'great_cleave_1': {
+                x: 10059,
+                y: 7498,
+            },
+            'great_cleave_2': {
+                x: 8867,
+                y: 7945,
             },
         },
         'storage_shed': {
@@ -860,6 +920,14 @@ export const customMarkers = {
                 x: 12093,
                 y: 8510,
             },
+            'great_cleave_1': {
+                x: 10072,
+                y: 7521,
+            },
+            'great_cleave_2': {
+                x: 8845,
+                y: 7960,
+            },
         },
         'tannery': {
             'cutlass_keys': {
@@ -913,6 +981,14 @@ export const customMarkers = {
             'edengrove_2': {
                 x: 12097,
                 y: 8517,
+            },
+            'great_cleave_1': {
+                x: 10067,
+                y: 7526,
+            },
+            'great_cleave_2': {
+                x: 8900,
+                y: 7954,
             },
         },
         'town_project_board': {
@@ -1187,6 +1263,10 @@ export const customMarkers = {
             'edengrove': {
                 x: 11115,
                 y: 7317,
+            },
+            'great_cleave': {
+                x: 8846,
+                y: 7953,
             },
         },
     },
