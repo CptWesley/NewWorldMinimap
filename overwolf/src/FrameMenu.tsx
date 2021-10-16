@@ -255,7 +255,7 @@ export default function FrameMenu(props: IProps) {
         classes.root,
         !visible && classes.hidden,
         context.settings.showHeader && classes.belowHeader,
-        isDraggingMapSlider && classes.peek);
+        isDraggingMapSlider && context.gameRunning && classes.peek);
 
     return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
