@@ -16,14 +16,22 @@ export function rotateAround(center: Vector2, point: Vector2, angle: number) {
 }
 
 export function interpolateVectors(start: Vector2, end: Vector2, percentage: number) {
+    const mu = computeCosineInterpolationMu(percentage);
+
     return {
-        x: start.x * (1 - percentage) + end.x * percentage,
-        y: start.y * (1 - percentage) + end.y * percentage,
+        x: start.x * (1 - mu) + end.x * mu,
+        y: start.y * (1 - mu) + end.y * mu,
     };
 }
 
-export function interpolate(start: number, end: number, percentage: number) {
-    return start * (1 - percentage) + end * percentage;
+export function interpolateAngle(start: number, end: number, percentage: number) {
+    const mu = computeCosineInterpolationMu(percentage);
+
+    return start * (1 - mu) + end * mu;
+}
+
+function computeCosineInterpolationMu(percentage: number) {
+    return (1 - Math.cos(percentage * Math.PI)) / 2;
 }
 
 export function squaredDistance(start: Vector2, end: Vector2) {

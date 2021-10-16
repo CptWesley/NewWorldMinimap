@@ -11,7 +11,7 @@ import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
-import { getAngle, interpolate, interpolateVectors, rotateAround, squaredDistance } from './logic/util';
+import { getAngle, interpolateAngle, interpolateVectors, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -222,7 +222,7 @@ export default function Minimap(props: IProps) {
 
         const percentage = timeDif / positionUpdateRate;
         const interpolatedPosition = interpolateVectors(lastPosition, currentPosition, percentage);
-        const interpolatedAngle = interpolate(lastAngle, currentAngle, percentage);
+        const interpolatedAngle = interpolateAngle(lastAngle, currentAngle, percentage);
         // Use the `draw` in the ref to get the most up-to-date one
         drawRef.current(interpolatedPosition, interpolatedAngle);
     }
