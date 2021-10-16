@@ -17,6 +17,7 @@ export const theme = {
     headerClosePress: '#d62700',
 
     frameMenuBackground: 'rgba(51, 51, 51, 0.75)',
+    frameMenuBackgroundPeek: 'rgba(51, 51, 51, 0.5)',
     frameMenuColor: '#ffffff',
 
     toolbarBackground: '#333333',

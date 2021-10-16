@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { OWHotkeys, OWWindow } from '@overwolf/overwolf-api-ts/dist';
+import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
@@ -8,7 +8,7 @@ import DesktopWindowIcon from './Icons/DesktopWindowIcon';
 import SettingsIcon from './Icons/SettingsIcon';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getBackgroundController } from './OverwolfWindows/background/background';
-import { hotkeys, newWorldId, windowNames } from './OverwolfWindows/consts';
+import { windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
 import { makeStyles } from './theme';
 

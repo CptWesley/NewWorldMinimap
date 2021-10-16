@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import produce from 'immer';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { faComment, faCommentSlash, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppContext } from './contexts/AppContext';
@@ -35,10 +35,17 @@ const useStyles = makeStyles()(theme => ({
         bottom: 0,
         zIndex: globalLayers.frameMenu,
         backdropFilter: 'blur(10px)',
+        transition: 'backdrop-filter 300ms ease, background 300ms ease',
+    },
+    belowHeader: {
         marginTop: theme.headerHeight,
     },
     hidden: {
         display: 'none !important',
+    },
+    peek: {
+        background: theme.frameMenuBackgroundPeek,
+        backdropFilter: 'none',
     },
     return: {
         background: 'transparent',
@@ -158,6 +165,8 @@ export default function FrameMenu(props: IProps) {
     const context = useContext(AppContext);
     const { classes } = useStyles();
 
+    const [isDraggingMapSlider, setIsDraggingMapSlider] = useState(false);
+
     function updateIconCategorySettings(name: string, value: boolean) {
         const settings = context.settings.iconSettings;
         storeIconCategory(name, value);
@@ -261,7 +270,21 @@ export default function FrameMenu(props: IProps) {
         });
     }
 
-    return <div className={clsx(classes.root, !visible && classes.hidden)}>
+    function handleMapSliderMouseDown() {
+        setIsDraggingMapSlider(true);
+    }
+
+    function handleMapSliderMouseUp() {
+        setIsDraggingMapSlider(false);
+    }
+
+    const rootClassName = clsx(
+        classes.root,
+        !visible && classes.hidden,
+        context.settings.showHeader && classes.belowHeader,
+        isDraggingMapSlider && context.gameRunning && classes.peek);
+
+    return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
             <ReturnIcon />
         </button>
@@ -323,6 +346,8 @@ export default function FrameMenu(props: IProps) {
                                     const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
                                     updateSimpleSetting('zoomLevel', newValue);
                                 }}
+                                onMouseDown={handleMapSliderMouseDown}
+                                onMouseUp={handleMapSliderMouseUp}
                             />
                             Zoom Level
                         </label>
@@ -350,6 +375,8 @@ export default function FrameMenu(props: IProps) {
                                     const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
                                     updateSimpleSetting('townZoomLevel', newValue);
                                 }}
+                                onMouseDown={handleMapSliderMouseDown}
+                                onMouseUp={handleMapSliderMouseUp}
                             />
                             Town Zoom Level
                         </label>
@@ -363,6 +390,8 @@ export default function FrameMenu(props: IProps) {
                                 max='5'
                                 step='0.1'
                                 onChange={e => updateSimpleSetting('iconScale', e.currentTarget.valueAsNumber)}
+                                onMouseDown={handleMapSliderMouseDown}
+                                onMouseUp={handleMapSliderMouseUp}
                             />
                             Icon Scale
                         </label>
