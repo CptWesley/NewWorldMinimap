@@ -316,7 +316,8 @@ export default function Minimap(props: IProps) {
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        window.addEventListener('resize', () => redraw(true));
+        const onResize = () => redraw(true);
+        window.addEventListener('resize', onResize);
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
@@ -326,7 +327,7 @@ export default function Minimap(props: IProps) {
         const interval = interpolationEnabled ? setInterval(() => redraw(false), 100) : -1;
 
         return function () {
-            window.removeEventListener('resize', () => redraw(true));
+            window.removeEventListener('resize', onResize);
             callbackUnregister();
             if (interpolationEnabled) {
                 clearInterval(interval);
