@@ -27,7 +27,17 @@ export function interpolateVectors(start: Vector2, end: Vector2, percentage: num
 export function interpolateAngle(start: number, end: number, percentage: number) {
     const mu = computeCosineInterpolationMu(percentage);
 
-    return start * (1 - mu) + end * mu;
+    const alternativeEnd1 = end - Math.PI * 2;
+    const alternativeEnd2 = end + Math.PI * 2;
+
+    const dif0 = Math.abs(end - start);
+    const dif1 = Math.abs(alternativeEnd1 - start);
+    const dif2 = Math.abs(alternativeEnd2 - start);
+
+    const minDif = Math.min(dif0, dif1, dif2);
+    const bestEnd = minDif === dif0 ? end : minDif === dif1 ? alternativeEnd1 : alternativeEnd2;
+
+    return start * (1 - mu) + bestEnd * mu;
 }
 
 function computeCosineInterpolationMu(percentage: number) {
