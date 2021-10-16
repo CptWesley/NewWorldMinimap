@@ -59,7 +59,7 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
-    const [lastPositionUpdate, setLastPositionUpdate] = useState<number>(Date.now());
+    const [lastPositionUpdate, setLastPositionUpdate] = useState<number>(performance.now());
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const [lastAngle, setLastAngle] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
@@ -74,7 +74,7 @@ export default function Minimap(props: IProps) {
 
     const draw = async (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
-        const currentDraw = Date.now();
+        const currentDraw = performance.now();
         lastDraw.current = currentDraw;
 
         const zoomLevel = appContext.settings.zoomLevel;
@@ -212,7 +212,7 @@ export default function Minimap(props: IProps) {
     drawRef.current = draw;
 
     function redraw() {
-        const curTime = Date.now();
+        const curTime = performance.now();
         const timeDif = curTime - lastPositionUpdate;
         const currentAngle = getAngle(lastPosition, currentPosition);
 
@@ -246,7 +246,7 @@ export default function Minimap(props: IProps) {
         }
 
         setLastAngle(getAngle(lastPosition, currentPosition));
-        setLastPositionUpdate(Date.now());
+        setLastPositionUpdate(performance.now());
         setLastPosition(currentPosition);
         setCurrentPosition(pos);
     }
