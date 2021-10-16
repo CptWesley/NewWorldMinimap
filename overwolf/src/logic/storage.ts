@@ -83,7 +83,7 @@ export function storeIconCategory(category: string, value: boolean) {
 
 /** Stores whether the icon type (part of a category) is visible. */
 export function storeIconType(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}-${type}.visible`;
+    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
     return storeUntyped(key, value);
 }
 
