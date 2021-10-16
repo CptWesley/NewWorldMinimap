@@ -301,22 +301,6 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range}>
-                            <input
-                                type='range'
-                                value={zoomLevelSettingBounds[1] - context.settings.townZoomLevel}
-                                min='0'
-                                max={zoomLevelSettingBounds[1] - zoomLevelSettingBounds[0]}
-                                step='0.1'
-                                onChange={e => {
-                                    const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
-                                    updateSimpleSetting('townZoomLevel', newValue);
-                                }}
-                            />
-                            Town Zoom Level
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
                         <label className={classes.checkbox}>
                             <input
                                 type='checkbox'
@@ -324,6 +308,23 @@ export default function FrameMenu(props: IProps) {
                                 onChange={e => updateSimpleSetting('townZoom', e.currentTarget.checked)}
                             />
                             Change Zoom In Towns
+                        </label>
+                    </div>
+                    <div className={classes.setting}>
+                        <label className={classes.range}>
+                            <input
+                                type='range'
+                                value={zoomLevelSettingBounds[1] - context.settings.townZoomLevel}
+                                min='0'
+                                max={zoomLevelSettingBounds[1] - zoomLevelSettingBounds[0]}
+                                step='0.1'
+                                disabled={!context.settings.townZoom}
+                                onChange={e => {
+                                    const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
+                                    updateSimpleSetting('townZoomLevel', newValue);
+                                }}
+                            />
+                            Town Zoom Level
                         </label>
                     </div>
                     <div className={classes.setting}>
