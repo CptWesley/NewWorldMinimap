@@ -33,6 +33,8 @@ const useStyles = makeStyles()(theme => ({
         bottom: 0,
         zIndex: globalLayers.frameMenu,
         backdropFilter: 'blur(10px)',
+    },
+    belowHeader: {
         marginTop: theme.headerHeight,
     },
     hidden: {
@@ -234,7 +236,7 @@ export default function FrameMenu(props: IProps) {
         });
     }
 
-    return <div className={clsx(classes.root, !visible && classes.hidden)}>
+    return <div className={clsx(classes.root, !visible && classes.hidden, context.settings.showHeader && classes.belowHeader)}>
         <button className={classes.return} onClick={onClose}>
             <ReturnIcon />
         </button>
