@@ -11,7 +11,7 @@ import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
-import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, rotateAround, squaredDistance } from './logic/util';
+import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictAngle, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -229,11 +229,21 @@ export default function Minimap(props: IProps) {
         let interpolatedPosition = currentPosition;
         let interpolatedAngle = currentAngle;
 
-        if (appContext.settings.interpolation === 'linear') {
+        if (appContext.settings.interpolation === 'linear-interpolation') {
             interpolatedPosition = interpolateVectorsLinear(lastPosition, currentPosition, percentage);
             interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
-        } else if (appContext.settings.interpolation === 'cosine') {
+        } else if (appContext.settings.interpolation === 'cosine-interpolation') {
             interpolatedPosition = interpolateVectorsCosine(lastPosition, currentPosition, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
+        }
+
+        const predictedPosition = predictVector(lastPosition, currentPosition);
+
+        if (appContext.settings.interpolation === 'linear-extrapolation') {
+            interpolatedPosition = interpolateVectorsLinear(currentPosition, predictedPosition, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
+        } else if (appContext.settings.interpolation === 'cosine-extrapolation') {
+            interpolatedPosition = interpolateVectorsCosine(currentPosition, predictedPosition, percentage);
             interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
         }
 
@@ -305,7 +315,8 @@ export default function Minimap(props: IProps) {
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        window.addEventListener('resize', () => redraw(true));
+        const onResize = () => redraw(true);
+        window.addEventListener('resize', onResize);
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
@@ -315,7 +326,7 @@ export default function Minimap(props: IProps) {
         const interval = interpolationEnabled ? setInterval(() => redraw(false), 100) : -1;
 
         return function () {
-            window.removeEventListener('resize', () => redraw(true));
+            window.removeEventListener('resize', onResize);
             callbackUnregister();
             if (interpolationEnabled) {
                 clearInterval(interval);

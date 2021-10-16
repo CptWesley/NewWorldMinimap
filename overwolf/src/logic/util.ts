@@ -69,3 +69,18 @@ export function squaredDistance(start: Vector2, end: Vector2) {
 export function getAngle(start: Vector2, end: Vector2) {
     return Math.atan2(end.x - start.x, end.y - start.y);
 }
+
+export function predictVector(start: Vector2, end: Vector2) {
+    const xDif = end.x - start.x;
+    const yDif = end.y - start.y;
+    const x = end.x + xDif;
+    const y = end.y + yDif;
+
+    return { x, y };
+}
+
+export function predictAngle(start: number, end: number) {
+    const bestEnd = correctEndAngle(start, end);
+    const dif = bestEnd - start;
+    return bestEnd + dif;
+}

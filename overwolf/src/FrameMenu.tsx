@@ -4,6 +4,8 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
+import SelectIcon from './Icons/SelectIcon';
+import UnselectIcon from './Icons/UnselectIcon';
 import { SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
@@ -41,6 +43,18 @@ const useStyles = makeStyles()(theme => ({
         border: 'none',
         color: theme.frameMenuColor,
         padding: 0,
+
+        '&:focus': {
+            outline: `1px solid ${theme.frameMenuColor}`,
+        },
+    },
+    selectIcon: {
+        background: 'transparent',
+        border: 'none',
+        color: theme.frameMenuColor,
+        padding: 0,
+        width: 18,
+        height: 18,
 
         '&:focus': {
             outline: `1px solid ${theme.frameMenuColor}`,
@@ -108,6 +122,14 @@ const useStyles = makeStyles()(theme => ({
             background: 'rgba(255, 255, 255, 0.33)',
         },
     },
+    iconCategory: {
+        display: 'flex',
+        alignItems: 'center',
+
+        '& > span': {
+            flexGrow: 1,
+        },
+    },
     indent: {
         marginLeft: 19,
     },
@@ -153,6 +175,21 @@ export default function FrameMenu(props: IProps) {
         return settings;
     }
 
+    function selectAllIconsByCategory(category: string, value: boolean) {
+        const settings = context.settings.iconSettings;
+        if (settings) {
+            return produce(settings, draft => {
+                storeIconCategory(category, value);
+                draft.categories[category].value = value;
+                for (const type in draft.categories[category].types) {
+                    draft.categories[category].types[type].value = value;
+                    storeIconType(category, type, value);
+                }
+            });
+        }
+        return settings;
+    }
+
     function renderIconFilterSettings() {
         if (!context.settings.iconSettings) {
             return null;
@@ -173,7 +210,7 @@ export default function FrameMenu(props: IProps) {
             });
 
             return <details key={'FrameMenuCat' + categoryKey}>
-                <summary className={classes.summary}>
+                <summary className={clsx(classes.summary, classes.iconCategory)}>
                     <label className={classes.checkbox}>
                         <input
                             type='checkbox'
@@ -182,6 +219,13 @@ export default function FrameMenu(props: IProps) {
                         />
                         {category.name}
                     </label>
+                    <span />
+                    <button className={classes.selectIcon} onClick={() => context.update({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}>
+                        <SelectIcon />
+                    </button>
+                    <button className={classes.selectIcon} onClick={() => context.update({ iconSettings: selectAllIconsByCategory(categoryKey, false) })}>
+                        <UnselectIcon />
+                    </button>
                 </summary>
                 <div className={classes.iconTypeContainer}>
                     {typeChildren}
@@ -286,10 +330,12 @@ export default function FrameMenu(props: IProps) {
                                 onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value)}
                             >
                                 <option value='none'>None</option>
-                                <option value='linear'>Linear Interpolation</option>
-                                <option value='cosine'>Cosine Interpolation</option>
+                                <option value='linear-interpolation'>Linear Interpolation</option>
+                                <option value='cosine-interpolation'>Cosine Interpolation</option>
+                                <option value='linear-extrapolation'>Linear Extrapolation</option>
+                                <option value='cosine-extrapolation'>Cosine Extrapolation</option>
                             </select>
-                            Location Interpolation
+                            Location (Inter/Extra)polation
                         </label>
                     </div>
                 </div>
