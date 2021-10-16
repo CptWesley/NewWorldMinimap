@@ -1,7 +1,7 @@
 import React from 'react';
 import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function StonecutterTableIcon(props: ISvgMapIconConsumerProps) {
+export default function StonecuttingTableIcon(props: ISvgMapIconConsumerProps) {
     return <SvgMapIcon {...props}>
         <path
             d='M 1.6378092,13.152166 3.7591294,15.273487 11.961548,7.0710678 13.388253,8.4977724 15.497082,8.4852814 15.484591,6.35147 14.082868,4.9497475 14.789975,4.2426407 12.668655,2.1213204 11.961548,2.8284272 9.8402273,0.70710676 7.7189069,2.8284272 9.8402273,4.9497475 Z'
