@@ -11,6 +11,7 @@ export const simpleStorageDefaultSettings = {
     opacity: 1,
     shape: 'none',
     compassMode: true,
+    interpolation: 'cosine',
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
@@ -23,6 +24,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'transparentHeader',
     'transparentToolbar',
     'zoomLevel',
+    'interpolation',
 ];
 
 export const iconSettingStorageScope = 'icon';

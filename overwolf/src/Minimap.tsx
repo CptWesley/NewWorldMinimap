@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import { registerEventCallback } from './logic/hooks';
+import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
@@ -11,7 +11,7 @@ import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
-import { rotateAround } from './logic/util';
+import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -59,7 +59,9 @@ export default function Minimap(props: IProps) {
 
     const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
     const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
+    const [lastPositionUpdate, setLastPositionUpdate] = useState<number>(performance.now());
     const [tilesDownloading, setTilesDownloading] = useState(0);
+    const [lastAngle, setLastAngle] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
@@ -70,12 +72,11 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
-    const draw = async () => {
+    const draw = async (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
-        const currentDraw = Date.now();
+        const currentDraw = performance.now();
         lastDraw.current = currentDraw;
 
-        const angle = Math.atan2(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y);
         const zoomLevel = appContext.settings.zoomLevel;
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
@@ -95,8 +96,8 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getMapTiles(currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
-        const offset = toMinimapCoordinate(currentPosition, currentPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const tiles = getMapTiles(pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+        const offset = toMinimapCoordinate(pos, pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
 
@@ -156,7 +157,7 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const imgPos = toMinimapCoordinate(currentPosition, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(pos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = await getIcon(marker.type, marker.category);
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
 
@@ -210,9 +211,33 @@ export default function Minimap(props: IProps) {
     const drawRef = useRef(draw);
     drawRef.current = draw;
 
-    function redraw() {
-        // Use the `draw` in the ref to get the most up-to-date one
-        drawRef.current();
+    function redraw(force: boolean) {
+        const curTime = performance.now();
+        const timeDif = curTime - lastPositionUpdate;
+        const currentAngle = getAngle(lastPosition, currentPosition);
+
+        if (timeDif > positionUpdateRate && !force) {
+            return;
+        }
+
+        if (squaredDistance(lastPosition, currentPosition) > 1000 || appContext.settings.interpolation === 'none') {
+            drawRef.current(currentPosition, currentAngle);
+            return;
+        }
+
+        const percentage = timeDif / positionUpdateRate;
+        let interpolatedPosition = currentPosition;
+        let interpolatedAngle = currentAngle;
+
+        if (appContext.settings.interpolation === 'linear') {
+            interpolatedPosition = interpolateVectorsLinear(lastPosition, currentPosition, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
+        } else if (appContext.settings.interpolation === 'cosine') {
+            interpolatedPosition = interpolateVectorsCosine(lastPosition, currentPosition, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
+        }
+
+        drawRef.current(interpolatedPosition, interpolatedAngle);
     }
 
     function setPosition(pos: Vector2) {
@@ -220,6 +245,8 @@ export default function Minimap(props: IProps) {
             return;
         }
 
+        setLastAngle(getAngle(lastPosition, currentPosition));
+        setLastPositionUpdate(performance.now());
         setLastPosition(currentPosition);
         setCurrentPosition(pos);
     }
@@ -240,19 +267,19 @@ export default function Minimap(props: IProps) {
     }
 
     useEffect(() => {
-        redraw();
+        redraw(true);
     }, [currentPosition, appContext]);
 
     useEffect(() => {
         function handleTileDownloadingCountChange(count: number) {
             setTilesDownloading(count);
             if (count === 0) {
-                redraw();
+                redraw(true);
             }
         }
 
         function handleMarkersLoaded() {
-            redraw();
+            redraw(true);
         }
 
         const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
@@ -278,15 +305,21 @@ export default function Minimap(props: IProps) {
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        window.addEventListener('resize', redraw);
+        window.addEventListener('resize', () => redraw(true));
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
         });
 
+        const interpolationEnabled = appContext.settings.interpolation !== 'none';
+        const interval = interpolationEnabled ? setInterval(() => redraw(false), 100) : -1;
+
         return function () {
-            window.removeEventListener('resize', redraw);
+            window.removeEventListener('resize', () => redraw(true));
             callbackUnregister();
+            if (interpolationEnabled) {
+                clearInterval(interval);
+            }
         };
     }, [currentPosition]);
 

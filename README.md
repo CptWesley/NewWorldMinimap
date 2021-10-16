@@ -26,6 +26,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Different minimap shapes.
 - Saving settings.
 - Compass mode (rotate minimap around player instead of other way around).
+- Different interpolation modes for smoother movement on map (linear, cosine, none).
 
 ## Planned Features
 - Private markers.
@@ -40,7 +41,8 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example2.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example3.gif?raw=true" width="512" height="288"><br>In-game semi-transparent (configureable) overlay.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example4.png?raw=true" width="402" height="374"><br>Different minimap shapes.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
 
 ## Usage
 - Currently not yet available, see the [legacy version](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet) if you want a working application.
