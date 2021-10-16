@@ -1,23 +1,25 @@
 const serverUrl = process.env.SERVER_URL || 'http://localhost:8000/data/update';
 
 export async function updateFriendLocation(id: string, name: string, location: Vector2, friends: string) {
-    try {
-        const req = await fetch(serverUrl, {
-            method: 'post',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                id,
-                data: {
-                    name,
-                    location: { x: location.x, y: location.y},
+    if (process.env.ENABLE_FRIENDS === 'true') {
+        try {
+            const req = await fetch(serverUrl, {
+                method: 'post',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
                 },
-                friends: friends.split('\n'),
-            }),
-        });
-        return await req.json();
-    } catch (_) {}
+                body: JSON.stringify({
+                    id,
+                    data: {
+                        name,
+                        location: { x: location.x, y: location.y},
+                    },
+                    friends: friends.split('\n'),
+                }),
+            });
+            return await req.json();
+        } catch (_) {}
+    }
     return undefined;
 }

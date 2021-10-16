@@ -310,6 +310,49 @@ export default function FrameMenu(props: IProps) {
         context.settings.showHeader && classes.belowHeader,
         isDraggingMapSlider && context.gameRunning && classes.peek);
 
+    function renderFriendsSettings() {
+        if (process.env.ENABLE_FRIENDS !== 'true') {
+            return null;
+        }
+        return <details>
+            <summary className={classes.summary}>Friends</summary>
+            <div className={classes.indent}>
+                <div className={classes.setting}>
+                    <label className={classes.checkbox}>
+                        <input
+                            type='checkbox'
+                            checked={context.settings.shareLocation}
+                            onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
+                        />
+                        Share location with friends
+                    </label>
+                </div>
+                <div className={classes.setting}>
+                    <label className={classes.textbox}>
+                        <input
+                            type='text'
+                            readOnly
+                            value={context.settings.friendCode}
+                        />
+                        Your code
+                        <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
+                            <GenerateIcon />
+                        </button>
+                    </label>
+                </div>
+                <div className={classes.setting}>
+                    <label className={classes.textarea}>
+                        <textarea
+                            value={context.settings.friends}
+                            onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
+                        />
+                        Friends
+                    </label>
+                </div>
+            </div>
+        </details>;
+    }
+
     return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
             <ReturnIcon />
@@ -506,43 +549,7 @@ export default function FrameMenu(props: IProps) {
                     </div>
                 </div>
             </details>
-            <details>
-                <summary className={classes.summary}>Friends</summary>
-                <div className={classes.indent}>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox}>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.shareLocation}
-                                onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
-                            />
-                            Share location with friends
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.textbox}>
-                            <input
-                                type='text'
-                                readOnly
-                                value={context.settings.friendCode}
-                            />
-                            Your code
-                            <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
-                                <GenerateIcon />
-                            </button>
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.textarea}>
-                            <textarea
-                                value={context.settings.friends}
-                                onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
-                            />
-                            Friends
-                        </label>
-                    </div>
-                </div>
-            </details>
+            {renderFriendsSettings()}
             <details>
                 <summary className={classes.summary}>Icon Categories</summary>
                 <div className={classes.indent}>
