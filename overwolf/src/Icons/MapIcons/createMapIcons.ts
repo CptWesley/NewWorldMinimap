@@ -6,6 +6,7 @@ import ChestIcon from './ChestIcon';
 import CovenantIcon from './CovenantIcon';
 import DocumentIcon from './DocumentIcon';
 import DropletIcon from './DropletIcon';
+import DyeBottleIcon from './DyeBottleIcon';
 import EssenceIcon from './EssenceIcon';
 import EssenceMinusIcon from './EssenceMinusIcon';
 import EssencePlusIcon from './EssencePlusIcon';
@@ -77,6 +78,18 @@ export async function createMapIcons(scale: number) {
 
         plants: await svgMapIconToImageBitmap(PlantIcon, { fill: 'lawngreen', scale }),
         azoth_water: await svgMapIconToImageBitmap(DropletIcon, { stroke: 'black', strokeWidth: 35, fill: 'aqua', scale, viewBox: '0 0 512 512' }),
+        dye_plant_black: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'black', scale, viewBox: '0 0 512 512' }),
+        dye_plant_blue: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
+        dye_plant_brown: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'brown', scale, viewBox: '0 0 512 512' }),
+        dye_plant_cyan: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'cyan', scale, viewBox: '0 0 512 512' }),
+        dye_plant_green: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'green', scale, viewBox: '0 0 512 512' }),
+        dye_plant_magenta: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'magenta', scale, viewBox: '0 0 512 512' }),
+        dye_plant_orange: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'orange', scale, viewBox: '0 0 512 512' }),
+        dye_plant_red: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
+        dye_plant_turquoise: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'turquoise', scale, viewBox: '0 0 512 512' }),
+        dye_plant_violet: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'violet', scale, viewBox: '0 0 512 512' }),
+        dye_plant_white: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'white', scale, viewBox: '0 0 512 512' }),
+        dye_plant_yellow: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'yellow', scale, viewBox: '0 0 512 512' }),
         hemp: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'green', scale, viewBox: '0 0 512 512' }),
         hemp_t4: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
         hemp_t5: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
