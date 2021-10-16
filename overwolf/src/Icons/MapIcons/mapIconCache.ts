@@ -9,17 +9,23 @@ import EssencePlusIcon from './EssencePlusIcon';
 import FishIcon from './FishIcon';
 import GoatIcon from './GoatIcon';
 import LeopardIcon from './LeopardIcon';
+import LoomIcon from './LoomIcon';
 import OreIcon from './OreIcon';
+import OutfittingStationIcon from './OutfittingStationIcon';
 import PigIcon from './PigIcon';
 import PlantIcon from './PlantIcon';
 import PlayerIcon from './PlayerIcon';
 import RabbitIcon from './RabbitIcon';
 import SheepIcon from './SheepIcon';
 import SkullIcon from './SkullIcon';
+import SmelterIcon from './SmelterIcon';
+import TradingPostIcon from './TradingPostIcon';
 import TreeIcon from './TreeIcon';
 import TurkeyIcon from './TurkeyIcon';
 import UnknownIcon from './UnknownIcon';
 import WolfIcon from './WolfIcon';
+import WoodshopIcon from './WoodshopIcon';
+import WorkshopIcon from './WorkshopIcon';
 
 export type MapIconsCache = typeof createMapIconCache extends (...args: any[]) => Promise<infer T> ? T : never;
 
@@ -118,5 +124,12 @@ export async function createMapIconCache(scale: number) {
         water_boid: await svgMapIconToImageBitmap(EssenceIcon, { fill: 'dodgerblue', scale }),
         water_plant: await svgMapIconToImageBitmap(EssenceMinusIcon, { fill: 'dodgerblue', scale }),
         water_stone: await svgMapIconToImageBitmap(EssencePlusIcon, { fill: 'dodgerblue', scale }),
+
+        loom: await svgMapIconToImageBitmap(LoomIcon, { fill: 'white', scale }),
+        outfitting_station: await svgMapIconToImageBitmap(OutfittingStationIcon, { fill: 'white', scale }),
+        smelter: await svgMapIconToImageBitmap(SmelterIcon, { fill: 'white', scale }),
+        trading_post: await svgMapIconToImageBitmap(TradingPostIcon, { fill: 'white', scale }),
+        woodshop: await svgMapIconToImageBitmap(WoodshopIcon, { fill: 'white', scale }),
+        workshop: await svgMapIconToImageBitmap(WorkshopIcon, { fill: 'white', scale }),
     };
 }
