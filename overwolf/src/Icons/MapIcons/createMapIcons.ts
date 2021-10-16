@@ -5,6 +5,7 @@ import BearIcon from './BearIcon';
 import ChestIcon from './ChestIcon';
 import CovenantIcon from './CovenantIcon';
 import DocumentIcon from './DocumentIcon';
+import DropletIcon from './DropletIcon';
 import EssenceIcon from './EssenceIcon';
 import EssenceMinusIcon from './EssenceMinusIcon';
 import EssencePlusIcon from './EssencePlusIcon';
@@ -56,7 +57,7 @@ export async function createMapIcons(scale: number) {
         lodestone: await svgMapIconToImageBitmap(OreIcon, { fill: 'orangered', scale }),
         orichalcum: await svgMapIconToImageBitmap(OreIcon, { fill: 'darkred', scale }),
         saltpeter: await svgMapIconToImageBitmap(OreIcon, { fill: 'white', scale }),
-        seeping_stone: await svgMapIconToImageBitmap(OreIcon, { fill: 'darkgray', scale }),
+        seeping_stone: await svgMapIconToImageBitmap(DropletIcon, { stroke: 'black', strokeWidth: 35, fill: 'darkgray', scale, viewBox: '0 0 512 512' }),
         silver: await svgMapIconToImageBitmap(OreIcon, { fill: 'silver', scale }),
         starmetal: await svgMapIconToImageBitmap(OreIcon, { fill: 'blue', scale }),
 
@@ -75,6 +76,7 @@ export async function createMapIcons(scale: number) {
         documents: await svgMapIconToImageBitmap(DocumentIcon, { fill: 'lightyellow', scale }),
 
         plants: await svgMapIconToImageBitmap(PlantIcon, { fill: 'lawngreen', scale }),
+        azoth_water: await svgMapIconToImageBitmap(DropletIcon, { stroke: 'black', strokeWidth: 35, fill: 'aqua', scale, viewBox: '0 0 512 512' }),
         hemp: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'green', scale, viewBox: '0 0 512 512' }),
         hemp_t4: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
         hemp_t5: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
