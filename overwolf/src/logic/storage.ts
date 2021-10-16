@@ -11,6 +11,8 @@ export const simpleStorageDefaultSettings = {
     opacity: 1,
     shape: 'none',
     compassMode: true,
+    townZoomLevel: 1,
+    townZoom: true,
     interpolation: 'cosine-interpolation',
 };
 
@@ -24,6 +26,8 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'transparentHeader',
     'transparentToolbar',
     'zoomLevel',
+    'townZoomLevel',
+    'townZoom',
     'interpolation',
 ];
 

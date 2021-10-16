@@ -26,7 +26,8 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Different minimap shapes.
 - Saving settings.
 - Compass mode (rotate minimap around player instead of other way around).
-- Different interpolation modes for smoother movement on map (linear, cosine, none).
+- Different interpolation and extrapolation modes for smoother movement on map (linear, cosine, none).
+- Seperately configureable zoom level for towns.
 
 ## Planned Features
 - Private markers.
