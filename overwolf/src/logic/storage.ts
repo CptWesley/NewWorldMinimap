@@ -11,7 +11,7 @@ export const simpleStorageDefaultSettings = {
     opacity: 1,
     shape: 'none',
     compassMode: true,
-    interpolation: 'cosine',
+    interpolation: 'cosine-interpolation',
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
