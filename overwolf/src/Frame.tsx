@@ -4,7 +4,7 @@ import produce from 'immer';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import App from './App';
-import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings, MinimapWindowType } from './contexts/AppContext';
+import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings } from './contexts/AppContext';
 import FrameMenu from './FrameMenu';
 import { deconstructIconStorageKey, getStorageKeyScope, load, loadIconCategory, loadIconType, scopedSettings, simpleStorageDefaultSettings, SimpleStorageSetting } from './logic/storage';
 import { getBackgroundController } from './OverwolfWindows/background/background';
@@ -12,7 +12,6 @@ import { makeStyles, theme } from './theme';
 
 interface IProps {
     header: React.ReactNode;
-    minimapWindowType: MinimapWindowType;
     isTransparentSurface?: boolean;
 }
 
@@ -40,7 +39,6 @@ export default function Frame(props: IProps) {
     const {
         header,
         isTransparentSurface,
-        minimapWindowType,
     } = props;
     const { classes } = useStyles();
 
@@ -105,7 +103,6 @@ export default function Frame(props: IProps) {
         toggleFrameMenu,
         gameRunning,
         isTransparentSurface,
-        minimapWindowType,
         frameMenuVisible,
     };
 

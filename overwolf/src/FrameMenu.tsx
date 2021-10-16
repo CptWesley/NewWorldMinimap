@@ -4,7 +4,7 @@ import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
-import { SimpleStorageSetting, store, storeIconCategory, storeIconType } from './logic/storage';
+import { SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -244,12 +244,12 @@ export default function FrameMenu(props: IProps) {
                         <label className={classes.range}>
                             <input
                                 type='range'
-                                value={7 - context.settings.zoomLevel}
+                                value={zoomLevelSettingBounds[1] - context.settings.zoomLevel}
                                 min='0'
-                                max='6.5'
+                                max={zoomLevelSettingBounds[1] - zoomLevelSettingBounds[0]}
                                 step='0.1'
                                 onChange={e => {
-                                    const newValue = 7 - e.currentTarget.valueAsNumber;
+                                    const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
                                     updateSimpleSetting('zoomLevel', newValue);
                                 }}
                             />
