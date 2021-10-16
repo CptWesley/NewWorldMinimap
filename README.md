@@ -38,7 +38,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Compass mode might not show some corners of the map, depending on the size of the window.
 
 ## Examples
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example2.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example7.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example3.gif?raw=true" width="512" height="288"><br>In-game semi-transparent (configureable) overlay.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example4.png?raw=true" width="402" height="374"><br>Different minimap shapes.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
