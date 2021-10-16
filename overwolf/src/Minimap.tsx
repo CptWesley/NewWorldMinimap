@@ -4,8 +4,8 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
-import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
+import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
 import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
@@ -64,6 +64,7 @@ export default function Minimap(props: IProps) {
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const [lastAngle, setLastAngle] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
+    const [mapIconsCache] = useState(() => new MapIconsCache());
 
     const lastDraw = useRef(0);
     const appContext = useContext(AppContext);
@@ -73,7 +74,7 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
-    const draw = async (pos: Vector2, angle: number) => {
+    const draw = (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -88,8 +89,6 @@ export default function Minimap(props: IProps) {
         }
 
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
-
-        setIconScale(appContext.settings.iconScale);
 
         if (!ctx) {
             return;
@@ -167,7 +166,8 @@ export default function Minimap(props: IProps) {
             }
 
             const imgPos = toMinimapCoordinate(pos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-            const icon = await getIcon(marker.type, marker.category);
+            const icon = mapIconsCache.getIcon(marker.type, marker.category);
+            if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
 
             if (lastDraw.current !== currentDraw) {
@@ -198,21 +198,23 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        const playerIcon = await GetPlayerIcon();
+        const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
             return;
         }
 
-        if (renderAsCompass) {
-            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
-        } else {
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            ctx.rotate(angle);
-            ctx.translate(-centerX, -centerY);
-            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
-            ctx.restore();
+        if (playerIcon) {
+            if (renderAsCompass) {
+                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+            } else {
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle);
+                ctx.translate(-centerX, -centerY);
+                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+                ctx.restore();
+            }
         }
     };
 
@@ -290,6 +292,10 @@ export default function Minimap(props: IProps) {
     }, [currentPosition, appContext]);
 
     useEffect(() => {
+        mapIconsCache.initialize(appContext.settings.iconScale);
+    }, [appContext.settings.iconScale]);
+
+    useEffect(() => {
         function handleTileDownloadingCountChange(count: number) {
             setTilesDownloading(count);
             if (count === 0) {
@@ -297,15 +303,17 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        function handleMarkersLoaded() {
+        function handleAssetsLoaded() {
             redraw(true);
         }
 
         const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
-        const markerRegistration = markerCache.registerOnMarkersLoaded(handleMarkersLoaded);
+        const markerRegistration = markerCache.registerOnMarkersLoaded(handleAssetsLoaded);
+        const mapIconsCacheRegistration = mapIconsCache.registerMapIconsLoaded(handleAssetsLoaded);
         return () => {
             tileRegistration();
             markerRegistration();
+            mapIconsCacheRegistration();
         };
     }, []);
 
