@@ -12,7 +12,7 @@ import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
-import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictAngle, predictVector, rotateAround, squaredDistance } from './logic/util';
+import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
