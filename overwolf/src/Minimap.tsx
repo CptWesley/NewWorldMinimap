@@ -211,12 +211,12 @@ export default function Minimap(props: IProps) {
     const drawRef = useRef(draw);
     drawRef.current = draw;
 
-    function redraw() {
+    function redraw(force: boolean) {
         const curTime = performance.now();
         const timeDif = curTime - lastPositionUpdate;
         const currentAngle = getAngle(lastPosition, currentPosition);
 
-        if (timeDif > positionUpdateRate) {
+        if (timeDif > positionUpdateRate && !force) {
             return;
         }
 
@@ -267,19 +267,19 @@ export default function Minimap(props: IProps) {
     }
 
     useEffect(() => {
-        redraw();
+        redraw(true);
     }, [currentPosition, appContext]);
 
     useEffect(() => {
         function handleTileDownloadingCountChange(count: number) {
             setTilesDownloading(count);
             if (count === 0) {
-                redraw();
+                redraw(true);
             }
         }
 
         function handleMarkersLoaded() {
-            redraw();
+            redraw(true);
         }
 
         const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
@@ -305,17 +305,17 @@ export default function Minimap(props: IProps) {
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        window.addEventListener('resize', redraw);
+        window.addEventListener('resize', () => redraw(true));
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
         });
 
         const interpolationEnabled = appContext.settings.interpolation !== 'none';
-        const interval = interpolationEnabled ? setInterval(() => redraw(), 100) : -1;
+        const interval = interpolationEnabled ? setInterval(() => redraw(false), 100) : -1;
 
         return function () {
-            window.removeEventListener('resize', redraw);
+            window.removeEventListener('resize', () => redraw(true));
             callbackUnregister();
             if (interpolationEnabled) {
                 clearInterval(interval);
