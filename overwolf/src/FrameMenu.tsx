@@ -126,7 +126,7 @@ const useStyles = makeStyles()(theme => ({
         display: 'flex',
         alignItems: 'center',
 
-        '& > label': {
+        '& > span': {
             flexGrow: 1,
         },
     },
@@ -219,6 +219,7 @@ export default function FrameMenu(props: IProps) {
                         />
                         {category.name}
                     </label>
+                    <span />
                     <button className={classes.selectIcon} onClick={() => context.update({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}>
                         <SelectIcon />
                     </button>
