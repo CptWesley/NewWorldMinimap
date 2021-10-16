@@ -1,3 +1,4 @@
+import { debounce } from 'lodash-es';
 import { createMapIcons, MapIcons } from '../Icons/MapIcons/createMapIcons';
 
 type OnMapIconsLoadedListener = () => void;
@@ -9,7 +10,7 @@ export default class MapIconsCache {
 
     public initialize = (scale: number) => {
         this.lastInitializedScale = scale;
-        this.initializeIconCache(scale);
+        this.debouncedInitializeIconCache(scale);
     }
 
     public getIcon = (type: string, category: string): ImageBitmap | undefined => {
@@ -55,4 +56,6 @@ export default class MapIconsCache {
             });
         }
     }
+
+    private debouncedInitializeIconCache = debounce(this.initializeIconCache, 250);
 }
