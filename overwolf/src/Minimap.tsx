@@ -11,7 +11,7 @@ import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
-import { getAngle, interpolateAngle, interpolateVectors, rotateAround, squaredDistance } from './logic/util';
+import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
 const debugLocations = {
@@ -220,15 +220,23 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (squaredDistance(lastPosition, currentPosition) > 1000) {
+        if (squaredDistance(lastPosition, currentPosition) > 1000 || appContext.settings.interpolation === 'none') {
             drawRef.current(currentPosition, currentAngle);
             return;
         }
 
         const percentage = timeDif / positionUpdateRate;
-        const interpolatedPosition = interpolateVectors(lastPosition, currentPosition, percentage);
-        const interpolatedAngle = interpolateAngle(lastAngle, currentAngle, percentage);
-        // Use the `draw` in the ref to get the most up-to-date one
+        let interpolatedPosition = currentPosition;
+        let interpolatedAngle = currentAngle;
+
+        if (appContext.settings.interpolation === 'linear') {
+            interpolatedPosition = interpolateVectorsLinear(lastPosition, currentPosition, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
+        } else if (appContext.settings.interpolation === 'cosine') {
+            interpolatedPosition = interpolateVectorsCosine(lastPosition, currentPosition, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
+        }
+
         drawRef.current(interpolatedPosition, interpolatedAngle);
     }
 
@@ -303,12 +311,15 @@ export default function Minimap(props: IProps) {
             setPosition(info.position);
         });
 
-        const interval = setInterval(() => redraw(), 100);
+        const interpolationEnabled = appContext.settings.interpolation !== 'none';
+        const interval = interpolationEnabled ? setInterval(() => redraw(), 100) : -1;
 
         return function () {
             window.removeEventListener('resize', redraw);
             callbackUnregister();
-            clearInterval(interval);
+            if (interpolationEnabled) {
+                clearInterval(interval);
+            }
         };
     }, [currentPosition]);
 

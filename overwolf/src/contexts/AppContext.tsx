@@ -27,6 +27,7 @@ export function loadAppContextSettings(): AppContextSettings {
         shape: load('shape'),
         compassMode: load('compassMode'),
         iconSettings: undefined,
+        interpolation: load('interpolation'),
     };
 }
 

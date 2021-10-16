@@ -279,6 +279,19 @@ export default function FrameMenu(props: IProps) {
                             Show text
                         </label>
                     </div>
+                    <div className={classes.setting}>
+                        <label className={classes.select}>
+                            <select
+                                value={context.settings.interpolation}
+                                onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value)}
+                            >
+                                <option value='none'>None</option>
+                                <option value='linear'>Linear Interpolation</option>
+                                <option value='cosine'>Cosine Interpolation</option>
+                            </select>
+                            Location Interpolation
+                        </label>
+                    </div>
                 </div>
             </details>
             <details>
