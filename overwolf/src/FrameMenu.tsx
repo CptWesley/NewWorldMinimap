@@ -1,12 +1,14 @@
 import clsx from 'clsx';
 import produce from 'immer';
 import React, { useContext } from 'react';
+import { faComment, faCommentSlash, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
 import SelectIcon from './Icons/SelectIcon';
 import UnselectIcon from './Icons/UnselectIcon';
-import { SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
+import { SimpleStorageSetting, store, storeIconCategory, storeIconType, storeLabelEnabled, zoomLevelSettingBounds } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -97,6 +99,14 @@ const useStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    checkboxIcon: {
+        '& > input[type="checkbox"]': {
+            display: 'none',
+        },
+        '& > #showIcon': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
     range: {
         '& > input[type="range"]': {
             margin: theme.spacing(0, 1, 0, 0),
@@ -164,12 +174,18 @@ export default function FrameMenu(props: IProps) {
         context.update({ [key]: value });
     }
 
-    function updateIconSettings(category: string, type: string, value: boolean) {
+    function updateIconSettings(category: string, type: string, key: string, value: boolean) {
         const settings = context.settings.iconSettings;
-        storeIconType(category, type, value);
+
+        if (key === 'label') {
+            storeLabelEnabled(category, type, value);
+        } else {
+            storeIconType(category, type, value);
+        }
+
         if (settings) {
             return produce(settings, draft => {
-                draft.categories[category].types[type].value = value;
+                draft.categories[category].types[type][key] = value;
             });
         }
         return settings;
@@ -198,22 +214,33 @@ export default function FrameMenu(props: IProps) {
         return Object.entries(context.settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
             const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
                 return <p key={'FrameMenuType' + typeKey}>
-                    <label className={classes.checkbox}>
+                    <label id='showIcon' className={classes.checkboxIcon}>
                         <input
                             type='checkbox'
                             checked={type.value}
-                            onChange={e => context.update({ iconSettings: updateIconSettings(categoryKey, typeKey, e.currentTarget.checked) })}
+                            onChange={e => context.update({ iconSettings: updateIconSettings(categoryKey, typeKey, 'value', e.currentTarget.checked) })}
                         />
-                        {type.name}
+                        {type.value ? <FontAwesomeIcon icon={faEye} id='showIcon' /> : <FontAwesomeIcon icon={faEyeSlash} id='showIcon' />}
                     </label>
+
+                    <label id='showIcon' className={classes.checkboxIcon}>
+                        <input
+                            type='checkbox'
+                            checked={type.label}
+                            onChange={e => context.update({ iconSettings: updateIconSettings(categoryKey, typeKey, 'label', e.currentTarget.checked) })}
+                        />
+                        {type.label ? <FontAwesomeIcon icon={faComment} id='showIcon' /> : <FontAwesomeIcon icon={faCommentSlash} id='showIcon' />}
+                    </label>
+                    {type.name}
                 </p>;
             });
 
             return <details key={'FrameMenuCat' + categoryKey}>
                 <summary className={clsx(classes.summary, classes.iconCategory)}>
-                    <label className={classes.checkbox}>
+                    <label className={classes.checkbox} id='view-label'>
                         <input
                             type='checkbox'
+                            id='view-checkbox'
                             checked={category.value}
                             onChange={e => context.update({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
                         />
