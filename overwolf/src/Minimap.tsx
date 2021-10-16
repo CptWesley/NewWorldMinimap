@@ -215,7 +215,12 @@ export default function Minimap(props: IProps) {
         const curTime = Date.now();
         const timeDif = curTime - lastPositionUpdate;
         const currentAngle = getAngle(lastPosition, currentPosition);
-        if (timeDif > positionUpdateRate || squaredDistance(lastPosition, currentPosition) > 1000) {
+
+        if (timeDif > positionUpdateRate) {
+            return;
+        }
+
+        if (squaredDistance(lastPosition, currentPosition) > 1000) {
             drawRef.current(currentPosition, currentAngle);
             return;
         }
