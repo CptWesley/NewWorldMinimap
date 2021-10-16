@@ -11,6 +11,7 @@ export const simpleStorageDefaultSettings = {
     opacity: 1,
     shape: 'none',
     compassMode: true,
+    interpolation: 'cosine',
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
@@ -23,12 +24,15 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'transparentHeader',
     'transparentToolbar',
     'zoomLevel',
+    'interpolation',
 ];
 
 export const iconSettingStorageScope = 'icon';
 export type KnownStorageScope = ConcreteWindow | typeof iconSettingStorageScope;
 export const knownStorageScopes: KnownStorageScope[] = ['desktop', 'icon', 'inGame'];
 const defaultHiddenIconCategories = ['npc', 'pois'];
+
+export const zoomLevelSettingBounds = [0.5, 7] as const;
 
 /** Stores a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */
 export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {
@@ -79,7 +83,7 @@ export function storeIconCategory(category: string, value: boolean) {
 
 /** Stores whether the icon type (part of a category) is visible. */
 export function storeIconType(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}-${type}.visible`;
+    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
     return storeUntyped(key, value);
 }
 

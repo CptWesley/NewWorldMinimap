@@ -1,4 +1,5 @@
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
+import { initializeHotkeyManager } from '../../logic/hotkeyManager';
 import { initializeTileCache } from '../../logic/tileCache';
 import { initializeTileMarkerCache } from '../../logic/tileMarkerCache';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
@@ -156,3 +157,4 @@ if (BackgroundController.isSupported) {
 
 initializeTileCache();
 initializeTileMarkerCache();
+initializeHotkeyManager();
