@@ -11,6 +11,7 @@ import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
+import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictAngle, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -77,7 +78,15 @@ export default function Minimap(props: IProps) {
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
 
-        const zoomLevel = appContext.settings.zoomLevel;
+        let zoomLevel = appContext.settings.zoomLevel;
+
+        if (appContext.settings.townZoom) {
+            const town = getNearestTown(pos);
+            if (town.distance <= 10000) {
+                zoomLevel = appContext.settings.townZoomLevel;
+            }
+        }
+
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
         setIconScale(appContext.settings.iconScale);
