@@ -103,6 +103,18 @@ export function loadIconType(category: string, type: string) {
     return loadUntyped(key, true) as boolean;
 }
 
+/** Stores whether the icon type (part of a category) label is visible. */
+export function storeLabelEnabled(category: string, type: string, value: boolean) {
+    const key = `${iconSettingStorageScope}::${category}--${type}.label`;
+    return storeUntyped(key, value);
+}
+
+/** Loads whether the icon type (part of a category) labelis visible. */
+export function loadLabelEnabled(category: string, type: string) {
+    const key = `${iconSettingStorageScope}::${category}--${type}.label`;
+    return loadUntyped(key, false) as boolean;
+}
+
 /** Splits a storage key into its scope (if it exists and is known), and the rest of the key (which is called the identifier). */
 export function getStorageKeyScope(key: string): [KnownStorageScope | undefined, string] {
     const potentialScope = key.split('::', 2) as [KnownStorageScope, string];
