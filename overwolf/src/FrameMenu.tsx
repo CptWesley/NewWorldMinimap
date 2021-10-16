@@ -286,10 +286,12 @@ export default function FrameMenu(props: IProps) {
                                 onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value)}
                             >
                                 <option value='none'>None</option>
-                                <option value='linear'>Linear Interpolation</option>
-                                <option value='cosine'>Cosine Interpolation</option>
+                                <option value='linear-interpolation'>Linear Interpolation</option>
+                                <option value='cosine-interpolation'>Cosine Interpolation</option>
+                                <option value='linear-extrapolation'>Linear Extrapolation</option>
+                                <option value='cosine-extrapolation'>Cosine Extrapolation</option>
                             </select>
-                            Location Interpolation
+                            Location (Inter/Extra)polation
                         </label>
                     </div>
                 </div>
