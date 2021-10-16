@@ -1,5 +1,6 @@
 import { svgMapIconToImageBitmap } from '../../logic/svg';
 import AlligatorIcon from './AlligatorIcon';
+import ArcaneRepositoryIcon from './ArcaneRepositoryIcon';
 import BearIcon from './BearIcon';
 import ChestIcon from './ChestIcon';
 import DocumentIcon from './DocumentIcon';
@@ -7,7 +8,11 @@ import EssenceIcon from './EssenceIcon';
 import EssenceMinusIcon from './EssenceMinusIcon';
 import EssencePlusIcon from './EssencePlusIcon';
 import FishIcon from './FishIcon';
+import ForgeIcon from './ForgeIcon';
 import GoatIcon from './GoatIcon';
+import GovernorDeskIcon from './GovernorDeskIcon';
+import InnIcon from './InnIcon';
+import KitchenIcon from './KitchenIcon';
 import LeopardIcon from './LeopardIcon';
 import LoomIcon from './LoomIcon';
 import OreIcon from './OreIcon';
@@ -19,10 +24,16 @@ import RabbitIcon from './RabbitIcon';
 import SheepIcon from './SheepIcon';
 import SkullIcon from './SkullIcon';
 import SmelterIcon from './SmelterIcon';
+import StonecuttingTableIcon from './StonecuttingTableIcon';
+import StorageShedIcon from './StorageShedIcon';
+import TanneryIcon from './TanneryIcon';
+import TerritoryBoardIcon from './TerritoryBoardIcon';
+import TownBoardIcon from './TownBoardIcon';
 import TradingPostIcon from './TradingPostIcon';
 import TreeIcon from './TreeIcon';
 import TurkeyIcon from './TurkeyIcon';
 import UnknownIcon from './UnknownIcon';
+import WarBoardIcon from './WarBoardIcon';
 import WolfIcon from './WolfIcon';
 import WoodshopIcon from './WoodshopIcon';
 import WorkshopIcon from './WorkshopIcon';
@@ -131,5 +142,16 @@ export async function createMapIconCache(scale: number) {
         trading_post: await svgMapIconToImageBitmap(TradingPostIcon, { fill: 'white', scale }),
         woodshop: await svgMapIconToImageBitmap(WoodshopIcon, { fill: 'white', scale }),
         workshop: await svgMapIconToImageBitmap(WorkshopIcon, { fill: 'white', scale }),
+        arcane_repository: await svgMapIconToImageBitmap(ArcaneRepositoryIcon, { fill: 'white', scale }),
+        forge: await svgMapIconToImageBitmap(ForgeIcon, { fill: 'white', scale }),
+        inn: await svgMapIconToImageBitmap(InnIcon, { fill: 'white', scale }),
+        kitchen: await svgMapIconToImageBitmap(KitchenIcon, { fill: 'white', scale }),
+        stonecutting_table: await svgMapIconToImageBitmap(StonecuttingTableIcon, { fill: 'white', scale }),
+        storage_shed: await svgMapIconToImageBitmap(StorageShedIcon, { fill: 'white', scale }),
+        tannery: await svgMapIconToImageBitmap(TanneryIcon, { fill: 'white', scale }),
+        governors_desk: await svgMapIconToImageBitmap(GovernorDeskIcon, { fill: 'white', scale }),
+        territory_planning_board: await svgMapIconToImageBitmap(TerritoryBoardIcon, { fill: 'white', scale }),
+        town_project_board: await svgMapIconToImageBitmap(TownBoardIcon, { fill: 'white', scale }),
+        war_board: await svgMapIconToImageBitmap(WarBoardIcon, { fill: 'white', scale }),
     };
 }
