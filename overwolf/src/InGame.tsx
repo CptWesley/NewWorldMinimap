@@ -5,7 +5,6 @@ import InGameHeader from './InGameHeader';
 export default function Desktop() {
     return <Frame
         header={<InGameHeader />}
-        minimapWindowType='inGame'
         isTransparentSurface
     />;
 }

@@ -3,9 +3,11 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { registerEventCallback } from './logic/hooks';
+import { getHotkeyManager } from './logic/hotkeyManager';
 import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import { getMarkers } from './logic/markers';
+import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
@@ -48,6 +50,7 @@ const useStyles = makeStyles()({
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
 
+const hotkeyManager = getHotkeyManager();
 export default function Minimap(props: IProps) {
     const {
         className,
@@ -221,6 +224,21 @@ export default function Minimap(props: IProps) {
         setCurrentPosition(pos);
     }
 
+    function zoomBy(delta: number) {
+        const nextZoomLevel = Math.max(
+            zoomLevelSettingBounds[0],
+            Math.min(
+                zoomLevelSettingBounds[1],
+                appContext.settings.zoomLevel + delta));
+        appContext.update({ zoomLevel: nextZoomLevel });
+        store('zoomLevel', nextZoomLevel);
+    }
+
+    function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
+        console.log(e.deltaY);
+        zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
+    }
+
     useEffect(() => {
         redraw();
     }, [currentPosition, appContext]);
@@ -245,6 +263,16 @@ export default function Minimap(props: IProps) {
         };
     }, []);
 
+    if (NWMM_APP_WINDOW === 'inGame') {
+        // This is alright, because the app window descriptor does not change.
+        // eslint-disable-next-line react-hooks/rules-of-hooks
+        useEffect(() => {
+            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5));
+            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5));
+            return () => { zoomInRegistration(); zoomOutRegistration(); };
+        }, [appContext.settings.zoomLevel]);
+    }
+
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
@@ -267,6 +295,7 @@ export default function Minimap(props: IProps) {
             ref={canvas}
             className={clsx(classes.canvas)}
             style={dynamicStyling}
+            onWheel={handleWheel}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&

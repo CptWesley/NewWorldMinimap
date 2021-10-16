@@ -1,8 +1,6 @@
 import React from 'react';
 import { load, simpleStorageDefaultSettings, SimpleStorageSetting } from '../logic/storage';
 
-export type MinimapWindowType = 'desktop' | 'inGame';
-
 export type AppContextSettings = SimpleStorageSetting & {
     iconSettings: IconSettings | undefined;
 }
@@ -13,7 +11,6 @@ export interface IAppContext {
     toggleFrameMenu: () => void;
     gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
-    minimapWindowType: MinimapWindowType | undefined;
     frameMenuVisible: boolean;
 }
 
@@ -42,7 +39,6 @@ export const defaultAppContext: IAppContext = {
     toggleFrameMenu: () => { },
     gameRunning: false,
     isTransparentSurface: undefined,
-    minimapWindowType: undefined,
     frameMenuVisible: false,
 };
 
