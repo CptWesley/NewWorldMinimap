@@ -3,6 +3,7 @@ import AlligatorIcon from './AlligatorIcon';
 import ArcaneRepositoryIcon from './ArcaneRepositoryIcon';
 import BearIcon from './BearIcon';
 import ChestIcon from './ChestIcon';
+import CovenantIcon from './CovenantIcon';
 import DocumentIcon from './DocumentIcon';
 import EssenceIcon from './EssenceIcon';
 import EssenceMinusIcon from './EssenceMinusIcon';
@@ -15,6 +16,7 @@ import InnIcon from './InnIcon';
 import KitchenIcon from './KitchenIcon';
 import LeopardIcon from './LeopardIcon';
 import LoomIcon from './LoomIcon';
+import MarauderIcon from './MarauderIcon';
 import OreIcon from './OreIcon';
 import OutfittingStationIcon from './OutfittingStationIcon';
 import PigIcon from './PigIcon';
@@ -26,6 +28,7 @@ import SkullIcon from './SkullIcon';
 import SmelterIcon from './SmelterIcon';
 import StonecuttingTableIcon from './StonecuttingTableIcon';
 import StorageShedIcon from './StorageShedIcon';
+import SyndicateIcon from './SyndicateIcon';
 import TanneryIcon from './TanneryIcon';
 import TerritoryBoardIcon from './TerritoryBoardIcon';
 import TownBoardIcon from './TownBoardIcon';
@@ -153,5 +156,8 @@ export async function createMapIconCache(scale: number) {
         territory_planning_board: await svgMapIconToImageBitmap(TerritoryBoardIcon, { fill: 'white', scale }),
         town_project_board: await svgMapIconToImageBitmap(TownBoardIcon, { fill: 'white', scale }),
         war_board: await svgMapIconToImageBitmap(WarBoardIcon, { fill: 'white', scale }),
+        syndicate_alchemist: await svgMapIconToImageBitmap(SyndicateIcon, { fill: 'purple', scale: scale / 5 }),
+        covenant_adjudicator: await svgMapIconToImageBitmap(CovenantIcon, { fill: 'yellow', scale: scale / 5 }),
+        marauder_commander: await svgMapIconToImageBitmap(MarauderIcon, { fill: 'green', scale: scale / 5 }),
     };
 }
