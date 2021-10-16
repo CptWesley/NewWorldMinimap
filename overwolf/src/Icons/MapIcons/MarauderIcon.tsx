@@ -1,8 +1,10 @@
 import React from 'react';
 import SvgMapIcon, { ISvgMapIconConsumerProps } from './SvgMapIcon';
 
-export default function MarauderCommanderIcon(props: ISvgMapIconConsumerProps) {
-    return <SvgMapIcon {...props} width={100} height={100} fill='#2a9b39' stroke='#ffffff'>
+export default function MarauderIcon(props: ISvgMapIconConsumerProps) {
+    const marauderColor = '#2a9b39';
+
+    return <SvgMapIcon {...props} width={100} height={100} fill={marauderColor} stroke='#ffffff'>
         <path
             d='m 6.1953904,18.519853 8.0346406,6.809807 35.7706,61.956945 35.770595,-61.956945 8.03464,-6.809807 -9.91965,3.55562 H 16.115039 Z'
             stroke='none'
@@ -29,27 +31,27 @@ export default function MarauderCommanderIcon(props: ISvgMapIconConsumerProps) {
         <path
             d='m 51.508957,48.658397 c 0.06289,-0.774877 0.510538,-1.779726 1.027527,-2.044005'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 53.216056,47.881218 c 0.06289,-0.774877 0.510537,-1.779726 1.027526,-2.044005'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 54.934829,47.256209 c 0.06289,-0.774877 0.510537,-1.779726 1.027526,-2.044006'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 41.277878,46.448661 c -0.929469,-3.281695 0.06701,-6.115492 4.198499,-8.220221'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 46.360269,41.366266 0.92809,-4.065914 2.651685,-1.546817 0.662919,2.872657 -2.077149,3.314604 0.530335,1.76779'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 49.228487,53.218035 c -0.82467,1.042384 -1.818819,2.014151 -1.281647,3.62397 0.48614,0.457227 0.972284,0.288609 1.458425,0.176771 z'
@@ -62,57 +64,57 @@ export default function MarauderCommanderIcon(props: ISvgMapIconConsumerProps) {
         <path
             d='m 58.467458,57.540739 c -2.542067,-0.445328 -4.220599,0.679405 -4.296599,4.717836'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 43.471483,58.467457 c 1.523388,0.07023 1.964483,1.816902 1.769189,4.549342'
             fill='none'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 43.126536,63.293563 c 0.01436,1.584847 1.199584,3.435203 2.071026,4.57019 -0.213886,-1.280361 -0.774616,-2.453768 -0.567344,-3.6832 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 44.630218,64.180553 c -0.193666,2.273294 0.707525,2.728472 1.252305,3.467674 -0.257502,-1.253621 -0.244765,-1.332119 0.305692,-2.772058 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 46.188219,64.876169 c -0.185199,0.76821 -0.650416,2.181465 0.792864,3.294803 -0.04653,-1.109838 0.265553,-1.479409 0.203795,-2.982924 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 47.184893,65.188048 c 0.628419,1.390922 -0.403829,2.062526 0.731922,2.904184 0.187429,-0.832916 0.617239,-1.026706 0.606989,-2.724061 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 50.154603,65.395286 c -0.405525,1.127602 -0.27228,2.118607 -1.453208,3.135936 -0.297188,-1.466709 -0.122421,-2.189092 -0.177565,-3.163051 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 51.839428,65.223591 c -0.586393,1.173627 -0.259467,2.321812 -1.210053,3.334746 -0.454018,-0.735297 -0.961101,-1.604808 -0.474783,-3.163051 0.394939,0.03477 1.117859,-0.111535 1.684825,-0.171668 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 53.270296,64.991318 c -0.682217,1.287228 0.432625,2.243714 -0.651708,2.857604 -0.735721,-1.015334 -1.015512,-1.436545 -0.779171,-2.625319 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 54.756822,64.753076 c -0.5378,0.960148 -0.09294,1.898968 -1.00745,3.009419 -0.460526,-1.28077 -0.792115,-1.477361 -0.479076,-2.771177 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='m 56.289111,64.0421 c -0.58433,1.716214 -1.433737,2.699142 -2.08125,3.340831 0.28755,-1.20872 -0.103938,-0.818732 0.548961,-2.629855 z'
             fill='#ffffff'
-            stroke='#2a9b39'
+            stroke={marauderColor}
         />
         <path
             d='M 44.750567,14.750184 H 40.25051 V 7.2500912 h 4.500057'
