@@ -1,5 +1,10 @@
 import { iconNameOverrides } from '../Icons/MapIcons/iconNameOverrides';
 
+export async function GetFriendIcon() {
+    const iconCache = await iconCachePromise;
+    return iconCache.friend;
+}
+
 function getChestCategoryName(str: string) {
     switch (str.charAt(0)) {
         case 's': return 'Supply';

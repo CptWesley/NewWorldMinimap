@@ -40,6 +40,14 @@ export default class MapIconsCache {
         return this.cache.player;
     }
 
+    public getFriendIcon = (): ImageBitmap | undefined => {
+        if (!this.cache) {
+            return undefined;
+        }
+
+        return this.cache.friend;
+    }
+
     public registerMapIconsLoaded = (listener: OnMapIconsLoadedListener) => {
         this.onMapIconsLoadedListeners.add(listener);
         return () => {

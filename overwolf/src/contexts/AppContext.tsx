@@ -30,7 +30,11 @@ export function loadAppContextSettings(): AppContextSettings {
         townZoomLevel: load('townZoomLevel'),
         townZoom: load('townZoom'),
         interpolation: load('interpolation'),
+        shareLocation: load('shareLocation'),
+        friendCode: load('friendCode'),
+        friends: load('friends'),
         lastKnownPosition: load('lastKnownPosition'),
+        lastKnownFriends: load('lastKnownFriends'),
     };
 }
 

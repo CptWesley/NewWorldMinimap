@@ -10,6 +10,7 @@ import EssenceMinusIcon from './EssenceMinusIcon';
 import EssencePlusIcon from './EssencePlusIcon';
 import FishIcon from './FishIcon';
 import ForgeIcon from './ForgeIcon';
+import FriendIcon from './FriendIcon';
 import GoatIcon from './GoatIcon';
 import GovernorDeskIcon from './GovernorDeskIcon';
 import InnIcon from './InnIcon';
@@ -46,6 +47,7 @@ export type MapIcons = typeof createMapIcons extends (...args: any[]) => Promise
 export async function createMapIcons(scale: number) {
     return {
         player: await svgMapIconToImageBitmap(PlayerIcon, { fill: 'yellow', scale }),
+        friend: await svgMapIconToImageBitmap(FriendIcon, { fill: 'blue', scale }),
         unknown: await svgMapIconToImageBitmap(UnknownIcon, { fill: 'red', scale }),
 
         ores: await svgMapIconToImageBitmap(OreIcon, { fill: 'green', scale }),

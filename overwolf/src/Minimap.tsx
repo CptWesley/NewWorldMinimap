@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import { updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMapTiles } from './logic/map';
@@ -56,6 +57,7 @@ export default function Minimap(props: IProps) {
     const appContext = useContext(AppContext);
 
     const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const currentFriends = useRef<FriendData[]>(appContext.settings.lastKnownFriends);
     const lastPosition = useRef<Vector2>(currentPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
@@ -197,6 +199,40 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        for (const key in currentFriends.current) {
+            const imgPos = toMinimapCoordinate(pos, {x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y} as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const icon = mapIconsCache.getFriendIcon();
+            if (!icon) { continue; }
+            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+
+            if (lastDraw.current !== currentDraw) {
+                return;
+            }
+
+            if (renderAsCompass) {
+                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
+            } else {
+                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            }
+
+            if (appContext.settings.showText) {
+                ctx.textAlign = 'center';
+                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.strokeStyle = '#000';
+                ctx.fillStyle = '#fff';
+
+                if (renderAsCompass) {
+                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    ctx.strokeText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                } else {
+                    ctx.strokeText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                }
+            }
+        }
+
         const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
@@ -274,6 +310,22 @@ export default function Minimap(props: IProps) {
         lastPosition.current = currentPosition.current;
         currentPosition.current = pos;
         store('lastKnownPosition', pos);
+        redraw(true);
+    }
+
+    function setFriends(friends: FriendData[]) {
+        if (friends.length === currentFriends.current.length) {
+            for (const key in friends) {
+                if (friends[key].name === currentFriends.current[key].name
+                        && friends[key].name === currentFriends.current[key].name
+                        && friends[key].location.x === currentFriends.current[key].location.x) {
+                    return;
+                }
+            }
+        }
+
+        currentFriends.current = friends;
+        //store('lastKnownFriends', friends);
         redraw(true);
     }
 
@@ -367,6 +419,16 @@ export default function Minimap(props: IProps) {
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
+            if (appContext.settings.shareLocation) {
+                const sharedLocation = updateFriendLocation(appContext.settings.friendCode, info.name || 'undefined', info.position, appContext.settings.friends);
+                sharedLocation.then(r => {
+                    if (r !== undefined) {
+                        setFriends(r.friends);
+                    } else {
+                        setFriends([]);
+                    }
+                });
+            }
         });
 
         return function () {

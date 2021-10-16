@@ -4,11 +4,12 @@ import React, { useContext, useState } from 'react';
 import { CSSObject } from 'tss-react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import GenerateIcon from './Icons/GenerateIcon';
 import ReturnIcon from './Icons/ReturnIcon';
 import SelectIcon from './Icons/SelectIcon';
 import UnselectIcon from './Icons/UnselectIcon';
 import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
-import { compareNames } from './logic/util';
+import { compareNames, generateRandomToken } from './logic/util';
 import { makeStyles } from './theme';
 
 interface IProps {
@@ -119,7 +120,21 @@ const useStyles = makeStyles()((theme, params, createRef) => {
                 visibility: 'visible',
             },
         },
-        hoverText,
+        textbox: {
+            '& > input[type="text"]': {
+                margin: theme.spacing(0, 1, 0, 0),
+            },
+        },
+        textarea: {
+            display: 'flex',
+            '& > textarea': {
+                minWidth: 170,
+                maxWidth: 170,
+                minHeight: '4em',
+                width: '100%',
+                margin: theme.spacing(0, 1, 0, 0),
+            },
+        },
         checkbox: {
             '& > input[type="checkbox"]': {
                 margin: theme.spacing(0, 1, 0, 0),
@@ -130,6 +145,7 @@ const useStyles = makeStyles()((theme, params, createRef) => {
                 margin: theme.spacing(0, 1, 0, 0),
             },
         },
+        hoverText,
         select: {
             '& > select': {
                 margin: theme.spacing(0, 1, 0, 0),
@@ -165,6 +181,20 @@ const useStyles = makeStyles()((theme, params, createRef) => {
             margin: theme.spacing(0, 0, 1, 3),
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+        },
+        friendsGenerateButton: {
+            background: 'transparent',
+            border: 'none',
+            color: theme.frameMenuColor,
+            padding: 0,
+            margin: '0 2px',
+            width: 20,
+            height: 20,
+            verticalAlign: 'middle',
+
+            '&:focus': {
+                outline: 0,
+            },
         },
     };
 }
@@ -473,6 +503,43 @@ export default function FrameMenu(props: IProps) {
                             Overlay Shape
                         </label>
                         <span className={classes.hoverText}>Determines the shape of the overlay.</span>
+                    </div>
+                </div>
+            </details>
+            <details>
+                <summary className={classes.summary}>Friends</summary>
+                <div className={classes.indent}>
+                    <div className={classes.setting}>
+                        <label className={classes.checkbox}>
+                            <input
+                                type='checkbox'
+                                checked={context.settings.shareLocation}
+                                onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
+                            />
+                            Share location with friends
+                        </label>
+                    </div>
+                    <div className={classes.setting}>
+                        <label className={classes.textbox}>
+                            <input
+                                type='text'
+                                readOnly
+                                value={context.settings.friendCode}
+                            />
+                            Your code
+                            <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
+                                <GenerateIcon />
+                            </button>
+                        </label>
+                    </div>
+                    <div className={classes.setting}>
+                        <label className={classes.textarea}>
+                            <textarea
+                                value={context.settings.friends}
+                                onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
+                            />
+                            Friends
+                        </label>
                     </div>
                 </div>
             </details>
