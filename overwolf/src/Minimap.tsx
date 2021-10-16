@@ -238,14 +238,13 @@ export default function Minimap(props: IProps) {
         }
 
         const predictedPosition = predictVector(lastPosition, currentPosition);
-        // const predictedAngle = predictAngle(lastAngle, currentAngle);
 
         if (appContext.settings.interpolation === 'linear-extrapolation') {
             interpolatedPosition = interpolateVectorsLinear(currentPosition, predictedPosition, percentage);
-            // interpolatedAngle = interpolateAngleLinear(currentAngle, predictedAngle, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
         } else if (appContext.settings.interpolation === 'cosine-extrapolation') {
             interpolatedPosition = interpolateVectorsCosine(currentPosition, predictedPosition, percentage);
-            // interpolatedAngle = interpolateAngleCosine(currentAngle, predictedAngle, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
         }
 
         drawRef.current(interpolatedPosition, interpolatedAngle);
