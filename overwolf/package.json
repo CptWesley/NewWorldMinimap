@@ -13,7 +13,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "@overwolf/overwolf-api-ts": "^1.3.0",
     "@overwolf/types": "^3.14.0",
