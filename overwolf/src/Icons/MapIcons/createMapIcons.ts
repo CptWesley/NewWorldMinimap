@@ -52,11 +52,12 @@ export async function createMapIcons(scale: number) {
         unknown: await svgMapIconToImageBitmap(UnknownIcon, { fill: 'red', scale }),
 
         ores: await svgMapIconToImageBitmap(OreIcon, { fill: 'green', scale }),
-        iron: await svgMapIconToImageBitmap(OreIcon, { fill: 'saddlebrown', scale }),
         crystal: await svgMapIconToImageBitmap(OreIcon, { fill: 'lightcyan', scale }),
         gold: await svgMapIconToImageBitmap(OreIcon, { fill: 'gold', scale }),
+        iron: await svgMapIconToImageBitmap(OreIcon, { fill: 'saddlebrown', scale }),
         lodestone: await svgMapIconToImageBitmap(OreIcon, { fill: 'orangered', scale }),
         orichalcum: await svgMapIconToImageBitmap(OreIcon, { fill: 'darkred', scale }),
+        platinium: await svgMapIconToImageBitmap(OreIcon, { fill: 'aliceblue', scale }),
         saltpeter: await svgMapIconToImageBitmap(OreIcon, { fill: 'white', scale }),
         seeping_stone: await svgMapIconToImageBitmap(DropletIcon, { stroke: 'black', strokeWidth: 35, fill: 'darkgray', scale, viewBox: '0 0 512 512' }),
         silver: await svgMapIconToImageBitmap(OreIcon, { fill: 'silver', scale }),
