@@ -1,19 +1,60 @@
-import clsx from 'clsx';
 import produce from 'immer';
 import React from 'react';
 import SelectIcon from '@/Icons/SelectIcon';
 import UnselectIcon from '@/Icons/UnselectIcon';
 import { storeIconCategory, storeIconType } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
+import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
-import { useAppSettingsStyles } from '../appSettingsStyle';
+import { useSharedSettingsStyles } from '../sharedSettingStyles';
+
+const useStyles = makeStyles()(theme => ({
+    selectIcon: {
+        background: 'transparent',
+        border: 'none',
+        color: theme.frameMenuColor,
+        padding: 0,
+        width: 18,
+        height: 18,
+
+        '&:focus': {
+            outline: `1px solid ${theme.frameMenuColor}`,
+        },
+    },
+    iconCategory: {
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: 3,
+        padding: 2,
+
+        '& > span': {
+            flexGrow: 1,
+        },
+
+        '&:focus': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.15)',
+        },
+
+        '&:hover': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.33)',
+        },
+    },
+    iconTypeContainer: {
+        margin: theme.spacing(0, 0, 1, 3),
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+    },
+}));
 
 export default function IconSettingsPage(props: IAppSettingsPageProps) {
     const {
         settings,
         updateSettings,
     } = props;
-    const { classes } = useAppSettingsStyles();
+    const { classes } = useStyles();
+    const { classes: sharedClasses } = useSharedSettingsStyles();
 
     function updateIconCategorySettings(name: string, value: boolean) {
         const iconSettings = settings.iconSettings;
@@ -58,7 +99,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
             return <p key={'FrameMenuType' + typeKey}>
-                <label className={classes.checkbox}>
+                <label className={sharedClasses.checkbox}>
                     <input
                         type='checkbox'
                         checked={type.value}
@@ -70,8 +111,8 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         });
 
         return <details key={'FrameMenuCat' + categoryKey}>
-            <summary className={clsx(classes.summary, classes.iconCategory)}>
-                <label className={classes.checkbox}>
+            <summary className={classes.iconCategory}>
+                <label className={sharedClasses.checkbox}>
                     <input
                         type='checkbox'
                         checked={category.value}

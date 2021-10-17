@@ -1,9 +1,10 @@
 import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
+import { globalLayers } from '@/globalLayers';
 import ReturnIcon from '@/Icons/ReturnIcon';
 import { SimpleStorageSetting, store } from '@/logic/storage';
-import { useAppSettingsStyles } from './appSettingsStyle';
+import { makeStyles } from '@/theme';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
@@ -19,6 +20,114 @@ export interface IAppSettingsPageProps {
     updateSettings: IAppContext['update']
     setPeek: (peek: boolean) => void;
 }
+
+const useStyles = makeStyles()(theme => ({
+    root: {
+        display: 'grid',
+        padding: theme.spacing(1),
+        gap: theme.spacing(1),
+        gridTemplateRows: '30px 1fr auto',
+        gridTemplateColumns: '180px 1fr 30px',
+        gridTemplateAreas: '"title title return" "nav content content" "footer footer footer"',
+
+        background: theme.frameMenuBackground,
+        color: theme.frameMenuColor,
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: globalLayers.frameMenu,
+        backdropFilter: 'blur(10px)',
+        transition: 'backdrop-filter 300ms ease, background 300ms ease',
+    },
+    belowHeader: {
+        marginTop: theme.headerHeight,
+    },
+    hidden: {
+        display: 'none !important',
+    },
+    peek: {
+        background: theme.frameMenuBackgroundPeek,
+        backdropFilter: 'none',
+    },
+    return: {
+        background: 'transparent',
+        border: 'none',
+        color: theme.frameMenuColor,
+        padding: 0,
+
+        '&:focus': {
+            outline: `1px solid ${theme.frameMenuColor}`,
+        },
+    },
+    nav: {
+        gridArea: 'nav',
+        display: 'flex',
+        margin: theme.spacing(0, -1),
+        flexDirection: 'column',
+        overflowY: 'auto',
+
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+
+        '&::-webkit-scrollbar-thumb': {
+            background: theme.scrollbarColor,
+        },
+    },
+    navItem: {
+        padding: theme.spacing(1),
+        border: 'none',
+        borderLeft: '8px solid transparent',
+        background: 'none',
+        color: theme.frameMenuColor,
+        fontFamily: theme.bodyFontFamily,
+        fontSize: theme.bodyFontSize,
+        textAlign: 'left',
+
+        '&:hover': {
+            background: theme.buttonBackgroundHover,
+        },
+
+        '&:focus': {
+            outline: 'none',
+        },
+    },
+    navItemActive: {
+        borderLeftColor: theme.frameMenuColor,
+    },
+    title: {
+        gridArea: 'title',
+        alignSelf: 'center',
+        fontSize: 18,
+    },
+    content: {
+        gridArea: 'content',
+        overflowY: 'auto',
+        maxHeight: '100%',
+        padding: theme.spacing(0, 1, 1, 1),
+
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+
+        '&::-webkit-scrollbar-thumb': {
+            background: theme.scrollbarColor,
+        },
+
+        '& > details:not(:last-child)': {
+            marginBottom: theme.spacing(1),
+        },
+
+        '& > details > summary': {
+            fontSize: 16,
+        },
+    },
+    footer: {
+        gridArea: 'footer',
+    },
+}));
 
 const settingsPageMap = {
     window: WindowSettingsPage,
@@ -44,7 +153,7 @@ export default function AppSettings(props: IProps) {
         visible,
     } = props;
     const context = useContext(AppContext);
-    const { classes } = useAppSettingsStyles();
+    const { classes } = useStyles();
 
     const [currentPage, setCurrentPage] = useState(settingsPages[0]);
     const [isPeeking, setIsPeeking] = useState(false);

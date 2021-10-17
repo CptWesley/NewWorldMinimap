@@ -1,7 +1,7 @@
 import React from 'react';
 import { Interpolation, zoomLevelSettingBounds } from '@/logic/storage';
 import { IAppSettingsPageProps } from '../AppSettings';
-import { useAppSettingsStyles } from '../appSettingsStyle';
+import { useSharedSettingsStyles } from '../sharedSettingStyles';
 
 export default function WindowSettingsPage(props: IAppSettingsPageProps) {
     const {
@@ -9,7 +9,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
         updateSimpleSetting,
         setPeek,
     } = props;
-    const { classes } = useAppSettingsStyles();
+    const { classes } = useSharedSettingsStyles();
 
     function handleMapSliderMouseDown() {
         setPeek(true);

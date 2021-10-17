@@ -1,13 +1,13 @@
 import React from 'react';
 import { IAppSettingsPageProps } from '../AppSettings';
-import { useAppSettingsStyles } from '../appSettingsStyle';
+import { useSharedSettingsStyles } from '../sharedSettingStyles';
 
 export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
     const {
         settings,
         updateSimpleSetting,
     } = props;
-    const { classes } = useAppSettingsStyles();
+    const { classes } = useSharedSettingsStyles();
 
     return <>
         <div className={classes.setting}>
