@@ -1,5 +1,8 @@
 import { makeStyles } from '@/theme';
 
+/**
+ * Contains generic styles for elements on the settings page.
+ */
 export const useSharedSettingsStyles = makeStyles()(theme => ({
     setting: {
         marginBottom: theme.spacing(1),
