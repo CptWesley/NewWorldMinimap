@@ -1,5 +1,12 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
 
+export type Interpolation =
+    | 'cosine-interpolation'
+    | 'linear-interpolation'
+    | 'cosine-extrapolation'
+    | 'linear-extrapolation'
+    | 'none';
+
 export const simpleStorageDefaultSettings = {
     showHeader: true,
     showToolbar: false,
@@ -13,7 +20,7 @@ export const simpleStorageDefaultSettings = {
     compassMode: true,
     townZoomLevel: 1,
     townZoom: true,
-    interpolation: 'cosine-interpolation',
+    interpolation: 'cosine-interpolation' as Interpolation,
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
