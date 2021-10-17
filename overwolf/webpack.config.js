@@ -40,7 +40,10 @@ module.exports = env => {
             ],
         },
         resolve: {
-            extensions: ['.ts', '.tsx', '.js']
+            extensions: ['.ts', '.tsx', '.js'],
+            alias: {
+                "@": path.resolve(__dirname, 'src'),
+            },
         },
         output: {
             path: path.resolve(__dirname, 'dist/'),
