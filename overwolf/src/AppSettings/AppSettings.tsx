@@ -92,6 +92,7 @@ const useStyles = makeStyles()(theme => ({
 
         '&:focus': {
             outline: 'none',
+            textDecoration: 'underline',
         },
     },
     navItemActive: {
