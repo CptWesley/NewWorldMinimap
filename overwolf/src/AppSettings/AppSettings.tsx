@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
 import { globalLayers } from '@/globalLayers';
-import ReturnIcon from '@/Icons/ReturnIcon';
+import CloseOIcon from '@/Icons/CloseOIcon';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
 import IconSettingsPage from './pages/IconSettingsPage';
@@ -51,7 +51,7 @@ const useStyles = makeStyles()(theme => ({
         background: theme.frameMenuBackgroundPeek,
         backdropFilter: 'none',
     },
-    return: {
+    close: {
         background: 'transparent',
         border: 'none',
         borderRadius: '50%',
@@ -185,8 +185,8 @@ export default function AppSettings(props: IProps) {
     const PageComponent = settingsPageMap[currentPage];
 
     return <div className={rootClassName}>
-        <button className={classes.return} onClick={onClose}>
-            <ReturnIcon />
+        <button className={classes.close} onClick={onClose}>
+            <CloseOIcon />
         </button>
         <h2 className={classes.title}>Options</h2>
         <nav className={classes.nav}>
