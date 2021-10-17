@@ -1,5 +1,10 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
 
+const debugLocations = {
+    default: { x: 7728.177, y: 1988.299 } as Vector2,
+    city: { x: 8912, y: 5783 } as Vector2,
+};
+
 export type Interpolation =
     | 'cosine-interpolation'
     | 'linear-interpolation'
@@ -21,6 +26,7 @@ export const simpleStorageDefaultSettings = {
     townZoomLevel: 1,
     townZoom: true,
     interpolation: 'cosine-interpolation' as Interpolation,
+    lastKnownPosition: debugLocations.default,
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
@@ -36,6 +42,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoomLevel',
     'townZoom',
     'interpolation',
+    'lastKnownPosition',
 ];
 
 export const iconSettingStorageScope = 'icon';

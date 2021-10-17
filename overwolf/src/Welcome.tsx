@@ -48,7 +48,7 @@ export default function Welcome() {
         <p>Launch New World to access the minimap.</p>
         <p>You may also access the application settings while the game is not running.</p>
         <p>Feel free to join our Discord server for questions, help, and suggestions you might have: <a className={classes.discordLink} href={discordUrl} target='_blank'>{discordUrl}</a>.</p>
-        {!NWMM_APP_BUILD_OPK && <>
+        {!NWMM_APP_BUILD_PRODUCTION && <>
             <hr />
             <p>This appears to be a development build. Use the button below to access the minimap at a debug location.</p>
             <Button onClick={tryForceMap}>Show me the map</Button>

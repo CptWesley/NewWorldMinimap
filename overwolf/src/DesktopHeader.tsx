@@ -84,7 +84,7 @@ export default function DesktopHeader() {
     const draggable = useRef<HTMLDivElement | null>(null);
     const [maximized, setMaximized] = useState(false);
 
-    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.frameMenuVisible;
+    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.appSettingsVisible;
 
     useEffect(() => {
         if (draggable.current) {

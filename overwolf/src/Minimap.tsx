@@ -4,8 +4,8 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
-import { getIcon, GetPlayerIcon, setIconScale } from './logic/icons';
 import { getMapTiles } from './logic/map';
+import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
 import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
@@ -14,11 +14,6 @@ import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
-
-const debugLocations = {
-    default: { x: 7728.177, y: 1988.299 } as Vector2,
-    city: { x: 8912, y: 5783 } as Vector2,
-};
 
 interface IProps {
     className?: string;
@@ -58,22 +53,27 @@ export default function Minimap(props: IProps) {
     } = props;
     const { classes } = useStyles();
 
-    const [currentPosition, setCurrentPosition] = useState<Vector2>(debugLocations.default);
-    const [lastPosition, setLastPosition] = useState<Vector2>(currentPosition);
-    const [lastPositionUpdate, setLastPositionUpdate] = useState<number>(performance.now());
+    const appContext = useContext(AppContext);
+
+    const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const lastPosition = useRef<Vector2>(currentPosition.current);
+    const lastPositionUpdate = useRef<number>(performance.now());
+    const lastAngle = useRef<number>(0);
+
     const [tilesDownloading, setTilesDownloading] = useState(0);
-    const [lastAngle, setLastAngle] = useState<number>(0);
     const canvas = useRef<HTMLCanvasElement>(null);
+    const [mapIconsCache] = useState(() => new MapIconsCache());
 
     const lastDraw = useRef(0);
-    const appContext = useContext(AppContext);
+
+    const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
     const dynamicStyling: React.CSSProperties = {};
     if (appContext.isTransparentSurface) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
-    const draw = async (pos: Vector2, angle: number) => {
+    const draw = (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -88,8 +88,6 @@ export default function Minimap(props: IProps) {
         }
 
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
-
-        setIconScale(appContext.settings.iconScale);
 
         if (!ctx) {
             return;
@@ -167,7 +165,8 @@ export default function Minimap(props: IProps) {
             }
 
             const imgPos = toMinimapCoordinate(pos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-            const icon = await getIcon(marker.type, marker.category);
+            const icon = mapIconsCache.getIcon(marker.type, marker.category);
+            if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
 
             if (lastDraw.current !== currentDraw) {
@@ -183,7 +182,7 @@ export default function Minimap(props: IProps) {
 
             if (typeSettings && typeSettings.label) {
                 ctx.textAlign = 'center';
-                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
                 ctx.fillStyle = '#fff';
 
@@ -198,76 +197,84 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        const playerIcon = await GetPlayerIcon();
+        const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
             return;
         }
 
-        if (renderAsCompass) {
-            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
-        } else {
-            ctx.save();
-            ctx.translate(centerX, centerY);
-            ctx.rotate(angle);
-            ctx.translate(-centerX, -centerY);
-            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
-            ctx.restore();
+        if (playerIcon) {
+            if (renderAsCompass) {
+                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+            } else {
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle);
+                ctx.translate(-centerX, -centerY);
+                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+                ctx.restore();
+            }
         }
     };
 
-    // Store the `draw` function in a ref object, so we can always access the latest one.
-    const drawRef = useRef(draw);
-    drawRef.current = draw;
-
-    function redraw(force: boolean) {
+    function drawWithInterpolation(force: boolean) {
         const curTime = performance.now();
-        const timeDif = curTime - lastPositionUpdate;
-        const currentAngle = getAngle(lastPosition, currentPosition);
+        const timeDif = curTime - lastPositionUpdate.current;
+        const currentAngle = getAngle(lastPosition.current, currentPosition.current);
 
         if (timeDif > positionUpdateRate && !force) {
             return;
         }
 
-        if (squaredDistance(lastPosition, currentPosition) > 1000 || appContext.settings.interpolation === 'none') {
-            drawRef.current(currentPosition, currentAngle);
+        if (squaredDistance(lastPosition.current, currentPosition.current) > 1000 || appContext.settings.interpolation === 'none') {
+            draw(currentPosition.current, currentAngle);
             return;
         }
 
         const percentage = timeDif / positionUpdateRate;
-        let interpolatedPosition = currentPosition;
+        let interpolatedPosition = currentPosition.current;
         let interpolatedAngle = currentAngle;
 
         if (appContext.settings.interpolation === 'linear-interpolation') {
-            interpolatedPosition = interpolateVectorsLinear(lastPosition, currentPosition, percentage);
-            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
+            interpolatedPosition = interpolateVectorsLinear(lastPosition.current, currentPosition.current, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
         } else if (appContext.settings.interpolation === 'cosine-interpolation') {
-            interpolatedPosition = interpolateVectorsCosine(lastPosition, currentPosition, percentage);
-            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
+            interpolatedPosition = interpolateVectorsCosine(lastPosition.current, currentPosition.current, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
         }
 
-        const predictedPosition = predictVector(lastPosition, currentPosition);
+        const predictedPosition = predictVector(lastPosition.current, currentPosition.current);
 
         if (appContext.settings.interpolation === 'linear-extrapolation') {
-            interpolatedPosition = interpolateVectorsLinear(currentPosition, predictedPosition, percentage);
-            interpolatedAngle = interpolateAngleLinear(lastAngle, currentAngle, percentage);
+            interpolatedPosition = interpolateVectorsLinear(currentPosition.current, predictedPosition, percentage);
+            interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
         } else if (appContext.settings.interpolation === 'cosine-extrapolation') {
-            interpolatedPosition = interpolateVectorsCosine(currentPosition, predictedPosition, percentage);
-            interpolatedAngle = interpolateAngleCosine(lastAngle, currentAngle, percentage);
+            interpolatedPosition = interpolateVectorsCosine(currentPosition.current, predictedPosition, percentage);
+            interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
         }
 
-        drawRef.current(interpolatedPosition, interpolatedAngle);
+        draw(interpolatedPosition, interpolatedAngle);
+    }
+
+    // Store the `drawWithInterpolation` function in a ref object, so we can always access the latest one.
+    const drawWithInterpolationRef = useRef(drawWithInterpolation);
+    drawWithInterpolationRef.current = drawWithInterpolation;
+
+    function redraw(force: boolean) {
+        drawWithInterpolationRef.current(force);
     }
 
     function setPosition(pos: Vector2) {
-        if (pos.x === currentPosition.x && pos.y === currentPosition.y) {
+        if (pos.x === currentPosition.current.x && pos.y === currentPosition.current.y) {
             return;
         }
 
-        setLastAngle(getAngle(lastPosition, currentPosition));
-        setLastPositionUpdate(performance.now());
-        setLastPosition(currentPosition);
-        setCurrentPosition(pos);
+        lastAngle.current = getAngle(lastPosition.current, currentPosition.current);
+        lastPositionUpdate.current = performance.now();
+        lastPosition.current = currentPosition.current;
+        currentPosition.current = pos;
+        store('lastKnownPosition', pos);
+        redraw(true);
     }
 
     function zoomBy(delta: number) {
@@ -285,9 +292,19 @@ export default function Minimap(props: IProps) {
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
     }
 
+    // This effect triggers a redraw when the context value changes (relevant for settings).
     useEffect(() => {
         redraw(true);
-    }, [currentPosition, appContext]);
+    }, [appContext]);
+
+    // This effect listens for events from asset caches/stores.
+    useEffect(() => {
+        mapIconsCache.initialize(appContext.settings.iconScale);
+    }, [appContext.settings.iconScale]);
+
+    useEffect(() => {
+        mapIconsCache.initialize(appContext.settings.iconScale);
+    }, [appContext.settings.iconScale]);
 
     useEffect(() => {
         function handleTileDownloadingCountChange(count: number) {
@@ -297,15 +314,17 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        function handleMarkersLoaded() {
+        function handleAssetsLoaded() {
             redraw(true);
         }
 
         const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
-        const markerRegistration = markerCache.registerOnMarkersLoaded(handleMarkersLoaded);
+        const markerRegistration = markerCache.registerOnMarkersLoaded(handleAssetsLoaded);
+        const mapIconsCacheRegistration = mapIconsCache.registerMapIconsLoaded(handleAssetsLoaded);
         return () => {
             tileRegistration();
             markerRegistration();
+            mapIconsCacheRegistration();
         };
     }, []);
 
@@ -319,29 +338,41 @@ export default function Minimap(props: IProps) {
         }, [appContext.settings.zoomLevel]);
     }
 
+    // This effect starts a timer if interpolation is enabled.
+    useEffect(() => {
+        const interval = interpolationEnabled
+            ? setInterval(() => redraw(false), 100)
+            : undefined;
+
+        return function () {
+            clearInterval(interval);
+        };
+    }, [interpolationEnabled]);
+
+    // This effect adds an event handler for the window resize event, triggering a redraw when it fires.
+    useEffect(() => {
+        const onResize = () => redraw(true);
+        window.addEventListener('resize', onResize);
+
+        return function () {
+            window.removeEventListener('resize', onResize);
+        };
+    }, []);
+
+    // This effect adds a registration for position updates.
     useEffect(() => {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
 
-        const onResize = () => redraw(true);
-        window.addEventListener('resize', onResize);
-
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
         });
 
-        const interpolationEnabled = appContext.settings.interpolation !== 'none';
-        const interval = interpolationEnabled ? setInterval(() => redraw(false), 100) : -1;
-
         return function () {
-            window.removeEventListener('resize', onResize);
             callbackUnregister();
-            if (interpolationEnabled) {
-                clearInterval(interval);
-            }
         };
-    }, [currentPosition]);
+    }, []);
 
     return <div className={clsx(classes.minimap, className)}>
         <canvas

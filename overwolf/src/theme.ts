@@ -5,6 +5,9 @@ export const theme = {
     color: '#ffffff',
     linkColor: '#a8ceff',
 
+    borderRadiusSmall: 3,
+    borderRadiusMedium: 5,
+
     bodyFontFamily: 'Lato',
     bodyFontSize: 16,
 

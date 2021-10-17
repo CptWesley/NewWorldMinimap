@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "module": "none",
@@ -7,6 +8,11 @@
     "noImplicitAny": false,
     "outDir": "./dist",
     "jsx": "react",
+    "paths": {
+      "@/*": [
+        "src/*"
+      ]
+    },
     "removeComments": true,
     "sourceMap": true,
     "strict": true,
