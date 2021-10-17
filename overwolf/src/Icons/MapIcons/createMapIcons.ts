@@ -41,9 +41,9 @@ import WolfIcon from './WolfIcon';
 import WoodshopIcon from './WoodshopIcon';
 import WorkshopIcon from './WorkshopIcon';
 
-export type MapIconsCache = typeof createMapIconCache extends (...args: any[]) => Promise<infer T> ? T : never;
+export type MapIcons = typeof createMapIcons extends (...args: any[]) => Promise<infer T> ? T : never;
 
-export async function createMapIconCache(scale: number) {
+export async function createMapIcons(scale: number) {
     return {
         player: await svgMapIconToImageBitmap(PlayerIcon, { fill: 'yellow', scale }),
         unknown: await svgMapIconToImageBitmap(UnknownIcon, { fill: 'red', scale }),
