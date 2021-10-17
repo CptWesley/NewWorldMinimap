@@ -268,7 +268,7 @@ export default function FrameMenu(props: IProps) {
                 <summary className={classes.summary}>This window</summary>
                 <div className={classes.indent}>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will make the window header transparent.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.transparentHeader}
@@ -278,7 +278,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting} hidden>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will make the toolbar transparent.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.transparentToolbar}
@@ -288,7 +288,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will show the header text and buttons.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.showHeader}
@@ -298,7 +298,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting} hidden>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will show the toolbar.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.showToolbar}
@@ -308,7 +308,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range}>
+                        <label className={classes.range} title='Determines the zoom level on the map. Lower zoom may impact performance.'>
                             <input
                                 type='range'
                                 value={zoomLevelSettingBounds[1] - context.settings.zoomLevel}
@@ -326,7 +326,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will allow you to configure a seperate zoom level when in towns.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.townZoom}
@@ -336,7 +336,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range}>
+                        <label className={classes.range} title='Determines the zoom level on the map when in towns. Lower zoom may impact performance.'>
                             <input
                                 type='range'
                                 value={zoomLevelSettingBounds[1] - context.settings.townZoomLevel}
@@ -355,7 +355,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range}>
+                        <label className={classes.range} title='Determines the size of the rendered icons.'>
                             <input
                                 type='range'
                                 value={context.settings.iconScale}
@@ -370,7 +370,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling adds text underneath icons on the map. Enabling may impact performance.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.showText}
@@ -380,7 +380,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.select}>
+                        <label className={classes.select} title='Detemines which algorithm to use to produce smoother movement around the map. Interpolation gives smoothest results, but adds a delay to your position. None gives the best performance.'>
                             <select
                                 value={context.settings.interpolation}
                                 onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
@@ -400,7 +400,7 @@ export default function FrameMenu(props: IProps) {
                 <summary className={classes.summary}>In-game overlay window</summary>
                 <div className={classes.indent}>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox}>
+                        <label className={classes.checkbox} title='Enabling will make the player always face north and rotates the map around the player, like a classic minimap.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.compassMode}
@@ -413,7 +413,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range}>
+                        <label className={classes.range} title='Determines the opacity of the overlay.'>
                             <input
                                 type='range'
                                 value={context.settings.opacity}
@@ -426,7 +426,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.select}>
+                        <label className={classes.select} title='Determines the shape of the overlay.'>
                             <select
                                 value={context.settings.shape}
                                 onChange={e => updateSimpleSetting('shape', e.currentTarget.value)}
