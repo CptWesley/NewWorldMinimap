@@ -35,7 +35,7 @@ export class BackgroundController {
             onGameEnded: this.onGameEnded,
         });
 
-        if (!NWMM_APP_BUILD_OPK) {
+        if (!NWMM_APP_BUILD_PRODUCTION) {
             this.debug_setGameRunning = (running: boolean) => {
                 this._gameRunning = true;
                 this._gameRunningEventListeners.forEach(l => l(running));

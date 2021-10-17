@@ -8,12 +8,13 @@ const appName = "CptWesley's Minimap";
 const appVersion = require('./package.json').version;
 const appDate = new Date().toISOString();
 
-module.exports = env => {
+module.exports = (env, argv) => {
+    const prod = argv['mode'] !== 'development';
     const templateParameters = {
         appName,
         appVersion,
         appDate,
-        makeOpk: env.makeOpk
+        prod,
     };
 
     return {
@@ -22,7 +23,7 @@ module.exports = env => {
             desktop: './src/OverwolfWindows/desktop/desktop.ts',
             in_game: './src/OverwolfWindows/in_game/in_game.ts'
         },
-        devtool: 'inline-source-map',
+        devtool: 'source-map',
         module: {
             rules: [
                 {

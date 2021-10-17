@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=development --env makeOpk",
+    "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --env makeOpk",
     "dev": "webpack --watch --mode=development",
     "watch": "webpack --watch --mode=development",
     "type-check": "tsc --sourcemap false --incremental --skipLibCheck -w --noemit",
