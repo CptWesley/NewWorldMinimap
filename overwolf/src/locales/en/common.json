@@ -1,0 +1,11 @@
+{
+    "lng": "English (US)",
+    "welcome": {
+        "title": "Welcome to CptWesley's Minimap",
+        "primary": "Launch New World to access the minimap.",
+        "settings": "You may also access the application settings while the game is not running.",
+        "discord": "Feel free to join our Discord server for questions, help, and suggestions you might have: <1>{{discord}}<1>.",
+        "devBuild": "This appears to be a development build. Use the button below to access the minimap at a debug location.",
+        "forceMap": "Show me the map"
+    }
+}

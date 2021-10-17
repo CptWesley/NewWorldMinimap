@@ -1,0 +1,11 @@
+{
+    "lng": "Nederlands (NL)",
+    "welcome": {
+        "title": "Welkom bij CptWesley's Minikaart",
+        "primary": "Start New World om de minimap te gebruiken.",
+        "settings": "Je kunt ook de instellingen van de applicatie aanpassen terwijl het spel niet actief is..",
+        "discord": "Word lid van onze Discord-server voor vragen, hulp, en eventuele suggesties: <1>{{discord}}<1>.",
+        "devBuild": "Dit lijkt een ontwikkelaarsbuild te zijn. Gebruik de onderstaande knop om de kaart te tonen op een debug-locatie.",
+        "forceMap": "Laat de kaart zien"
+    }
+}
