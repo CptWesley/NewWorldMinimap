@@ -60,7 +60,8 @@ Currently, the Overwolf version of the application is the only supported one. Th
 4. Run <kbd>yarn install</kbd> to download and install the required dependencies.
 5. To build the application, you have two options:
     1. <kbd>yarn watch</kbd> will continuously build the application whenever there is an update. This is the recommended command.
-    2. <kbd>yarn build</kbd> will build the application once, and also produce an .opk (Overwolf package) file.
+    2. <kbd>yarn build</kbd> will build the application once.
+    3. <kbd>yarn build:prod</kbd> will also build the application once, but it will be a production build. This allows for optimizations, such as minification, and a production build of React (which is faster). Source maps are included, and an .opk (Overwolf package) file is also generated.
 6. Go to Overwolf Settings - About - Development options to open the Overwolf developer tools.
 7. Select _Load unpacked extension..._ and navigate to the `overwolf/dist` directory of this repository. It contains the build output if the build was successful. You may get an error at this step, see below for more information.
 8. Enable the Overwolf overlay for New World. Go to Overwolf settings - Overlay & Hotkeys, and enable the switch for New World. The application icon should appear beside the name of the game.
