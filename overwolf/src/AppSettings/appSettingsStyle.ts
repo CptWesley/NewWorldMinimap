@@ -7,7 +7,7 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
         padding: theme.spacing(1),
         gap: theme.spacing(1),
         gridTemplateRows: '30px 1fr auto',
-        gridTemplateColumns: '200px 1fr 30px',
+        gridTemplateColumns: '180px 1fr 30px',
         gridTemplateAreas: '"title title return" "nav content content" "footer footer footer"',
 
         background: theme.frameMenuBackground,
@@ -44,6 +44,7 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
     nav: {
         gridArea: 'nav',
         display: 'flex',
+        margin: theme.spacing(0, -1),
         flexDirection: 'column',
         overflowY: 'auto',
 
@@ -57,8 +58,8 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
     },
     navItem: {
         padding: theme.spacing(1),
-        border: '2px solid transparent',
-        borderRadius: theme.borderRadiusSmall,
+        border: 'none',
+        borderLeft: '8px solid transparent',
         background: 'none',
         color: theme.frameMenuColor,
         fontFamily: theme.bodyFontFamily,
@@ -74,7 +75,7 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
         },
     },
     navItemActive: {
-        borderColor: theme.frameMenuColor,
+        borderLeftColor: theme.frameMenuColor,
     },
     selectIcon: {
         background: 'transparent',
@@ -98,7 +99,6 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
         overflowY: 'auto',
         maxHeight: '100%',
         padding: theme.spacing(0, 1, 1, 1),
-        borderLeft: `1px solid ${theme.frameMenuColor}`,
 
         '&::-webkit-scrollbar': {
             width: '10px',
