@@ -16,6 +16,7 @@ import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
 import { useInterpolation } from './useInterpolation';
+import drawPlayerCoordinates from './drawPlayerCoordinates';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
@@ -26,6 +27,7 @@ export type MapRendererParameters = {
     renderAsCompass: boolean,
     zoomLevel: number,
     angle: number,
+    showPlayerCoordinates: boolean,
 }
 
 export type MapIconRendererParameters = {
@@ -146,6 +148,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             mapCenterPosition: mapCenterPos,
             renderAsCompass,
             zoomLevel,
+            showPlayerCoordinates: appContext.settings.showPlayerCoordinates,
         };
 
         const toDraw = drawMapTiles(mapRendererParameters);
@@ -172,6 +175,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
+
+        drawPlayerCoordinates(mapRendererParameters);
 
         lastDrawParameters.current = {
             mapRendererParams: mapRendererParameters,
