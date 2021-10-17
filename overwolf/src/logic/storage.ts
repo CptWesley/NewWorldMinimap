@@ -31,7 +31,6 @@ export const simpleStorageDefaultSettings = {
     friendCode: generateRandomToken(),
     friends: '',
     lastKnownPosition: debugLocations.default,
-    lastKnownFriends: [],
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
@@ -51,7 +50,6 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'friendCode',
     'friends',
     'lastKnownPosition',
-    'lastKnownFriends',
 ];
 
 export const iconSettingStorageScope = 'icon';

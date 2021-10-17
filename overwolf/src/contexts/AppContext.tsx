@@ -34,7 +34,6 @@ export function loadAppContextSettings(): AppContextSettings {
         friendCode: load('friendCode'),
         friends: load('friends'),
         lastKnownPosition: load('lastKnownPosition'),
-        lastKnownFriends: load('lastKnownFriends'),
     };
 }
 

@@ -57,7 +57,7 @@ export default function Minimap(props: IProps) {
     const appContext = useContext(AppContext);
 
     const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
-    const currentFriends = useRef<FriendData[]>(appContext.settings.lastKnownFriends);
+    const currentFriends = useRef<FriendData[]>([]);
     const lastPosition = useRef<Vector2>(currentPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
@@ -325,7 +325,6 @@ export default function Minimap(props: IProps) {
         }
 
         currentFriends.current = friends;
-        //store('lastKnownFriends', friends);
         redraw(true);
     }
 
@@ -416,12 +415,15 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
+        (window as any).setFriends = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
             if (appContext.settings.shareLocation) {
                 const sharedLocation = updateFriendLocation(appContext.settings.friendCode, info.name || 'undefined', info.position, appContext.settings.friends);
                 sharedLocation.then(r => {
+                    console.log("sent");
+                    console.log(r);
                     if (r !== undefined) {
                         setFriends(r.friends);
                     } else {
@@ -434,7 +436,7 @@ export default function Minimap(props: IProps) {
         return function () {
             callbackUnregister();
         };
-    }, []);
+    }, [appContext.settings]);
 
     return <div className={clsx(classes.minimap, className)}>
         <canvas
