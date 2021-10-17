@@ -1,5 +1,6 @@
 import produce from 'immer';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import SelectIcon from '@/Icons/SelectIcon';
 import UnselectIcon from '@/Icons/UnselectIcon';
 import { storeIconCategory, storeIconType } from '@/logic/storage';
@@ -53,6 +54,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         settings,
         updateSettings,
     } = props;
+    const { t } = useTranslation();
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
 
@@ -121,10 +123,18 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     {category.name}
                 </label>
                 <span />
-                <button className={classes.selectIcon} onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}>
+                <button
+                    className={classes.selectIcon}
+                    onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}
+                    title={t('selectAll')}
+                >
                     <SelectIcon />
                 </button>
-                <button className={classes.selectIcon} onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, false) })}>
+                <button
+                    className={classes.selectIcon}
+                    onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, false) })}
+                    title={t('deselectAll')}
+                >
                     <UnselectIcon />
                 </button>
             </summary>

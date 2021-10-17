@@ -1,5 +1,8 @@
 {
     "lng": "English",
+    "close": "Close",
+    "selectAll": "Select all",
+    "deselectAll": "Deselect all",
     "header": {
         "settings": "Settings",
         "openInGame": "Open in-game window",

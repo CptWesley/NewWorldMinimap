@@ -1,5 +1,8 @@
 {
     "lng": "Nederlands",
+    "close": "Sluiten",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
     "header": {
         "settings": "Instellingen",
         "openInGame": "Venster in-game openen",

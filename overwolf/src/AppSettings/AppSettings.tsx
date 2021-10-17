@@ -181,7 +181,7 @@ export default function AppSettings(props: IProps) {
     const PageComponent = settingsPageMap[currentPage];
 
     return <div className={rootClassName}>
-        <button className={classes.close} onClick={onClose}>
+        <button className={classes.close} onClick={onClose} title={t('close')}>
             <CloseOIcon />
         </button>
         <h2 className={classes.title}>{t('settings.title')}</h2>
