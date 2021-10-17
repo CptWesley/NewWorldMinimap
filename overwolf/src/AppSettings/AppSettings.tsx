@@ -198,7 +198,7 @@ export default function AppSettings(props: IProps) {
             <PageComponent {...pageProps} />
         </div>
         <footer className={classes.footer}>
-            Open this menu at any time by right-clicking in the application.
+            Open this menu at any time by right-clicking.
         </footer>
     </div>;
 }
