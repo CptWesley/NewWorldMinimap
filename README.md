@@ -64,7 +64,7 @@ Currently, the Overwolf version of the application is the only supported one. Th
 6. Go to Overwolf Settings - About - Development options to open the Overwolf developer tools.
 7. Select _Load unpacked extension..._ and navigate to the `overwolf/dist` directory of this repository. It contains the build output if the build was successful. You may get an error at this step, see below for more information.
 8. Enable the Overwolf overlay for New World. Go to Overwolf settings - Overlay & Hotkeys, and enable the switch for New World. The application icon should appear beside the name of the game.
-9 Launch the application from the Overwolf dock, or launch the game to see the app in action.
+9. Launch the application from the Overwolf dock, or launch the game to see the app in action.
 
 When loading an unpacked extension, you might encounter an error where Overwolf will not allow you to load an unauthorized extension.
 When this happens, you need to make two modifications to the file `overwolf\public\manifest.json`.
