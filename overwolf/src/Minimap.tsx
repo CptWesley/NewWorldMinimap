@@ -15,11 +15,6 @@ import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
 
-const debugLocations = {
-    default: { x: 7728.177, y: 1988.299 } as Vector2,
-    city: { x: 8912, y: 5783 } as Vector2,
-};
-
 interface IProps {
     className?: string;
 }
@@ -58,7 +53,9 @@ export default function Minimap(props: IProps) {
     } = props;
     const { classes } = useStyles();
 
-    const currentPosition = useRef<Vector2>(debugLocations.default);
+    const appContext = useContext(AppContext);
+
+    const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
     const lastPosition = useRef<Vector2>(currentPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
@@ -68,7 +65,6 @@ export default function Minimap(props: IProps) {
     const [mapIconsCache] = useState(() => new MapIconsCache());
 
     const lastDraw = useRef(0);
-    const appContext = useContext(AppContext);
 
     const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
@@ -277,6 +273,7 @@ export default function Minimap(props: IProps) {
         lastPositionUpdate.current = performance.now();
         lastPosition.current = currentPosition.current;
         currentPosition.current = pos;
+        store('lastKnownPosition', pos);
         redraw(true);
     }
 
