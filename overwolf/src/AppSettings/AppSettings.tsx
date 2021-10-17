@@ -1,151 +1,25 @@
 import clsx from 'clsx';
 import produce from 'immer';
 import React, { useContext, useState } from 'react';
-import { AppContext } from '@/contexts/AppContext';
-import { globalLayers } from '@/globalLayers';
+import { AppContext, AppContextSettings } from '@/contexts/AppContext';
 import ReturnIcon from '@/Icons/ReturnIcon';
 import SelectIcon from '@/Icons/SelectIcon';
 import UnselectIcon from '@/Icons/UnselectIcon';
-import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from '@/logic/storage';
+import { SimpleStorageSetting, store, storeIconCategory, storeIconType } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
-import { makeStyles } from '@/theme';
+import { useAppSettingsStyles } from './appSettingsStyle';
+import WindowSettingsPage from './pages/WindowSettingsPage';
 
 interface IProps {
     visible: boolean;
     onClose: () => void;
 }
 
-const useStyles = makeStyles()(theme => ({
-    root: {
-        display: 'grid',
-        padding: theme.spacing(2),
-        gap: theme.spacing(1),
-        gridTemplateRows: '30px 1fr auto',
-        gridTemplateColumns: '1fr 30px',
-        gridTemplateAreas: '"title return" "content content" "footer footer"',
-
-        background: theme.frameMenuBackground,
-        color: theme.frameMenuColor,
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: globalLayers.frameMenu,
-        backdropFilter: 'blur(10px)',
-        transition: 'backdrop-filter 300ms ease, background 300ms ease',
-    },
-    belowHeader: {
-        marginTop: theme.headerHeight,
-    },
-    hidden: {
-        display: 'none !important',
-    },
-    peek: {
-        background: theme.frameMenuBackgroundPeek,
-        backdropFilter: 'none',
-    },
-    return: {
-        background: 'transparent',
-        border: 'none',
-        color: theme.frameMenuColor,
-        padding: 0,
-
-        '&:focus': {
-            outline: `1px solid ${theme.frameMenuColor}`,
-        },
-    },
-    selectIcon: {
-        background: 'transparent',
-        border: 'none',
-        color: theme.frameMenuColor,
-        padding: 0,
-        width: 18,
-        height: 18,
-
-        '&:focus': {
-            outline: `1px solid ${theme.frameMenuColor}`,
-        },
-    },
-    title: {
-        gridArea: 'title',
-        alignSelf: 'center',
-        fontSize: 18,
-    },
-    content: {
-        gridArea: 'content',
-        overflowY: 'auto',
-        maxHeight: '100%',
-
-        '&::-webkit-scrollbar': {
-            width: '10px',
-        },
-
-        '&::-webkit-scrollbar-thumb': {
-            background: theme.scrollbarColor,
-        },
-
-        '& > details:not(:last-child)': {
-            marginBottom: theme.spacing(1),
-        },
-
-        '& > details > summary': {
-            fontSize: 16,
-        },
-    },
-    footer: {
-        gridArea: 'footer',
-    },
-    setting: {
-        marginTop: theme.spacing(1),
-    },
-    checkbox: {
-        '& > input[type="checkbox"]': {
-            margin: theme.spacing(0, 1, 0, 0),
-        },
-    },
-    range: {
-        '& > input[type="range"]': {
-            margin: theme.spacing(0, 1, 0, 0),
-        },
-    },
-    select: {
-        '& > select': {
-            margin: theme.spacing(0, 1, 0, 0),
-        },
-    },
-    summary: {
-        outline: 'none',
-        borderRadius: 3,
-        padding: 2,
-
-        '&:focus': {
-            outline: 'none',
-            background: 'rgba(255, 255, 255, 0.15)',
-        },
-
-        '&:hover': {
-            outline: 'none',
-            background: 'rgba(255, 255, 255, 0.33)',
-        },
-    },
-    iconCategory: {
-        display: 'flex',
-        alignItems: 'center',
-
-        '& > span': {
-            flexGrow: 1,
-        },
-    },
-    indent: {
-        marginLeft: 19,
-    },
-    iconTypeContainer: {
-        margin: theme.spacing(0, 0, 1, 3),
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-    },
-}));
+export interface IAppSettingsPageProps {
+    settings: AppContextSettings;
+    updateSimpleSetting: <TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) => void;
+    setPeek: (peek: boolean) => void;
+}
 
 export default function AppSettings(props: IProps) {
     const {
@@ -153,9 +27,9 @@ export default function AppSettings(props: IProps) {
         visible,
     } = props;
     const context = useContext(AppContext);
-    const { classes } = useStyles();
+    const { classes } = useAppSettingsStyles();
 
-    const [isDraggingMapSlider, setIsDraggingMapSlider] = useState(false);
+    const [isPeeking, setIsPeeking] = useState(false);
 
     function updateIconCategorySettings(name: string, value: boolean) {
         const settings = context.settings.iconSettings;
@@ -243,19 +117,11 @@ export default function AppSettings(props: IProps) {
         });
     }
 
-    function handleMapSliderMouseDown() {
-        setIsDraggingMapSlider(true);
-    }
-
-    function handleMapSliderMouseUp() {
-        setIsDraggingMapSlider(false);
-    }
-
     const rootClassName = clsx(
         classes.root,
         !visible && classes.hidden,
         context.settings.showHeader && classes.belowHeader,
-        isDraggingMapSlider && context.gameRunning && classes.peek);
+        isPeeking && context.gameRunning && classes.peek);
 
     return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
@@ -267,133 +133,11 @@ export default function AppSettings(props: IProps) {
             <details>
                 <summary className={classes.summary}>This window</summary>
                 <div className={classes.indent}>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Enabling will make the window header transparent.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.transparentHeader}
-                                onChange={e => updateSimpleSetting('transparentHeader', e.currentTarget.checked)}
-                            />
-                            Transparent header
-                        </label>
-                    </div>
-                    <div className={classes.setting} hidden>
-                        <label className={classes.checkbox} title='Enabling will make the toolbar transparent.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.transparentToolbar}
-                                onChange={e => updateSimpleSetting('transparentToolbar', e.currentTarget.checked)}
-                            />
-                            Transparent toolbar
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Enabling will show the header text and buttons.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.showHeader}
-                                onChange={e => updateSimpleSetting('showHeader', e.currentTarget.checked)}
-                            />
-                            Show header
-                        </label>
-                    </div>
-                    <div className={classes.setting} hidden>
-                        <label className={classes.checkbox} title='Enabling will show the toolbar.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.showToolbar}
-                                onChange={e => updateSimpleSetting('showToolbar', e.currentTarget.checked)}
-                            />
-                            Show toolbar
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the zoom level on the map. Lower zoom may impact performance negatively.'>
-                            <input
-                                type='range'
-                                value={zoomLevelSettingBounds[1] - context.settings.zoomLevel}
-                                min='0'
-                                max={zoomLevelSettingBounds[1] - zoomLevelSettingBounds[0]}
-                                step='0.1'
-                                onChange={e => {
-                                    const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
-                                    updateSimpleSetting('zoomLevel', newValue);
-                                }}
-                                onMouseDown={handleMapSliderMouseDown}
-                                onMouseUp={handleMapSliderMouseUp}
-                            />
-                            Zoom Level
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Enabling will allow you to configure a seperate zoom level when in towns.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.townZoom}
-                                onChange={e => updateSimpleSetting('townZoom', e.currentTarget.checked)}
-                            />
-                            Change Zoom In Towns
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.'>
-                            <input
-                                type='range'
-                                value={zoomLevelSettingBounds[1] - context.settings.townZoomLevel}
-                                min='0'
-                                max={zoomLevelSettingBounds[1] - zoomLevelSettingBounds[0]}
-                                step='0.1'
-                                disabled={!context.settings.townZoom}
-                                onChange={e => {
-                                    const newValue = zoomLevelSettingBounds[1] - e.currentTarget.valueAsNumber;
-                                    updateSimpleSetting('townZoomLevel', newValue);
-                                }}
-                                onMouseDown={handleMapSliderMouseDown}
-                                onMouseUp={handleMapSliderMouseUp}
-                            />
-                            Town Zoom Level
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the size of the rendered icons.'>
-                            <input
-                                type='range'
-                                value={context.settings.iconScale}
-                                min='0.5'
-                                max='5'
-                                step='0.1'
-                                onChange={e => updateSimpleSetting('iconScale', e.currentTarget.valueAsNumber)}
-                                onMouseDown={handleMapSliderMouseDown}
-                                onMouseUp={handleMapSliderMouseUp}
-                            />
-                            Icon Scale
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.showText}
-                                onChange={e => updateSimpleSetting('showText', e.currentTarget.checked)}
-                            />
-                            Show text
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.select} title='Detemines which algorithm to use to produce smoother movement around the map. Interpolation gives smoothest results, but adds a delay to your position. None gives the best performance.'>
-                            <select
-                                value={context.settings.interpolation}
-                                onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
-                            >
-                                <option value='none'>None</option>
-                                <option value='linear-interpolation'>Linear Interpolation</option>
-                                <option value='cosine-interpolation'>Cosine Interpolation</option>
-                                <option value='linear-extrapolation'>Linear Extrapolation</option>
-                                <option value='cosine-extrapolation'>Cosine Extrapolation</option>
-                            </select>
-                            Location (Inter/Extra)polation
-                        </label>
-                    </div>
+                    <WindowSettingsPage
+                        settings={context.settings}
+                        updateSimpleSetting={updateSimpleSetting}
+                        setPeek={setIsPeeking}
+                    />
                 </div>
             </details>
             <details>
