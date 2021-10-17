@@ -308,7 +308,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the zoom level on the map. Lower zoom may impact performance.'>
+                        <label className={classes.range} title='Determines the zoom level on the map. Lower zoom may impact performance negatively.'>
                             <input
                                 type='range'
                                 value={zoomLevelSettingBounds[1] - context.settings.zoomLevel}
@@ -336,7 +336,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the zoom level on the map when in towns. Lower zoom may impact performance.'>
+                        <label className={classes.range} title='Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.'>
                             <input
                                 type='range'
                                 value={zoomLevelSettingBounds[1] - context.settings.townZoomLevel}
@@ -370,7 +370,7 @@ export default function FrameMenu(props: IProps) {
                         </label>
                     </div>
                     <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Enabling adds text underneath icons on the map. Enabling may impact performance.'>
+                        <label className={classes.checkbox} title='Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.'>
                             <input
                                 type='checkbox'
                                 checked={context.settings.showText}
