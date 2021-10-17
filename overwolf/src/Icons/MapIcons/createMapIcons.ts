@@ -2,7 +2,9 @@ import { svgMapIconToImageBitmap } from '../../logic/svg';
 import AlligatorIcon from './AlligatorIcon';
 import ArcaneRepositoryIcon from './ArcaneRepositoryIcon';
 import BearIcon from './BearIcon';
+import CarrotIcon from './CarrotIcon';
 import ChestIcon from './ChestIcon';
+import CornIcon from './CornIcon';
 import CovenantIcon from './CovenantIcon';
 import DocumentIcon from './DocumentIcon';
 import DropletIcon from './DropletIcon';
@@ -25,12 +27,14 @@ import OutfittingStationIcon from './OutfittingStationIcon';
 import PigIcon from './PigIcon';
 import PlantIcon from './PlantIcon';
 import PlayerIcon from './PlayerIcon';
+import PotatoIcon from './PotatoIcon';
 import RabbitIcon from './RabbitIcon';
 import SheepIcon from './SheepIcon';
 import SkullIcon from './SkullIcon';
 import SmelterIcon from './SmelterIcon';
 import StonecuttingTableIcon from './StonecuttingTableIcon';
 import StorageShedIcon from './StorageShedIcon';
+import StrawberryIcon from './StrawberryIcon';
 import SyndicateIcon from './SyndicateIcon';
 import TanneryIcon from './TanneryIcon';
 import TerritoryBoardIcon from './TerritoryBoardIcon';
@@ -79,6 +83,8 @@ export async function createMapIcons(scale: number) {
 
         plants: await svgMapIconToImageBitmap(PlantIcon, { fill: 'lawngreen', scale }),
         azoth_water: await svgMapIconToImageBitmap(DropletIcon, { stroke: 'black', strokeWidth: 35, fill: 'aqua', scale, viewBox: '0 0 512 512' }),
+        carrot: await svgMapIconToImageBitmap(CarrotIcon, { stroke: 'black', strokeWidth: 35, fill: 'orange', scale, viewBox: '0 0 512 512' }),
+        corn: await svgMapIconToImageBitmap(CornIcon, { stroke: 'black', strokeWidth: 35, fill: 'yellow', scale, viewBox: '0 0 512 512' }),
         dye_plant_black: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'black', scale, viewBox: '0 0 512 512' }),
         dye_plant_blue: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
         dye_plant_brown: await svgMapIconToImageBitmap(DyeBottleIcon, { stroke: 'black', strokeWidth: 35, fill: 'brown', scale, viewBox: '0 0 512 512' }),
@@ -94,6 +100,8 @@ export async function createMapIcons(scale: number) {
         hemp: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'green', scale, viewBox: '0 0 512 512' }),
         hemp_t4: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'blue', scale, viewBox: '0 0 512 512' }),
         hemp_t5: await svgMapIconToImageBitmap(HempIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
+        potato: await svgMapIconToImageBitmap(PotatoIcon, { stroke: 'black', strokeWidth: 35, fill: 'saddlebrown', scale, viewBox: '0 0 512 512' }),
+        strawberries: await svgMapIconToImageBitmap(StrawberryIcon, { stroke: 'black', strokeWidth: 35, fill: 'red', scale, viewBox: '0 0 512 512' }),
 
         monsters: await svgMapIconToImageBitmap(SkullIcon, { fill: 'green', scale }),
 
