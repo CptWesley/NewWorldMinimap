@@ -4,8 +4,8 @@ import produce from 'immer';
 import React, { useCallback, useEffect, useState } from 'react';
 import { GlobalStyles } from 'tss-react';
 import App from './App';
+import AppSettings from './AppSettings/AppSettings';
 import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings } from './contexts/AppContext';
-import FrameMenu from './FrameMenu';
 import { deconstructIconStorageKey, getStorageKeyScope, load, loadIconCategory, loadIconType, scopedSettings, simpleStorageDefaultSettings, SimpleStorageSetting } from './logic/storage';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles, theme } from './theme';
@@ -42,12 +42,12 @@ export default function Frame(props: IProps) {
     } = props;
     const { classes } = useStyles();
 
-    const [frameMenuVisible, setFrameMenuVisible] = useState(false);
+    const [appSettingsVisible, setAppSettingsVisible] = useState(false);
     const [appContextSettings, setAppContextSettings] = useState<AppContextSettings>(loadAppContextSettings);
     const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
 
     const updateAppContext = useCallback((e: Partial<AppContextSettings>) => setAppContextSettings(prev => ({ ...prev, ...e })), []);
-    const toggleFrameMenu = useCallback(() => setFrameMenuVisible(prev => !prev), []);
+    const toggleFrameMenu = useCallback(() => setAppSettingsVisible(prev => !prev), []);
 
     useEffect(() => {
         function handleStorageEvent(e: StorageEvent) {
@@ -103,7 +103,7 @@ export default function Frame(props: IProps) {
         toggleFrameMenu,
         gameRunning,
         isTransparentSurface,
-        frameMenuVisible,
+        appSettingsVisible,
     };
 
     function handleContext(e: React.MouseEvent<HTMLDivElement>) {
@@ -145,9 +145,9 @@ export default function Frame(props: IProps) {
                 onContextMenuCapture={handleContext}
                 style={dynamicStyling}
             >
-                <FrameMenu
-                    visible={frameMenuVisible}
-                    onClose={() => setFrameMenuVisible(false)}
+                <AppSettings
+                    visible={appSettingsVisible}
+                    onClose={() => setAppSettingsVisible(false)}
                 />
                 {header}
                 <App />

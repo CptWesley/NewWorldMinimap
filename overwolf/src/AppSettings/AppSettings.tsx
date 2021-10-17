@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import produce from 'immer';
 import React, { useContext, useState } from 'react';
-import { AppContext } from './contexts/AppContext';
-import { globalLayers } from './globalLayers';
-import ReturnIcon from './Icons/ReturnIcon';
-import SelectIcon from './Icons/SelectIcon';
-import UnselectIcon from './Icons/UnselectIcon';
-import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
-import { compareNames } from './logic/util';
-import { makeStyles } from './theme';
+import { AppContext } from '@/contexts/AppContext';
+import { globalLayers } from '@/globalLayers';
+import ReturnIcon from '@/Icons/ReturnIcon';
+import SelectIcon from '@/Icons/SelectIcon';
+import UnselectIcon from '@/Icons/UnselectIcon';
+import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from '@/logic/storage';
+import { compareNames } from '@/logic/util';
+import { makeStyles } from '@/theme';
 
 interface IProps {
     visible: boolean;
@@ -147,7 +147,7 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
-export default function FrameMenu(props: IProps) {
+export default function AppSettings(props: IProps) {
     const {
         onClose,
         visible,
