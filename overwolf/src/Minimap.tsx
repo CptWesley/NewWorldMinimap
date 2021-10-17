@@ -73,6 +73,7 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
+    /* eslint-disable complexity */
     const draw = (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
@@ -144,6 +145,45 @@ export default function Minimap(props: IProps) {
                 }
 
                 toDraw = toDraw.concat(tile.markers);
+            }
+        }
+        // Draw feature collection
+        for (const feature of appContext.settings.featureCollection.features) {
+            if (feature.geometry.type !== 'LineString') {
+                console.warn('Only `LineString` feature is supported at the moment');
+                continue;
+            } else {
+                const lineString = feature.geometry;
+
+                // TODO: Add legend of this line if exsists.
+                ctx.beginPath();
+                let pointIndex = 0;
+                for (const coor of lineString.coordinates) {
+                    const pointPos: Vector2 = {x: coor[0], y: coor[1]};
+                    const pointImgPos = toMinimapCoordinate(pos, pointPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+                    // TODO: DRY, similar to marker pos correction below.
+                    let pointImgPosCorrected = { x: pointImgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: pointImgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+                    if (renderAsCompass) {
+                        pointImgPosCorrected = rotateAround({ x: centerX, y: centerY }, pointImgPosCorrected, -angle);
+                    }
+                    if (pointIndex === 0) {
+                        ctx.moveTo(pointImgPosCorrected.x, pointImgPosCorrected.y);
+                    } else {
+                        ctx.lineTo(pointImgPosCorrected.x, pointImgPosCorrected.y);
+                    }
+                    pointIndex++;
+                }
+                if (feature.properties?.strokeStyle !== undefined) {
+                    ctx.strokeStyle = feature.properties?.strokeStyle;
+                }
+                if (feature.properties?.lineWidth !== undefined) {
+                    ctx.lineWidth = feature.properties?.lineWidth;
+                }
+                ctx.stroke();
+
+                // Reset to default style
+                ctx.strokeStyle = '#000000';
+                ctx.lineWidth = 1;
             }
         }
 

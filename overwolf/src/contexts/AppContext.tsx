@@ -31,6 +31,7 @@ export function loadAppContextSettings(): AppContextSettings {
         townZoom: load('townZoom'),
         interpolation: load('interpolation'),
         lastKnownPosition: load('lastKnownPosition'),
+        featureCollection: load('featureCollection'),
     };
 }
 

@@ -42,6 +42,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@fontsource/lato": "^4.5.0",
+    "@types/geojson": "^7946.0.8",
     "clsx": "^1.1.1",
     "immer": "^9.0.6",
     "lodash-es": "^4.17.21",

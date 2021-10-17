@@ -8,6 +8,7 @@ import { makeStyles } from '@/theme';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
+import FeatureCollectionPage from './pages/FeatureCollectionPage';
 
 interface IProps {
     visible: boolean;
@@ -139,18 +140,22 @@ const settingsPageMap = {
     window: WindowSettingsPage,
     overlay: OverlaySettingsPage,
     icon: IconSettingsPage,
+    featureCollection: FeatureCollectionPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
     'window',
     'overlay',
     'icon',
+    'featureCollection',
 ];
 
 const settingsPageNames: Record<keyof typeof settingsPageMap, string> = {
     icon: 'Icons',
     overlay: 'In-game overlay',
     window: 'This window',
+    // TODO: Rename to something meaningful to regular folks.
+    featureCollection: 'Render GeoJSON',
 };
 
 export default function AppSettings(props: IProps) {

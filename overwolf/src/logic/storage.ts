@@ -1,8 +1,36 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
+import { FeatureCollection } from 'geojson';
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
     city: { x: 8912, y: 5783 } as Vector2,
+};
+
+export const debugFeatureCollections = {
+    weaversFen: JSON.parse(`
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "legend": "Testing",
+                        "strokeStyle": "#EBA5AB",
+                        "lineWidth": 5
+                    },
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [ 11540.99, 5444.16 ],
+                            [ 11571, 5453.48 ],
+                            [ 11575, 5431 ],
+                            [ 11507, 5404 ]
+                        ]
+                    }
+                }
+            ]
+        }
+    `) as FeatureCollection,
 };
 
 export type Interpolation =
@@ -27,6 +55,7 @@ export const simpleStorageDefaultSettings = {
     townZoom: true,
     interpolation: 'cosine-interpolation' as Interpolation,
     lastKnownPosition: debugLocations.default,
+    featureCollection: debugFeatureCollections.weaversFen,
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
