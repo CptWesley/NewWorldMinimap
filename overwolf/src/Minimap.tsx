@@ -182,7 +182,7 @@ export default function Minimap(props: IProps) {
 
             if (appContext.settings.showText) {
                 ctx.textAlign = 'center';
-                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
                 ctx.fillStyle = '#fff';
 
