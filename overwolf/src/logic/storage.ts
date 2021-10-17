@@ -46,6 +46,7 @@ export const simpleStorageDefaultSettings = {
     transparentHeader: true,
     transparentToolbar: true,
     showText: false,
+    showPlayerLocation: false,
     iconScale: 1.5,
     zoomLevel: 2,
     opacity: 1,

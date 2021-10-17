@@ -21,6 +21,7 @@ export function loadAppContextSettings(): AppContextSettings {
         transparentHeader: load('transparentHeader'),
         transparentToolbar: load('transparentToolbar'),
         showText: load('showText'),
+        showPlayerLocation: load('showPlayerLocation'),
         iconScale: load('iconScale'),
         zoomLevel: load('zoomLevel'),
         opacity: load('opacity'),

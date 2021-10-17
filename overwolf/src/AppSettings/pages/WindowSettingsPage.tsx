@@ -147,6 +147,16 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 Location (Inter/Extra)polation
             </label>
         </div>
+        <div className={classes.setting}>
+            <label className={classes.checkbox}>
+                <input
+                    type='checkbox'
+                    checked={settings.showPlayerLocation}
+                    onChange={e => updateSimpleSetting('showPlayerLocation', e.currentTarget.checked)}
+                />
+                Show Player Location
+            </label>
+        </div>
 
     </>;
 }

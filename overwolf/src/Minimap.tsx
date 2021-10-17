@@ -237,6 +237,14 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        // Draw current position to screen if required
+        if (appContext.settings.showPlayerLocation) {
+            const currentPositionString = `[${currentPosition.current.x}, ${currentPosition.current.y}]`;
+            ctx.fillStyle = '#fff';
+            ctx.strokeText(currentPositionString, ctx.canvas.width - 100, ctx.canvas.height - 10);
+            ctx.fillText(currentPositionString, ctx.canvas.width - 100, ctx.canvas.height - 10);
+        }
+
         const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
