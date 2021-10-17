@@ -1,11 +1,12 @@
 require('dotenv').config();
 const express = require('express');
-const rateLimit = require("express-rate-limit");
+const rateLimit = require('express-rate-limit');
 const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
-const debug = process.env.DEBUG;
+const debug = process.env.DEBUG === 'true';
+const expire = process.env.EXPIRE;
 
 // Set rate limiter
 const limiter = rateLimit({
@@ -38,7 +39,25 @@ app.use(function(err, req, res, next) {
 const onlinePlayers = new Map();
 
 function updatePlayerData(player, data) {
-    onlinePlayers.set(player, data);
+    console.log(expire);
+    if (expire > 0) {
+        const existingPlayer = onlinePlayers.get(player);
+        if (existingPlayer) {
+            clearTimeout(existingPlayer.interval);
+        }
+    }
+    onlinePlayers.set(player, {
+        data: data,
+        interval: expire > 0 ? setTimeout(() => deletePlayerData(player), expire * 1000) : undefined,
+    });
+}
+
+function deletePlayerData(player) {
+    if (debug) {
+        console.log('Expired ' + player);
+    }
+
+    onlinePlayers.delete(player);
 }
 
 function getPlayersData(players) {
@@ -67,6 +86,11 @@ function validateJSON(json) {
 
 app.post('/data/update', function(req, res) {
     const json = req.body;
+
+    if (debug) {
+        console.log(json);
+    }
+
     if (validateJSON(json)) {
         updatePlayerData(json.id, json.data);
 
