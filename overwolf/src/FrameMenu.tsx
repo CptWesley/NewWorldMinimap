@@ -117,15 +117,6 @@ const useStyles = makeStyles()(theme => ({
             maxWidth: 170,
             minHeight: '4em',
             width: '100%',
-             margin: theme.spacing(0, 1, 0, 0),
-        },
-        [`& > .${hoverText.ref}`]: {
-            marginLeft: 183,
-            marginTop: 25,
-        },
-    },
-    checkbox: {
-        '& > input[type="checkbox"]': {
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
@@ -304,18 +295,17 @@ export default function FrameMenu(props: IProps) {
             <summary className={classes.summary}>Friends</summary>
             <div className={classes.indent}>
                 <div className={classes.setting}>
-                    <label className={classes.checkbox}>
+                    <label className={classes.checkbox} title='Share your location with any player that have your code.'>
                         <input
                             type='checkbox'
                             checked={context.settings.shareLocation}
                             onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
                         />
                         Share location with friends
-                        <span className={classes.hoverText}>Share your location with any player that have your code.</span>
                     </label>
                 </div>
                 <div className={classes.setting}>
-                    <label className={classes.textbox}>
+                    <label className={classes.textbox} title='Send this code to your friends to share your location.'>
                         <input
                             type='text'
                             readOnly
@@ -325,17 +315,15 @@ export default function FrameMenu(props: IProps) {
                         <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
                             <GenerateIcon />
                         </button>
-                        <span className={classes.hoverText}>Send this code to your friends to share your location.</span>
                     </label>
                 </div>
                 <div className={classes.setting}>
-                    <label className={classes.textarea}>
+                    <label className={classes.textarea} title='List of friend codes one per line.'>
                         <textarea
                             value={context.settings.friends}
                             onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
                         />
                         Friends
-                        <span className={classes.hoverText}>List of friend codes one per line.</span>
                     </label>
                 </div>
             </div>
