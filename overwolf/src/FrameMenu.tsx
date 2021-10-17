@@ -134,6 +134,10 @@ const useStyles = makeStyles()((theme, params, createRef) => {
                 width: '100%',
                 margin: theme.spacing(0, 1, 0, 0),
             },
+            [`& > .${hoverText.ref}`]: {
+                marginLeft: 183,
+                marginTop: 25,
+            },
         },
         checkbox: {
             '& > input[type="checkbox"]': {
@@ -325,6 +329,7 @@ export default function FrameMenu(props: IProps) {
                             onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
                         />
                         Share location with friends
+                        <span className={classes.hoverText}>Share your location with any player that have your code.</span>
                     </label>
                 </div>
                 <div className={classes.setting}>
@@ -338,6 +343,7 @@ export default function FrameMenu(props: IProps) {
                         <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
                             <GenerateIcon />
                         </button>
+                        <span className={classes.hoverText}>Send this code to your friends to share your location.</span>
                     </label>
                 </div>
                 <div className={classes.setting}>
@@ -347,6 +353,7 @@ export default function FrameMenu(props: IProps) {
                             onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
                         />
                         Friends
+                        <span className={classes.hoverText}>List of friend codes one per line.</span>
                     </label>
                 </div>
             </div>
