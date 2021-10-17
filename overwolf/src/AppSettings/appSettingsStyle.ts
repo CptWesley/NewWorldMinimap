@@ -4,11 +4,11 @@ import { makeStyles } from '@/theme';
 export const useAppSettingsStyles = makeStyles()(theme => ({
     root: {
         display: 'grid',
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         gap: theme.spacing(1),
         gridTemplateRows: '30px 1fr auto',
-        gridTemplateColumns: '1fr 30px',
-        gridTemplateAreas: '"title return" "content content" "footer footer"',
+        gridTemplateColumns: '200px 1fr 30px',
+        gridTemplateAreas: '"title title return" "nav content content" "footer footer footer"',
 
         background: theme.frameMenuBackground,
         color: theme.frameMenuColor,
@@ -41,6 +41,41 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
             outline: `1px solid ${theme.frameMenuColor}`,
         },
     },
+    nav: {
+        gridArea: 'nav',
+        display: 'flex',
+        flexDirection: 'column',
+        overflowY: 'auto',
+
+        '&::-webkit-scrollbar': {
+            width: '10px',
+        },
+
+        '&::-webkit-scrollbar-thumb': {
+            background: theme.scrollbarColor,
+        },
+    },
+    navItem: {
+        padding: theme.spacing(1),
+        border: '2px solid transparent',
+        borderRadius: theme.borderRadiusSmall,
+        background: 'none',
+        color: theme.frameMenuColor,
+        fontFamily: theme.bodyFontFamily,
+        fontSize: theme.bodyFontSize,
+        textAlign: 'left',
+
+        '&:hover': {
+            background: theme.buttonBackgroundHover,
+        },
+
+        '&:focus': {
+            outline: 'none',
+        },
+    },
+    navItemActive: {
+        borderColor: theme.frameMenuColor,
+    },
     selectIcon: {
         background: 'transparent',
         border: 'none',
@@ -62,6 +97,8 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
         gridArea: 'content',
         overflowY: 'auto',
         maxHeight: '100%',
+        padding: theme.spacing(0, 1, 1, 1),
+        borderLeft: `1px solid ${theme.frameMenuColor}`,
 
         '&::-webkit-scrollbar': {
             width: '10px',
@@ -83,7 +120,7 @@ export const useAppSettingsStyles = makeStyles()(theme => ({
         gridArea: 'footer',
     },
     setting: {
-        marginTop: theme.spacing(1),
+        marginBottom: theme.spacing(1),
     },
     checkbox: {
         '& > input[type="checkbox"]': {

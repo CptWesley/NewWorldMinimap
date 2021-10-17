@@ -20,6 +20,24 @@ export interface IAppSettingsPageProps {
     setPeek: (peek: boolean) => void;
 }
 
+const settingsPageMap = {
+    window: WindowSettingsPage,
+    overlay: OverlaySettingsPage,
+    icon: IconSettingsPage,
+} as const;
+
+const settingsPages: (keyof typeof settingsPageMap)[] = [
+    'window',
+    'overlay',
+    'icon',
+];
+
+const settingsPageNames: Record<keyof typeof settingsPageMap, string> = {
+    icon: 'Icons',
+    overlay: 'In-game overlay',
+    window: 'This window',
+};
+
 export default function AppSettings(props: IProps) {
     const {
         onClose,
@@ -28,6 +46,7 @@ export default function AppSettings(props: IProps) {
     const context = useContext(AppContext);
     const { classes } = useAppSettingsStyles();
 
+    const [currentPage, setCurrentPage] = useState(settingsPages[0]);
     const [isPeeking, setIsPeeking] = useState(false);
 
     function updateSimpleSetting<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {
@@ -48,31 +67,28 @@ export default function AppSettings(props: IProps) {
         setPeek: setIsPeeking,
     };
 
+    const PageComponent = settingsPageMap[currentPage];
+
     return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
             <ReturnIcon />
         </button>
         <h2 className={classes.title}>Options</h2>
-        <span className={classes.footer}>Open this menu at any time by right-clicking in the application.</span>
+        <nav className={classes.nav}>
+            {settingsPages.map(p =>
+                <button
+                    className={clsx(classes.navItem, p === currentPage && classes.navItemActive)}
+                    onClick={() => setCurrentPage(p)}
+                >
+                    {settingsPageNames[p]}
+                </button>
+            )}
+        </nav>
         <div className={classes.content}>
-            <details>
-                <summary className={classes.summary}>This window</summary>
-                <div className={classes.indent}>
-                    <WindowSettingsPage {...pageProps} />
-                </div>
-            </details>
-            <details>
-                <summary className={classes.summary}>In-game overlay window</summary>
-                <div className={classes.indent}>
-                    <OverlaySettingsPage {...pageProps} />
-                </div>
-            </details>
-            <details>
-                <summary className={classes.summary}>Icon Categories</summary>
-                <div className={classes.indent}>
-                    <IconSettingsPage {...pageProps} />
-                </div>
-            </details>
+            <PageComponent {...pageProps} />
         </div>
+        <footer className={classes.footer}>
+            Open this menu at any time by right-clicking in the application.
+        </footer>
     </div>;
 }
