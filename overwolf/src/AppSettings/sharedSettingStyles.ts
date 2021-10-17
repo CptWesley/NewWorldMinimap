@@ -20,6 +20,11 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
     select: {
         '& > select': {
             margin: theme.spacing(0, 1, 0, 0),
+            fontFamily: theme.bodyFontFamily,
+            fontSize: typeof theme.bodyFontSize === 'number'
+                ? theme.bodyFontSize - 1
+                : `calc(${theme.bodyFontSize} - 1px)`,
+            padding: '2px 4px',
         },
     },
 }));
