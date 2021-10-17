@@ -8,6 +8,7 @@ import UnselectIcon from '@/Icons/UnselectIcon';
 import { SimpleStorageSetting, store, storeIconCategory, storeIconType } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
 import { useAppSettingsStyles } from './appSettingsStyle';
+import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
 
 interface IProps {
@@ -143,45 +144,11 @@ export default function AppSettings(props: IProps) {
             <details>
                 <summary className={classes.summary}>In-game overlay window</summary>
                 <div className={classes.indent}>
-                    <div className={classes.setting}>
-                        <label className={classes.checkbox} title='Enabling will make the player always face north and rotates the map around the player, like a classic minimap.'>
-                            <input
-                                type='checkbox'
-                                checked={context.settings.compassMode}
-                                onChange={e => {
-                                    store('compassMode', e.currentTarget.checked);
-                                    context.update({ compassMode: e.currentTarget.checked });
-                                }}
-                            />
-                            Overlay Compass Mode
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.range} title='Determines the opacity of the overlay.'>
-                            <input
-                                type='range'
-                                value={context.settings.opacity}
-                                min='0.1'
-                                max='1'
-                                step='0.05'
-                                onChange={e => updateSimpleSetting('opacity', e.currentTarget.valueAsNumber)}
-                            />
-                            Overlay Opacity
-                        </label>
-                    </div>
-                    <div className={classes.setting}>
-                        <label className={classes.select} title='Determines the shape of the overlay.'>
-                            <select
-                                value={context.settings.shape}
-                                onChange={e => updateSimpleSetting('shape', e.currentTarget.value)}
-                            >
-                                <option value='none'>Rectangular</option>
-                                <option value='ellipse(50% 50%)'>Ellipse</option>
-                                <option value='polygon(50% 0, 100% 50%, 50% 100%, 0 50%)'>Diamond</option>
-                            </select>
-                            Overlay Shape
-                        </label>
-                    </div>
+                    <OverlaySettingsPage
+                        settings={context.settings}
+                        updateSimpleSetting={updateSimpleSetting}
+                        setPeek={setIsPeeking}
+                    />
                 </div>
             </details>
             <details>
