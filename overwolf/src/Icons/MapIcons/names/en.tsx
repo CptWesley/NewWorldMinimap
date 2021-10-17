@@ -776,7 +776,7 @@ export const iconNamesEn = {
         'wolf': 'Wolf',
         'wolf_den': 'Wolf Den',
         'wolf_elemental': 'Elemental Wolf',
-        'wolf_elemental_den': 'Elemental Wolf Den'
+        'wolf_elemental_den': 'Elemental Wolf Den',
     },
     'npc': {
         '0001_CaptainThorpe': 'Captain Aldous Thorpe',
@@ -1030,7 +1030,7 @@ export const iconNamesEn = {
         '9923_MSQ_WardenConstance': 'Constance Zarigueya',
         '9924_MSQ_WardenEliza': 'Eliza Turnbuckle',
         '9925_MSQ_WardenSamir': 'Samir Katari',
-        'Reekwater_Dungeon_Scylla': 'Cilla'
+        'Reekwater_Dungeon_Scylla': 'Cilla',
     },
     'ores': {
         'crystal': 'Crystal',
@@ -1043,7 +1043,7 @@ export const iconNamesEn = {
         'sandstone': 'Sandstone',
         'seeping_stone': 'Seeping Stone (Oil)',
         'silver': 'Silver Vein',
-        'starmetal': 'Starmetal Vein'
+        'starmetal': 'Starmetal Vein',
     },
     'others': {
         'cities': 'Cities',
@@ -1051,7 +1051,7 @@ export const iconNamesEn = {
         'forts': 'Forts',
         'outposts': 'Outpost',
         'regions': 'Regions',
-        'spirit_shrine': 'Spirit Shrine'
+        'spirit_shrine': 'Spirit Shrine',
     },
     'plants': {
         'azoth_water': 'Azoth Spring',
