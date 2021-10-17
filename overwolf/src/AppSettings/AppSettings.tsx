@@ -192,6 +192,7 @@ export default function AppSettings(props: IProps) {
         <nav className={classes.nav}>
             {settingsPages.map(p =>
                 <button
+                    key={p}
                     className={clsx(classes.navItem, p === currentPage && classes.navItemActive)}
                     onClick={() => setCurrentPage(p)}
                 >
