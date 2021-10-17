@@ -8,7 +8,7 @@ import { globalLayers } from './globalLayers';
 import ReturnIcon from './Icons/ReturnIcon';
 import SelectIcon from './Icons/SelectIcon';
 import UnselectIcon from './Icons/UnselectIcon';
-import { SimpleStorageSetting, store, storeIconCategory, storeIconType, storeLabelEnabled, zoomLevelSettingBounds } from './logic/storage';
+import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, storeLabelEnabled, zoomLevelSettingBounds } from './logic/storage';
 import { compareNames } from './logic/util';
 import { makeStyles } from './theme';
 
@@ -410,7 +410,7 @@ export default function FrameMenu(props: IProps) {
                         <label className={classes.select}>
                             <select
                                 value={context.settings.interpolation}
-                                onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value)}
+                                onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
                             >
                                 <option value='none'>None</option>
                                 <option value='linear-interpolation'>Linear Interpolation</option>
