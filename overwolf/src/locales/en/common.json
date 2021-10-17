@@ -1,5 +1,10 @@
 {
-    "lng": "English (US)",
+    "lng": "English",
+    "header": {
+        "settings": "Settings",
+        "openInGame": "Open in-game window",
+        "openDesktop": "Open window outside game"
+    },
     "welcome": {
         "title": "Welcome to CptWesley's Minimap",
         "primary": "Launch New World to access the minimap.",
@@ -7,5 +12,50 @@
         "discord": "Feel free to join our Discord server for questions, help, and suggestions you might have: <1>{{discord}}<1>.",
         "devBuild": "This appears to be a development build. Use the button below to access the minimap at a debug location.",
         "forceMap": "Show me the map"
+    },
+    "minimap": {
+        "tilesLoading_one": "Loading {{count}} tile",
+        "tilesLoading_other": "Loading {{count}} tiles"
+    },
+    "settings": {
+        "title": "Settings",
+        "window": {
+            "_": "This window",
+            "transparentHeader": "Transparent header",
+            "transparentHeaderTooltip": "Makes the window header transparent when the map is displayed.",
+            "transparentToolbar": "Transparent toolbar",
+            "transparentToolbarTooltip": "Makes map toolbars transparent.",
+            "showHeader": "Show header",
+            "showHeaderTooltip": "Show the header text and buttons when the map is displayed.",
+            "showToolbar": "Show toolbar",
+            "showToolbarTooltip": "Shows toolbars above the map.",
+            "zoomLevel": "Zoom level",
+            "zoomLevelTooltip": "Determines the zoom level on the map. Lower zoom may impact performance negatively.",
+            "townZoom": "Automatically zoom in towns",
+            "townZoomTooltip": "Enabling will allow you to configure a seperate zoom level when in towns.",
+            "townZoomLevel": "Zoom level for towns",
+            "townZoomLevelTooltip": "Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.",
+            "iconScale": "Icon scale",
+            "iconScaleTooltip": "Determines the size of the rendered icons.",
+            "showText": "Show text",
+            "showTextTooltip": "Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.",
+            "interpolation": "Location interpolation/extrapolation",
+            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance."
+        },
+        "overlay": {
+            "_": "In-game overlay",
+            "compassMode": "Overlay Compass Mode",
+            "compassModeTooltip": "Enabling will make the player always face north and rotates the map around the player, like a classic minimap.",
+            "opacity": "Overlay Opacity",
+            "opacityTooltip": "Determines the opacity of the overlay.",
+            "shape": "Overlay Shape",
+            "shapeTooltip": "Determines the shape of the overlay.",
+            "shapeRectangular": "Rectangular",
+            "shapeEllipse": "Ellipse",
+            "shapeDiamond": "Diamond"
+        },
+        "icon": {
+            "_": "Icons"
+        }
     }
 }

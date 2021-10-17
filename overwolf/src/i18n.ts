@@ -12,7 +12,6 @@ i18next
     .use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
     .init({
-        lng: defaultLanguage,
         fallbackLng: defaultLanguage,
         debug: !NWMM_APP_BUILD_PRODUCTION,
         resources: locales,

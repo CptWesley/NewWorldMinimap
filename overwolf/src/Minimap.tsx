@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
@@ -52,6 +53,7 @@ export default function Minimap(props: IProps) {
         className,
     } = props;
     const { classes } = useStyles();
+    const { t } = useTranslation();
 
     const appContext = useContext(AppContext);
 
@@ -383,7 +385,7 @@ export default function Minimap(props: IProps) {
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
-                <p>Loading {tilesDownloading} tiles</p>
+                <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
     </div>;

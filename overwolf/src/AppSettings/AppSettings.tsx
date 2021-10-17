@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
 import { globalLayers } from '@/globalLayers';
 import CloseOIcon from '@/Icons/CloseOIcon';
@@ -147,12 +148,6 @@ const settingsPages: (keyof typeof settingsPageMap)[] = [
     'icon',
 ];
 
-const settingsPageNames: Record<keyof typeof settingsPageMap, string> = {
-    icon: 'Icons',
-    overlay: 'In-game overlay',
-    window: 'This window',
-};
-
 export default function AppSettings(props: IProps) {
     const {
         onClose,
@@ -160,6 +155,7 @@ export default function AppSettings(props: IProps) {
     } = props;
     const context = useContext(AppContext);
     const { classes } = useStyles();
+    const { t } = useTranslation();
 
     const [currentPage, setCurrentPage] = useState(settingsPages[0]);
     const [isPeeking, setIsPeeking] = useState(false);
@@ -188,7 +184,7 @@ export default function AppSettings(props: IProps) {
         <button className={classes.close} onClick={onClose}>
             <CloseOIcon />
         </button>
-        <h2 className={classes.title}>Options</h2>
+        <h2 className={classes.title}>{t('settings.title')}</h2>
         <nav className={classes.nav}>
             {settingsPages.map(p =>
                 <button
@@ -196,7 +192,7 @@ export default function AppSettings(props: IProps) {
                     className={clsx(classes.navItem, p === currentPage && classes.navItemActive)}
                     onClick={() => setCurrentPage(p)}
                 >
-                    {settingsPageNames[p]}
+                    {t(`settings.${p}._`)}
                 </button>
             )}
         </nav>
