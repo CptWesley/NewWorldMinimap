@@ -54,8 +54,13 @@ const useStyles = makeStyles()(theme => ({
     return: {
         background: 'transparent',
         border: 'none',
+        borderRadius: '50%',
         color: theme.frameMenuColor,
         padding: 0,
+
+        '&:hover': {
+            background: theme.buttonBackgroundHover,
+        },
 
         '&:focus': {
             outline: `1px solid ${theme.frameMenuColor}`,
