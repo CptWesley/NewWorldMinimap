@@ -104,7 +104,7 @@ export function loadIconConfiguration(category: string, type: string | null, pro
 }
 
 function getDefaultIconConfigurationValue(key: string, category: string, type: string | null, property: IconProperty): boolean {
-    if (property === 'label') {
+    if (property === 'showLabel') {
         return false;
     }
 

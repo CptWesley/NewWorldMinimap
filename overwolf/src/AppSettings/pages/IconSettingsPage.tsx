@@ -147,7 +147,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     <input
                         type='checkbox'
                         checked={type.showLabel}
-                        onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'label', e.currentTarget.checked) })}
+                        onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'showLabel', e.currentTarget.checked) })}
                     />
                     <FontAwesomeIcon
                         icon={type.showLabel ? faComment : faCommentSlash}
