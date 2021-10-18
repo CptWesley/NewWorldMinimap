@@ -7,7 +7,7 @@
     "version": "1.0.0",
     "minimum-overwolf-version": "0.92.300.0",
     "description": "Open-source minimap for Amazon's New World.",
-    "dock_button_title": "CptWesley's Minimap",
+    "dock_button_title": "CptWesleys Minimap",
     "icon": "icons/app_256.png",
     "icon_gray": "icons/app_256_gray.png",
     "launcher_icon": "icons/app.ico",
