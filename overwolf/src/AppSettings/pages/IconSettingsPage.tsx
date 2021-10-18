@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import produce from 'immer';
 import React from 'react';
 import SelectIcon from '@/Icons/SelectIcon';
@@ -44,12 +45,30 @@ const useStyles = makeStyles()(theme => ({
         },
     },
     checkboxIcon: {
+        padding: '2px 4px',
+        borderRadius: theme.borderRadiusMedium,
+        display: 'inline-block',
+        marginRight: 2,
+
+        '&:hover': {
+            background: theme.buttonBackgroundHover,
+        },
+
+        '&:focus-within': {
+            background: theme.buttonBackgroundHover,
+        },
+
         '& > input[type="checkbox"]': {
-            display: 'none',
+            width: 0,
+            height: 0,
+            margin: 0,
         },
-        '& > .showIcon': {
-            margin: theme.spacing(0, 1, 0, 0),
-        },
+    },
+    invisible: {
+        visibility: 'hidden',
+    },
+    categoryTypeName: {
+        marginLeft: 8,
     },
     iconTypeContainer: {
         margin: theme.spacing(0, 0, 1, 3),
@@ -65,17 +84,6 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     } = props;
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
-    const actionIcon = {
-        'visible': {
-            'true': faEye,
-            'false': faEyeSlash,
-        },
-        'label': {
-            'true': faComment,
-            'false': faCommentSlash,
-        },
-    };
-
     function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         storeIconConfiguration(name, null, property, value);
@@ -96,22 +104,6 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
             });
         }
         return iconSettings;
-    }
-
-    // Get icon opacity based on the item context
-    function getIconOpacity(item: IconTypeSetting | IconCategorySetting, action: IconProperty) {
-        // If item is not visible, the label icon should reduce their opacity
-        if (action === 'label' && !item.visible) {
-            return 0.5;
-        }
-
-        return 1;
-    }
-
-    function printInteractiveItem(item: IconTypeSetting | IconCategorySetting, action: IconProperty) {
-        const opacity = getIconOpacity(item, action);
-        const color = opacity < 1 ? 'white' : item[action] ? 'green' : 'red';
-        return <FontAwesomeIcon color={color} icon={actionIcon[action][item[action].toString()]} opacity={opacity} fixedWidth={true} className='showIcon' />;
     }
 
     function selectAllIconsByCategory(category: string, value: boolean) {
@@ -136,6 +128,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
 
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
+
             return <p key={'FrameMenuType' + typeKey}>
                 <label className={classes.checkboxIcon}>
                     <input
@@ -143,19 +136,27 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                         checked={type.visible}
                         onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'visible', e.currentTarget.checked) })}
                     />
-                    {printInteractiveItem(type, 'visible')}
+                    <FontAwesomeIcon
+                        icon={type.visible ? faEye : faEyeSlash}
+                        opacity={type.visible ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
                 </label>
 
-                <label className={classes.checkboxIcon}>
+                <label className={clsx(classes.checkboxIcon, !type.visible && classes.invisible)}>
                     <input
                         type='checkbox'
                         checked={type.label}
                         onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'label', e.currentTarget.checked) })}
                     />
-                    {printInteractiveItem(type, 'label')}
+                    <FontAwesomeIcon
+                        icon={type.label ? faComment : faCommentSlash}
+                        opacity={type.label ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
                 </label>
 
-                <span>{type.name}</span>
+                <span className={classes.categoryTypeName}>{type.name}</span>
             </p>;
         });
 
