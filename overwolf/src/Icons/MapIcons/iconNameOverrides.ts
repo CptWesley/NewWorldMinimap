@@ -1,11 +1,11 @@
 import { i18n } from '@/i18n';
 
-const temporaryNames = {};
+const temporaryNames = new Map<string, string>();
 
 export function getIconNameOverride(category: string, type?: string) {
     if (type) {
-        if (temporaryNames[getTemporaryKey(category, type)]) {
-            return temporaryNames[getTemporaryKey(category, type)];
+        if (temporaryNames.has(getTemporaryKey(category, type))) {
+            return temporaryNames.get(getTemporaryKey(category, type));
         }
 
         // Categories override
@@ -32,7 +32,7 @@ export function getIconNameOverride(category: string, type?: string) {
 }
 
 export function saveTemporaryIconName(category: string, type: string | undefined, prediction: string) {
-    temporaryNames[getTemporaryKey(category, type)] = prediction;
+    temporaryNames.set(getTemporaryKey(category, type), prediction);
 }
 
 function getTemporaryKey(category: string, type: string | undefined) {
