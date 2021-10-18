@@ -93,17 +93,24 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
-export function storeIconConfiguration(category: string, type: string | null, property: IconProperty, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
+const iconCategoryTypeSeparator = '--';
+function getIconPropertySettingKey(category: string, type: string | undefined, property: IconProperty) {
+    return type
+        ? `${iconSettingStorageScope}::${category}${iconCategoryTypeSeparator}${type}.${property}`
+        : `${iconSettingStorageScope}::${category}.${property}`;
+}
+
+export function storeIconConfiguration(category: string, type: string | undefined, property: IconProperty, value: boolean) {
+    const key = getIconPropertySettingKey(category, type, property);
     return storeUntyped(key, value);
 }
 
-export function loadIconConfiguration(category: string, type: string | null, property: IconProperty) {
-    const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
+export function loadIconConfiguration(category: string, type: string | undefined, property: IconProperty) {
+    const key = getIconPropertySettingKey(category, type, property);
     return loadUntyped(key, getDefaultIconConfigurationValue(key, category, type, property)) as boolean;
 }
 
-function getDefaultIconConfigurationValue(key: string, category: string, type: string | null, property: IconProperty): boolean {
+function getDefaultIconConfigurationValue(key: string, category: string, type: string | undefined, property: IconProperty): boolean {
     if (property === 'showLabel') {
         return false;
     }

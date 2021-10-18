@@ -66,7 +66,7 @@ export default function Frame(props: IProps) {
                     setAppContextSettings(prev => prev.iconSettings?.categories[categoryType] !== undefined
                         ? produce(prev, draft => {
                             if (draft.iconSettings) {
-                                draft.iconSettings.categories[categoryType].visible = loadIconConfiguration(categoryType, null, 'visible');
+                                draft.iconSettings.categories[categoryType].visible = loadIconConfiguration(categoryType, undefined, 'visible');
                             }
                         })
                         : prev);

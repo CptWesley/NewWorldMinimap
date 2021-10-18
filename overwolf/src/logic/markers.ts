@@ -25,8 +25,8 @@ export async function getDefaultIconSettings() {
             if (!categories[marker.category]) {
                 categories[marker.category] = {
                     name: getIconName(marker.category),
-                    visible: loadIconConfiguration(marker.category, null, 'visible'),
-                    showLabel: loadIconConfiguration(marker.category, null, 'showLabel'),
+                    visible: loadIconConfiguration(marker.category, undefined, 'visible'),
+                    showLabel: loadIconConfiguration(marker.category, undefined, 'showLabel'),
                     types: {},
                 };
             }

@@ -86,7 +86,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     const { classes: sharedClasses } = useSharedSettingsStyles();
     function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
-        storeIconConfiguration(name, null, property, value);
+        storeIconConfiguration(name, undefined, property, value);
         if (iconSettings) {
             return produce(iconSettings, draft => {
                 draft.categories[name][property] = value;
@@ -112,7 +112,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         const iconSettings = settings.iconSettings;
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                storeIconConfiguration(category, null, 'visible', value);
+                storeIconConfiguration(category, undefined, 'visible', value);
                 draft.categories[category][property] = value;
                 for (const type in draft.categories[category].types) {
                     draft.categories[category].types[type][property] = value;
