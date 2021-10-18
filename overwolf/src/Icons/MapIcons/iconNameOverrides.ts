@@ -13,7 +13,7 @@ export function getIconNameOverride(category: string, type?: string) {
             // if the poi is a region, return region name instead
             return i18n.t(`markers:regions.${type}`);
         }
-        if (category === 'npcs' && type && i18n.exists(`markers:regions.${type}`)) {
+        if (category === 'npc' && i18n.exists(`markers:regions.${type}`)) {
             // npcs may contain region names
             return i18n.t(`markers:regions.${type}`);
         }

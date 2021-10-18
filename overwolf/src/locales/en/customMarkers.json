@@ -13,8 +13,12 @@
         "woods": "Woods"
     },
     "markers": {
+        "plants": {
+            "Single_Placeholder_DyePlant": "Dye plant",
+            "Single_Pumpkin": "Pumpking"
+        },
         "town": {
-            "arcane_repository": "Arcane repository",
+            "arcane_repository": "Arcane Repository",
             "covenant_adjudicator": "Covenant Adjudicator",
             "forge": "Forge",
             "governors_desk": "Governor's Desk",
