@@ -1,4 +1,5 @@
 [![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet)  
+<a href="https://www.buymeacoffee.com/cptwesley" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 20px;width: 102px" ></a>  
 
 Looking for the legacy C# app? You can find it [here](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet)!
 
@@ -20,6 +21,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - [Development](https://github.com/CptWesley/NewWorldMinimap#development)
 - [Licensing](https://github.com/CptWesley/NewWorldMinimap#licensing)
 - [Contribution](https://github.com/CptWesley/NewWorldMinimap#contribution)
+- [Support Me](https://github.com/CptWesley/NewWorldMinimap#support-me)
 
 ## Current Features
 - Render surroundings of the player (including resources).
@@ -124,3 +126,6 @@ The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMin
 
 ## Contribution
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
+
+## Support Me
+Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley)! But don't feel obliged to!
