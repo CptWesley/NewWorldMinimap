@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import produce from 'immer';
 import React from 'react';
-import SelectIcon from '@/Icons/SelectIcon';
-import UnselectIcon from '@/Icons/UnselectIcon';
 import { storeIconConfiguration } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
 import { makeStyles } from '@/theme';
@@ -69,6 +67,9 @@ const useStyles = makeStyles()(theme => ({
     categoryTypeName: {
         marginLeft: 8,
     },
+    toggleAllEntry: {
+        margin: theme.spacing(1, 0, 1, 3),
+    },
     iconTypeContainer: {
         margin: theme.spacing(0, 0, 1, 3),
         display: 'grid',
@@ -105,14 +106,10 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         return iconSettings;
     }
 
-    function selectAllIconsByCategory(category: string, value: boolean) {
-        // TODO: Modify it when the general flow is approve and allow the category assign
-        const property = 'visible';
+    function selectAllIconsByCategory(category: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                storeIconConfiguration(category, undefined, 'visible', value);
-                draft.categories[category][property] = value;
                 for (const type in draft.categories[category].types) {
                     draft.categories[category].types[type][property] = value;
                     storeIconConfiguration(category, type, property, value);
@@ -127,7 +124,6 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
 
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
-
             return <p key={'FrameMenuType' + typeKey}>
                 <label className={classes.checkboxIcon}>
                     <input
@@ -159,6 +155,9 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
             </p>;
         });
 
+        const hasAnyVisible = Object.values(category.types).some(t => t.visible);
+        const hasAnyShowLabel = Object.values(category.types).some(t => t.showLabel);
+
         return <details key={'FrameMenuCat' + categoryKey}>
             <summary className={classes.iconCategory}>
                 <label className={classes.checkboxIcon}>
@@ -188,13 +187,38 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 </label>
 
                 <span>{category.name}</span>
-                <button className={classes.selectIcon} onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}>
-                    <SelectIcon />
-                </button>
-                <button className={classes.selectIcon} onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, false) })}>
-                    <UnselectIcon />
-                </button>
             </summary>
+
+            <div className={classes.toggleAllEntry}>
+                <label className={classes.checkboxIcon}>
+                    <input
+                        type='checkbox'
+                        checked={hasAnyShowLabel}
+                        onChange={e => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, 'visible', e.currentTarget.checked) })}
+                    />
+                    <FontAwesomeIcon
+                        icon={hasAnyVisible ? faEye : faEyeSlash}
+                        opacity={hasAnyVisible ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
+                </label>
+
+                <label className={classes.checkboxIcon}>
+                    <input
+                        type='checkbox'
+                        checked={hasAnyShowLabel}
+                        onChange={e => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, 'showLabel', e.currentTarget.checked) })}
+                    />
+                    <FontAwesomeIcon
+                        icon={hasAnyShowLabel ? faComment : faCommentSlash}
+                        opacity={hasAnyShowLabel ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
+                </label>
+
+                <span className={classes.categoryTypeName}>Toggle all</span>
+            </div>
+
             <div className={classes.iconTypeContainer}>
                 {typeChildren}
             </div>
