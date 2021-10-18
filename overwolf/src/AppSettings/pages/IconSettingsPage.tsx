@@ -65,7 +65,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     } = props;
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
-    const actionIcons = {
+    const actionIcon = {
         'visible': {
             'true': faEye,
             'false': faEyeSlash,
@@ -111,7 +111,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     function printInteractiveItem(item: IconTypeSetting | IconCategorySetting, action: 'visible' | 'label') {
         const opacity = getIconOpacity(item, action);
         const color = opacity < 1 ? 'white' : item[action] ? 'green' : 'red';
-        return <FontAwesomeIcon color={color} icon={actionIcons[action][item[action].toString()]} opacity={opacity} fixedWidth={true} className='showIcon' />;
+        return <FontAwesomeIcon color={color} icon={actionIcon[action][item[action].toString()]} opacity={opacity} fixedWidth={true} className='showIcon' />;
     }
 
     function selectAllIconsByCategory(category: string, value: boolean) {
