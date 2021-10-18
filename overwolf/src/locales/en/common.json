@@ -58,7 +58,10 @@
             "shapeDiamond": "Diamond"
         },
         "icon": {
-            "_": "Icons"
+            "_": "Icons",
+            "toggleAll": "Toggle all",
+            "toggleVisible": "Toggle visibility",
+            "toggleShowLabel": "Toggle whether this icon's label is shown"
         }
     }
 }

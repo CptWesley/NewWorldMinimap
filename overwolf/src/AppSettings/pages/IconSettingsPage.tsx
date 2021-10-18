@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import produce from 'immer';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { storeIconConfiguration } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
 import { makeStyles } from '@/theme';
@@ -77,6 +78,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         settings,
         updateSettings,
     } = props;
+    const { t } = useTranslation();
     const { classes } = useStyles();
 
     function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
@@ -120,7 +122,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
             return <div key={typeKey}>
-                <label className={classes.checkboxIcon}>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
                         type='checkbox'
                         checked={type.visible}
@@ -133,7 +135,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <label className={clsx(classes.checkboxIcon, !type.visible && classes.invisible)}>
+                <label className={clsx(classes.checkboxIcon, !type.visible && classes.invisible)} title={t('settings.icon.toggleShowLabel')}>
                     <input
                         type='checkbox'
                         checked={type.showLabel}
@@ -155,7 +157,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
 
         return <details key={categoryKey}>
             <summary className={classes.iconCategory}>
-                <label className={classes.checkboxIcon}>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
                         type='checkbox'
                         checked={category.visible}
@@ -168,7 +170,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <label className={clsx(classes.checkboxIcon, !category.visible && classes.invisible)}>
+                <label className={clsx(classes.checkboxIcon, !category.visible && classes.invisible)} title={t('settings.icon.toggleShowLabel')}>
                     <input
                         type='checkbox'
                         checked={category.showLabel}
@@ -185,7 +187,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
             </summary>
 
             <div className={classes.toggleAllEntry}>
-                <label className={classes.checkboxIcon}>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
                         type='checkbox'
                         checked={hasAnyShowLabel}
@@ -198,7 +200,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <label className={classes.checkboxIcon}>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleShowLabel')}>
                     <input
                         type='checkbox'
                         checked={hasAnyShowLabel}
@@ -211,7 +213,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <span className={classes.categoryTypeName}>Toggle all</span>
+                <span className={classes.categoryTypeName}>{t('settings.icon.toggleAll')}</span>
             </div>
 
             <div className={classes.iconTypeContainer}>
