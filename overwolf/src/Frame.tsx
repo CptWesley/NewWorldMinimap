@@ -59,27 +59,30 @@ export default function Frame(props: IProps) {
                 updateAppContext({ [identifier as keyof SimpleStorageSetting]: load(identifier as keyof SimpleStorageSetting) });
             } else if (keyScope === 'icon') {
                 // It is an icon setting. First, determine if it's just a category, or a category and an icon
-                const categoryType = deconstructIconStorageKey(identifier);
-                if (typeof categoryType === 'string') {
-                    // It is just a category. If the iconSettings are loaded, and the category exists, produce a new iconSettings
-                    // with the category value set to the new setting value.
-                    setAppContextSettings(prev => prev.iconSettings?.categories[categoryType] !== undefined
-                        ? produce(prev, draft => {
-                            if (draft.iconSettings) {
-                                draft.iconSettings.categories[categoryType].visible = loadIconConfiguration(categoryType, undefined, 'visible');
-                            }
-                        })
-                        : prev);
-                } else {
+                const iconSetting = deconstructIconStorageKey(identifier);
+                if (iconSetting && iconSetting.type) {
                     // It is a category and type. If the iconSettings are loaded, and the category and type exist,
                     // produce a new iconSettings with the category.types.type value set to the new setting value.
-                    setAppContextSettings(prev => prev.iconSettings?.categories[categoryType[0]]?.types[categoryType[1]] !== undefined
-                        ? produce(prev, draft => {
-                            if (draft.iconSettings) {
-                                draft.iconSettings.categories[categoryType[0]].types[categoryType[1]].visible = loadIconConfiguration(categoryType[0], categoryType[1], 'visible');
-                            }
-                        })
-                        : prev);
+                    setAppContextSettings(prev => produce(prev, draft => {
+                        if (draft.iconSettings
+                            && draft.iconSettings.categories
+                            && draft.iconSettings.categories[iconSetting.category]
+                            && draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!]
+                            && draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!] !== undefined) {
+                            draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!][iconSetting.property] = loadIconConfiguration(iconSetting.category, iconSetting.type, iconSetting.property as IconProperty);
+                        }
+                    }));
+                } else if (iconSetting) {
+                    // It is just a category. If the iconSettings are loaded, and the category exists, produce a new iconSettings
+                    // with the category value set to the new setting value.
+                    setAppContextSettings(prev => produce(prev, draft => {
+                        if (draft.iconSettings
+                            && draft.iconSettings.categories
+                            && draft.iconSettings.categories[iconSetting.category]
+                            && draft.iconSettings.categories[iconSetting.category][iconSetting.property] !== undefined) {
+                            draft.iconSettings.categories[iconSetting.category][iconSetting.property] = loadIconConfiguration(iconSetting.category, undefined, iconSetting.property as IconProperty);
+                        }
+                    }));
                 }
             } else if (keyScope === undefined && simpleStorageDefaultSettings.hasOwnProperty(identifier) && !scopedSettings.includes(identifier as keyof SimpleStorageSetting)) {
                 // The setting is not scoped to the current window, and exists, but is not listed as a scoped setting.

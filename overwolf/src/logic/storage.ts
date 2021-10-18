@@ -135,12 +135,14 @@ export function getStorageKeyScope(key: string): [KnownStorageScope | undefined,
  * @param identifier The identifier of the key, without the scope.
  * @returns a string if it's just a category; or an array of two strings, containing category and type.
  */
-export function deconstructIconStorageKey(identifier: string): string | [string, string] {
-    const withoutProperty = identifier.split('.')[0];
-    const categoryAndType = withoutProperty.split('--');
-    if (categoryAndType.length === 2) {
-        return [categoryAndType[0], categoryAndType[1]];
-    } else {
-        return categoryAndType[0];
-    }
+export function deconstructIconStorageKey(identifier: string) {
+    const propertySplit = identifier.split('.');
+    if (propertySplit.length !== 2) { return undefined; }
+    const categoryAndType = propertySplit[0].split('--');
+    if (categoryAndType.length < 1 || categoryAndType.length > 2) { return undefined; }
+    return {
+        property: propertySplit[1],
+        category: categoryAndType[0],
+        type: categoryAndType.length === 2 ? categoryAndType[1] : undefined,
+    };
 }
