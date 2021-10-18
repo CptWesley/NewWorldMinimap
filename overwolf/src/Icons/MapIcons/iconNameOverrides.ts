@@ -1,6 +1,8 @@
-import { customCategoryNamesEn, customNamesEn, iconNamesEn } from './names/en';
+import i18next from 'i18next';
 
 const temporaryNames = {};
+
+i18next.loadNamespaces('markers');
 
 export function getIconNameOverride(category: string, type?: string) {
     if (type) {
@@ -9,23 +11,24 @@ export function getIconNameOverride(category: string, type?: string) {
         }
 
         // Categories override
-        if (category === 'pois' && iconNamesEn['regions'][type]) {
+        if (category === 'pois' && i18next.exists(`markers:regions.${type}`)) {
             // if the poi is a region, return region name instead
-            return iconNamesEn['regions'][type];
+            return i18next.t(`markers:regions.${type}`);
         }
-        if (category === 'npcs' && type && iconNamesEn['regions'][type]) {
+        if (category === 'npcs' && type && i18next.exists(`markers:regions.${type}`)) {
             // npcs may contain region names
-            return iconNamesEn['regions'][type];
+            return i18next.t(`markers:regions.${type}`);
         }
 
-        if (customNamesEn[category] && customNamesEn[category][type]) {
-            return customNamesEn[category][type];
+        if (i18next.exists(`markers:custom.markers.${category}.${type}`)) {
+            return i18next.t(`markers:custom.markers.${category}.${type}`);
         }
-        if (iconNamesEn[category]) {
-            return iconNamesEn[category][type];
+
+        if (i18next.exists(`markers:${category}.${type}`)) {
+            return i18next.t(`markers:${category}.${type}`);
         }
     } else {
-        return customCategoryNamesEn[category];
+        return i18next.t(`markers:custom.categories.${category}`);
     }
     return undefined;
 }

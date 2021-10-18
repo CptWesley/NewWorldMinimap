@@ -1,0 +1,42 @@
+{
+    "categories": {
+        "npc": "NPCs",
+        "chests": "Chests",
+        "documents": "Documents",
+        "essences": "Essences",
+        "fishing": "Fish",
+        "monsters": "Creatures",
+        "ores": "Ores",
+        "plants": "Plants",
+        "pois": "Points of Interest",
+        "town": "Town",
+        "woods": "Woods"
+    },
+    "markers": {
+        "town": {
+            "arcane_repository": "Arcane repository",
+            "covenant_adjudicator": "Covenant adjudicator",
+            "forge": "Forge",
+            "governors_desk": "Governors desk",
+            "inn": "Inn",
+            "kitchen": "Kitchen",
+            "loom": "Loom",
+            "marauder_commander": "Marauder commander",
+            "outfitting_station": "Outfitting station",
+            "smelter": "Smelter",
+            "stonecutting_table": "Stonecutting table",
+            "storage_shed": "Storage shed",
+            "syndicate_alchemist": "Syndicate alchemist",
+            "tannery": "Tannery",
+            "territory_planning_board": "Territory planning board",
+            "town_project_board": "Town project board",
+            "trading_post": "Trading post",
+            "war_board": "War board",
+            "woodshop": "Woodshop",
+            "workshop": "Workshop"
+        },
+        "woods": {
+            "Briar": "Briar"
+        }
+    }
+}
