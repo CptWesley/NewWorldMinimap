@@ -11,6 +11,16 @@ It then utilizes data obtained from [StudioLoot's New World Interactive Map](htt
 
 Join the [Discord](https://discord.gg/dCgStTDaet)!
 
+## Table of Contents
+- [Current Features](https://github.com/CptWesley/NewWorldMinimap#current-features)
+- [Planned Features](https://github.com/CptWesley/NewWorldMinimap#planned-features)
+- [Known Issues](https://github.com/CptWesley/NewWorldMinimap#known-issues)
+- [Examples](https://github.com/CptWesley/NewWorldMinimap#examples)
+- [Installation and Usage](https://github.com/CptWesley/NewWorldMinimap#installation-and-usage)
+- [Development](https://github.com/CptWesley/NewWorldMinimap#development)
+- [Licensing](https://github.com/CptWesley/NewWorldMinimap#licensing)
+- [Contribution](https://github.com/CptWesley/NewWorldMinimap#contribution)
+
 ## Current Features
 - Render surroundings of the player (including resources).
 - Track the player (including direction).
@@ -45,7 +55,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
 
-## Usage
+## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
 - You now have 2 options:
   - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
