@@ -35,7 +35,7 @@ export async function getDefaultIconSettings() {
 
             if (!category.types[marker.type]) {
                 category.types[marker.type] = {
-                    name: getIconName(marker.type),
+                    name: getIconName(marker.category, marker.type),
                     visible: loadIconConfiguration(marker.category, marker.type, 'visible'),
                     showLabel: loadIconConfiguration(marker.category, marker.type, 'showLabel'),
                 };

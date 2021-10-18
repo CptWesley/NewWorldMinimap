@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
@@ -77,6 +78,8 @@ const backgroundController = getBackgroundController();
 export default function DesktopHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
+    const { t } = useTranslation();
+
     const [desktopWindow] = useState(() => {
         return new OWWindow(windowNames.desktop);
     });
@@ -129,10 +132,10 @@ export default function DesktopHeader() {
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>
-        {context.gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow}>
+        {context.gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow} title={t('header.openInGame')}>
             <DesktopWindowIcon />
         </button>}
-        <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>
+        <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu} title={t('header.settings')}>
             <SettingsIcon />
         </button>
         <button className={clsx(classes.controlButton)} onClick={handleMinimize}>

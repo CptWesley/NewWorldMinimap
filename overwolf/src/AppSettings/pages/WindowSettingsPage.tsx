@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Interpolation, zoomLevelSettingBounds } from '@/logic/storage';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
@@ -10,6 +11,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
         setPeek,
     } = props;
     const { classes } = useSharedSettingsStyles();
+    const { t } = useTranslation();
 
     function handleMapSliderMouseDown() {
         setPeek(true);
@@ -21,47 +23,47 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
 
     return <>
         <div className={classes.setting}>
-            <label className={classes.checkbox} title='Enabling will make the window header transparent.'>
+            <label className={classes.checkbox} title={t('settings.window.transparentHeaderTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.transparentHeader}
                     onChange={e => updateSimpleSetting('transparentHeader', e.currentTarget.checked)}
                 />
-                Transparent header
+                {t('settings.window.transparentHeader')}
             </label>
         </div>
         <div className={classes.setting} hidden>
-            <label className={classes.checkbox} title='Enabling will make the toolbar transparent.'>
+            <label className={classes.checkbox} title={t('settings.window.transparentToolbarTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.transparentToolbar}
                     onChange={e => updateSimpleSetting('transparentToolbar', e.currentTarget.checked)}
                 />
-                Transparent toolbar
+                {t('settings.window.transparentToolbar')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.checkbox} title='Enabling will show the header text and buttons.'>
+            <label className={classes.checkbox} title={t('settings.window.showHeaderTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.showHeader}
                     onChange={e => updateSimpleSetting('showHeader', e.currentTarget.checked)}
                 />
-                Show header
+                {t('settings.window.showHeader')}
             </label>
         </div>
         <div className={classes.setting} hidden>
-            <label className={classes.checkbox} title='Enabling will show the toolbar.'>
+            <label className={classes.checkbox} title={t('settings.window.showToolbarTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.showToolbar}
                     onChange={e => updateSimpleSetting('showToolbar', e.currentTarget.checked)}
                 />
-                Show toolbar
+                {t('settings.window.showToolbar')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.range} title='Determines the zoom level on the map. Lower zoom may impact performance negatively.'>
+            <label className={classes.range} title={t('settings.window.zoomLevelTooltip')}>
                 <input
                     type='range'
                     value={zoomLevelSettingBounds[1] - settings.zoomLevel}
@@ -75,21 +77,21 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     onMouseDown={handleMapSliderMouseDown}
                     onMouseUp={handleMapSliderMouseUp}
                 />
-                Zoom Level
+                {t('settings.window.zoomLevel')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.checkbox} title='Enabling will allow you to configure a seperate zoom level when in towns.'>
+            <label className={classes.checkbox} title={t('settings.window.townZoomTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.townZoom}
                     onChange={e => updateSimpleSetting('townZoom', e.currentTarget.checked)}
                 />
-                Change Zoom In Towns
+                {t('settings.window.townZoom')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.range} title='Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.'>
+            <label className={classes.range} title={t('settings.window.townZoomLevelTooltip')}>
                 <input
                     type='range'
                     value={zoomLevelSettingBounds[1] - settings.townZoomLevel}
@@ -104,11 +106,11 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     onMouseDown={handleMapSliderMouseDown}
                     onMouseUp={handleMapSliderMouseUp}
                 />
-                Town Zoom Level
+                {t('settings.window.townZoomLevel')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.range} title='Determines the size of the rendered icons.'>
+            <label className={classes.range} title={t('settings.window.iconScaleTooltip')}>
                 <input
                     type='range'
                     value={settings.iconScale}
@@ -119,21 +121,21 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     onMouseDown={handleMapSliderMouseDown}
                     onMouseUp={handleMapSliderMouseUp}
                 />
-                Icon Scale
+                {t('settings.window.iconScale')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.checkbox} title='Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.'>
+            <label className={classes.checkbox} title={t('settings.window.showTextTooltip')}>
                 <input
                     type='checkbox'
                     checked={settings.showText}
                     onChange={e => updateSimpleSetting('showText', e.currentTarget.checked)}
                 />
-                Show text
+                {t('settings.window.showText')}
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.select} title='Detemines which algorithm to use to produce smoother movement around the map. Interpolation gives smoothest results, but adds a delay to your position. None gives the best performance.'>
+            <label className={classes.select} title={t('settings.window.interpolationTooltip')}>
                 <select
                     value={settings.interpolation}
                     onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
@@ -144,7 +146,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     <option value='linear-extrapolation'>Linear Extrapolation</option>
                     <option value='cosine-extrapolation'>Cosine Extrapolation</option>
                 </select>
-                Location (Inter/Extra)polation
+                {t('settings.window.interpolation')}
             </label>
         </div>
 

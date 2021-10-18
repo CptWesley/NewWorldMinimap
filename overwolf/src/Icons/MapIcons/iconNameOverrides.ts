@@ -1,21 +1,40 @@
-export const iconNameOverrides = {
-    'npc': 'NPCs',
-    'chests': 'Chests',
-    'documents': 'Documents',
-    'essences': 'Essences',
-    'fishing': 'Fish',
-    'monsters': 'Creatures',
-    'ores': 'Ores',
-    'plants': 'Plants',
-    'pois': 'Places of Interest',
-    'woods': 'Trees',
+import { i18n } from '@/i18n';
 
-    'bear_elemental': 'Elemental Bear',
-    'elk_elemental': 'Elemental Elk',
-    'named': 'Boss',
-    'turkey_nest': 'Turkey Nest',
-    'wolf_elemental': 'Elemental Wolf',
+const temporaryNames = new Map<string, string>();
 
-    'monarchs_bluffs': 'Monarch\'s Bluffs',
-    'weavers_fen': 'Weaver\'s Fen',
-};
+export function getIconNameOverride(category: string, type?: string) {
+    if (type) {
+        if (temporaryNames.has(getTemporaryKey(category, type))) {
+            return temporaryNames.get(getTemporaryKey(category, type));
+        }
+
+        // Categories override
+        if (category === 'pois' && i18n.exists(`markers:regions.${type}`)) {
+            // if the poi is a region, return region name instead
+            return i18n.t(`markers:regions.${type}`);
+        }
+        if (category === 'npc' && i18n.exists(`markers:regions.${type}`)) {
+            // npcs may contain region names
+            return i18n.t(`markers:regions.${type}`);
+        }
+
+        if (i18n.exists(`markers:custom.markers.${category}.${type}`)) {
+            return i18n.t(`markers:custom.markers.${category}.${type}`);
+        }
+
+        if (i18n.exists(`markers:${category}.${type}`)) {
+            return i18n.t(`markers:${category}.${type}`);
+        }
+    } else {
+        return i18n.t(`markers:custom.categories.${category}`);
+    }
+    return undefined;
+}
+
+export function saveTemporaryIconName(category: string, type: string | undefined, prediction: string) {
+    temporaryNames.set(getTemporaryKey(category, type), prediction);
+}
+
+function getTemporaryKey(category: string, type: string | undefined) {
+    return category + ':' + type;
+}
