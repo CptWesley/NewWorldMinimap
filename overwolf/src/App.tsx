@@ -1,6 +1,5 @@
 import React, { useContext, useEffect } from 'react';
 import { AppContext } from './contexts/AppContext';
-import { changeLanguage } from './i18n';
 import { getDefaultIconSettings } from './logic/markers';
 import Minimap from './Minimap';
 import MinimapToolbar from './MinimapToolbar';
@@ -26,7 +25,6 @@ const useStyles = makeStyles()(() => ({
 
 export default function App() {
     const { classes } = useStyles();
-    (window as any).changeLanguage = changeLanguage;
 
     const context = useContext(AppContext);
 
