@@ -32,13 +32,13 @@ declare type Tile = {
 declare type IconTypeSetting = {
     name: string;
     visible: boolean;
-    label: boolean;
+    showLabel: boolean;
 }
 
 declare type IconCategorySetting = {
     name: string,
     visible: boolean,
-    label: boolean,
+    showLabel: boolean,
     types: Record<string, IconTypeSetting>,
 }
 

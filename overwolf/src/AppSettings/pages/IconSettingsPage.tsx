@@ -146,12 +146,12 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 <label className={clsx(classes.checkboxIcon, !type.visible && classes.invisible)}>
                     <input
                         type='checkbox'
-                        checked={type.label}
+                        checked={type.showLabel}
                         onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'label', e.currentTarget.checked) })}
                     />
                     <FontAwesomeIcon
-                        icon={type.label ? faComment : faCommentSlash}
-                        opacity={type.label ? 1 : 0.5}
+                        icon={type.showLabel ? faComment : faCommentSlash}
+                        opacity={type.showLabel ? 1 : 0.5}
                         fixedWidth={true}
                     />
                 </label>

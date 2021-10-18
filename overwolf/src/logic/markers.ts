@@ -26,7 +26,7 @@ export async function getDefaultIconSettings() {
                 categories[marker.category] = {
                     name: getIconName(marker.category),
                     visible: loadIconConfiguration(marker.category, null, 'visible'),
-                    label: loadIconConfiguration(marker.category, null, 'label'),
+                    showLabel: loadIconConfiguration(marker.category, null, 'label'),
                     types: {},
                 };
             }
@@ -37,7 +37,7 @@ export async function getDefaultIconSettings() {
                 category.types[marker.type] = {
                     name: getIconName(marker.type),
                     visible: loadIconConfiguration(marker.category, marker.type, 'visible'),
-                    label: loadIconConfiguration(marker.category, marker.type, 'label'),
+                    showLabel: loadIconConfiguration(marker.category, marker.type, 'label'),
                 };
             }
         });
