@@ -290,7 +290,6 @@ export default function Minimap(props: IProps) {
     }
 
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-        console.log(e.deltaY);
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
     }
 
