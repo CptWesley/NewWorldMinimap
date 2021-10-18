@@ -2,12 +2,17 @@
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
     "forceConsistentCasingInFileNames": true,
+    "jsx": "react",
     "module": "es2015",
     "moduleResolution": "node",
-    "noImplicitAny": false,
+    "noImplicitAny": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
     "outDir": "./dist",
-    "jsx": "react",
     "paths": {
       "@/*": [
         "src/*"
