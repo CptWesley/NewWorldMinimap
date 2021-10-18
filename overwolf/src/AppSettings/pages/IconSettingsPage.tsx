@@ -31,14 +31,9 @@ const useStyles = makeStyles()(theme => ({
             flexGrow: 1,
         },
 
-        '&:focus': {
+        '&:hover, &:focus': {
             outline: 'none',
-            background: 'rgba(255, 255, 255, 0.15)',
-        },
-
-        '&:hover': {
-            outline: 'none',
-            background: 'rgba(255, 255, 255, 0.33)',
+            background: 'rgba(255, 255, 255, 0.2)',
         },
     },
     checkboxIcon: {
