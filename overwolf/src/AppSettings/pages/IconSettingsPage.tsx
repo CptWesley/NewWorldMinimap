@@ -119,7 +119,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
 
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
-            return <p key={'FrameMenuType' + typeKey}>
+            return <div key={typeKey}>
                 <label className={classes.checkboxIcon}>
                     <input
                         type='checkbox'
@@ -147,13 +147,13 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 </label>
 
                 <span className={classes.categoryTypeName}>{type.name}</span>
-            </p>;
+            </div>;
         });
 
         const hasAnyVisible = Object.values(category.types).some(t => t.visible);
         const hasAnyShowLabel = Object.values(category.types).some(t => t.showLabel);
 
-        return <details key={'FrameMenuCat' + categoryKey}>
+        return <details key={categoryKey}>
             <summary className={classes.iconCategory}>
                 <label className={classes.checkboxIcon}>
                     <input
