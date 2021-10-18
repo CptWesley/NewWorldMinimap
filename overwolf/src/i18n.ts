@@ -8,7 +8,8 @@ export const supportedLocales = Object.keys(locales) as readonly SupportedLocale
 
 const defaultLanguage: SupportedLocale = 'en';
 
-i18next
+export const i18n = i18next;
+i18n
     .use(I18nextBrowserLanguageDetector)
     .use(initReactI18next)
     .init({
