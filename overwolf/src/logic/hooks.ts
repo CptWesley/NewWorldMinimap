@@ -41,8 +41,6 @@ function transformData(info: any): PlayerData | undefined {
     }
 
     if (!info.location) {
-        console.error('Unsuccesful poll attempt!');
-        console.error(info);
         return undefined;
     }
 
