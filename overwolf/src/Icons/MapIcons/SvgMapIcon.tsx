@@ -5,6 +5,7 @@ export interface ISvgMapIconConsumerProps {
     strokeWidth?: string | number;
     fill?: string;
     scale?: number;
+    viewBox?: string;
 }
 
 interface ISvgMapIconProps extends ISvgMapIconConsumerProps {
@@ -37,6 +38,7 @@ export default function SvgMapIcon(props: SvgMapIconPropsType) {
         width = 16,
         height = 16,
         scale = 1,
+        viewBox = `0 0 ${width} ${height}`,
     } = getSvgMapIconProps(props);
 
     return (
@@ -44,7 +46,7 @@ export default function SvgMapIcon(props: SvgMapIconPropsType) {
             xmlns={xmlNamespace}
             width={width * scale}
             height={height * scale}
-            viewBox={`0 0 ${width} ${height}`}
+            viewBox={viewBox}
             style={{
                 fill,
                 stroke,
