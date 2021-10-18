@@ -22,6 +22,7 @@
     },
     "settings": {
         "title": "Settings",
+        "open": "Open this menu at any time by right-clicking.",
         "window": {
             "_": "This window",
             "transparentHeader": "Transparent header",
@@ -43,7 +44,12 @@
             "showText": "Show text",
             "showTextTooltip": "Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.",
             "interpolation": "Location interpolation/extrapolation",
-            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance."
+            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance.",
+            "interpolationNone": "None",
+            "interpolationLinearInter": "Linear Interpolation",
+            "interpolationCosineInter": "Cosine Interpolation",
+            "interpolationLinearExtra": "Linear Extrapolation",
+            "interpolationCosineExtra": "Cosine Extrapolation"
         },
         "overlay": {
             "_": "In-game overlay",
