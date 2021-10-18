@@ -1,8 +1,10 @@
 import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
 import { globalLayers } from '@/globalLayers';
 import CloseOIcon from '@/Icons/CloseOIcon';
+import LanguagePicker from '@/LanguagePicker';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
 import IconSettingsPage from './pages/IconSettingsPage';
@@ -132,6 +134,8 @@ const useStyles = makeStyles()(theme => ({
     },
     footer: {
         gridArea: 'footer',
+        display: 'flex',
+        justifyContent: 'space-between',
     },
 }));
 
@@ -147,12 +151,6 @@ const settingsPages: (keyof typeof settingsPageMap)[] = [
     'icon',
 ];
 
-const settingsPageNames: Record<keyof typeof settingsPageMap, string> = {
-    icon: 'Icons',
-    overlay: 'In-game overlay',
-    window: 'This window',
-};
-
 export default function AppSettings(props: IProps) {
     const {
         onClose,
@@ -160,6 +158,7 @@ export default function AppSettings(props: IProps) {
     } = props;
     const context = useContext(AppContext);
     const { classes } = useStyles();
+    const { t } = useTranslation();
 
     const [currentPage, setCurrentPage] = useState(settingsPages[0]);
     const [isPeeking, setIsPeeking] = useState(false);
@@ -185,10 +184,10 @@ export default function AppSettings(props: IProps) {
     const PageComponent = settingsPageMap[currentPage];
 
     return <div className={rootClassName}>
-        <button className={classes.close} onClick={onClose}>
+        <button className={classes.close} onClick={onClose} title={t('close')}>
             <CloseOIcon />
         </button>
-        <h2 className={classes.title}>Options</h2>
+        <h2 className={classes.title}>{t('settings.title')}</h2>
         <nav className={classes.nav}>
             {settingsPages.map(p =>
                 <button
@@ -196,7 +195,7 @@ export default function AppSettings(props: IProps) {
                     className={clsx(classes.navItem, p === currentPage && classes.navItemActive)}
                     onClick={() => setCurrentPage(p)}
                 >
-                    {settingsPageNames[p]}
+                    {t(`settings.${p}._`)}
                 </button>
             )}
         </nav>
@@ -204,7 +203,8 @@ export default function AppSettings(props: IProps) {
             <PageComponent {...pageProps} />
         </div>
         <footer className={classes.footer}>
-            Open this menu at any time by right-clicking.
+            <span>Open this menu at any time by right-clicking.</span>
+            <LanguagePicker />
         </footer>
     </div>;
 }
