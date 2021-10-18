@@ -24,6 +24,12 @@ jobs:
         working-directory: ./overwolf
       
       - name: Build
-        run: yarn run build
+        run: yarn build:prod
         working-directory: ./overwolf
+        
+      - name: Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: app-${GITHUB_SHA::6}
+          path: ./overwolf/releases/*.opk
         
