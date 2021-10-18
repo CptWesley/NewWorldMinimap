@@ -69,7 +69,8 @@ export default function Frame(props: IProps) {
                             && draft.iconSettings.categories[iconSetting.category]
                             && draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!]
                             && draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!] !== undefined) {
-                            draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!][iconSetting.property] = loadIconConfiguration(iconSetting.category, iconSetting.type, iconSetting.property as IconProperty);
+                            draft.iconSettings.categories[iconSetting.category].types[iconSetting.type!][iconSetting.property] =
+                                loadIconConfiguration(iconSetting.category, iconSetting.type, iconSetting.property as IconProperty);
                         }
                     }));
                 } else if (iconSetting) {
@@ -80,7 +81,8 @@ export default function Frame(props: IProps) {
                             && draft.iconSettings.categories
                             && draft.iconSettings.categories[iconSetting.category]
                             && draft.iconSettings.categories[iconSetting.category][iconSetting.property] !== undefined) {
-                            draft.iconSettings.categories[iconSetting.category][iconSetting.property] = loadIconConfiguration(iconSetting.category, undefined, iconSetting.property as IconProperty);
+                            draft.iconSettings.categories[iconSetting.category][iconSetting.property] =
+                                loadIconConfiguration(iconSetting.category, undefined, iconSetting.property as IconProperty);
                         }
                     }));
                 }
