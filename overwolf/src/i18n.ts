@@ -16,7 +16,6 @@ i18n
         fallbackLng: defaultLanguage,
         debug: !NWMM_APP_BUILD_PRODUCTION,
         resources: locales,
-        ns: Object.keys(locales[defaultLanguage]),
         defaultNS: 'common',
         interpolation: {
             // React already escapes everything
