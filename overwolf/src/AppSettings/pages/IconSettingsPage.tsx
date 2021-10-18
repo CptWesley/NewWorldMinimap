@@ -9,7 +9,6 @@ import { makeStyles } from '@/theme';
 import { faComment, faCommentSlash, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IAppSettingsPageProps } from '../AppSettings';
-import { useSharedSettingsStyles } from '../sharedSettingStyles';
 
 const useStyles = makeStyles()(theme => ({
     selectIcon: {
@@ -83,7 +82,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         updateSettings,
     } = props;
     const { classes } = useStyles();
-    const { classes: sharedClasses } = useSharedSettingsStyles();
+
     function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         storeIconConfiguration(name, undefined, property, value);
@@ -162,15 +161,33 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
 
         return <details key={'FrameMenuCat' + categoryKey}>
             <summary className={classes.iconCategory}>
-                <label className={sharedClasses.checkbox}>
+                <label className={classes.checkboxIcon}>
                     <input
                         type='checkbox'
                         checked={category.visible}
                         onChange={e => updateSettings({ iconSettings: updateIconCategorySettings(categoryKey, 'visible', e.currentTarget.checked) })}
                     />
-                    {category.name}
+                    <FontAwesomeIcon
+                        icon={category.visible ? faEye : faEyeSlash}
+                        opacity={category.visible ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
                 </label>
-                <span />
+
+                <label className={clsx(classes.checkboxIcon, !category.visible && classes.invisible)}>
+                    <input
+                        type='checkbox'
+                        checked={category.showLabel}
+                        onChange={e => updateSettings({ iconSettings: updateIconCategorySettings(categoryKey, 'showLabel', e.currentTarget.checked) })}
+                    />
+                    <FontAwesomeIcon
+                        icon={category.showLabel ? faComment : faCommentSlash}
+                        opacity={category.showLabel ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
+                </label>
+
+                <span>{category.name}</span>
                 <button className={classes.selectIcon} onClick={() => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, true) })}>
                     <SelectIcon />
                 </button>
