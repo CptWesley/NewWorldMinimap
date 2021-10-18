@@ -1,5 +1,5 @@
 import { getIconName } from './icons';
-import { loadIconCategory, loadIconType, loadLabelEnabled } from './storage';
+import { loadIconConfiguration } from './storage';
 import { getTileMarkerCache } from './tileMarkerCache';
 
 const tileMarkerCache = getTileMarkerCache();
@@ -25,7 +25,8 @@ export async function getDefaultIconSettings() {
             if (!categories[marker.category]) {
                 categories[marker.category] = {
                     name: getIconName(marker.category),
-                    value: loadIconCategory(marker.category),
+                    visible: loadIconConfiguration(marker.category, null, 'visible'),
+                    label: loadIconConfiguration(marker.category, null, 'label'),
                     types: {},
                 };
             }
@@ -35,8 +36,8 @@ export async function getDefaultIconSettings() {
             if (!category.types[marker.type]) {
                 category.types[marker.type] = {
                     name: getIconName(marker.type),
-                    value: loadIconType(marker.category, marker.type),
-                    label: loadLabelEnabled(marker.category, marker.type),
+                    visible: loadIconConfiguration(marker.category, marker.type, 'visible'),
+                    label: loadIconConfiguration(marker.category, marker.type, 'label'),
                 };
             }
         });

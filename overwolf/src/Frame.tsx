@@ -6,7 +6,7 @@ import { GlobalStyles } from 'tss-react';
 import App from './App';
 import AppSettings from './AppSettings/AppSettings';
 import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings } from './contexts/AppContext';
-import { deconstructIconStorageKey, getStorageKeyScope, load, loadIconCategory, loadIconType, scopedSettings, simpleStorageDefaultSettings, SimpleStorageSetting } from './logic/storage';
+import { deconstructIconStorageKey, getStorageKeyScope, load, loadIconConfiguration, scopedSettings, simpleStorageDefaultSettings, SimpleStorageSetting } from './logic/storage';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles, theme } from './theme';
 
@@ -66,7 +66,7 @@ export default function Frame(props: IProps) {
                     setAppContextSettings(prev => prev.iconSettings?.categories[categoryType] !== undefined
                         ? produce(prev, draft => {
                             if (draft.iconSettings) {
-                                draft.iconSettings.categories[categoryType].value = loadIconCategory(categoryType);
+                                draft.iconSettings.categories[categoryType].visible = loadIconConfiguration(categoryType, null, 'visible');
                             }
                         })
                         : prev);
@@ -76,7 +76,7 @@ export default function Frame(props: IProps) {
                     setAppContextSettings(prev => prev.iconSettings?.categories[categoryType[0]]?.types[categoryType[1]] !== undefined
                         ? produce(prev, draft => {
                             if (draft.iconSettings) {
-                                draft.iconSettings.categories[categoryType[0]].types[categoryType[1]].value = loadIconType(categoryType[0], categoryType[1]);
+                                draft.iconSettings.categories[categoryType[0]].types[categoryType[1]].visible = loadIconConfiguration(categoryType[0], categoryType[1], 'visible');
                             }
                         })
                         : prev);

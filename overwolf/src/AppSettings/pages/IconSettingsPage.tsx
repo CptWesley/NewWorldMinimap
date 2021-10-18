@@ -2,7 +2,7 @@ import produce from 'immer';
 import React from 'react';
 import SelectIcon from '@/Icons/SelectIcon';
 import UnselectIcon from '@/Icons/UnselectIcon';
-import { storeIconCategory, storeIconType } from '@/logic/storage';
+import { storeIconConfiguration } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
 import { makeStyles } from '@/theme';
 import { faComment, faCommentSlash, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
@@ -65,38 +65,66 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     } = props;
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
+    const actionIcons = {
+        'visible': {
+            'true': faEye,
+            'false': faEyeSlash,
+        },
+        'label': {
+            'true': faComment,
+            'false': faCommentSlash,
+        },
+    };
 
-    function updateIconCategorySettings(name: string, value: boolean) {
+    function updateIconCategorySettings(name: string, property: 'visible' | 'label', value: boolean) {
         const iconSettings = settings.iconSettings;
-        storeIconCategory(name, value);
+        storeIconConfiguration(name, null, property, value);
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                draft.categories[name].value = value;
+                draft.categories[name][property] = value;
             });
         }
         return iconSettings;
     }
 
-    function updateIconSettings(category: string, type: string, key: string, value: boolean) {
+    function updateIconSettings(category: string, type: string, property: 'visible' | 'label', value: boolean) {
         const iconSettings = settings.iconSettings;
-        storeIconType(category, type, value);
+        storeIconConfiguration(category, type, property, value);
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                draft.categories[category].types[type][key] = value;
+                draft.categories[category].types[type][property] = value;
             });
         }
         return iconSettings;
+    }
+
+    // Get icon opacity based on the item context
+    function getIconOpacity(item: IconTypeSetting | IconCategorySetting, action: 'visible' | 'label') {
+        // If item is not visible, the label icon should reduce their opacity
+        if (action === 'label' && !item.visible) {
+            return 0.5;
+        }
+
+        return 1;
+    }
+
+    function printInteractiveItem(item: IconTypeSetting | IconCategorySetting, action: 'visible' | 'label') {
+        const opacity = getIconOpacity(item, action);
+        const color = opacity < 1 ? 'white' : item[action] ? 'green' : 'red';
+        return <FontAwesomeIcon color={color} icon={actionIcons[action][item[action].toString()]} opacity={opacity} fixedWidth={true} className='showIcon' />;
     }
 
     function selectAllIconsByCategory(category: string, value: boolean) {
+        // TODO: Modify it when the general flow is approve and allow the category assign
+        const property = 'visible';
         const iconSettings = settings.iconSettings;
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                storeIconCategory(category, value);
-                draft.categories[category].value = value;
+                storeIconConfiguration(category, null, 'visible', value);
+                draft.categories[category][property] = value;
                 for (const type in draft.categories[category].types) {
-                    draft.categories[category].types[type].value = value;
-                    storeIconType(category, type, value);
+                    draft.categories[category].types[type][property] = value;
+                    storeIconConfiguration(category, type, property, value);
                 }
             });
         }
@@ -112,20 +140,22 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 <label className={classes.checkboxIcon}>
                     <input
                         type='checkbox'
-                        checked={type.value}
-                        onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'value', e.currentTarget.checked) })}
+                        checked={type.visible}
+                        onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'visible', e.currentTarget.checked) })}
                     />
-                    {type.value ? <FontAwesomeIcon icon={faEye} className='showIcon' /> : <FontAwesomeIcon icon={faEyeSlash} className='showIcon' />}
+                    {printInteractiveItem(type, 'visible')}
                 </label>
 
                 <label className={classes.checkboxIcon}>
                     <input
                         type='checkbox'
-                        checked={type.value}
+                        checked={type.label}
                         onChange={e => updateSettings({ iconSettings: updateIconSettings(categoryKey, typeKey, 'label', e.currentTarget.checked) })}
                     />
-                    {type.label ? <FontAwesomeIcon icon={faComment} className='showIcon' /> : <FontAwesomeIcon icon={faCommentSlash} className='showIcon' />}
+                    {printInteractiveItem(type, 'label')}
                 </label>
+
+                <span>{type.name}</span>
             </p>;
         });
 
@@ -134,8 +164,8 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 <label className={sharedClasses.checkbox}>
                     <input
                         type='checkbox'
-                        checked={category.value}
-                        onChange={e => updateSettings({ iconSettings: updateIconCategorySettings(categoryKey, e.currentTarget.checked) })}
+                        checked={category.visible}
+                        onChange={e => updateSettings({ iconSettings: updateIconCategorySettings(categoryKey, 'visible', e.currentTarget.checked) })}
                     />
                     {category.name}
                 </label>

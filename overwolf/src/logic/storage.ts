@@ -93,40 +93,26 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
-/** Stores whether the icon category is visible. */
-export function storeIconCategory(category: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}.visible`;
+export function storeIconConfiguration(category: string, type: string | null, property: 'visible' | 'label', value: boolean) {
+    const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
     return storeUntyped(key, value);
 }
 
-/** Stores whether the icon type (part of a category) is visible. */
-export function storeIconType(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
-    return storeUntyped(key, value);
+export function loadIconConfiguration(category: string, type: string | null, property: 'visible' | 'label') {
+    const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
+    return loadUntyped(key, getDefaultIconConfigurationValue(key, category, type, property)) as boolean;
 }
 
-/** Loads whether the icon category is visible. */
-export function loadIconCategory(category: string) {
-    const key = `${iconSettingStorageScope}::${category}.visible`;
-    return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
-}
+function getDefaultIconConfigurationValue(key: string, category: string, type: string | null, property: 'visible' | 'label'): boolean {
+    if (property === 'label') {
+        return false;
+    }
 
-/** Loads whether the icon type (part of a category) is visible. */
-export function loadIconType(category: string, type: string) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
-    return loadUntyped(key, true) as boolean;
-}
+    if (!type) {
+        return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
+    }
 
-/** Stores whether the icon type (part of a category) label is visible. */
-export function storeLabelEnabled(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.label`;
-    return storeUntyped(key, value);
-}
-
-/** Loads whether the icon type (part of a category) labelis visible. */
-export function loadLabelEnabled(category: string, type: string) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.label`;
-    return loadUntyped(key, false) as boolean;
+    return true;
 }
 
 /** Splits a storage key into its scope (if it exists and is known), and the rest of the key (which is called the identifier). */
