@@ -6,7 +6,7 @@ Looking for the legacy C# app? You can find it [here](https://github.com/CptWesl
 
 # CptWesley's Minimap
 Minimap for [Amazon's New World](https://www.newworld.com/).
-The application uses Overwolf's approved API for getting character positions.
+The application uses [Overwolf's](https://www.overwolf.com/) approved API for getting character positions.
 It then utilizes data obtained from [StudioLoot's New World Interactive Map](https://www.newworld-map.com/) to render all objects of interest around the player.
 
 Join the [Discord](https://discord.gg/dCgStTDaet)!
@@ -46,7 +46,19 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
 
 ## Usage
-- Currently not yet available, see the [legacy version](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet) if you want a working application.
+- Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
+- You now have 2 options:
+  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
+  - Get the latest release available from the [releases page](https://github.com/CptWesley/NewWorldMinimap/releases). These are the latest releases that might not have yet been inspected by the Overwolf QA team.
+- Install the application.
+- Make sure that Overwolf is enabled for New World:
+  - Right click the Overwolf tray icon.
+  - Open settings.
+  - Navigate to Overlay & Hotkeys.
+  - Make sure that the New World switch is enabled.
+- Start the game, the minimap should now appear.
+- If you want to change the settings, **right click** anywhere on the overlay.
+- If you want to open the desktop app to use on your second monitor, click the icon in the top right of the overlay.
 
 ## Development
 
