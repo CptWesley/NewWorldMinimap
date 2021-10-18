@@ -9,6 +9,8 @@ declare type Vector2 = {
     y: number;
 };
 
+type IconProperty = 'visible' | 'label';
+
 declare type Vector3 = {
     x: number;
     y: number;

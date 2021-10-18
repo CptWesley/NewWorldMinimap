@@ -76,7 +76,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         },
     };
 
-    function updateIconCategorySettings(name: string, property: 'visible' | 'label', value: boolean) {
+    function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         storeIconConfiguration(name, null, property, value);
         if (iconSettings) {
@@ -87,7 +87,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         return iconSettings;
     }
 
-    function updateIconSettings(category: string, type: string, property: 'visible' | 'label', value: boolean) {
+    function updateIconSettings(category: string, type: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         storeIconConfiguration(category, type, property, value);
         if (iconSettings) {
@@ -99,7 +99,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     }
 
     // Get icon opacity based on the item context
-    function getIconOpacity(item: IconTypeSetting | IconCategorySetting, action: 'visible' | 'label') {
+    function getIconOpacity(item: IconTypeSetting | IconCategorySetting, action: IconProperty) {
         // If item is not visible, the label icon should reduce their opacity
         if (action === 'label' && !item.visible) {
             return 0.5;
@@ -108,7 +108,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         return 1;
     }
 
-    function printInteractiveItem(item: IconTypeSetting | IconCategorySetting, action: 'visible' | 'label') {
+    function printInteractiveItem(item: IconTypeSetting | IconCategorySetting, action: IconProperty) {
         const opacity = getIconOpacity(item, action);
         const color = opacity < 1 ? 'white' : item[action] ? 'green' : 'red';
         return <FontAwesomeIcon color={color} icon={actionIcon[action][item[action].toString()]} opacity={opacity} fixedWidth={true} className='showIcon' />;

@@ -93,17 +93,17 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
-export function storeIconConfiguration(category: string, type: string | null, property: 'visible' | 'label', value: boolean) {
+export function storeIconConfiguration(category: string, type: string | null, property: IconProperty, value: boolean) {
     const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
     return storeUntyped(key, value);
 }
 
-export function loadIconConfiguration(category: string, type: string | null, property: 'visible' | 'label') {
+export function loadIconConfiguration(category: string, type: string | null, property: IconProperty) {
     const key = `${iconSettingStorageScope}::${category}` + (type ? `--${type}` : '') + `.${property}`;
     return loadUntyped(key, getDefaultIconConfigurationValue(key, category, type, property)) as boolean;
 }
 
-function getDefaultIconConfigurationValue(key: string, category: string, type: string | null, property: 'visible' | 'label'): boolean {
+function getDefaultIconConfigurationValue(key: string, category: string, type: string | null, property: IconProperty): boolean {
     if (property === 'label') {
         return false;
     }
