@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
 import { globalLayers } from '@/globalLayers';
 import CloseOIcon from '@/Icons/CloseOIcon';
+import LanguagePicker from '@/LanguagePicker';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
 import IconSettingsPage from './pages/IconSettingsPage';
@@ -133,6 +134,8 @@ const useStyles = makeStyles()(theme => ({
     },
     footer: {
         gridArea: 'footer',
+        display: 'flex',
+        justifyContent: 'space-between',
     },
 }));
 
@@ -200,7 +203,8 @@ export default function AppSettings(props: IProps) {
             <PageComponent {...pageProps} />
         </div>
         <footer className={classes.footer}>
-            Open this menu at any time by right-clicking.
+            <span>Open this menu at any time by right-clicking.</span>
+            <LanguagePicker />
         </footer>
     </div>;
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Trans, useTranslation } from 'react-i18next';
 import Button from './Button';
+import LanguagePicker from './LanguagePicker';
 import { discordUrl } from './links';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles } from './theme';
@@ -33,6 +34,9 @@ const useStyles = makeStyles()(theme => ({
     discordLink: {
         color: theme.linkColor,
     },
+    gap: {
+        flexGrow: 1,
+    },
 }));
 
 const backgroundController = getBackgroundController();
@@ -59,5 +63,7 @@ export default function Welcome() {
             <p>{t('welcome.devBuild')}</p>
             <Button onClick={tryForceMap}>{t('welcome.forceMap')}</Button>
         </>}
+        <div className={classes.gap} />
+        <LanguagePicker />
     </div>;
 }

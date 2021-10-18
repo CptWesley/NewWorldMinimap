@@ -3,10 +3,10 @@ import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import locales from '@/locales';
 
-export type SupportedLanguage = keyof typeof locales;
-export const supportedLanguages = Object.keys(locales) as readonly SupportedLanguage[];
+export type SupportedLocale = keyof typeof locales;
+export const supportedLocales = Object.keys(locales) as readonly SupportedLocale[];
 
-const defaultLanguage: SupportedLanguage = 'en';
+const defaultLanguage: SupportedLocale = 'en';
 
 i18next
     .use(I18nextBrowserLanguageDetector)
@@ -25,6 +25,6 @@ i18next
         },
     });
 
-export async function changeLanguage(language: SupportedLanguage) {
+export async function changeLanguage(language: SupportedLocale) {
     await i18next.changeLanguage(language);
 }
