@@ -77,6 +77,7 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
+    // eslint-disable-next-line complexity
     const draw = (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
