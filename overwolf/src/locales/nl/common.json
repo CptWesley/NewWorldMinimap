@@ -22,6 +22,7 @@
     },
     "settings": {
         "title": "Instellingen",
+        "open": "Open dit scherm wanneer u wilt door op de kaart op de rechter muisknop te klikken.",
         "window": {
             "_": "Dit venster",
             "transparentHeader": "Doorzichtige titelbalk",
