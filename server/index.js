@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
@@ -24,7 +23,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Set json body parser
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(function(err, req, res, next) {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
         res.status(400).send("400 Bad request");
