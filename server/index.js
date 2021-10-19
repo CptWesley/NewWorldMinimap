@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
+const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -17,10 +18,13 @@ app.use(limiter);
 
 // Set CORS
 app.use(function(req, res, next) {
+    console.log('cors');
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+// app.use(cors());
 
 // Set json body parser
 app.use(bodyParser.json());

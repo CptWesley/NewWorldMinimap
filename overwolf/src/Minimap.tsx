@@ -311,7 +311,20 @@ export default function Minimap(props: IProps) {
         currentPosition.current = pos;
         store('lastKnownPosition', pos);
         redraw(true);
-    }
+
+        if (appContext.settings.shareLocation) {
+            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, 'debug crap' || 'undefined', pos, appContext.settings.friends);
+            sharedLocation.then(r => {
+                console.log("sent");
+                console.log(r);
+                if (r !== undefined) {
+                    setFriends(r.friends);
+                } else {
+                    setFriends([]);
+                }
+            });
+        }
+}
 
     function setFriends(friends: FriendData[]) {
         if (friends.length === currentFriends.current.length) {
@@ -392,11 +405,11 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), 100)
+            ? window.setInterval(() => redraw(false), 100)
             : undefined;
 
         return function () {
-            clearInterval(interval);
+            window.clearInterval(interval);
         };
     }, [interpolationEnabled]);
 
@@ -419,18 +432,6 @@ export default function Minimap(props: IProps) {
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
-            if (appContext.settings.shareLocation) {
-                const sharedLocation = updateFriendLocation(appContext.settings.friendCode, info.name || 'undefined', info.position, appContext.settings.friends);
-                sharedLocation.then(r => {
-                    console.log("sent");
-                    console.log(r);
-                    if (r !== undefined) {
-                        setFriends(r.friends);
-                    } else {
-                        setFriends([]);
-                    }
-                });
-            }
         });
 
         return function () {
