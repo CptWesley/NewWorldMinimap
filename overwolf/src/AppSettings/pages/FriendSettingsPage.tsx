@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GenerateIcon from '@/Icons/GenerateIcon';
-import { generateRandomToken } from '@/logic/util';
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
+import { getFriendCode, regenerateFriendCode } from '@/logic/friends';
 
 const useStyles = makeStyles()(theme => ({
     friendsGenerateButton: {
@@ -31,6 +31,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
     const { t } = useTranslation();
+    const [friendCode, setFriendCode] = useState(getFriendCode());
 
     return <>
         <div>
@@ -49,10 +50,10 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     <input
                         type='text'
                         readOnly
-                        value={settings.friendCode}
+                        value={friendCode}
                     />
                     {t('settings.friend.friendCode')}
-                    <button className={classes.friendsGenerateButton} title={t('settings.friend.regenerate')} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
+                    <button className={classes.friendsGenerateButton} title={t('settings.friend.regenerate')} onClick={() => setFriendCode(regenerateFriendCode())}>
                         <GenerateIcon />
                     </button>
                 </label>

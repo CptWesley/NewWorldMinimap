@@ -1,5 +1,4 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
-import { generateRandomToken } from './util';
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
@@ -28,7 +27,6 @@ export const simpleStorageDefaultSettings = {
     townZoom: true,
     interpolation: 'cosine-interpolation' as Interpolation,
     shareLocation: false,
-    friendCode: generateRandomToken(),
     friends: '',
     lastKnownPosition: debugLocations.default,
 };
@@ -46,9 +44,6 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoomLevel',
     'townZoom',
     'interpolation',
-    'shareLocation',
-    'friendCode',
-    'friends',
     'lastKnownPosition',
 ];
 

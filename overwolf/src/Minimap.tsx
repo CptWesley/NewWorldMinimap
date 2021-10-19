@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import { updateFriendLocation } from './logic/friends';
+import { updateFriendLocation, getFriendCode } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMapTiles } from './logic/map';
@@ -306,7 +306,7 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, playerName.current, pos, appContext.settings.friends);
+            const sharedLocation = updateFriendLocation(getFriendCode(), playerName.current, pos, appContext.settings.friends);
             sharedLocation.then(r => {
                 if (r !== undefined) {
                     setFriends(r.friends);
@@ -332,8 +332,8 @@ export default function Minimap(props: IProps) {
         if (friends.length === currentFriends.current.length) {
             for (const key in friends) {
                 if (friends[key].name === currentFriends.current[key].name
-                    && friends[key].name === currentFriends.current[key].name
-                    && friends[key].location.x === currentFriends.current[key].location.x) {
+                    && friends[key].location.x === currentFriends.current[key].location.x
+                    && friends[key].location.y === currentFriends.current[key].location.y) {
                     return;
                 }
             }

@@ -1,3 +1,5 @@
+import { generateRandomToken } from './util';
+
 const serverUrl = process.env.SERVER_URL || 'http://localhost:8000/data/update';
 
 export async function updateFriendLocation(id: string, name: string, location: Vector2, friends: string) {
@@ -22,4 +24,15 @@ export async function updateFriendLocation(id: string, name: string, location: V
         } catch (_) {}
     }
     return undefined;
+}
+
+export function getFriendCode() {
+    const code = localStorage.getItem('friendCode');
+    return !code ? regenerateFriendCode() : code;
+}
+
+export function regenerateFriendCode() {
+    const code = generateRandomToken();
+    localStorage.setItem('friendCode', code);
+    return code;
 }
