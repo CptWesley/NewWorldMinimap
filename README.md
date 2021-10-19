@@ -1,4 +1,5 @@
 [![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet)  
+<a href="https://www.buymeacoffee.com/cptwesley" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 20px;width: 102px" ></a>  
 
 Looking for the legacy C# app? You can find it [here](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet)!
 
@@ -6,10 +7,21 @@ Looking for the legacy C# app? You can find it [here](https://github.com/CptWesl
 
 # CptWesley's Minimap
 Minimap for [Amazon's New World](https://www.newworld.com/).
-The application uses Overwolf's approved API for getting character positions.
+The application uses [Overwolf's](https://www.overwolf.com/) approved API for getting character positions.
 It then utilizes data obtained from [StudioLoot's New World Interactive Map](https://www.newworld-map.com/) to render all objects of interest around the player.
 
 Join the [Discord](https://discord.gg/dCgStTDaet)!
+
+## Table of Contents
+- [Current Features](https://github.com/CptWesley/NewWorldMinimap#current-features)
+- [Planned Features](https://github.com/CptWesley/NewWorldMinimap#planned-features)
+- [Known Issues](https://github.com/CptWesley/NewWorldMinimap#known-issues)
+- [Examples](https://github.com/CptWesley/NewWorldMinimap#examples)
+- [Installation and Usage](https://github.com/CptWesley/NewWorldMinimap#installation-and-usage)
+- [Development](https://github.com/CptWesley/NewWorldMinimap#development)
+- [Licensing](https://github.com/CptWesley/NewWorldMinimap#licensing)
+- [Contribution](https://github.com/CptWesley/NewWorldMinimap#contribution)
+- [Support Me](https://github.com/CptWesley/NewWorldMinimap#support-me)
 
 ## Current Features
 - Render surroundings of the player (including resources).
@@ -45,8 +57,24 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
 
-## Usage
-- Currently not yet available, see the [legacy version](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet) if you want a working application.
+## Installation and Usage
+- Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
+- You now have 3 options:
+  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
+  - Get the latest release available from the [releases page](https://github.com/CptWesley/NewWorldMinimap/releases). These are the latest releases that might not have yet been inspected by the Overwolf QA team.
+  - Get the latest builds available from the [build-artifacts](https://github.com/CptWesley/NewWorldMinimap/actions/workflows/overwolf.yml). These builds are automatically created and might be very unstable, but will contain the newest features.
+    - Go to the [page](https://github.com/CptWesley/NewWorldMinimap/actions/workflows/overwolf.yml)
+    - Click on the build you are interested in (higher is more recent).
+    - Download the `app-artifact.zip` at the bottom of the page. This `.zip` will contain the produced `.opk` file.
+- Install the application.
+- Make sure that Overwolf is enabled for New World:
+  - Right click the Overwolf tray icon.
+  - Open settings.
+  - Navigate to Overlay & Hotkeys.
+  - Make sure that the New World switch is enabled.
+- Start the game, the minimap should now appear.
+- If you want to change the settings, **right click** anywhere on the overlay.
+- If you want to open the desktop app to use on your second monitor, click the icon in the top right of the overlay.
 
 ## Development
 
@@ -98,3 +126,6 @@ The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMin
 
 ## Contribution
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
+
+## Support Me
+Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley)! But don't feel obliged to!

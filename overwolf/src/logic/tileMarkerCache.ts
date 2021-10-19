@@ -97,11 +97,22 @@ class TileMarkerCache {
                         nextCache.set(tileString, markerList);
                     }
 
+                    let text;
+                    if (category === 'monsters' && type === 'named') {
+                        // Get the right name of named monsters
+                        text = getIconName(category, (entryContent as {name}).name);
+                    } else if (category === 'pois') {
+                        // Get the right name of pois
+                        text = getIconName(category, (entryContent as {name}).name);
+                    } else {
+                        text = getIconName(category, type);
+                    }
+
                     const marker = {
                         category,
                         type,
                         pos,
-                        text: getIconName(type),
+                        text,
                     };
                     markerList.push(marker);
                 }

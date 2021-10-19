@@ -354,7 +354,7 @@ export default function Minimap(props: IProps) {
             currentMousePos.current = {x: e.pageX, y: e.pageY} as Vector2;
             const xMod = currentMousePos.current.x - lastMousePos.current.x;
             const yMod = currentMousePos.current.y - lastMousePos.current.y;
-            if (scrollingMap.current && (Math.abs(xMod) > 5 || Math.abs(yMod) > 5)) {
+            if (scrollingMap.current && (mapScrolled.current || Math.abs(xMod) > 3 || Math.abs(yMod) > 3)) {
                 currentMapPosition.current.x = currentMapPosition.current.x - xMod;
                 currentMapPosition.current.y = currentMapPosition.current.y + yMod;
                 mapScrolled.current = true;
