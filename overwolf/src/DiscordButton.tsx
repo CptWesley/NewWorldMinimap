@@ -9,9 +9,6 @@ interface IProps {
 }
 
 const useStyles = makeStyles()(theme => ({
-    root: {
-        display: 'flex',
-    },
     discordLink: {
         color: theme.color,
         textDecoration: 'none',
@@ -33,11 +30,9 @@ export default function DiscordButton(props: IProps) {
     const { classes } = useStyles();
 
     return (
-        <div className={clsx(classes.root, className)}>
-            <a className={classes.discordLink} href={discordUrl} target='_blank'>
-                <DiscordIcon />
-                <span className={classes.text}>Discord</span>
-            </a>
-        </div>
+        <a className={clsx(classes.discordLink, className)} href={discordUrl} target='_blank'>
+            <DiscordIcon />
+            <span className={classes.text}>Discord</span>
+        </a>
     );
 }
