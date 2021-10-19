@@ -139,9 +139,8 @@ const useStyles = makeStyles()(theme => ({
         justifyContent: 'space-between',
     },
     bottomRightMenu: {
-        '& > *': {
-            marginTop: '5px',
-        },
+        display: 'flex',
+        gap: theme.spacing(1),
     },
 }));
 
@@ -211,8 +210,8 @@ export default function AppSettings(props: IProps) {
         <footer className={classes.footer}>
             <span>{t('settings.open')}</span>
             <span className={classes.bottomRightMenu}>
-                <LanguagePicker />
                 <DiscordButton />
+                <LanguagePicker />
             </span>
         </footer>
     </div>;
