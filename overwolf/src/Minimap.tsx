@@ -92,8 +92,8 @@ export default function Minimap(props: IProps) {
 
     const appContext = useContext(AppContext);
 
-    const currentMapPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
-    const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const currentMapPosition = useRef<Vector2>({x:9200, y:8110} );
+    const currentPlayerPosition = useRef<Vector2>({x:9200, y:8110});
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
@@ -146,7 +146,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const mapCenterPos = !renderAsCompass ? mapPos : pos;
+        const mapCenterPos = mapScrolled.current ? mapPos : pos;
         const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
@@ -319,6 +319,11 @@ export default function Minimap(props: IProps) {
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
+
+        if (!mapScrolled.current) {
+            currentMapPosition.current = {x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
+        }
+
         store('lastKnownPosition', pos);
         redraw(true);
     }
@@ -343,18 +348,20 @@ export default function Minimap(props: IProps) {
 
     function onRecenterMap() {
         mapScrolled.current = false;
-        currentMapPosition.current = currentPlayerPosition.current;
+        console.log(currentPlayerPosition.current);
+        currentMapPosition.current = {x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y};
         appContext.settings.showToolbar = false;
         appContext.update(appContext.settings);
     }
 
     function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
         if (!appContext.isTransparentSurface) {
-            lastMousePos.current = currentMousePos.current;
+            lastMousePos.current = {x: currentMousePos.current.x, y: currentMousePos.current.y };
             currentMousePos.current = {x: e.pageX, y: e.pageY} as Vector2;
             const xMod = currentMousePos.current.x - lastMousePos.current.x;
             const yMod = currentMousePos.current.y - lastMousePos.current.y;
             if (scrollingMap.current && (mapScrolled.current || Math.abs(xMod) > 3 || Math.abs(yMod) > 3)) {
+                console.log('Map scrolled');
                 currentMapPosition.current.x = currentMapPosition.current.x - xMod;
                 currentMapPosition.current.y = currentMapPosition.current.y + yMod;
                 mapScrolled.current = true;
