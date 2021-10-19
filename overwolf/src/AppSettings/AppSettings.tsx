@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppContext, AppContextSettings, IAppContext } from '@/contexts/AppContext';
+import DiscordButton from '@/DiscordButton';
 import { globalLayers } from '@/globalLayers';
 import CloseOIcon from '@/Icons/CloseOIcon';
 import LanguagePicker from '@/LanguagePicker';
@@ -137,6 +138,11 @@ const useStyles = makeStyles()(theme => ({
         display: 'flex',
         justifyContent: 'space-between',
     },
+    bottomRightMenu: {
+        '& > *': {
+            marginTop: '5px',
+        },
+    },
 }));
 
 const settingsPageMap = {
@@ -204,7 +210,10 @@ export default function AppSettings(props: IProps) {
         </div>
         <footer className={classes.footer}>
             <span>{t('settings.open')}</span>
-            <LanguagePicker />
+            <span className={classes.bottomRightMenu}>
+                <LanguagePicker />
+                <DiscordButton />
+            </span>
         </footer>
     </div>;
 }
