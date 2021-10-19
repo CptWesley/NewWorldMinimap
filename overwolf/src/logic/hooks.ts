@@ -27,8 +27,6 @@ function onUpdate(info: any) {
         return;
     }
 
-    console.log(playerData);
-
     for (const cb of callbacks) {
         cb(playerData);
     }
@@ -40,8 +38,6 @@ function transformData(info: any): PlayerData | undefined {
     }
 
     if (!info.location) {
-        console.error('Unsuccesful poll attempt!');
-        console.error(info);
         return undefined;
     }
 
