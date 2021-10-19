@@ -1,20 +1,12 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
 const debug = process.env.DEBUG === 'true';
 const expire = process.env.EXPIRE;
-
-// Set rate limiter
-const limiter = rateLimit({
-    windowMs: 1000, // 1 second
-    max: 1 // 1 request max
-});
-app.use(limiter);
 
 // Set CORS
 app.use(function(req, res, next) {
@@ -24,7 +16,12 @@ app.use(function(req, res, next) {
     next();
 });
 
-// app.use(cors());
+// Set rate limiter
+const limiter = rateLimit({
+    windowMs: 1000, // 1 second
+    max: 4 // 4 request max
+});
+app.use(limiter);
 
 // Set json body parser
 app.use(bodyParser.json());
