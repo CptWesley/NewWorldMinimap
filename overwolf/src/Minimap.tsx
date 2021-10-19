@@ -200,7 +200,7 @@ export default function Minimap(props: IProps) {
         }
 
         for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(pos, {x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y} as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
@@ -301,6 +301,17 @@ export default function Minimap(props: IProps) {
     }
 
     function setPosition(pos: Vector2) {
+        if (appContext.settings.shareLocation) {
+            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, 'UnknownFriend', pos, appContext.settings.friends);
+            sharedLocation.then(r => {
+                if (r !== undefined) {
+                    setFriends(r.friends);
+                } else {
+                    setFriends([]);
+                }
+            });
+        }
+
         if (pos.x === currentPosition.current.x && pos.y === currentPosition.current.y) {
             return;
         }
@@ -311,27 +322,14 @@ export default function Minimap(props: IProps) {
         currentPosition.current = pos;
         store('lastKnownPosition', pos);
         redraw(true);
-
-        if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, 'debug crap' || 'undefined', pos, appContext.settings.friends);
-            sharedLocation.then(r => {
-                console.log("sent");
-                console.log(r);
-                if (r !== undefined) {
-                    setFriends(r.friends);
-                } else {
-                    setFriends([]);
-                }
-            });
-        }
-}
+    }
 
     function setFriends(friends: FriendData[]) {
         if (friends.length === currentFriends.current.length) {
             for (const key in friends) {
                 if (friends[key].name === currentFriends.current[key].name
-                        && friends[key].name === currentFriends.current[key].name
-                        && friends[key].location.x === currentFriends.current[key].location.x) {
+                    && friends[key].name === currentFriends.current[key].name
+                    && friends[key].location.x === currentFriends.current[key].location.x) {
                     return;
                 }
             }
