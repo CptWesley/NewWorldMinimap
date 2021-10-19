@@ -64,7 +64,7 @@ function getPlayersData(players) {
     for (key in players) {
         const playerData = onlinePlayers.get(players[key]);
         if (playerData)
-            data.push(playerData);
+            data.push(playerData.data);
     }
     return data;
 }
