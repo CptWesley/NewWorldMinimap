@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { OWWindow } from '@overwolf/overwolf-api-ts/dist';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
@@ -153,11 +154,13 @@ const hotkeyManager = getHotkeyManager();
 export default function InGameHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();
+    const { t } = useTranslation();
+
     const [inGameWindow] = useState(() => {
         return new OWWindow(windowNames.inGame);
     });
     const [inGameWindowId, setInGameWindowId] = useState<string>();
-    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.frameMenuVisible;
+    const useTransparency = context.settings.transparentHeader && context.gameRunning && !context.appSettingsVisible;
 
     const draggable = useRef<HTMLDivElement | null>(null);
     const hotkeyText = hotkeyManager.getHotkeyText('toggleInGame');
@@ -209,7 +212,7 @@ export default function InGameHeader() {
                 <span>{inGameAppTitle}</span>
                 {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}
             </div>
-            <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow}>
+            <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow} title={t('header.openDesktop')}>
                 <DesktopWindowIcon />
             </button>
             <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>

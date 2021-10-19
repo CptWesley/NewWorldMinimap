@@ -1,0 +1,70 @@
+{
+    "lng": "Italiano",
+    "close": "Chiudi",
+    "selectAll": "Seleziona tutto",
+    "deselectAll": "Deseleziona tutto",
+    "header": {
+        "settings": "Impostazioni",
+        "openInGame": "Apri la finesta in gioco",
+        "openDesktop": "Apri la finestra fuori dal gioco"
+    },
+    "welcome": {
+        "title": "Benvenuto in CptWesley's Minimap",
+        "primary": "Avvia New World per accedere alla minimappa.",
+        "settings": "Puoi accedere alle impostazioni anche se il gioco non è in esecuzione.",
+        "discord": "Sentiti libero di unirti al nostro server Discord per domande, aiuto e suggerimenti che potresti avere: <1>{{discord}}<1>.",
+        "devBuild": "Questa sembra essere una build di sviluppo. Utilizza il bottone sotto per accedere alla minimappa ad una posizione di prova.",
+        "forceMap": "Mostrami la mappa"
+    },
+    "minimap": {
+        "tilesLoading_one": "Caricando {{count}} zona",
+        "tilesLoading_other": "Caricando {{count}} zone"
+    },
+    "settings": {
+        "title": "Impostazioni",
+        "open": "Apri in qualsiasi momento questo menu cliccando con il destro.",
+        "window": {
+            "_": "Questa finestra",
+            "transparentHeader": "Barra del titolo trasparente",
+            "transparentHeaderTooltip": "Rendi la barra del titolo della finestra trasparente quando la mappa è visibile.",
+            "transparentToolbar": "Barra degli strumenti trasparente",
+            "transparentToolbarTooltip": "Rendi la barra degli strumenti della mappa trasparente.",
+            "showHeader": "Mostra barra del titolo",
+            "showHeaderTooltip": "Mostra la barra del titolo quando la mappa è visibile.",
+            "showToolbar": "Mostra la barra degli strumenti",
+            "showToolbarTooltip": "Mostra la barra degli strumenti sopra la mappa.",
+            "zoomLevel": "Livello di ingrandimento",
+            "zoomLevelTooltip": "Determina il livello di ingrandimento sulla mappa. Un basso livello può influire negativamente sulle performance.",
+            "townZoom": "Ingradisci automaticamente nelle città",
+            "townZoomTooltip": "Abilita un diverso livello di ingrandimento quando sei in una città.",
+            "townZoomLevel": "Livello di ingrandimento per le città",
+            "townZoomLevelTooltip": "Determina il livello di ingrandimento sulla mappa quando sei in una città. Un basso livello può influire negativamente sulle performance.",
+            "iconScale": "Scala icone",
+            "iconScaleTooltip": "Determina la grandeza delle icone renderizzate.",
+            "showText": "Mostra testo",
+            "showTextTooltip": "Controlla se mostrare il testo sotto le icone sulla mappa. Se abilitato può influire negativamente sulle performance.",
+            "interpolation": "Interpolazione/estrapolazione della posizione",
+            "interpolationTooltip": "Determina quale algoritmo usare per produrre un movimento più fluido della mappa. 'Interpolazione' offre risultati più fluidi, ma aggiunge un ritardo alla tua posizione. 'Nessuna' offre le performance migliori.",
+            "interpolationNone": "Nessuna",
+            "interpolationLinearInter": "Interpolazione lineare",
+            "interpolationCosineInter": "Interpolazione cosinusoidale",
+            "interpolationLinearExtra": "Estrapolazione lineare",
+            "interpolationCosineExtra": "Estrapolazione cosinusoidale"
+        },
+        "overlay": {
+            "_": "Overlay in gioco",
+            "compassMode": "Overlay in modalità bussola",
+            "compassModeTooltip": "Fa puntare il giocatore sempre a nord e ruotare la mappa intorno al giocatore, come una normale minimappa.",
+            "opacity": "Opacità overlay",
+            "opacityTooltip": "Determina l'opacità dell'overlay.",
+            "shape": "Forma overlay",
+            "shapeTooltip": "Determina la forma dell'overlay.",
+            "shapeRectangular": "Rettangolare",
+            "shapeEllipse": "Ellittica",
+            "shapeDiamond": "A diamante"
+        },
+        "icon": {
+            "_": "Icone"
+        }
+    }
+}

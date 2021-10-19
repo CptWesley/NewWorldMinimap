@@ -1,0 +1,46 @@
+{
+    "categories": {
+        "npc": "NPC",
+        "chests": "Forzieri",
+        "documents": "Documenti",
+        "essences": "Essenze",
+        "fishing": "Pesca",
+        "monsters": "Creature",
+        "ores": "Minerali",
+        "plants": "Piante",
+        "pois": "Punti di Interesse",
+        "town": "Città",
+        "woods": "Alberi"
+    },
+    "markers": {
+        "plants": {
+            "Single_Placeholder_DyePlant": "Prismafiore",
+            "Single_Pumpkin": "Zucca"
+        },
+        "town": {
+            "arcane_repository": "Fonte Arcana",
+            "covenant_adjudicator": "Giudice del Patto",
+            "forge": "Fucina",
+            "governors_desk": "Scrivania del Governatore",
+            "inn": "Locanda",
+            "kitchen": "Cucina",
+            "loom": "Telaio",
+            "marauder_commander": "Comandante dei Predoni",
+            "outfitting_station": "Postazioni di Accessoristica",
+            "smelter": "Fonditore",
+            "stonecutting_table": "Tavolo del Tagliapietre",
+            "storage_shed": "Deposito",
+            "syndicate_alchemist": "Alchimista dell'Unione",
+            "tannery": "Conceria",
+            "territory_planning_board": "Tabellone Progettazione del Territorio",
+            "town_project_board": "Tabellone Progetto Cittadino",
+            "trading_post": "Emporio",
+            "war_board": "Tabellone Guerra",
+            "woodshop": "Falegnameria",
+            "workshop": "Laboratorio"
+        },
+        "woods": {
+            "Briar": "Rovo"
+        }
+    }
+}

@@ -1,4 +1,4 @@
-import { iconNameOverrides } from '../Icons/MapIcons/iconNameOverrides';
+import { getIconNameOverride, saveTemporaryIconName } from '../Icons/MapIcons/iconNameOverrides';
 
 function getChestCategoryName(str: string) {
     switch (str.charAt(0)) {
@@ -38,15 +38,15 @@ function predictCorrectName(str: string) {
     return capitalizedParts.join(' ');
 }
 
-export function getIconName(type: string) {
-    const lookup = iconNameOverrides[type];
+export function getIconName(category: string, type?: string) {
+    const lookup = getIconNameOverride(category, type);
 
     if (lookup) {
         return lookup;
     }
 
-    const prediction = predictCorrectName(type);
-    iconNameOverrides[type] = prediction;
+    const prediction = predictCorrectName(type ? type : category);
+    saveTemporaryIconName(category, type, prediction);
 
     return prediction;
 }

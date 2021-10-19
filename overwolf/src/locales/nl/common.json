@@ -1,0 +1,79 @@
+{
+    "lng": "Nederlands",
+    "close": "Sluiten",
+    "selectAll": "Alles selecteren",
+    "deselectAll": "Alles deselecteren",
+    "header": {
+        "settings": "Instellingen",
+        "openInGame": "Venster in-game openen",
+        "openDesktop": "Venster buiten spel openen"
+    },
+    "welcome": {
+        "title": "Welkom bij CptWesley's Minimap",
+        "primary": "Start New World om de minimap te gebruiken.",
+        "settings": "Je kunt ook de instellingen van de applicatie aanpassen terwijl het spel niet actief is..",
+        "discord": "Word lid van onze Discord-server voor vragen, hulp, en eventuele suggesties: <1>{{discord}}<1>.",
+        "devBuild": "Dit lijkt een ontwikkelaarsbuild te zijn. Gebruik de onderstaande knop om de kaart te tonen op een debug-locatie.",
+        "forceMap": "Laat de kaart zien"
+    },
+    "minimap": {
+        "tilesLoading_one": "{{count}} tegel aan het laden",
+        "tilesLoading_other": "{{count}} tegels aan het laden"
+    },
+    "settings": {
+        "title": "Instellingen",
+        "window": {
+            "_": "Dit venster",
+            "transparentHeader": "Doorzichtige titelbalk",
+            "transparentHeaderTooltip": "Maakt de titelbalk doorzichtig wanneer de kaart wordt getoond.",
+            "transparentToolbar": "Doorzichtige werkbalk",
+            "transparentToolbarTooltip": "Maakt werkbalken boven de kaart doorzichtig.",
+            "showHeader": "Titelbalk tonen",
+            "showHeaderTooltip": "Maakt de titelbalk zichtbaar wanneer de kaart wordt getoond.",
+            "showToolbar": "Werkbalk tonen",
+            "showToolbarTooltip": "Laat werkbalken boven de kaart zien.",
+            "zoomLevel": "Zoomniveau",
+            "zoomLevelTooltip": "Bepaalt het zoomniveau van de kaart. Een laag zoomniveau kan de prestaties negatief beïnvloeden.",
+            "townZoom": "Automatisch zoomen in plaatsen",
+            "townZoomTooltip": "Dit inschakelen stelt je in staat om een los zoomniveau in te stellen voor plaatsen.",
+            "townZoomLevel": "Zoomniveau in plaatsen",
+            "townZoomLevelTooltip": "Bepaalt het zoomniveau van de kaart in plaatsen. Een laag zoomniveau kan de prestaties negatief beïnvloeden.",
+            "iconScale": "Grootte van iconen",
+            "iconScaleTooltip": "Bepaalt de grootte van iconen op de kaart.",
+            "showText": "Tekst tonen",
+            "showTextTooltip": "Bepaalt of er tekst wordt weergegeven onder iconen op de kaart. Inschakelen kan de prestaties negatief beïnvloeden.",
+            "interpolation": "Locatie interpoleren/extrapoleren",
+            "interpolationTooltip": "Bepaalt welk algoritme gebruikt wordt voor vloeiende bewegingen van de kaart. 'Interpolatie' geeft de vloeiendste resultaten, maar voegt ook vertraging toe aan je positie. 'Geen' geeft de beste prestaties.",
+            "interpolationNone": "Geen",
+            "interpolationLinearInter": "Lineaire Interpolatie",
+            "interpolationCosineInter": "Cosinus Interpolatie",
+            "interpolationLinearExtra": "Lineaire Extrapolatie",
+            "interpolationCosineExtra": "Cosinus Extrapolatie"
+        },
+        "overlay": {
+            "_": "In-game overlay",
+            "compassMode": "Kompasmodus overlay",
+            "compassModeTooltip": "Zorgt ervoor dat de speler altijd richting het noorden kijkt, en draait de kaart mee, zoals een klassieke minimap.",
+            "opacity": "Ondoorzichtigheid overlay",
+            "opacityTooltip": "Bepaalt de ondoorzichtigheid van de overlay.",
+            "shape": "Vorm van overlay",
+            "shapeTooltip": "Bepaalt de vorm van de overlay.",
+            "shapeRectangular": "Rechthoekig",
+            "shapeEllipse": "Ellips",
+            "shapeDiamond": "Ruit"
+        },
+        "icon": {
+            "_": "Iconen"
+        },
+        "friend": {
+            "_": "Vrienden",
+            "shareLocation": "Locatie delen met vrienden",
+            "shareLocationTooltip": "Deel je locatie met iedereen die je vriend code heeft.",
+            "friendCode": "Jouw vriend code",
+            "friendCodeTooltip": "Stuur deze code naar je vrienden om je locatie te delen.",
+            "friends": "Jouw vrienden",
+            "friendsTooltip": "Lijst van vrienden. Eén vriend code per regel.",
+            "regenerate": "Genereer een nieuwe vriend code als je niet meer wilt dat sommige mensen je kunnen volgen."
+        }
+    }
+}

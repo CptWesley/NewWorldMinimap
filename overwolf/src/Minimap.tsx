@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { updateFriendLocation } from './logic/friends';
@@ -53,6 +54,7 @@ export default function Minimap(props: IProps) {
         className,
     } = props;
     const { classes } = useStyles();
+    const { t } = useTranslation();
 
     const appContext = useContext(AppContext);
 
@@ -200,7 +202,7 @@ export default function Minimap(props: IProps) {
         }
 
         for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(pos, {x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y} as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
@@ -301,6 +303,17 @@ export default function Minimap(props: IProps) {
     }
 
     function setPosition(pos: Vector2) {
+        if (appContext.settings.shareLocation) {
+            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, 'UnknownFriend', pos, appContext.settings.friends);
+            sharedLocation.then(r => {
+                if (r !== undefined) {
+                    setFriends(r.friends);
+                } else {
+                    setFriends([]);
+                }
+            });
+        }
+
         if (pos.x === currentPosition.current.x && pos.y === currentPosition.current.y) {
             return;
         }
@@ -317,8 +330,8 @@ export default function Minimap(props: IProps) {
         if (friends.length === currentFriends.current.length) {
             for (const key in friends) {
                 if (friends[key].name === currentFriends.current[key].name
-                        && friends[key].name === currentFriends.current[key].name
-                        && friends[key].location.x === currentFriends.current[key].location.x) {
+                    && friends[key].name === currentFriends.current[key].name
+                    && friends[key].location.x === currentFriends.current[key].location.x) {
                     return;
                 }
             }
@@ -339,7 +352,6 @@ export default function Minimap(props: IProps) {
     }
 
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-        console.log(e.deltaY);
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
     }
 
@@ -392,11 +404,11 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), 100)
+            ? window.setInterval(() => redraw(false), 100)
             : undefined;
 
         return function () {
-            clearInterval(interval);
+            window.clearInterval(interval);
         };
     }, [interpolationEnabled]);
 
@@ -419,18 +431,6 @@ export default function Minimap(props: IProps) {
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
-            if (appContext.settings.shareLocation) {
-                const sharedLocation = updateFriendLocation(appContext.settings.friendCode, info.name || 'undefined', info.position, appContext.settings.friends);
-                sharedLocation.then(r => {
-                    console.log("sent");
-                    console.log(r);
-                    if (r !== undefined) {
-                        setFriends(r.friends);
-                    } else {
-                        setFriends([]);
-                    }
-                });
-            }
         });
 
         return function () {
@@ -447,7 +447,7 @@ export default function Minimap(props: IProps) {
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
-                <p>Loading {tilesDownloading} tiles</p>
+                <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
     </div>;

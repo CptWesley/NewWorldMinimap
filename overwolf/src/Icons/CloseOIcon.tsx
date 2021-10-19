@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function ReturnIcon() {
+export default function CloseOIcon() {
     return (
         <svg viewBox='0 0 40 40'>
             <circle

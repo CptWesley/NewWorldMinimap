@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
-const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT;
@@ -18,12 +17,12 @@ app.use(function(req, res, next) {
 // Set rate limiter
 const limiter = rateLimit({
     windowMs: 1000, // 1 second
-    max: 1 // 1 request max
+    max: 4 // 4 request max
 });
 app.use(limiter);
 
 // Set json body parser
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(function(err, req, res, next) {
     if (err instanceof SyntaxError && err.status === 400 && "body" in err) {
         res.status(400).send("400 Bad request");
@@ -65,7 +64,7 @@ function getPlayersData(players) {
     for (key in players) {
         const playerData = onlinePlayers.get(players[key]);
         if (playerData)
-            data.push(playerData);
+            data.push(playerData.data);
     }
     return data;
 }
