@@ -65,6 +65,16 @@
         },
         "icon": {
             "_": "Icons"
+        },
+        "friend": {
+            "_": "Friends",
+            "shareLocation": "Share location with friends",
+            "shareLocationTooltip": "Share your in-game location with any player that has your code.",
+            "friendCode": "Your friend code",
+            "friendCodeTooltip": "Send this code to your friends to share your location.",
+            "friends": "Your friends",
+            "friendsTooltip": "List of your friends. One friend code per line.",
+            "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer."
         }
     }
 }

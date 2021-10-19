@@ -1,6 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import GenerateIcon from '@/Icons/GenerateIcon';
+import { generateRandomToken } from '@/logic/util';
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
@@ -34,35 +35,35 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
     return <>
         <div>
             <div className={sharedClasses.setting}>
-                <label className={sharedClasses.checkbox} title='Share your location with any player that have your code.'>
+                <label className={sharedClasses.checkbox} title={t('settings.friend.shareLocationTooltip')}>
                     <input
                         type='checkbox'
                         checked={settings.shareLocation}
                         onChange={e => updateSimpleSetting('shareLocation', e.currentTarget.checked)}
                     />
-                    Share location with friends
+                    {t('settings.friend.shareLocation')}
                 </label>
             </div>
             <div className={sharedClasses.setting}>
-                <label className={sharedClasses.textbox} title='Send this code to your friends to share your location.'>
+                <label className={sharedClasses.textbox} title={t('settings.friend.friendCodeTooltip')}>
                     <input
                         type='text'
                         readOnly
                         value={settings.friendCode}
                     />
-                    Your code
-                    <button className={classes.friendsGenerateButton} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
+                    {t('settings.friend.friendCode')}
+                    <button className={classes.friendsGenerateButton} title={t('settings.friend.regenerate')} onClick={() => updateSimpleSetting('friendCode', generateRandomToken())}>
                         <GenerateIcon />
                     </button>
                 </label>
             </div>
             <div className={sharedClasses.setting}>
-                <label className={sharedClasses.textarea} title='List of friend codes one per line.'>
+                <label className={sharedClasses.textarea} title={t('settings.friend.friendsTooltip')}>
                     <textarea
                         value={settings.friends}
                         onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
                     />
-                    Friends
+                    {t('settings.friend.friends')}
                 </label>
             </div>
         </div>
