@@ -203,7 +203,7 @@ export default function AppSettings(props: IProps) {
             <PageComponent {...pageProps} />
         </div>
         <footer className={classes.footer}>
-            <span>Open this menu at any time by right-clicking.</span>
+            <span>{t('settings.open')}</span>
             <LanguagePicker />
         </footer>
     </div>;
