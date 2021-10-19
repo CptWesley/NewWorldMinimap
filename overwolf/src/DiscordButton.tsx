@@ -15,6 +15,10 @@ const useStyles = makeStyles()(theme => ({
     discordLink: {
         color: theme.color,
         textDecoration: 'none',
+
+        '&:hover': {
+            textDecoration: 'underline',
+        },
     },
     text: {
         fontSize: typeof theme.bodyFontSize === 'number'
