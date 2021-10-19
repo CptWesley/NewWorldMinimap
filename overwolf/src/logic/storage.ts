@@ -42,7 +42,6 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoomLevel',
     'townZoom',
     'interpolation',
-    'lastKnownPosition',
 ];
 
 export const iconSettingStorageScope = 'icon';
