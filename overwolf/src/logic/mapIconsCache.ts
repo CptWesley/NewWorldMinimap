@@ -18,12 +18,12 @@ export default class MapIconsCache {
             return undefined;
         }
 
-        const typeImage = this.cache[type] as unknown;
+        const typeImage = (this.cache as Record<string, unknown>)[type];
         if (typeImage instanceof ImageBitmap) {
             return typeImage;
         }
 
-        const categoryImage = this.cache[category] as unknown;
+        const categoryImage = (this.cache as Record<string, unknown>)[category];
         if (categoryImage instanceof ImageBitmap) {
             return categoryImage;
         }

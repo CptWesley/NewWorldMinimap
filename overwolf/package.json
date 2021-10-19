@@ -1,10 +1,11 @@
 {
   "name": "cptwesley-minimap",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --mode=development --env makeOpk",
+    "build": "webpack --mode=development",
+    "build:prod": "webpack --mode=production --env makeOpk",
     "dev": "webpack --watch --mode=development",
     "watch": "webpack --watch --mode=development",
     "type-check": "tsc --sourcemap false --incremental --skipLibCheck -w --noemit",
@@ -44,10 +45,13 @@
     "@fontsource/lato": "^4.5.0",
     "clsx": "^1.1.1",
     "dotenv-webpack": "^7.0.3",
+    "i18next": "^21.3.2",
+    "i18next-browser-languagedetector": "^6.1.2",
     "immer": "^9.0.6",
     "lodash-es": "^4.17.21",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-i18next": "^11.12.0",
     "tss-react": "^0.9.4"
   }
 }

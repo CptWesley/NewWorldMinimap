@@ -1,5 +1,7 @@
 import React from 'react';
+import { Trans, useTranslation } from 'react-i18next';
 import Button from './Button';
+import LanguagePicker from './LanguagePicker';
 import { discordUrl } from './links';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles } from './theme';
@@ -32,11 +34,15 @@ const useStyles = makeStyles()(theme => ({
     discordLink: {
         color: theme.linkColor,
     },
+    gap: {
+        flexGrow: 1,
+    },
 }));
 
 const backgroundController = getBackgroundController();
 export default function Welcome() {
     const { classes } = useStyles();
+    const { t } = useTranslation();
 
     function tryForceMap() {
         backgroundController.debug_setGameRunning(true);
@@ -44,14 +50,20 @@ export default function Welcome() {
 
     return <div className={classes.root}>
         <img className={classes.background} src='/img/map-crop.svg' />
-        <h2>Welcome to {NWMM_APP_NAME}</h2>
-        <p>Launch New World to access the minimap.</p>
-        <p>You may also access the application settings while the game is not running.</p>
-        <p>Feel free to join our Discord server for questions, help, and suggestions you might have: <a className={classes.discordLink} href={discordUrl} target='_blank'>{discordUrl}</a>.</p>
-        {!NWMM_APP_BUILD_OPK && <>
+        <h2>{t('welcome.title')}</h2>
+        <p>{t('welcome.primary')}</p>
+        <p>{t('welcome.settings')}</p>
+        <p>
+            <Trans i18nKey='welcome.discord' tOptions={{ discord: discordUrl }}>
+                Join <a className={classes.discordLink} href={discordUrl} target='_blank'>discord</a>!
+            </Trans>
+        </p>
+        {!NWMM_APP_BUILD_PRODUCTION && <>
             <hr />
-            <p>This appears to be a development build. Use the button below to access the minimap at a debug location.</p>
-            <Button onClick={tryForceMap}>Show me the map</Button>
+            <p>{t('welcome.devBuild')}</p>
+            <Button onClick={tryForceMap}>{t('welcome.forceMap')}</Button>
         </>}
+        <div className={classes.gap} />
+        <LanguagePicker />
     </div>;
 }

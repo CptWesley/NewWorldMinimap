@@ -3,8 +3,8 @@ import produce from 'immer';
 import React, { useContext, useState } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import CloseOIcon from './Icons/CloseOIcon';
 import GenerateIcon from './Icons/GenerateIcon';
-import ReturnIcon from './Icons/ReturnIcon';
 import SelectIcon from './Icons/SelectIcon';
 import UnselectIcon from './Icons/UnselectIcon';
 import { Interpolation, SimpleStorageSetting, store, storeIconCategory, storeIconType, zoomLevelSettingBounds } from './logic/storage';
@@ -332,7 +332,7 @@ export default function FrameMenu(props: IProps) {
 
     return <div className={rootClassName}>
         <button className={classes.return} onClick={onClose}>
-            <ReturnIcon />
+            <CloseOIcon />
         </button>
         <h2 className={classes.title}>Options</h2>
         <span className={classes.footer}>Open this menu at any time by right-clicking in the application.</span>

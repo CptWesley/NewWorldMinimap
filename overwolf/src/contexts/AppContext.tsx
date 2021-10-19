@@ -11,7 +11,7 @@ export interface IAppContext {
     toggleFrameMenu: () => void;
     gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
-    frameMenuVisible: boolean;
+    appSettingsVisible: boolean;
 }
 
 export function loadAppContextSettings(): AppContextSettings {
@@ -46,7 +46,7 @@ export const defaultAppContext: IAppContext = {
     toggleFrameMenu: () => { },
     gameRunning: false,
     isTransparentSurface: undefined,
-    frameMenuVisible: false,
+    appSettingsVisible: false,
 };
 
 export const AppContext = React.createContext<IAppContext>(defaultAppContext);

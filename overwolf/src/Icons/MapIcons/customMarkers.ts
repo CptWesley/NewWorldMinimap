@@ -920,6 +920,10 @@ export const customMarkers = {
                 x: 9346,
                 y: 2656,
             },
+            'windsward_3': {
+                x: 9345,
+                y: 2753,
+            },
             'reekwater_1': {
                 x: 11012,
                 y: 3301,
