@@ -22,6 +22,7 @@
     },
     "settings": {
         "title": "Impostazioni",
+        "open": "Apri in qualsiasi momento questo menu cliccando con il destro.",
         "window": {
             "_": "Questa finestra",
             "transparentHeader": "Barra del titolo trasparente",
@@ -43,7 +44,12 @@
             "showText": "Mostra testo",
             "showTextTooltip": "Controlla se mostrare il testo sotto le icone sulla mappa. Se abilitato può influire negativamente sulle performance.",
             "interpolation": "Interpolazione/estrapolazione della posizione",
-            "interpolationTooltip": "Determina quale algoritmo usare per produrre un movimento più fluido della mappa. 'Interpolation' offre risultati più fluidi, ma aggiunge un ritardo alla tua posizione. 'None' offre le performance migliori."
+            "interpolationTooltip": "Determina quale algoritmo usare per produrre un movimento più fluido della mappa. 'Interpolazione' offre risultati più fluidi, ma aggiunge un ritardo alla tua posizione. 'Nessuna' offre le performance migliori.",
+            "interpolationNone": "Nessuna",
+            "interpolationLinearInter": "Interpolazione lineare",
+            "interpolationCosineInter": "Interpolazione cosinusoidale",
+            "interpolationLinearExtra": "Estrapolazione lineare",
+            "interpolationCosineExtra": "Estrapolazione cosinusoidale"
         },
         "overlay": {
             "_": "Overlay in gioco",
