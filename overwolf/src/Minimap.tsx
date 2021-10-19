@@ -15,12 +15,14 @@ import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
+import MinimapToolbar from '@/MinimapToolbar';
+import RecenterIcon from '@/Icons/RecenterIcon';
 
 interface IProps {
     className?: string;
 }
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()(theme => ({
     minimap: {
         position: 'relative',
     },
@@ -42,7 +44,40 @@ const useStyles = makeStyles()({
         bottom: 0,
         zIndex: globalLayers.minimapCanvas,
     },
-});
+    controlButton: {
+        width: 42,
+        background: 'transparent',
+        border: 'none',
+        color: '#fff',
+
+        outline: 'none',
+
+        '&:hover': {
+            background: theme.headerButtonHover,
+        },
+
+        '&:active': {
+            background: theme.headerButtonPress,
+        },
+
+        '&:focus': {
+            outline: 'none',
+        },
+
+        '& > svg': {
+            width: 30,
+            height: 30,
+        },
+    },
+    close: {
+        '&:hover': {
+            background: theme.headerCloseHover,
+        },
+        '&:active': {
+            background: theme.headerClosePress,
+        },
+    },
+}));
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
@@ -111,7 +146,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const mapCenterPos = mapScrolled.current && !renderAsCompass ? mapPos : pos;
+        const mapCenterPos = !renderAsCompass ? mapPos : pos;
         const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
@@ -299,7 +334,6 @@ export default function Minimap(props: IProps) {
     }
 
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-        console.log(e.deltaY);
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
     }
 
@@ -307,22 +341,25 @@ export default function Minimap(props: IProps) {
         scrollingMap.current = true;
     }
 
-    function handleDoubleClick() {
+    function onRecenterMap() {
         mapScrolled.current = false;
         currentMapPosition.current = currentPlayerPosition.current;
+        appContext.settings.showToolbar = false;
+        appContext.update(appContext.settings);
     }
 
     function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
         if (!appContext.isTransparentSurface) {
             lastMousePos.current = currentMousePos.current;
             currentMousePos.current = {x: e.pageX, y: e.pageY} as Vector2;
-            if (scrollingMap.current) {
-                const xMod = currentMousePos.current.x - lastMousePos.current.x;
-                const yMod = currentMousePos.current.y - lastMousePos.current.y;
+            const xMod = currentMousePos.current.x - lastMousePos.current.x;
+            const yMod = currentMousePos.current.y - lastMousePos.current.y;
+            if (scrollingMap.current && (Math.abs(xMod) > 5 || Math.abs(yMod) > 5)) {
                 currentMapPosition.current.x = currentMapPosition.current.x - xMod;
                 currentMapPosition.current.y = currentMapPosition.current.y + yMod;
-                redraw(true);
                 mapScrolled.current = true;
+                appContext.settings.showToolbar = true;
+                appContext.update(appContext.settings);
             }
         }
     }
@@ -422,12 +459,16 @@ export default function Minimap(props: IProps) {
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
             onMouseMove={handleMouseMove}
-            onDoubleClick={handleDoubleClick}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
                 <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
+        <MinimapToolbar>
+            <button className={clsx(classes.controlButton, classes.close)} onClick={onRecenterMap}>
+                <RecenterIcon/>
+            </button>
+        </MinimapToolbar>
     </div>;
 }

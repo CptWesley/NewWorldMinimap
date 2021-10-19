@@ -2,11 +2,12 @@ import clsx from 'clsx';
 import React, { useContext } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import { makeStyles, theme } from './theme';
+import { makeStyles } from './theme';
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()(theme => ({
     toolbar: {
         position: 'relative',
+        width: '40px',
         zIndex: globalLayers.minimapToolbar,
 
         margin: theme.spacing(1, 1, 0, 1),
