@@ -63,6 +63,7 @@ export default function Minimap(props: IProps) {
     const lastPosition = useRef<Vector2>(currentPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
+    const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const canvas = useRef<HTMLCanvasElement>(null);
@@ -305,7 +306,7 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, 'UnknownFriend', pos, appContext.settings.friends);
+            const sharedLocation = updateFriendLocation(appContext.settings.friendCode, playerName.current, pos, appContext.settings.friends);
             sharedLocation.then(r => {
                 if (r !== undefined) {
                     setFriends(r.friends);
@@ -432,6 +433,10 @@ export default function Minimap(props: IProps) {
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
+
+            if (info.name) {
+                playerName.current = info.name;
+            }
         });
 
         return function () {
