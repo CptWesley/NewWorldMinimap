@@ -13,7 +13,7 @@ interface ISvgMapIconProps extends ISvgMapIconConsumerProps {
     height?: number;
 }
 
-export const svgMapIconDefaultProps: ISvgMapIconProps = {
+export const svgMapIconDefaultProps: Required<Omit<ISvgMapIconProps, 'viewBox'>> = {
     stroke: '#000',
     strokeWidth: 1,
     fill: '#fff',
@@ -22,24 +22,26 @@ export const svgMapIconDefaultProps: ISvgMapIconProps = {
     scale: 1,
 };
 
-export function getSvgMapIconProps<T extends ISvgMapIconProps>(props: T) {
-    return { ...svgMapIconDefaultProps, ...props };
+export function getSvgMapIconProps<T extends ISvgMapIconProps>(props: T): T & typeof svgMapIconDefaultProps {
+    const next = { ...svgMapIconDefaultProps, ...props };
+    return next;
 }
 
 const xmlNamespace = 'http://www.w3.org/2000/svg';
 
 type SvgMapIconPropsType = React.PropsWithChildren<ISvgMapIconProps>;
 export default function SvgMapIcon(props: SvgMapIconPropsType) {
+    const processedProps = getSvgMapIconProps(props);
     const {
         children,
-        stroke = '#000',
-        strokeWidth = 1,
-        fill = '#fff',
-        width = 16,
-        height = 16,
-        scale = 1,
+        stroke,
+        strokeWidth,
+        fill,
+        width,
+        height,
+        scale,
         viewBox = `0 0 ${width} ${height}`,
-    } = getSvgMapIconProps(props);
+    } = processedProps;
 
     return (
         <svg
