@@ -70,14 +70,15 @@ function getPlayersData(players) {
 }
 
 function validateJSON(json) {
-    if (json !== undefined
-            && json.id !== undefined
-            && json.friends !== undefined
-            && json.data !== undefined
-            && json.data.name !== undefined
-            && json.data.location !== undefined
-            && json.data.location.x !== undefined
-            && json.data.location.x !== undefined) {
+    if (typeof json === 'object'
+        && typeof json.id === 'string'
+        && Array.isArray(json.friends)
+        && json.friends.every(f => typeof f === 'string')
+        && typeof json.data === 'object'
+        && typeof json.data.name === 'string'
+        && typeof json.data.location === 'object'
+        && typeof json.data.location.x === 'number'
+        && typeof json.data.location.y === 'number') {
         return true;
     }
     return false;
