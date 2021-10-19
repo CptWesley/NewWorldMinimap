@@ -8,6 +8,8 @@ export const supportedLocales = Object.keys(locales) as readonly SupportedLocale
 
 const defaultLanguage: SupportedLocale = 'en';
 
+export const storageKey = 'i18nextLng';
+
 export const i18n = i18next;
 i18n
     .use(I18nextBrowserLanguageDetector)
@@ -24,8 +26,21 @@ i18n
         react: {
             useSuspense: true,
         },
+        detection: {
+            lookupSessionStorage: storageKey,
+            lookupLocalStorage: storageKey,
+        },
     });
 
 export async function changeLanguage(language: SupportedLocale) {
     await i18next.changeLanguage(language);
 }
+
+window.addEventListener('storage', e => {
+    if (e.key === storageKey) {
+        const nextLng = localStorage.getItem(storageKey) || sessionStorage.getItem(storageKey);
+        if (nextLng) {
+            changeLanguage(nextLng as SupportedLocale);
+        }
+    }
+});
