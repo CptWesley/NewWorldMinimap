@@ -228,7 +228,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (squaredDistance(lastPosition.current, currentPosition.current) > 1000 || appContext.settings.interpolation === 'none') {
+        if (timeDif > positionUpdateRate || squaredDistance(lastPosition.current, currentPosition.current) > 1000 || appContext.settings.interpolation === 'none') {
             draw(currentPosition.current, currentAngle);
             return;
         }
