@@ -272,7 +272,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > 1000 || appContext.settings.interpolation === 'none' || scrollingMap.current) {
+        if (timeDif > positionUpdateRate || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > 1000 || appContext.settings.interpolation === 'none' || scrollingMap.current) {
             draw(currentPlayerPosition.current, currentMapPosition.current, currentAngle);
             return;
         }
