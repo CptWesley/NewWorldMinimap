@@ -105,7 +105,7 @@ export default function CarrotIcon(props: ISvgMapIconConsumerProps) {
             289.14,29.32 295.56,29.70 299.00,30.00 Z'
         />
         <path id='carrot top'
-            fill='green' stroke='black' stroke-width='16'
+            fill='green' stroke='black' strokeWidth='16'
             d='M 299.00,30.00
             C 298.58,27.60 298.05,25.46 298.37,23.00
             300.26,8.35 312.30,7.51 324.00,5.71
