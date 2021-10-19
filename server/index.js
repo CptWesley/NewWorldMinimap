@@ -8,19 +8,19 @@ const port = process.env.PORT;
 const debug = process.env.DEBUG === 'true';
 const expire = process.env.EXPIRE;
 
-// Set rate limiter
-const limiter = rateLimit({
-    windowMs: 1000, // 1 second
-    max: 1 // 1 request max
-});
-app.use(limiter);
-
 // Set CORS
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
+// Set rate limiter
+const limiter = rateLimit({
+    windowMs: 1000, // 1 second
+    max: 1 // 1 request max
+});
+app.use(limiter);
 
 // Set json body parser
 app.use(bodyParser.json());
