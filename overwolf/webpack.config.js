@@ -1,5 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OverwolfPlugin = require('./overwolf.webpack');
@@ -73,6 +74,7 @@ module.exports = (env, argv) => {
                 filename: path.resolve(__dirname, './dist/in_game.html'),
                 chunks: ['in_game']
             }),
+            new Dotenv(),
             new OverwolfPlugin(env)
         ]
     };

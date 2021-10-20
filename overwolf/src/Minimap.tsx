@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMapTiles } from './logic/map';
@@ -58,9 +59,11 @@ export default function Minimap(props: IProps) {
     const appContext = useContext(AppContext);
 
     const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const currentFriends = useRef<FriendData[]>([]);
     const lastPosition = useRef<Vector2>(currentPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
+    const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const canvas = useRef<HTMLCanvasElement>(null);
@@ -75,6 +78,7 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
+    // eslint-disable-next-line complexity
     const draw = (pos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
@@ -199,6 +203,40 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        for (const key in currentFriends.current) {
+            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const icon = mapIconsCache.getFriendIcon();
+            if (!icon) { continue; }
+            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+
+            if (lastDraw.current !== currentDraw) {
+                return;
+            }
+
+            if (renderAsCompass) {
+                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
+            } else {
+                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            }
+
+            if (appContext.settings.showText) {
+                ctx.textAlign = 'center';
+                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.strokeStyle = '#000';
+                ctx.fillStyle = '#fff';
+
+                if (renderAsCompass) {
+                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    ctx.strokeText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                } else {
+                    ctx.strokeText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                }
+            }
+        }
+
         const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
@@ -267,6 +305,17 @@ export default function Minimap(props: IProps) {
     }
 
     function setPosition(pos: Vector2) {
+        if (appContext.settings.shareLocation) {
+            const sharedLocation = updateFriendLocation(getFriendCode(), playerName.current, pos, appContext.settings.friends);
+            sharedLocation.then(r => {
+                if (r !== undefined) {
+                    setFriends(r.friends);
+                } else {
+                    setFriends([]);
+                }
+            });
+        }
+
         if (pos.x === currentPosition.current.x && pos.y === currentPosition.current.y) {
             return;
         }
@@ -276,6 +325,21 @@ export default function Minimap(props: IProps) {
         lastPosition.current = currentPosition.current;
         currentPosition.current = pos;
         store('lastKnownPosition', pos);
+        redraw(true);
+    }
+
+    function setFriends(friends: FriendData[]) {
+        if (friends.length === currentFriends.current.length) {
+            for (const key in friends) {
+                if (friends[key].name === currentFriends.current[key].name
+                    && friends[key].location.x === currentFriends.current[key].location.x
+                    && friends[key].location.y === currentFriends.current[key].location.y) {
+                    return;
+                }
+            }
+        }
+
+        currentFriends.current = friends;
         redraw(true);
     }
 
@@ -346,7 +410,9 @@ export default function Minimap(props: IProps) {
             : undefined;
 
         return function () {
-            clearInterval(interval);
+            if (interval) {
+                clearInterval(interval);
+            }
         };
     }, [interpolationEnabled, appContext.settings.resamplingRate]);
 
@@ -365,15 +431,20 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
+        (window as any).setFriends = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
+
+            if (info.name) {
+                playerName.current = info.name;
+            }
         });
 
         return function () {
             callbackUnregister();
         };
-    }, []);
+    }, [appContext.settings]);
 
     return <div className={clsx(classes.minimap, className)}>
         <canvas

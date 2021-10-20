@@ -84,3 +84,7 @@ export function predictAngle(start: number, end: number) {
     const dif = bestEnd - start;
     return bestEnd + dif;
 }
+
+export function generateRandomToken() {
+    return Math.random().toString(36).substr(2);
+}

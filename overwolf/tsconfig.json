@@ -24,7 +24,8 @@
     "strict": true,
     "target": "es2017",
     "types": [
-      "@overwolf/types"
+      "@overwolf/types",
+      "@types/node"
     ],
     "rootDirs": [
       "./src"
