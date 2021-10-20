@@ -51,7 +51,7 @@
             "interpolationLinearExtra": "Lineaire Extrapolatie",
             "interpolationCosineExtra": "Cosinus Extrapolatie",
             "resamplingRate": "Opschalingsfactor",
-            "resamplingRateTooltip": "Het aantal monsters dat wordt genomen voor inter/extra-polatie."
+            "resamplingRateTooltip": "Het aantal monsters dat wordt genomen voor inter/extra-polatie. Een hogere waardere geeft een vloeierende ervaring, maar heeft mogelijk slechtere presetaties."
         },
         "overlay": {
             "_": "In-game overlay",
