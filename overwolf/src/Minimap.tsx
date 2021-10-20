@@ -409,6 +409,8 @@ export default function Minimap(props: IProps) {
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
         if (NWMM_APP_WINDOW !== 'desktop') { return; }
+        // Left mouse button only
+        if (e.pointerType === 'mouse' && e.button !== 0) { return; }
         scrollingMap.current = {
             pointerId: e.pointerId,
             position: { x: e.pageX, y: e.pageY },
