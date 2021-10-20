@@ -386,6 +386,7 @@ export default function Minimap(props: IProps) {
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (NWMM_APP_WINDOW !== 'desktop') { return; }
         scrollingMap.current = {
             pointerId: e.pointerId,
             position: { x: e.pageX, y: e.pageY },
@@ -408,6 +409,9 @@ export default function Minimap(props: IProps) {
             if (dragAllowed) {
                 if (!isMapDragged) {
                     setIsMapDragged(true);
+                    // Reset the position to make the transition smoother
+                    scrollingMap.current.position.x = e.pageX;
+                    scrollingMap.current.position.y = e.pageY;
                 }
                 if (!mapPositionOverride.current) {
                     mapPositionOverride.current = { ...currentPlayerPosition.current };
@@ -533,16 +537,18 @@ export default function Minimap(props: IProps) {
                 <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
-        <MinimapToolbar className={classes.mapControls}>
-            {isMapDragged && <MinimapToolbarButton onClick={onRecenterMap} title={t('minimap.recenter')}>
-                <RecenterIcon />
-            </MinimapToolbarButton>}
-            <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomOut')}>
-                <ZoomOutIcon />
-            </MinimapToolbarButton>
-            <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomIn')}>
-                <ZoomInIcon />
-            </MinimapToolbarButton>
-        </MinimapToolbar>
+        {NWMM_APP_WINDOW === 'desktop' &&
+            <MinimapToolbar className={classes.mapControls}>
+                {isMapDragged && <MinimapToolbarButton onClick={onRecenterMap} title={t('minimap.recenter')}>
+                    <RecenterIcon />
+                </MinimapToolbarButton>}
+                <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomOut')}>
+                    <ZoomOutIcon />
+                </MinimapToolbarButton>
+                <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomIn')}>
+                    <ZoomInIcon />
+                </MinimapToolbarButton>
+            </MinimapToolbar>
+        }
     </div>;
 }
