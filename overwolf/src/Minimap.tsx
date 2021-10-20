@@ -81,7 +81,6 @@ export default function Minimap(props: IProps) {
 
     // eslint-disable-next-line complexity
     const draw = (pos: Vector2, angle: number) => {
-        const startTime = performance.now();
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -259,9 +258,6 @@ export default function Minimap(props: IProps) {
                 ctx.restore();
             }
         }
-        const endTime = performance.now();
-        const difTime = endTime - startTime;
-        console.log('Draw took: ' + difTime + ' ms.');
     };
 
     function drawWithInterpolation(force: boolean) {
