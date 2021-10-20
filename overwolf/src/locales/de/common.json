@@ -1,3 +1,81 @@
 {
-   "lng": "Deutsch"
+    "lng": "Deutsch",
+    "close": "Schließen",
+    "selectAll": "Alles auswählen",
+    "deselectAll": "Alles abwählen",
+    "header": {
+        "settings": "Optionen",
+        "openInGame": "in-game Fenster öffnen",
+        "openDesktop": "Fenster außerhalb des Spiels öffnen"
+    },
+    "welcome": {
+        "title": "Willkommen zu CptWesley's Minimap",
+        "primary": "Starte New World um auf die Minimap zuzugreifen.",
+        "settings": "Du kannst auf die Applikationseinstellungen auch außerhalb des Spiels zugreifen.",
+        "discord": "Du kannst unserem Discordserver beitreten wenn du Fragen oder Vorschläge hast, oder Hilfe brauchst: <1>{{discord}}<1>.",
+        "devBuild": "Dies ist eine Entwicklungsversion. Benutz den Knopf hierunter um die Minimap an einem debug Standort aufzurufen.",
+        "forceMap": "Karte Anzeigen"
+    },
+    "minimap": {
+        "tilesLoading_one": "Lade {{count}} Kachel",
+        "tilesLoading_other": "Lade {{count}} Kachelen"
+    },
+    "settings": {
+        "title": "Optionen",
+        "open": "Öffne dieses Menü jederzeit durch rechtsklicken.",
+        "window": {
+            "_": "Dieses Fenster",
+            "transparentHeader": "Transparente Kopfzeile",
+            "transparentHeaderTooltip": "Macht die Kopfzeile transparent, wenn die Karte angezeigt wird.",
+            "transparentToolbar": "Transparente Toolbar",
+            "transparentToolbarTooltip": "Macht die Karten Toolbars transparent.",
+            "showHeader": "Kopfzeile anzeigen",
+            "showHeaderTooltip": "Zeigt die Kopfzeile und Knöpfe an wen die Karte angezeigt wird.",
+            "showToolbar": "Toolbar anzeigen",
+            "showToolbarTooltip": "Zeigt Toolbars über der Karte.",
+            "zoomLevel": "Vergrösserungsstufe",
+            "zoomLevelTooltip": "Bestimmt die Vergrößerungsstufe der Karte. Niedrige Vergrößerung kann die Leistung negative beeinflussen.",
+            "townZoom": "Automatische Vergrößerung in Städten",
+            "townZoomTooltip": "Aktiveren ermöglicht das Einrichten einer separaten Vergrößerungsstufe für Städte.",
+            "townZoomLevel": "Vergrößerungsstufe in Städten",
+            "townZoomLevelTooltip": "Bestimmt die Vergrößerungsstufe der Karte in Städten. Niedrige Vergrößerung kann die Leistung negative beeinflussen.",
+            "iconScale": "Icon Größe",
+            "iconScaleTooltip": "Bestimmt die Größe von Icons auf der Karte.",
+            "showText": "Text anzeigen",
+            "showTextTooltip": "Bestimmt ob Text unter der Karte angezeigt wird. Aktivierung kann die Leistung negative beeinflussen.",
+            "interpolation": "Standorts Interpolation/Extrapolation",
+            "interpolationTooltip": "Bestimmt welcher Algorithmus benutzt wird um ein flüssige Bewegung auf der Karte zu erzeugen. 'Interpolation' erzeugt das flüssigste Resultat, aber führt zu einer Verzögerung des Standortes. 'Keiner' hat die beste Leistung .",
+            "interpolationNone": "Keiner",
+            "interpolationLinearInter": "Lineare Interpolation",
+            "interpolationCosineInter": "Cosinus Interpolation",
+            "interpolationLinearExtra": "Lineare Extrapolation",
+            "interpolationCosineExtra": "Cosinus Extrapolation"
+        },
+        "overlay": {
+            "_": "In-game overlay",
+            "compassMode": "Kompasmodus Overlay",
+            "compassModeTooltip": "Lässt den Spieler immer nach Norden zeigen und die Karte um den Spieler rotieren, wie bei einer klassischen Minimap.",
+            "opacity": "Overlay Durchsichtigkeit",
+            "opacityTooltip": "Bestimmt wie durchsichtig das Overlay ist.",
+            "shape": "Overlay Form",
+            "shapeTooltip": "Bestimmt die Form des Overlays.",
+            "shapeRectangular": "Rechteckig",
+            "shapeEllipse": "Elliptisch",
+            "shapeDiamond": "Diamant"
+        },
+        "icon": {
+            "_": "Icons"
+        },
+        "friend": {
+            "_": "Freunde",
+            "shareLocation": "Standort mit Freunden teilen",
+            "shareLocationTooltip": "Teilt deinen in-game Standort mit jedem Spieler der deinen Code hat.",
+            "friendCode": "Dein Freundescode",
+            "friendCodeTooltip": "Schick diesen Code deinen Freunden um deinen Standort zu teilen.",
+            "friends": "Deine Freunde",
+            "friendsTooltip": "Liste deiner Freunde. Ein Freundescode pro Zeile.",
+            "regenerate": "Generiere einen neuen Freundescode, wenn du deinen Standort nicht mehr Teilen willst"
+		}
+	}
 }
+			
