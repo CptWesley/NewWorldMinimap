@@ -5,7 +5,7 @@ import { nl } from './nl';
 
 export default {
     en,
+    dk,
     it,
     nl,
-    dk,
 } as const;
