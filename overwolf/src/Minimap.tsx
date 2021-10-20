@@ -93,8 +93,8 @@ export default function Minimap(props: IProps) {
 
     const appContext = useContext(AppContext);
 
-    const currentMapPosition = useRef<Vector2>({ x: 9200, y: 8110 });
-    const currentPlayerPosition = useRef<Vector2>({ x: 9200, y: 8110 });
+    const mapPositionOverride = useRef<Vector2>();
+    const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
     const currentFriends = useRef<FriendData[]>([]);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
@@ -108,7 +108,6 @@ export default function Minimap(props: IProps) {
     const lastDraw = useRef(0);
 
     const scrollingMap = useRef<{ pointerId: number, position: Vector2, threshold: boolean }>();
-    const mapScrolled = useRef(false);
 
     const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
@@ -117,7 +116,8 @@ export default function Minimap(props: IProps) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
 
-    const draw = (pos: Vector2, mapPos: Vector2, angle: number) => {
+    // eslint-disable-next-line complexity
+    const draw = (playerPos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -125,7 +125,7 @@ export default function Minimap(props: IProps) {
         let zoomLevel = appContext.settings.zoomLevel;
 
         if (appContext.settings.townZoom) {
-            const town = getNearestTown(pos);
+            const town = getNearestTown(playerPos);
             if (town.distance <= 10000) {
                 zoomLevel = appContext.settings.townZoomLevel;
             }
@@ -147,7 +147,7 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const mapCenterPos = mapScrolled.current ? mapPos : pos;
+        const mapCenterPos = mapPositionOverride.current ?? playerPos;
         const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
         const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
@@ -209,7 +209,7 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const mapPos = renderAsCompass ? pos : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const mapPos = renderAsCompass ? playerPos : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getIcon(marker.type, marker.category);
             if (!icon) { continue; }
             const imgPosCorrected = { x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY };
@@ -243,7 +243,7 @@ export default function Minimap(props: IProps) {
         }
 
         for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(playerPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
@@ -286,7 +286,7 @@ export default function Minimap(props: IProps) {
             if (renderAsCompass) {
                 ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
             } else {
-                const mapPos = toMinimapCoordinate(mapCenterPos, pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+                const mapPos = toMinimapCoordinate(mapCenterPos, playerPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
                 const imgPosCorrected = { x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY };
                 ctx.save();
                 ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
@@ -308,7 +308,7 @@ export default function Minimap(props: IProps) {
         }
 
         if (timeDif > positionUpdateRate || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none' || scrollingMap.current) {
-            draw(currentPlayerPosition.current, currentMapPosition.current, currentAngle);
+            draw(currentPlayerPosition.current, currentAngle);
             return;
         }
 
@@ -334,7 +334,7 @@ export default function Minimap(props: IProps) {
             interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
         }
 
-        draw(interpolatedPosition, currentMapPosition.current, interpolatedAngle);
+        draw(interpolatedPosition, interpolatedAngle);
     }
 
     // Store the `drawWithInterpolation` function in a ref object, so we can always access the latest one.
@@ -365,10 +365,6 @@ export default function Minimap(props: IProps) {
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
-
-        if (!mapScrolled.current) {
-            currentMapPosition.current = { x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
-        }
 
         store('lastKnownPosition', pos);
         redraw(true);
@@ -413,9 +409,7 @@ export default function Minimap(props: IProps) {
     }
 
     function onRecenterMap() {
-        mapScrolled.current = false;
-        console.log(currentPlayerPosition.current);
-        currentMapPosition.current = { x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
+        mapPositionOverride.current = undefined;
         appContext.settings.showToolbar = false;
         appContext.update(appContext.settings);
     }
@@ -425,9 +419,11 @@ export default function Minimap(props: IProps) {
             const dX = e.pageX - scrollingMap.current.position.x;
             const dY = e.pageY - scrollingMap.current.position.y;
             if (scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3) {
-                currentMapPosition.current.x -= dX * appContext.settings.zoomLevel / 4;
-                currentMapPosition.current.y += dY * appContext.settings.zoomLevel / 4;
-                mapScrolled.current = true;
+                if (!mapPositionOverride.current) {
+                    mapPositionOverride.current = { ...currentPlayerPosition.current };
+                }
+                mapPositionOverride.current.x -= dX * appContext.settings.zoomLevel / 4;
+                mapPositionOverride.current.y += dY * appContext.settings.zoomLevel / 4;
                 scrollingMap.current.threshold = true;
                 scrollingMap.current.position.x = e.pageX;
                 scrollingMap.current.position.y = e.pageY;
