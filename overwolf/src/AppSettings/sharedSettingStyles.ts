@@ -27,4 +27,19 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
             padding: '2px 4px',
         },
     },
+    textbox: {
+        '& > input[type="text"]': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
+    textarea: {
+        display: 'flex',
+        '& > textarea': {
+            minWidth: 170,
+            maxWidth: 170,
+            minHeight: '4em',
+            width: '100%',
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
 }));

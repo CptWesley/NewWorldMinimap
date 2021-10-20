@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMapTiles } from './logic/map';
@@ -94,9 +95,11 @@ export default function Minimap(props: IProps) {
 
     const currentMapPosition = useRef<Vector2>({x:9200, y:8110} );
     const currentPlayerPosition = useRef<Vector2>({x:9200, y:8110});
+    const currentFriends = useRef<FriendData[]>([]);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
+    const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const canvas = useRef<HTMLCanvasElement>(null);
@@ -199,12 +202,12 @@ export default function Minimap(props: IProps) {
 
         for (const marker of toDraw) {
             const catSettings = iconSettings.categories[marker.category];
-            if (!catSettings || !catSettings.value) {
+            if (!catSettings || !catSettings.visible) {
                 continue;
             }
 
             const typeSettings = catSettings.types[marker.type];
-            if (typeSettings && !typeSettings.value) {
+            if (typeSettings && !typeSettings.visible) {
                 continue;
             }
 
@@ -224,7 +227,7 @@ export default function Minimap(props: IProps) {
                 ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
             }
 
-            if (appContext.settings.showText) {
+            if (appContext.settings.showText && catSettings.showLabel && typeSettings.showLabel) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
@@ -237,6 +240,40 @@ export default function Minimap(props: IProps) {
                 } else {
                     ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                     ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                }
+            }
+        }
+
+        for (const key in currentFriends.current) {
+            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const icon = mapIconsCache.getFriendIcon();
+            if (!icon) { continue; }
+            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+
+            if (lastDraw.current !== currentDraw) {
+                return;
+            }
+
+            if (renderAsCompass) {
+                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
+            } else {
+                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            }
+
+            if (appContext.settings.showText) {
+                ctx.textAlign = 'center';
+                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
+                ctx.strokeStyle = '#000';
+                ctx.fillStyle = '#fff';
+
+                if (renderAsCompass) {
+                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    ctx.strokeText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
+                } else {
+                    ctx.strokeText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                 }
             }
         }
@@ -272,7 +309,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (timeDif > positionUpdateRate || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > 1000 || appContext.settings.interpolation === 'none' || scrollingMap.current) {
+        if (timeDif > positionUpdateRate || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none' || scrollingMap.current) {
             draw(currentPlayerPosition.current, currentMapPosition.current, currentAngle);
             return;
         }
@@ -311,6 +348,17 @@ export default function Minimap(props: IProps) {
     }
 
     function setPosition(pos: Vector2) {
+        if (appContext.settings.shareLocation) {
+            const sharedLocation = updateFriendLocation(getFriendCode(), playerName.current, pos, appContext.settings.friends);
+            sharedLocation.then(r => {
+                if (r !== undefined) {
+                    setFriends(r.friends);
+                } else {
+                    setFriends([]);
+                }
+            });
+        }
+
         if (pos.x === currentPlayerPosition.current.x && pos.y === currentPlayerPosition.current.y) {
             return;
         }
@@ -325,6 +373,21 @@ export default function Minimap(props: IProps) {
         }
 
         store('lastKnownPosition', pos);
+        redraw(true);
+    }
+
+    function setFriends(friends: FriendData[]) {
+        if (friends.length === currentFriends.current.length) {
+            for (const key in friends) {
+                if (friends[key].name === currentFriends.current[key].name
+                    && friends[key].location.x === currentFriends.current[key].location.x
+                    && friends[key].location.y === currentFriends.current[key].location.y) {
+                    return;
+                }
+            }
+        }
+
+        currentFriends.current = friends;
         redraw(true);
     }
 
@@ -424,13 +487,15 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), 100)
+            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
             : undefined;
 
         return function () {
-            clearInterval(interval);
+            if (interval) {
+                clearInterval(interval);
+            }
         };
-    }, [interpolationEnabled]);
+    }, [interpolationEnabled, appContext.settings.resamplingRate]);
 
     // This effect adds an event handler for the window resize event, triggering a redraw when it fires.
     useEffect(() => {
@@ -447,15 +512,20 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
+        (window as any).setFriends = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
+
+            if (info.name) {
+                playerName.current = info.name;
+            }
         });
 
         return function () {
             callbackUnregister();
         };
-    }, []);
+    }, [appContext.settings]);
 
     return <div className={clsx(classes.minimap, className)}>
         <canvas

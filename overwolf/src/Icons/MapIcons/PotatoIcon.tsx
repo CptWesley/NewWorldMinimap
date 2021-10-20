@@ -80,7 +80,7 @@ export default function PotatoIcon(props: ISvgMapIconConsumerProps) {
             358.27,34.35 376.52,44.50 385.00,44.00
             385.00,44.00 385.00,46.00 385.00,46.00 Z'
         />
-        <path id='eyes' fill='black' stroke='black' stroke-width='1'
+        <path id='eyes' fill='black' stroke='black' strokeWidth='1'
             d='M 276.00,83.00
             C 276.13,72.01 282.10,73.53 291.00,72.91
             304.15,71.99 308.17,71.42 321.00,76.00

@@ -34,11 +34,11 @@
             "showToolbar": "Show toolbar",
             "showToolbarTooltip": "Shows toolbars above the map.",
             "zoomLevel": "Zoom level",
-            "zoomLevelTooltip": "Determines the zoom level on the map. Lower zoom may impact performance negatively.",
+            "zoomLevelTooltip": "Determines the zoom level of the map. Lower zoom may impact performance negatively.",
             "townZoom": "Automatically zoom in towns",
             "townZoomTooltip": "Enabling will allow you to configure a seperate zoom level when in towns.",
             "townZoomLevel": "Zoom level for towns",
-            "townZoomLevelTooltip": "Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.",
+            "townZoomLevelTooltip": "Determines the zoom level of the map when in towns. Lower zoom may impact performance negatively.",
             "iconScale": "Icon scale",
             "iconScaleTooltip": "Determines the size of the rendered icons.",
             "showText": "Show text",
@@ -49,7 +49,9 @@
             "interpolationLinearInter": "Linear Interpolation",
             "interpolationCosineInter": "Cosine Interpolation",
             "interpolationLinearExtra": "Linear Extrapolation",
-            "interpolationCosineExtra": "Cosine Extrapolation"
+            "interpolationCosineExtra": "Cosine Extrapolation",
+            "resamplingRate": "Upsampling factor",
+            "resamplingRateTooltip": "The number of samples taken when performing inter/extra-polation. A higher value will give a smoother experience, but has worse performance."
         },
         "overlay": {
             "_": "In-game overlay",
@@ -64,7 +66,20 @@
             "shapeDiamond": "Diamond"
         },
         "icon": {
-            "_": "Icons"
+            "_": "Icons",
+            "toggleAll": "Toggle all",
+            "toggleVisible": "Toggle visibility",
+            "toggleShowLabel": "Toggle whether this icon's label is shown"
+        },
+        "friend": {
+            "_": "Friends",
+            "shareLocation": "Share location with friends",
+            "shareLocationTooltip": "Share your in-game location with any player that has your code.",
+            "friendCode": "Your friend code",
+            "friendCodeTooltip": "Send this code to your friends to share your location.",
+            "friends": "Your friends",
+            "friendsTooltip": "List of your friends. One friend code per line.",
+            "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer."
         }
     }
 }

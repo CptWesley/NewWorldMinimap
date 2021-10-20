@@ -8,6 +8,7 @@ import CloseOIcon from '@/Icons/CloseOIcon';
 import LanguagePicker from '@/LanguagePicker';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
+import FriendSettingsPage from './pages/FriendSettingsPage';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
@@ -148,12 +149,14 @@ const settingsPageMap = {
     window: WindowSettingsPage,
     overlay: OverlaySettingsPage,
     icon: IconSettingsPage,
+    friend: FriendSettingsPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
     'window',
     'overlay',
     'icon',
+    'friend',
 ];
 
 export default function AppSettings(props: IProps) {

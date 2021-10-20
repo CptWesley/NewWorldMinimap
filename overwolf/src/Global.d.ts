@@ -29,14 +29,18 @@ declare type Tile = {
 
 declare type IconTypeSetting = {
     name: string;
-    value: boolean;
+    visible: boolean;
+    showLabel: boolean;
 }
 
 declare type IconCategorySetting = {
     name: string,
-    value: boolean,
+    visible: boolean,
+    showLabel: boolean,
     types: Record<string, IconTypeSetting>,
 }
+
+type IconProperty = Extract<keyof (IconCategorySetting | IconTypeSetting), 'visible' | 'showLabel'>;
 
 declare type IconSettings = {
     categories: Record<string, IconCategorySetting>,
@@ -49,4 +53,9 @@ declare type PlayerData = {
     map: string | undefined,
     name: string | undefined,
     world: string | undefined,
+}
+
+declare type FriendData = {
+    name: string,
+    location: Vector2,
 }
