@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { changeLanguage, SupportedLocale, supportedLocales } from './i18n';
+import { changeLanguage, defaultLanguage, SupportedLocale, supportedLocales } from './i18n';
 import GlobeIcon from './Icons/GlobeIcon';
 import { makeStyles } from './theme';
 
@@ -54,16 +54,31 @@ export default function LanguagePicker(props: IProps) {
         }
     }
 
+    const locales = supportedLocales.map<[SupportedLocale, string]>(locale => [locale, i18n.getFixedT(locale)('lng')]);
+    locales.sort((a, b) => a[1].localeCompare(b[1], undefined, { sensitivity: 'base' }));
+
+    let selectedLocale: string;
+    if (supportedLocales.includes(i18n.language as SupportedLocale)) {
+        selectedLocale = i18n.language;
+    } else {
+        const languageWithoutRegion = i18n.language.substr(0, 2);
+        if (supportedLocales.includes(languageWithoutRegion as SupportedLocale)) {
+            selectedLocale = languageWithoutRegion;
+        } else {
+            selectedLocale = defaultLanguage;
+        }
+    }
+
     return (
         <div className={clsx(classes.root, className)}>
             <GlobeIcon className={classes.globe} />
             <select
                 className={classes.select}
-                value={i18n.language}
+                value={selectedLocale}
                 onChange={handleChange}
             >
-                {supportedLocales.map(l =>
-                    <option key={l} value={l}>{i18n.getFixedT(l)('lng')}</option>
+                {locales.map(l =>
+                    <option key={l[0]} value={l[0]}>{l[1]}</option>
                 )}
             </select>
         </div>

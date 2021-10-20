@@ -6,7 +6,7 @@ import locales from '@/locales';
 export type SupportedLocale = keyof typeof locales;
 export const supportedLocales = Object.keys(locales) as readonly SupportedLocale[];
 
-const defaultLanguage: SupportedLocale = 'en';
+export const defaultLanguage: SupportedLocale = 'en';
 
 export const storageKey = 'i18nextLng';
 
