@@ -18,7 +18,10 @@
     },
     "minimap": {
         "tilesLoading_one": "Loading {{count}} tile",
-        "tilesLoading_other": "Loading {{count}} tiles"
+        "tilesLoading_other": "Loading {{count}} tiles",
+        "zoomIn": "Zoom in",
+        "zoomOut": "Zoom out",
+        "recenter": "Center on player location"
     },
     "settings": {
         "title": "Settings",

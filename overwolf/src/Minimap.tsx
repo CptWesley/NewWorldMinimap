@@ -5,6 +5,8 @@ import RecenterIcon from '@/Icons/RecenterIcon';
 import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import ZoomInIcon from './Icons/ZoomInIcon';
+import ZoomOutIcon from './Icons/ZoomOutIcon';
 import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
@@ -17,6 +19,7 @@ import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
+import MinimapToolbarButton from './MinimapToolbarButton';
 import { makeStyles } from './theme';
 
 interface IProps {
@@ -45,38 +48,10 @@ const useStyles = makeStyles()(theme => ({
         bottom: 0,
         zIndex: globalLayers.minimapCanvas,
     },
-    controlButton: {
-        width: 42,
-        background: 'transparent',
-        border: 'none',
-        color: '#fff',
-
-        outline: 'none',
-
-        '&:hover': {
-            background: theme.headerButtonHover,
-        },
-
-        '&:active': {
-            background: theme.headerButtonPress,
-        },
-
-        '&:focus': {
-            outline: 'none',
-        },
-
-        '& > svg': {
-            width: 30,
-            height: 30,
-        },
-    },
-    close: {
-        '&:hover': {
-            background: theme.headerCloseHover,
-        },
-        '&:active': {
-            background: theme.headerClosePress,
-        },
+    mapControls: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        bottom: theme.spacing(1),
     },
 }));
 
@@ -102,8 +77,9 @@ export default function Minimap(props: IProps) {
     const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
-    const canvas = useRef<HTMLCanvasElement>(null);
     const [mapIconsCache] = useState(() => new MapIconsCache());
+    const [isMapDragged, setIsMapDragged] = useState(false);
+    const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
 
@@ -420,15 +396,19 @@ export default function Minimap(props: IProps) {
 
     function onRecenterMap() {
         mapPositionOverride.current = undefined;
-        appContext.settings.showToolbar = false;
-        appContext.update(appContext.settings);
+        setIsMapDragged(false);
+        redraw(true);
     }
 
     function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
         if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
             const dX = e.pageX - scrollingMap.current.position.x;
             const dY = e.pageY - scrollingMap.current.position.y;
-            if (scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3) {
+            const dragAllowed = scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3;
+            if (dragAllowed) {
+                if (!isMapDragged) {
+                    setIsMapDragged(true);
+                }
                 if (!mapPositionOverride.current) {
                     mapPositionOverride.current = { ...currentPlayerPosition.current };
                 }
@@ -553,10 +533,16 @@ export default function Minimap(props: IProps) {
                 <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
-        <MinimapToolbar>
-            <button className={clsx(classes.controlButton, classes.close)} onClick={onRecenterMap}>
+        <MinimapToolbar className={classes.mapControls}>
+            {isMapDragged && <MinimapToolbarButton onClick={onRecenterMap} title={t('minimap.recenter')}>
                 <RecenterIcon />
-            </button>
+            </MinimapToolbarButton>}
+            <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomOut')}>
+                <ZoomOutIcon />
+            </MinimapToolbarButton>
+            <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomIn')}>
+                <ZoomInIcon />
+            </MinimapToolbarButton>
         </MinimapToolbar>
     </div>;
 }

@@ -18,7 +18,10 @@
     },
     "minimap": {
         "tilesLoading_one": "{{count}} tegel aan het laden",
-        "tilesLoading_other": "{{count}} tegels aan het laden"
+        "tilesLoading_other": "{{count}} tegels aan het laden",
+        "zoomIn": "Inzoomen",
+        "zoomOut": "Uitzoomen",
+        "recenter": "Centreren op spelerslocatie"
     },
     "settings": {
         "title": "Instellingen",
