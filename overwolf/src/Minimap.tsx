@@ -313,7 +313,7 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(getFriendCode(), playerName.current, pos, appContext.settings.friends);
+            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(), playerName.current, pos, appContext.settings.friends);
             sharedLocation.then(r => {
                 if (r !== undefined) {
                     setFriends(r.friends);
