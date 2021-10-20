@@ -9,6 +9,7 @@ import { makeStyles } from '@/theme';
 import { faComment, faCommentSlash, faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IAppSettingsPageProps } from '../AppSettings';
+import { useSharedSettingsStyles } from '../sharedSettingStyles';
 
 const useStyles = makeStyles()(theme => ({
     selectIcon: {
@@ -21,21 +22,6 @@ const useStyles = makeStyles()(theme => ({
 
         '&:focus': {
             outline: `1px solid ${theme.frameMenuColor}`,
-        },
-    },
-    iconCategory: {
-        display: 'flex',
-        alignItems: 'center',
-        borderRadius: 3,
-        padding: 2,
-
-        '& > span': {
-            flexGrow: 1,
-        },
-
-        '&:hover, &:focus': {
-            outline: 'none',
-            background: 'rgba(255, 255, 255, 0.2)',
         },
     },
     checkboxIcon: {
@@ -81,6 +67,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     } = props;
     const { t } = useTranslation();
     const { classes } = useStyles();
+    const { classes: sharedClasses } = useSharedSettingsStyles();
 
     function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
@@ -157,7 +144,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         const hasAnyShowLabel = Object.values(category.types).some(t => t.showLabel);
 
         return <details key={categoryKey}>
-            <summary className={classes.iconCategory}>
+            <summary className={sharedClasses.summary}>
                 <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
                         type='checkbox'

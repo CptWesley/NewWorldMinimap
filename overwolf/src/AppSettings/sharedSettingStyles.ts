@@ -8,9 +8,15 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
         marginBottom: theme.spacing(1),
     },
     summary: {
-        borderRadius: 3,
+        display: 'flex',
+        alignItems: 'center',
+        borderRadius: theme.borderRadiusSmall,
         padding: 2,
         marginBottom: theme.spacing(1),
+
+        '& > span': {
+            flexGrow: 1,
+        },
 
         '&:hover, &:focus': {
             outline: 'none',
