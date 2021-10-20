@@ -209,10 +209,15 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const mapPos = renderAsCompass ? playerPos : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const mapPos = renderAsCompass
+                ? playerPos
+                : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getIcon(marker.type, marker.category);
             if (!icon) { continue; }
-            const imgPosCorrected = { x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+            const imgPosCorrected = {
+                x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            };
 
             if (lastDraw.current !== currentDraw) {
                 return;
@@ -287,7 +292,10 @@ export default function Minimap(props: IProps) {
                 ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
             } else {
                 const mapPos = toMinimapCoordinate(mapCenterPos, playerPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-                const imgPosCorrected = { x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+                const imgPosCorrected = {
+                    x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                    y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                };
                 ctx.save();
                 ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
                 ctx.rotate(angle);
@@ -307,7 +315,9 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (timeDif > positionUpdateRate || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none' || scrollingMap.current) {
+        if (timeDif > positionUpdateRate
+            || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate
+            || appContext.settings.interpolation === 'none') {
             draw(currentPlayerPosition.current, currentAngle);
             return;
         }
@@ -427,8 +437,7 @@ export default function Minimap(props: IProps) {
                 scrollingMap.current.threshold = true;
                 scrollingMap.current.position.x = e.pageX;
                 scrollingMap.current.position.y = e.pageY;
-                appContext.settings.showToolbar = true;
-                appContext.update(appContext.settings);
+                redraw(true);
             }
         }
     }
