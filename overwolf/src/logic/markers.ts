@@ -1,4 +1,3 @@
-import { getIconName } from './icons';
 import { loadIconConfiguration } from './storage';
 import { getTileMarkerCache } from './tileMarkerCache';
 
