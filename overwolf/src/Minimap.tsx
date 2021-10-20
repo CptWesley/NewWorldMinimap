@@ -1,8 +1,13 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { keyframes } from 'tss-react';
+import RecenterIcon from '@/Icons/RecenterIcon';
+import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import ZoomInIcon from './Icons/ZoomInIcon';
+import ZoomOutIcon from './Icons/ZoomOutIcon';
 import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
@@ -16,13 +21,25 @@ import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
+import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
 
 interface IProps {
     className?: string;
 }
 
-const useStyles = makeStyles()({
+const showRecenterButton = keyframes({
+    from: {
+        width: 0,
+        padding: 0,
+    },
+    to: {
+        width: 40,
+        padding: 5,
+    },
+});
+
+const useStyles = makeStyles()(theme => ({
     minimap: {
         position: 'relative',
     },
@@ -44,7 +61,22 @@ const useStyles = makeStyles()({
         bottom: 0,
         zIndex: globalLayers.minimapCanvas,
     },
-});
+    mapControls: {
+        position: 'absolute',
+        right: theme.spacing(1),
+        bottom: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'row-reverse',
+    },
+    recenter: {
+        animation: `300ms ease ${showRecenterButton}`,
+        display: 'flex',
+        alignItems: 'center',
+        '& > svg': {
+            width: '100%',
+        },
+    },
+}));
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
@@ -59,18 +91,22 @@ export default function Minimap(props: IProps) {
 
     const appContext = useContext(AppContext);
 
-    const currentPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const mapPositionOverride = useRef<Vector2>();
+    const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
     const currentFriends = useRef<FriendData[]>([]);
-    const lastPosition = useRef<Vector2>(currentPosition.current);
+    const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
     const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
-    const canvas = useRef<HTMLCanvasElement>(null);
     const [mapIconsCache] = useState(() => new MapIconsCache());
+    const [isMapDragged, setIsMapDragged] = useState(false);
+    const canvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
+
+    const scrollingMap = useRef<{ pointerId: number, position: Vector2, threshold: boolean }>();
 
     const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
@@ -80,7 +116,7 @@ export default function Minimap(props: IProps) {
     }
 
     // eslint-disable-next-line complexity
-    const draw = (pos: Vector2, angle: number) => {
+    const draw = (playerPos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -88,7 +124,7 @@ export default function Minimap(props: IProps) {
         let zoomLevel = appContext.settings.zoomLevel;
 
         if (appContext.settings.townZoom) {
-            const town = getNearestTown(pos);
+            const town = getNearestTown(playerPos);
             if (town.distance <= 10000) {
                 zoomLevel = appContext.settings.townZoomLevel;
             }
@@ -110,8 +146,9 @@ export default function Minimap(props: IProps) {
         const centerX = ctx.canvas.width / 2;
         const centerY = ctx.canvas.height / 2;
 
-        const tiles = getMapTiles(pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
-        const offset = toMinimapCoordinate(pos, pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+        const mapCenterPos = mapPositionOverride.current ?? playerPos;
+        const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+        const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
         let toDraw: Marker[] = [];
 
@@ -171,10 +208,15 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const imgPos = toMinimapCoordinate(pos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const mapPos = renderAsCompass
+                ? playerPos
+                : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getIcon(marker.type, marker.category);
             if (!icon) { continue; }
-            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+            const imgPosCorrected = {
+                x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            };
 
             if (lastDraw.current !== currentDraw) {
                 return;
@@ -207,7 +249,7 @@ export default function Minimap(props: IProps) {
         }
 
         for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(pos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(playerPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
             const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
@@ -250,11 +292,16 @@ export default function Minimap(props: IProps) {
             if (renderAsCompass) {
                 ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
             } else {
+                const mapPos = toMinimapCoordinate(mapCenterPos, playerPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+                const imgPosCorrected = {
+                    x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                    y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                };
                 ctx.save();
-                ctx.translate(centerX, centerY);
+                ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
                 ctx.rotate(angle);
-                ctx.translate(-centerX, -centerY);
-                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+                ctx.translate(-imgPosCorrected.x, -imgPosCorrected.y);
+                ctx.drawImage(playerIcon, imgPosCorrected.x - playerIcon.width / 2, imgPosCorrected.y - playerIcon.height / 2);
                 ctx.restore();
             }
         }
@@ -263,36 +310,38 @@ export default function Minimap(props: IProps) {
     function drawWithInterpolation(force: boolean) {
         const curTime = performance.now();
         const timeDif = curTime - lastPositionUpdate.current;
-        const currentAngle = getAngle(lastPosition.current, currentPosition.current);
+        const currentAngle = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
 
         if (timeDif > positionUpdateRate && !force) {
             return;
         }
 
-        if (timeDif > positionUpdateRate || squaredDistance(lastPosition.current, currentPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none') {
-            draw(currentPosition.current, currentAngle);
+        if (timeDif > positionUpdateRate
+            || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate
+            || appContext.settings.interpolation === 'none') {
+            draw(currentPlayerPosition.current, currentAngle);
             return;
         }
 
         const percentage = timeDif / positionUpdateRate;
-        let interpolatedPosition = currentPosition.current;
+        let interpolatedPosition = currentPlayerPosition.current;
         let interpolatedAngle = currentAngle;
 
         if (appContext.settings.interpolation === 'linear-interpolation') {
-            interpolatedPosition = interpolateVectorsLinear(lastPosition.current, currentPosition.current, percentage);
+            interpolatedPosition = interpolateVectorsLinear(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
             interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
         } else if (appContext.settings.interpolation === 'cosine-interpolation') {
-            interpolatedPosition = interpolateVectorsCosine(lastPosition.current, currentPosition.current, percentage);
+            interpolatedPosition = interpolateVectorsCosine(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
             interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
         }
 
-        const predictedPosition = predictVector(lastPosition.current, currentPosition.current);
+        const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
 
         if (appContext.settings.interpolation === 'linear-extrapolation') {
-            interpolatedPosition = interpolateVectorsLinear(currentPosition.current, predictedPosition, percentage);
+            interpolatedPosition = interpolateVectorsLinear(currentPlayerPosition.current, predictedPosition, percentage);
             interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
         } else if (appContext.settings.interpolation === 'cosine-extrapolation') {
-            interpolatedPosition = interpolateVectorsCosine(currentPosition.current, predictedPosition, percentage);
+            interpolatedPosition = interpolateVectorsCosine(currentPlayerPosition.current, predictedPosition, percentage);
             interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
         }
 
@@ -319,14 +368,15 @@ export default function Minimap(props: IProps) {
             });
         }
 
-        if (pos.x === currentPosition.current.x && pos.y === currentPosition.current.y) {
+        if (pos.x === currentPlayerPosition.current.x && pos.y === currentPlayerPosition.current.y) {
             return;
         }
 
-        lastAngle.current = getAngle(lastPosition.current, currentPosition.current);
+        lastAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
         lastPositionUpdate.current = performance.now();
-        lastPosition.current = currentPosition.current;
-        currentPosition.current = pos;
+        lastPlayerPosition.current = currentPlayerPosition.current;
+        currentPlayerPosition.current = pos;
+
         store('lastKnownPosition', pos);
         redraw(true);
     }
@@ -358,6 +408,52 @@ export default function Minimap(props: IProps) {
 
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
+    }
+
+    function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (NWMM_APP_WINDOW !== 'desktop') { return; }
+        // Left mouse button only
+        if (e.pointerType === 'mouse' && e.button !== 0) { return; }
+        scrollingMap.current = {
+            pointerId: e.pointerId,
+            position: { x: e.pageX, y: e.pageY },
+            threshold: false,
+        };
+        e.currentTarget.setPointerCapture(e.pointerId);
+    }
+
+    function onRecenterMap() {
+        mapPositionOverride.current = undefined;
+        setIsMapDragged(false);
+        redraw(true);
+    }
+
+    function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
+            const dX = e.pageX - scrollingMap.current.position.x;
+            const dY = e.pageY - scrollingMap.current.position.y;
+            const dragAllowed = scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3;
+            if (dragAllowed) {
+                if (!scrollingMap.current.threshold) {
+                    scrollingMap.current.threshold = true;
+                    mapPositionOverride.current = { ...mapPositionOverride.current ?? currentPlayerPosition.current };
+                    setIsMapDragged(true);
+                } else if (mapPositionOverride.current) {
+                    mapPositionOverride.current.x -= dX * appContext.settings.zoomLevel / 4;
+                    mapPositionOverride.current.y += dY * appContext.settings.zoomLevel / 4;
+                }
+                redraw(true);
+                scrollingMap.current.position.x = e.pageX;
+                scrollingMap.current.position.y = e.pageY;
+            }
+        }
+    }
+
+    function handlePointerUp(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            scrollingMap.current = undefined;
+        }
     }
 
     // This effect triggers a redraw when the context value changes (relevant for settings).
@@ -455,11 +551,27 @@ export default function Minimap(props: IProps) {
             className={clsx(classes.canvas)}
             style={dynamicStyling}
             onWheel={handleWheel}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onPointerMove={handlePointerMove}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
                 <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
             }
         </div>
+        {NWMM_APP_WINDOW === 'desktop' &&
+            <MinimapToolbar className={classes.mapControls}>
+                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomIn')}>
+                    <ZoomInIcon />
+                </MinimapToolbarIconButton>
+                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomOut')}>
+                    <ZoomOutIcon />
+                </MinimapToolbarIconButton>
+                {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
+                    <RecenterIcon />
+                </MinimapToolbarIconButton>}
+            </MinimapToolbar>
+        }
     </div>;
 }

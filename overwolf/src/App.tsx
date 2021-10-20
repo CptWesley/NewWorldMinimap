@@ -2,7 +2,6 @@ import React, { useContext, useEffect } from 'react';
 import { AppContext } from './contexts/AppContext';
 import { getDefaultIconSettings } from './logic/markers';
 import Minimap from './Minimap';
-import MinimapToolbar from './MinimapToolbar';
 import { makeStyles } from './theme';
 import Welcome from './Welcome';
 
@@ -39,9 +38,6 @@ export default function App() {
     }
 
     return <div className={classes.root}>
-        <MinimapToolbar>
-            Toolbar
-        </MinimapToolbar>
         <Minimap className={classes.minimap} />
     </div>;
 }
