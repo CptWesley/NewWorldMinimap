@@ -107,16 +107,16 @@ export function storeIconConfiguration(category: string, type: string | undefine
 
 export function loadIconConfiguration(category: string, type: string | undefined, property: IconProperty) {
     const key = getIconPropertySettingKey(category, type, property);
-    return loadUntyped(key, getDefaultIconConfigurationValue(key, category, type, property)) as boolean;
+    return loadUntyped(key, getDefaultIconConfigurationValue(category, type, property)) as boolean;
 }
 
-function getDefaultIconConfigurationValue(key: string, category: string, type: string | undefined, property: IconProperty): boolean {
+function getDefaultIconConfigurationValue(category: string, type: string | undefined, property: IconProperty): boolean {
     if (property === 'showLabel') {
         return false;
     }
 
     if (!type) {
-        return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
+        return !defaultHiddenIconCategories.includes(category);
     }
 
     return true;
