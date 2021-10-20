@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import { updateFriendLocation, getFriendCode } from './logic/friends';
+import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMapTiles } from './logic/map';
@@ -161,12 +161,12 @@ export default function Minimap(props: IProps) {
 
         for (const marker of toDraw) {
             const catSettings = iconSettings.categories[marker.category];
-            if (!catSettings || !catSettings.value) {
+            if (!catSettings || !catSettings.visible) {
                 continue;
             }
 
             const typeSettings = catSettings.types[marker.type];
-            if (typeSettings && !typeSettings.value) {
+            if (typeSettings && !typeSettings.visible) {
                 continue;
             }
 
@@ -186,7 +186,7 @@ export default function Minimap(props: IProps) {
                 ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
             }
 
-            if (appContext.settings.showText) {
+            if (appContext.settings.showText && catSettings.showLabel && typeSettings.showLabel) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
@@ -266,7 +266,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (squaredDistance(lastPosition.current, currentPosition.current) > 1000 || appContext.settings.interpolation === 'none') {
+        if (timeDif > positionUpdateRate || squaredDistance(lastPosition.current, currentPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none') {
             draw(currentPosition.current, currentAngle);
             return;
         }
@@ -406,13 +406,13 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? window.setInterval(() => redraw(false), 100)
+            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
             : undefined;
 
         return function () {
             window.clearInterval(interval);
         };
-    }, [interpolationEnabled]);
+    }, [interpolationEnabled, appContext.settings.resamplingRate]);
 
     // This effect adds an event handler for the window resize event, triggering a redraw when it fires.
     useEffect(() => {

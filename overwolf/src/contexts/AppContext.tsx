@@ -32,6 +32,7 @@ export function loadAppContextSettings(): AppContextSettings {
         interpolation: load('interpolation'),
         shareLocation: load('shareLocation'),
         friends: load('friends'),
+        resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
     };
 }

@@ -109,7 +109,7 @@ export default function StrawberryIcon(props: ISvgMapIconConsumerProps) {
             248.26,48.29 255.92,34.67 255.92,34.67
             259.50,30.19 263.95,30.47 266.00,21.00 Z'
         />
-        <path id='stem and leaf' fill='green' stroke='black' stroke-width='16'
+        <path id='stem and leaf' fill='green' stroke='black' strokeWidth='16'
             d='M 266.00,21.00
             C 266.00,21.00 280.04,18.05 280.04,18.05
             280.04,18.05 301.00,21.00 301.00,21.00
@@ -195,7 +195,7 @@ export default function StrawberryIcon(props: ISvgMapIconConsumerProps) {
             248.26,48.29 255.92,34.67 255.92,34.67
             259.50,30.19 263.95,30.47 266.00,21.00 Z'
         />
-        <path id='seeds' fill='black' stroke='black' stroke-width='1'
+        <path id='seeds' fill='black' stroke='black' strokeWidth='1'
             d='M 127.33,218.93
             C 133.15,216.98 139.45,218.63 138.87,225.93
             138.70,228.05 137.75,230.00 137.22,232.05

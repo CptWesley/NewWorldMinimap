@@ -28,6 +28,7 @@ export const simpleStorageDefaultSettings = {
     interpolation: 'cosine-interpolation' as Interpolation,
     shareLocation: false,
     friends: '',
+    resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
 };
 
@@ -44,7 +45,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoomLevel',
     'townZoom',
     'interpolation',
-    'lastKnownPosition',
+    'resamplingRate',
 ];
 
 export const iconSettingStorageScope = 'icon';
@@ -95,28 +96,32 @@ function loadUntyped<T>(key: string, defaultValue: T) {
     return defaultValue;
 }
 
-/** Stores whether the icon category is visible. */
-export function storeIconCategory(category: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}.visible`;
+const iconCategoryTypeSeparator = '--';
+function getIconPropertySettingKey(category: string, type: string | undefined, property: IconProperty) {
+    return type
+        ? `${iconSettingStorageScope}::${category}${iconCategoryTypeSeparator}${type}.${property}`
+        : `${iconSettingStorageScope}::${category}.${property}`;
+}
+
+export function storeIconConfiguration(category: string, type: string | undefined, property: IconProperty, value: boolean) {
+    const key = getIconPropertySettingKey(category, type, property);
     return storeUntyped(key, value);
 }
 
-/** Stores whether the icon type (part of a category) is visible. */
-export function storeIconType(category: string, type: string, value: boolean) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
-    return storeUntyped(key, value);
+export function loadIconConfiguration(category: string, type: string | undefined, property: IconProperty) {
+    const key = getIconPropertySettingKey(category, type, property);
+    return loadUntyped(key, getDefaultIconConfigurationValue(category, type, property)) as boolean;
 }
 
-/** Loads whether the icon category is visible. */
-export function loadIconCategory(category: string) {
-    const key = `${iconSettingStorageScope}::${category}.visible`;
-    return loadUntyped(key, !defaultHiddenIconCategories.includes(category)) as boolean;
-}
-
-/** Loads whether the icon type (part of a category) is visible. */
-export function loadIconType(category: string, type: string) {
-    const key = `${iconSettingStorageScope}::${category}--${type}.visible`;
-    return loadUntyped(key, true) as boolean;
+function getDefaultIconConfigurationValue(category: string, type: string | undefined, property: IconProperty): boolean {
+    switch (property) {
+        case 'showLabel':
+            return true;
+        case 'visible':
+            return type
+                ? true // it's not a category
+                : !defaultHiddenIconCategories.includes(category); // it's a category
+    }
 }
 
 /** Splits a storage key into its scope (if it exists and is known), and the rest of the key (which is called the identifier). */
@@ -127,17 +132,21 @@ export function getStorageKeyScope(key: string): [KnownStorageScope | undefined,
         : [undefined, key];
 }
 
+const iconProperties: IconProperty[] = ['showLabel', 'visible'];
 /**
  * Obtains the category (and optionally, type) of an icon setting storage key.
  * @param identifier The identifier of the key, without the scope.
  * @returns a string if it's just a category; or an array of two strings, containing category and type.
  */
-export function deconstructIconStorageKey(identifier: string): string | [string, string] {
-    const withoutProperty = identifier.split('.')[0];
-    const categoryAndType = withoutProperty.split('--');
-    if (categoryAndType.length === 2) {
-        return [categoryAndType[0], categoryAndType[1]];
-    } else {
-        return categoryAndType[0];
-    }
+export function deconstructIconStorageKey(identifier: string) {
+    const propertySplit = identifier.split('.');
+    if (propertySplit.length !== 2) { return undefined; }
+    if (!iconProperties.includes(propertySplit[1] as IconProperty)) { return undefined; }
+    const categoryAndType = propertySplit[0].split('--');
+    if (categoryAndType.length < 1 || categoryAndType.length > 2) { return undefined; }
+    return {
+        property: propertySplit[1] as IconProperty,
+        category: categoryAndType[0],
+        type: categoryAndType.length === 2 ? categoryAndType[1] : undefined,
+    };
 }

@@ -85,7 +85,7 @@ export default function CornIcon(props: ISvgMapIconConsumerProps) {
             146.95,157.81 144.52,154.74 155.00,162.75
             167.67,172.44 171.09,183.72 179.00,196.00 Z'
         />
-        <path id='kernels' fill='none' stroke='black' stroke-width='4'
+        <path id='kernels' fill='none' stroke='black' strokeWidth='4'
             d='M 264.00,12.00
             C 279.44,22.98 282.70,28.78 290.00,46.00
             290.00,46.00 301.00,38.00 301.00,38.00
@@ -285,7 +285,7 @@ export default function CornIcon(props: ISvgMapIconConsumerProps) {
             290.06,432.58 295.21,410.80 298.00,396.00 Z'
         />
         <path id='husk'
-            fill='green' stroke='black' stroke-width='16'
+            fill='green' stroke='black' strokeWidth='16'
             d='M 38.00,287.00
             C 38.00,287.00 35.00,262.00 35.00,262.00
             34.89,252.48 35.18,253.81 36.56,245.00
