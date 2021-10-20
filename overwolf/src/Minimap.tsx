@@ -107,10 +107,8 @@ export default function Minimap(props: IProps) {
 
     const lastDraw = useRef(0);
 
-    const scrollingMap = useRef<{ pointerId: number, position: Vector2 }>();
+    const scrollingMap = useRef<{ pointerId: number, position: Vector2, threshold: boolean }>();
     const mapScrolled = useRef(false);
-    const currentMousePos = useRef<Vector2>({ x: 0, y: 0 } as Vector2);
-    const lastMousePos = useRef<Vector2>({ x: 0, y: 0 } as Vector2);
 
     const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
@@ -409,6 +407,7 @@ export default function Minimap(props: IProps) {
         scrollingMap.current = {
             pointerId: e.pointerId,
             position: { x: e.pageX, y: e.pageY },
+            threshold: false,
         };
         e.currentTarget.setPointerCapture(e.pointerId);
     }
@@ -422,16 +421,16 @@ export default function Minimap(props: IProps) {
     }
 
     function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
-        if (!appContext.isTransparentSurface) {
-            lastMousePos.current = { x: currentMousePos.current.x, y: currentMousePos.current.y };
-            currentMousePos.current = { x: e.pageX, y: e.pageY } as Vector2;
-            const xMod = currentMousePos.current.x - lastMousePos.current.x;
-            const yMod = currentMousePos.current.y - lastMousePos.current.y;
-            if (scrollingMap.current && (mapScrolled.current || Math.abs(xMod) > 3 || Math.abs(yMod) > 3)) {
-                console.log('Map scrolled');
-                currentMapPosition.current.x = currentMapPosition.current.x - xMod;
-                currentMapPosition.current.y = currentMapPosition.current.y + yMod;
+        if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
+            const dX = e.pageX - scrollingMap.current.position.x;
+            const dY = e.pageY - scrollingMap.current.position.y;
+            if (scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3) {
+                currentMapPosition.current.x -= dX * appContext.settings.zoomLevel / 4;
+                currentMapPosition.current.y += dY * appContext.settings.zoomLevel / 4;
                 mapScrolled.current = true;
+                scrollingMap.current.threshold = true;
+                scrollingMap.current.position.x = e.pageX;
+                scrollingMap.current.position.y = e.pageY;
                 appContext.settings.showToolbar = true;
                 appContext.update(appContext.settings);
             }
@@ -542,7 +541,7 @@ export default function Minimap(props: IProps) {
             onWheel={handleWheel}
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
-            onMouseMove={handlePointerMove}
+            onPointerMove={handlePointerMove}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
