@@ -29,7 +29,7 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
-export default function MinimapToolbarButton(props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
+export default function MinimapToolbarIconButton(props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
     const { classes } = useStyles();
     const {
         className,

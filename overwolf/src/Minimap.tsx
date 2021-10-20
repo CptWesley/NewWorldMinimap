@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { keyframes } from 'tss-react';
 import RecenterIcon from '@/Icons/RecenterIcon';
 import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
@@ -19,12 +20,23 @@ import { getTileMarkerCache } from './logic/tileMarkerCache';
 import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
-import MinimapToolbarButton from './MinimapToolbarButton';
+import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
 
 interface IProps {
     className?: string;
 }
+
+const showRecenterButton = keyframes({
+    from: {
+        width: 0,
+        padding: 0,
+    },
+    to: {
+        width: 40,
+        padding: 5,
+    },
+});
 
 const useStyles = makeStyles()(theme => ({
     minimap: {
@@ -52,6 +64,16 @@ const useStyles = makeStyles()(theme => ({
         position: 'absolute',
         right: theme.spacing(1),
         bottom: theme.spacing(1),
+        display: 'flex',
+        flexDirection: 'row-reverse',
+    },
+    recenter: {
+        animation: `300ms ease ${showRecenterButton}`,
+        display: 'flex',
+        alignItems: 'center',
+        '& > svg': {
+            width: '100%',
+        },
     },
 }));
 
@@ -539,15 +561,15 @@ export default function Minimap(props: IProps) {
         </div>
         {NWMM_APP_WINDOW === 'desktop' &&
             <MinimapToolbar className={classes.mapControls}>
-                {isMapDragged && <MinimapToolbarButton onClick={onRecenterMap} title={t('minimap.recenter')}>
-                    <RecenterIcon />
-                </MinimapToolbarButton>}
-                <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomOut')}>
-                    <ZoomOutIcon />
-                </MinimapToolbarButton>
-                <MinimapToolbarButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomIn')}>
+                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomIn')}>
                     <ZoomInIcon />
-                </MinimapToolbarButton>
+                </MinimapToolbarIconButton>
+                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomOut')}>
+                    <ZoomOutIcon />
+                </MinimapToolbarIconButton>
+                {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
+                    <RecenterIcon />
+                </MinimapToolbarIconButton>}
             </MinimapToolbar>
         }
     </div>;
