@@ -99,8 +99,6 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        console.log('DRAWING');
-
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
 
