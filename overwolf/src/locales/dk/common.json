@@ -1,80 +1,82 @@
 {
-   "lng":"Dansk",
-   "close":"Luk",
-   "selectAll":"Vælg alt",
-   "deselectAll":" Fravælg alt ",
-   "header":{
-      "settings":"Indstillinger",
-      "openInGame":"Åben in-game vindue",
-      "openDesktop":"Åben vindue uden for spillet"
+   "lng": "Dansk",
+   "close": "Luk",
+   "selectAll": "Vælg alt",
+   "deselectAll": " Fravælg alt ",
+   "header": {
+      "settings": "Indstillinger",
+      "openInGame": "Åben in-game vindue",
+      "openDesktop": "Åben vindue uden for spillet"
    },
-   "welcome":{
-      "title":"Velkommen til CptWesley's Minimap",
-      "primary":"Start New World for at benytte minimappet.",
-      "settings":"Du kan også tilgå programmets indstillinger når det ikke kører.",
-      "discord":"Du er velkommen til at tilslutte dig vores Discord server, hvis du har spørgsmål, har brug for hjælp eller har forslag til forbedringer: <1>{{discord}}<1>.",
-      "devBuild":"Det her ser ud til at være et udviklings build. Brug nedenstående knap til at tilgå minimappet ved en debug lokalitet.",
-      "forceMap":"Vis mig kortet"
+   "welcome": {
+      "title": "Velkommen til CptWesley's Minimap",
+      "primary": "Start New World for at benytte minimappet.",
+      "settings": "Du kan også tilgå programmets indstillinger når det ikke kører.",
+      "discord": "Du er velkommen til at tilslutte dig vores Discord server, hvis du har spørgsmål, har brug for hjælp eller har forslag til forbedringer: <1>{{discord}}<1>.",
+      "devBuild": "Det her ser ud til at være et udviklings build. Brug nedenstående knap til at tilgå minimappet ved en debug lokalitet.",
+      "forceMap": "Vis mig kortet"
    },
-   "minimap":{
-      "tilesLoading_one":"Indlæser {{count}} tile",
-      "tilesLoading_other":"Indlæser {{count}} tiles"
+   "minimap": {
+      "tilesLoading_one": "Indlæser {{count}} tile",
+      "tilesLoading_other": "Indlæser {{count}} tiles"
    },
-   "settings":{
-      "title":"Indstillinger",
-      "open":"Åben denne menu, til hver en tid, ved at højreklikke.",
-      "window":{
-         "_":"Dette vindue",
-         "transparentHeader":"Gennemsigtig titel",
-         "transparentHeaderTooltip":"Gør vinduets titel gennemsigtig, når kortet bliver brugt.",
-         "transparentToolbar":"Gennemsigtig værktøjslinje",
-         "transparentToolbarTooltip":"Gør kortværktøjslinjer gennemsigtige.",
-         "showHeader":"Vis titel",
-         "showHeaderTooltip":"Vis titlens tekst og knapper, når kortet vises.",
-         "showToolbar":"Vis værktøjslinje",
-         "showToolbarTooltip":"Viser værktøjslinjerne over kortet.",
-         "zoomLevel":"Zoomniveau",
-         "zoomLevelTooltip":"Bestemmer zoomniveauet på kortet. Lavt zoomniveau, kan påvirke ydeevnen negativt.",
-         "townZoom":"Zoom automatisk ind i byer",
-         "townZoomTooltip":"Aktivering gør det muligt for dig at konfigurere et separat zoomniveau, når du er i byer.",
-         "townZoomLevel":"Zoomniveau for byer",
-         "townZoomLevelTooltip":"Bestemmer zoomniveauet på kortet i byer. Lavt zoomniveau, kan påvirke ydeevnen negativt.",
-         "iconScale":"Ikon størrelse",
-         "iconScaleTooltip":"Bestemmer størrelsen på de indlæste ikoner.",
-         "showText":"Vis tekst",
-         "showTextTooltip":"Bestemmer om teksten vises under ikoner på kortet, aktivering kan påvirke ydeevnen negativt.",
-         "interpolation":"Placerings interpolation/ekstrapolation",
-         "interpolationTooltip":"Bestemmer hvilken algoritme som benyttes til at udjævne bevægelse omkring kortet. ’interpolation’ giver det mest jævne resultat, men tilføjer en forsinkelse til din placering. ’ingen’ giver den bedste ydeevne.",
-         "interpolationNone":"Ingen",
-         "interpolationLinearInter":"Lineær interpolation",
-         "interpolationCosineInter":"Cosinus interpolation",
-         "interpolationLinearExtra":"Lineær ekstrapolation ",
-         "interpolationCosineExtra":"Cosinus ekstrapolation "
+   "settings": {
+      "title": "Indstillinger",
+      "open": "Åben denne menu, til hver en tid, ved at højreklikke.",
+      "window": {
+         "_": "Dette vindue",
+         "transparentHeader": "Gennemsigtig titel",
+         "transparentHeaderTooltip": "Gør vinduets titel gennemsigtig, når kortet bliver brugt.",
+         "transparentToolbar": "Gennemsigtig værktøjslinje",
+         "transparentToolbarTooltip": "Gør kortværktøjslinjer gennemsigtige.",
+         "showHeader": "Vis titel",
+         "showHeaderTooltip": "Vis titlens tekst og knapper, når kortet vises.",
+         "showToolbar": "Vis værktøjslinje",
+         "showToolbarTooltip": "Viser værktøjslinjerne over kortet.",
+         "zoomLevel": "Zoomniveau",
+         "zoomLevelTooltip": "Bestemmer zoomniveauet på kortet. Lavt zoomniveau, kan påvirke ydeevnen negativt.",
+         "townZoom": "Zoom automatisk ind i byer",
+         "townZoomTooltip": "Aktivering gør det muligt for dig at konfigurere et separat zoomniveau, når du er i byer.",
+         "townZoomLevel": "Zoomniveau for byer",
+         "townZoomLevelTooltip": "Bestemmer zoomniveauet på kortet i byer. Lavt zoomniveau, kan påvirke ydeevnen negativt.",
+         "iconScale": "Ikon størrelse",
+         "iconScaleTooltip": "Bestemmer størrelsen på de indlæste ikoner.",
+         "showText": "Vis tekst",
+         "showTextTooltip": "Bestemmer om teksten vises under ikoner på kortet, aktivering kan påvirke ydeevnen negativt.",
+         "interpolation": "Placerings interpolation/ekstrapolation",
+         "interpolationTooltip": "Bestemmer hvilken algoritme som benyttes til at udjævne bevægelse omkring kortet. ’interpolation’ giver det mest jævne resultat, men tilføjer en forsinkelse til din placering. ’ingen’ giver den bedste ydeevne.",
+         "interpolationNone": "Ingen",
+         "interpolationLinearInter": "Lineær interpolation",
+         "interpolationCosineInter": "Cosinus interpolation",
+         "interpolationLinearExtra": "Lineær ekstrapolation ",
+         "interpolationCosineExtra": "Cosinus ekstrapolation ",
+         "resamplingRate": "Opsamplingsfaktor",
+         "resamplingRateTooltip": "Antallet af prøver som tages ved inter-/ekstrapolation. En højere værdi, vil give en jævnere oplevelse, men har værre ydeevne."
       },
-      "overlay":{
-         "_":"In-game overlay",
-         "compassMode":"Ovelay kompasstilstand",
-         "compassModeTooltip":"Aktivering får spilleren til altid at vende mod nord og roterer kortet omkring spilleren, ligesom et klassisk minimap.",
-         "opacity":"Overlay gennemsigtighed",
-         "opacityTooltip":"Bestemmer gennemsigtigheden på overlayet.",
-         "shape":"Overlay form",
-         "shapeTooltip":"Bestemmer formen af overlayet.",
-         "shapeRectangular":"Rektangulær",
-         "shapeEllipse":"Ellipse",
-         "shapeDiamond":"Diamant"
+      "overlay": {
+         "_": "In-game overlay",
+         "compassMode": "Ovelay kompasstilstand",
+         "compassModeTooltip": "Aktivering får spilleren til altid at vende mod nord og roterer kortet omkring spilleren, ligesom et klassisk minimap.",
+         "opacity": "Overlay gennemsigtighed",
+         "opacityTooltip": "Bestemmer gennemsigtigheden på overlayet.",
+         "shape": "Overlay form",
+         "shapeTooltip": "Bestemmer formen af overlayet.",
+         "shapeRectangular": "Rektangulær",
+         "shapeEllipse": "Ellipse",
+         "shapeDiamond": "Diamant"
       },
-      "icon":{
-         "_":"Ikoner"
+      "icon": {
+         "_": "Ikoner"
       },
-      "friend":{
-         "_":"Venner",
-         "shareLocation":"Del placering med venner",
-         "shareLocationTooltip":"Del din placering i spillet med enhver spiller, som har din kode.",
-         "friendCode":"Din vennekode",
-         "friendCodeTooltip":"Send denne kode til dine venner for at dele din placering.",
-         "friends":"Dine venner",
-         "friendsTooltip":"Liste af dine venner. Én vennekode pr. linje.",
-         "regenerate":"Generer en ny vennekode, hvis du ikke vil lade bestemte personer følge dig."
+      "friend": {
+         "_": "Venner",
+         "shareLocation": "Del placering med venner",
+         "shareLocationTooltip": "Del din placering i spillet med enhver spiller, som har din kode.",
+         "friendCode": "Din vennekode",
+         "friendCodeTooltip": "Send denne kode til dine venner for at dele din placering.",
+         "friends": "Dine venner",
+         "friendsTooltip": "Liste af dine venner. Én vennekode pr. linje.",
+         "regenerate": "Generer en ny vennekode, hvis du ikke vil lade bestemte personer følge dig."
       }
    }
 }
