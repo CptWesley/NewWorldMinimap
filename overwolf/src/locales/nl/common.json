@@ -79,7 +79,11 @@
             "friendCodeTooltip": "Stuur deze code naar je vrienden om je locatie te delen.",
             "friends": "Jouw vrienden",
             "friendsTooltip": "Lijst van vrienden. Eén vriend code per regel.",
-            "regenerate": "Genereer een nieuwe vriend code als je niet meer wilt dat sommige mensen je kunnen volgen."
+            "regenerate": "Genereer een nieuwe vriend code als je niet meer wilt dat sommige mensen je kunnen volgen.",
+            "advanced": "Geavanceerde Instellingen",
+            "advancedTooltip": "Instellingen voor geavanceerde gebruikers. Verander ze alleen als je weet wat je doet.",
+            "customServerUrl": "Server endpoint URL",
+            "customServerUrlTooltip": "De URL van de server waar je mee wilt verbinden. Leeg laten om gebruik te maken van de standaard server."
         }
     }
 }
