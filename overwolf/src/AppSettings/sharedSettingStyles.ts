@@ -7,6 +7,16 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
     setting: {
         marginBottom: theme.spacing(1),
     },
+    summary: {
+        borderRadius: 3,
+        padding: 2,
+        marginBottom: theme.spacing(1),
+
+        '&:hover, &:focus': {
+            outline: 'none',
+            background: 'rgba(255, 255, 255, 0.2)',
+        },
+    },
     checkbox: {
         '& > input[type="checkbox"]': {
             margin: theme.spacing(0, 1, 0, 0),
