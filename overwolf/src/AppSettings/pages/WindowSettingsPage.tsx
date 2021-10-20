@@ -149,6 +149,21 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.interpolation')}
             </label>
         </div>
-
+        <div className={classes.setting}>
+            <label className={classes.range} title={t('settings.window.resamplingRateTooltip')}>
+                <input
+                    type='range'
+                    value={settings.resamplingRate}
+                    min='10'
+                    max='40'
+                    step='1'
+                    disabled={settings.interpolation === 'none'}
+                    onChange={e => updateSimpleSetting('resamplingRate', e.currentTarget.valueAsNumber)}
+                    onMouseDown={handleMapSliderMouseDown}
+                    onMouseUp={handleMapSliderMouseUp}
+                />
+                {t('settings.window.resamplingRate')}
+            </label>
+        </div>
     </>;
 }
