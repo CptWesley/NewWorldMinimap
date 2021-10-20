@@ -1,4 +1,3 @@
-import { getIconName } from './icons';
 import { loadIconConfiguration } from './storage';
 import { getTileMarkerCache } from './tileMarkerCache';
 
@@ -24,7 +23,7 @@ export async function getDefaultIconSettings() {
         value.forEach(marker => {
             if (!categories[marker.category]) {
                 categories[marker.category] = {
-                    name: getIconName(marker.category),
+                    category: marker.category,
                     visible: loadIconConfiguration(marker.category, undefined, 'visible'),
                     showLabel: loadIconConfiguration(marker.category, undefined, 'showLabel'),
                     types: {},
@@ -35,7 +34,8 @@ export async function getDefaultIconSettings() {
 
             if (!category.types[marker.type]) {
                 category.types[marker.type] = {
-                    name: getIconName(marker.category, marker.type),
+                    category: marker.category,
+                    type: marker.type,
                     visible: loadIconConfiguration(marker.category, marker.type, 'visible'),
                     showLabel: loadIconConfiguration(marker.category, marker.type, 'showLabel'),
                 };

@@ -2,6 +2,7 @@ import i18next from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 import locales from '@/locales';
+import { purgeIconNames } from './logic/icons';
 
 export type SupportedLocale = keyof typeof locales;
 export const supportedLocales = Object.keys(locales) as readonly SupportedLocale[];
@@ -34,6 +35,7 @@ i18n
 
 export async function changeLanguage(language: SupportedLocale) {
     await i18next.changeLanguage(language);
+    purgeIconNames();
 }
 
 window.addEventListener('storage', e => {

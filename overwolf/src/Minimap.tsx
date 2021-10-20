@@ -6,6 +6,7 @@ import { globalLayers } from './globalLayers';
 import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
+import { getIconName } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
@@ -80,6 +81,7 @@ export default function Minimap(props: IProps) {
 
     // eslint-disable-next-line complexity
     const draw = (pos: Vector2, angle: number) => {
+        const startTime = performance.now();
         const ctx = canvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
@@ -192,13 +194,15 @@ export default function Minimap(props: IProps) {
                 ctx.strokeStyle = '#000';
                 ctx.fillStyle = '#fff';
 
+                const markerText = getIconName(marker.category, marker.name ?? marker.type);
+
                 if (renderAsCompass) {
                     const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                    ctx.strokeText(marker.text, rotated.x, rotated.y + icon.height);
-                    ctx.fillText(marker.text, rotated.x, rotated.y + icon.height);
+                    ctx.strokeText(markerText, rotated.x, rotated.y + icon.height);
+                    ctx.fillText(markerText, rotated.x, rotated.y + icon.height);
                 } else {
-                    ctx.strokeText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                    ctx.fillText(marker.text, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.strokeText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
+                    ctx.fillText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
                 }
             }
         }
@@ -255,6 +259,9 @@ export default function Minimap(props: IProps) {
                 ctx.restore();
             }
         }
+        const endTime = performance.now();
+        const difTime = endTime - startTime;
+        console.log('Draw took: ' + difTime + ' ms.');
     };
 
     function drawWithInterpolation(force: boolean) {

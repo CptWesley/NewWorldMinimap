@@ -38,7 +38,27 @@ function predictCorrectName(str: string) {
     return capitalizedParts.join(' ');
 }
 
+const cache = new Map<string, string>();
+
 export function getIconName(category: string, type?: string) {
+    const key = type ? category + '::' + type : category;
+    const lookup = cache.get(key);
+
+    if (lookup) {
+        return lookup;
+    }
+
+    const value = getIconNameUncached(category, type);
+
+    cache.set(key, value);
+    return value;
+}
+
+export function purgeIconNames() {
+    cache.clear();
+}
+
+function getIconNameUncached(category: string, type?: string) {
     const lookup = getIconNameOverride(category, type);
 
     if (lookup) {

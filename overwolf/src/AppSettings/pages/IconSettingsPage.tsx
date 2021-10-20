@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import produce from 'immer';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { getIconName } from '@/logic/icons';
 import { storeIconConfiguration } from '@/logic/storage';
 import { compareNames } from '@/logic/util';
 import { makeStyles } from '@/theme';
@@ -148,7 +149,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <span className={classes.categoryTypeName}>{type.name}</span>
+                <span className={classes.categoryTypeName}>{getIconName(type.category, type.type)}</span>
             </div>;
         });
 
@@ -183,7 +184,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                     />
                 </label>
 
-                <span>{category.name}</span>
+                <span>{getIconName(category.category)}</span>
             </summary>
 
             <div className={classes.toggleAllEntry}>
