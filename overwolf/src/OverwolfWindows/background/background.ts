@@ -1,3 +1,4 @@
+import { initializeHooks } from '@/logic/hooks';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
 import { initializeTileCache } from '../../logic/tileCache';
@@ -155,6 +156,7 @@ if (BackgroundController.isSupported) {
     (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
 }
 
+initializeHooks();
 initializeTileCache();
 initializeTileMarkerCache();
 initializeHotkeyManager();

@@ -228,7 +228,7 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (squaredDistance(lastPosition.current, currentPosition.current) > 1000 || appContext.settings.interpolation === 'none') {
+        if (timeDif > positionUpdateRate || squaredDistance(lastPosition.current, currentPosition.current) > positionUpdateRate || appContext.settings.interpolation === 'none') {
             draw(currentPosition.current, currentAngle);
             return;
         }
@@ -342,13 +342,13 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), 100)
+            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
             : undefined;
 
         return function () {
             clearInterval(interval);
         };
-    }, [interpolationEnabled]);
+    }, [interpolationEnabled, appContext.settings.resamplingRate]);
 
     // This effect adds an event handler for the window resize event, triggering a redraw when it fires.
     useEffect(() => {

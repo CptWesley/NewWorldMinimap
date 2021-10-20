@@ -22,6 +22,7 @@
     },
     "settings": {
         "title": "Instellingen",
+        "open": "Open dit scherm wanneer u wilt door op de kaart op de rechter muisknop te klikken.",
         "window": {
             "_": "Dit venster",
             "transparentHeader": "Doorzichtige titelbalk",
@@ -43,7 +44,14 @@
             "showText": "Tekst tonen",
             "showTextTooltip": "Bepaalt of er tekst wordt weergegeven onder iconen op de kaart. Inschakelen kan de prestaties negatief beïnvloeden.",
             "interpolation": "Locatie interpoleren/extrapoleren",
-            "interpolationTooltip": "Bepaalt welk algoritme gebruikt wordt voor vloeiende bewegingen van de kaart. 'Interpolation' geeft de vloeiendste resultaten, maar voegt ook vertraging toe aan je positie. 'None' geeft de beste prestaties."
+            "interpolationTooltip": "Bepaalt welk algoritme gebruikt wordt voor vloeiende bewegingen van de kaart. 'Interpolatie' geeft de vloeiendste resultaten, maar voegt ook vertraging toe aan je positie. 'Geen' geeft de beste prestaties.",
+            "interpolationNone": "Geen",
+            "interpolationLinearInter": "Lineaire Interpolatie",
+            "interpolationCosineInter": "Cosinus Interpolatie",
+            "interpolationLinearExtra": "Lineaire Extrapolatie",
+            "interpolationCosineExtra": "Cosinus Extrapolatie",
+            "resamplingRate": "Opschalingsfactor",
+            "resamplingRateTooltip": "Het aantal monsters dat wordt genomen voor inter/extra-polatie. Een hogere waardere geeft een vloeierende ervaring, maar heeft mogelijk slechtere presetaties."
         },
         "overlay": {
             "_": "In-game overlay",

@@ -3,18 +3,17 @@ import { interestingFeatures } from '../OverwolfWindows/consts';
 
 export const positionUpdateRate = 1000;
 
-const listener = new OWGamesEvents({
-    onInfoUpdates: onUpdate,
-    onNewEvents: onUpdate,
-}, interestingFeatures);
-
-listener.start();
-
 type cb = (info: PlayerData) => void;
 
 const callbacks: Set<cb> = new Set();
+const isBackground = NWMM_APP_WINDOW === 'background';
+const actualRegister = isBackground ? registerEventCallbackGlobal : (overwolf.windows.getMainWindow() as any).registerEventCallbackGlobal;
 
 export function registerEventCallback(callback: cb) {
+    return actualRegister(callback);
+}
+
+function registerEventCallbackGlobal(callback: cb) {
     callbacks.add(callback);
     return () => {
         callbacks.delete(callback);
@@ -28,8 +27,6 @@ function onUpdate(info: any) {
         return;
     }
 
-    console.log(playerData);
-
     for (const cb of callbacks) {
         cb(playerData);
     }
@@ -41,8 +38,6 @@ function transformData(info: any): PlayerData | undefined {
     }
 
     if (!info.location) {
-        console.error('Unsuccesful poll attempt!');
-        console.error(info);
         return undefined;
     }
 
@@ -72,4 +67,16 @@ function transformData(info: any): PlayerData | undefined {
     };
 }
 
-setInterval(() => overwolf.games.events.getInfo(onUpdate), positionUpdateRate);
+export function initializeHooks() {
+    if (!isBackground) {
+        return;
+    }
+
+    const listener = new OWGamesEvents({
+        onInfoUpdates: onUpdate,
+        onNewEvents: onUpdate,
+    }, interestingFeatures);
+    listener.start();
+    setInterval(() => overwolf.games.events.getInfo(onUpdate), positionUpdateRate);
+    (window as any).registerEventCallbackGlobal = registerEventCallbackGlobal;
+}

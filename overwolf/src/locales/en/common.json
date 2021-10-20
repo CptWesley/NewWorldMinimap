@@ -22,6 +22,7 @@
     },
     "settings": {
         "title": "Settings",
+        "open": "Open this menu at any time by right-clicking.",
         "window": {
             "_": "This window",
             "transparentHeader": "Transparent header",
@@ -33,17 +34,24 @@
             "showToolbar": "Show toolbar",
             "showToolbarTooltip": "Shows toolbars above the map.",
             "zoomLevel": "Zoom level",
-            "zoomLevelTooltip": "Determines the zoom level on the map. Lower zoom may impact performance negatively.",
+            "zoomLevelTooltip": "Determines the zoom level of the map. Lower zoom may impact performance negatively.",
             "townZoom": "Automatically zoom in towns",
             "townZoomTooltip": "Enabling will allow you to configure a seperate zoom level when in towns.",
             "townZoomLevel": "Zoom level for towns",
-            "townZoomLevelTooltip": "Determines the zoom level on the map when in towns. Lower zoom may impact performance negatively.",
+            "townZoomLevelTooltip": "Determines the zoom level of the map when in towns. Lower zoom may impact performance negatively.",
             "iconScale": "Icon scale",
             "iconScaleTooltip": "Determines the size of the rendered icons.",
             "showText": "Show text",
             "showTextTooltip": "Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.",
             "interpolation": "Location interpolation/extrapolation",
-            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance."
+            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance.",
+            "interpolationNone": "None",
+            "interpolationLinearInter": "Linear Interpolation",
+            "interpolationCosineInter": "Cosine Interpolation",
+            "interpolationLinearExtra": "Linear Extrapolation",
+            "interpolationCosineExtra": "Cosine Extrapolation",
+            "resamplingRate": "Upsampling factor",
+            "resamplingRateTooltip": "The number of samples taken when performing inter/extra-polation. A higher value will give a smoother experience, but has worse performance."
         },
         "overlay": {
             "_": "In-game overlay",

@@ -140,15 +140,30 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     value={settings.interpolation}
                     onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
                 >
-                    <option value='none'>None</option>
-                    <option value='linear-interpolation'>Linear Interpolation</option>
-                    <option value='cosine-interpolation'>Cosine Interpolation</option>
-                    <option value='linear-extrapolation'>Linear Extrapolation</option>
-                    <option value='cosine-extrapolation'>Cosine Extrapolation</option>
+                    <option value='none'>{t('settings.window.interpolationNone')}</option>
+                    <option value='linear-interpolation'>{t('settings.window.interpolationLinearInter')}</option>
+                    <option value='cosine-interpolation'>{t('settings.window.interpolationCosineInter')}</option>
+                    <option value='linear-extrapolation'>{t('settings.window.interpolationLinearExtra')}</option>
+                    <option value='cosine-extrapolation'>{t('settings.window.interpolationCosineExtra')}</option>
                 </select>
                 {t('settings.window.interpolation')}
             </label>
         </div>
-
+        <div className={classes.setting}>
+            <label className={classes.range} title={t('settings.window.resamplingRateTooltip')}>
+                <input
+                    type='range'
+                    value={settings.resamplingRate}
+                    min='10'
+                    max='60'
+                    step='1'
+                    disabled={settings.interpolation === 'none'}
+                    onChange={e => updateSimpleSetting('resamplingRate', e.currentTarget.valueAsNumber)}
+                    onMouseDown={handleMapSliderMouseDown}
+                    onMouseUp={handleMapSliderMouseUp}
+                />
+                {t('settings.window.resamplingRate')}
+            </label>
+        </div>
     </>;
 }

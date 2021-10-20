@@ -59,10 +59,12 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 
 ## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
-- You now have 3 options:
+- You now have 4 options:
   - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
   - Get the latest release available from the [releases page](https://github.com/CptWesley/NewWorldMinimap/releases). These are the latest releases that might not have yet been inspected by the Overwolf QA team.
-  - Get the latest builds available from the [build-artifacts](https://github.com/CptWesley/NewWorldMinimap/actions/workflows/overwolf.yml). These builds are automatically created and might be very unstable, but will contain the newest features.
+  - Get the latest build artifact [here](https://nightly.link/CptWesley/NewWorldMinimap/workflows/overwolf/master/app-artifact.zip). These builds are automatically created and might be very unstable, but will contain the newest features.
+    - Download the `app-artifact.zip` at the bottom of the page. This `.zip` will contain the produced `.opk` file.
+  - Get any other available build from the [build-artifacts](https://github.com/CptWesley/NewWorldMinimap/actions/workflows/overwolf.yml). These builds are automatically created and might be very unstable, but will contain the newest features. This requires being logged into GitHub to download.
     - Go to the [page](https://github.com/CptWesley/NewWorldMinimap/actions/workflows/overwolf.yml)
     - Click on the build you are interested in (higher is more recent).
     - Download the `app-artifact.zip` at the bottom of the page. This `.zip` will contain the produced `.opk` file.
@@ -128,4 +130,4 @@ The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMin
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
 
 ## Support Me
-Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley)! But don't feel obliged to!
+Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley) ! But don't feel obliged to!
