@@ -28,13 +28,14 @@ declare type Tile = {
 }
 
 declare type IconTypeSetting = {
-    name: string;
+    category: string;
+    type: string;
     visible: boolean;
     showLabel: boolean;
 }
 
 declare type IconCategorySetting = {
-    name: string,
+    category: string,
     visible: boolean,
     showLabel: boolean,
     types: Record<string, IconTypeSetting>,

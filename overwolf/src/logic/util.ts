@@ -1,7 +1,13 @@
+import { getIconName } from './icons';
+
 export function compareNames([, v1]: [string, any], [, v2]: [string, any]) {
     const s1 = v1 as IconTypeSetting;
     const s2 = v2 as IconTypeSetting;
-    return s1.name.localeCompare(s2.name);
+
+    const n1 = getIconName(s1.category, s1.type);
+    const n2 = getIconName(s2.category, s2.type);
+
+    return n1.localeCompare(n2);
 }
 
 export function rotateAround(center: Vector2, point: Vector2, angle: number) {
