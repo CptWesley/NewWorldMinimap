@@ -157,12 +157,12 @@ export default function Minimap(props: IProps) {
 
         for (const marker of toDraw) {
             const catSettings = iconSettings.categories[marker.category];
-            if (!catSettings || !catSettings.value) {
+            if (!catSettings || !catSettings.visible) {
                 continue;
             }
 
             const typeSettings = catSettings.types[marker.type];
-            if (typeSettings && !typeSettings.value) {
+            if (typeSettings && !typeSettings.visible) {
                 continue;
             }
 
@@ -182,7 +182,7 @@ export default function Minimap(props: IProps) {
                 ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
             }
 
-            if (appContext.settings.showText) {
+            if (appContext.settings.showText && catSettings.showLabel && typeSettings.showLabel) {
                 ctx.textAlign = 'center';
                 ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
                 ctx.strokeStyle = '#000';
