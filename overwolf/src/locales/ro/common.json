@@ -1,0 +1,92 @@
+{
+    "lng": "Română",
+    "close": "Închide",
+    "selectAll": "Selectează tot",
+    "deselectAll": "Deselectează tot",
+    "header": {
+        "settings": "Setări",
+        "openInGame": "Deschide fereastra în joc",
+        "openDesktop": "Deschide fereatra înafara jocului"
+    },
+    "welcome": {
+        "title": "Bine ați venit la CptWesley's Minimap",
+        "primary": "Lansează New World ca să accesezi minimap.",
+        "settings": "Poți accesa setările aplicației și atunci când jocul nu e activ.",
+        "discord": "Alătură-te serverului nostru Discord pentru întrebări, ajutor și sugestii: <1>{{discord}}<1>.",
+        "devBuild": "Acesta pare a fi a development build. Folosește butonul de mai jos ca să accesezi minimap la o locație debug.",
+        "forceMap": "Arată-mi harta"
+    },
+    "minimap": {
+        "tilesLoading_one": "Încărcare {{count}} placă",
+        "tilesLoading_other": "Încărcare {{count}} plăci",
+        "zoomIn": "Mărește",
+        "zoomOut": "Micșorează",
+        "recenter": "Centrează pe locația jucătorului"
+    },
+    "settings": {
+        "title": "Setări",
+        "open": "Deschide acest meniu prin clic-dreapta.",
+        "window": {
+            "_": "Această fereastră",
+            "transparentHeader": "Antet transparent",
+            "transparentHeaderTooltip": "Face antetul ferestrei transparent când harta este afișată.",
+            "transparentToolbar": "Bara de instrumente transparentă",
+            "transparentToolbarTooltip": "Face bara de instrumente a hărții transparentă.",
+            "showHeader": "Arată antet",
+            "showHeaderTooltip": "Arată textul și butoanele antetului când harta este afișată.",
+            "showToolbar": "Arată bara de instrumente",
+            "showToolbarTooltip": "Arată bara de instrumente deasupra hărții.",
+            "zoomLevel": "Nivel de zoom",
+            "zoomLevelTooltip": "Determină nivelul de zoom al hărții. Un nivel de zoom redus poate afecta performnța jocului în mod negativ.",
+            "townZoom": "Mărește orașele automat",
+            "townZoomTooltip": "Permițând aceasta poți configura un nivel separat de zoom când te afli în orașe.",
+            "townZoomLevel": "Nivel de zoom pentru orașe",
+            "townZoomLevelTooltip": "Determină nivelul de zoom al hărții când te afli în orașe. Un nivel de zoom redus poate afecta performnța jocului în mod negativ.",
+            "iconScale": "Dimensiune pictogramă",
+            "iconScaleTooltip": "Determină mărimea pictogramelor redate.",
+            "showText": "Arată text",
+            "showTextTooltip": "Controlează dacă textul este afișat sub picograme pe hartă. Controlează dacă textul este afișat sub pictograme pe hartă. Permiterea acesteia poate afecta performanța jocului în mod negativ.",
+            "interpolation": "Interpolarea/Extrapolarea locației",
+            "interpolationTooltip": "Detemines which algorithm to use to produce smoother movement around the map. 'Interpolation' gives the smoothest results, but adds a delay to your position. 'None' gives the best performance.",
+            "interpolationNone": "Nici una",
+            "interpolationLinearInter": "Interpolare liniară",
+            "interpolationCosineInter": "Interpolare cosinus",
+            "interpolationLinearExtra": "Extrapolare liniară",
+            "interpolationCosineExtra": "Extrapolare cosinus",
+            "resamplingRate": "Factor de Upsampling factor",
+            "resamplingRateTooltip": "Numărul de probe luate în timpul inter/extrapolării. O valoare mai mare oferă o experiență mai bună, dar are performanță mai scăzută."
+        },
+        "overlay": {
+            "_": "Overlay în joc",
+            "compassMode": "Overlay Mod Busolă",
+            "compassModeTooltip": "Permiterea va face jucătorul să privească mereu nordul și rotește hartă în jurul jucătorului, ca un minimap clasic.",
+            "opacity": "Overlay Opacitate",
+            "opacityTooltip": "Determină opacitatea overlay.",
+            "shape": "Overlay Formă",
+            "shapeTooltip": "Determină forma overlay.",
+            "shapeRectangular": "Dreptunghiulară",
+            "shapeEllipse": "Elipsă",
+            "shapeDiamond": "Diamant"
+        },
+        "icon": {
+            "_": "Pictograme",
+            "toggleAll": "(Dez)activează tot",
+            "toggleVisible": "(Dez)activează vizibilitatea",
+            "toggleShowLabel": "(Dez)activează eticheta pictogramei"
+        },
+        "friend": {
+            "_": "Prieteni",
+            "shareLocation": "Trimite locația prietenilor",
+            "shareLocationTooltip": "Trimite locația ta din joc oricărui jucător care are codul tău.",
+            "friendCode": "Codul prietenului tău",
+            "friendCodeTooltip": "Trimite acest cod prietenilor tăi ca să le trimiți locația ta.",
+            "friends": "Prietenii tăi",
+            "friendsTooltip": "Lista prietenilor tăi. Un cod al unui prieten pe linie.",
+            "regenerate": "Genrează un cod nou al unui prieten dacă vrei ca diverși oameni să nu îți mai poată accesa datele.",
+            "advanced": "Setări avansate",
+            "advancedTooltip": "Setări pentru jucători avansați. Schimbă-le doar dacă știi ce faci.",
+            "customServerUrl": "Server endpoint URL",
+            "customServerUrlTooltip": "URL-ul pentru server endpoint la care vrei să te conectezi. Lasă necompletat pentru serverul standard."
+        }
+    }
+}

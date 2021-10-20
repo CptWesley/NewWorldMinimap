@@ -7,6 +7,7 @@ import { it } from './it';
 import { nl } from './nl';
 import { pl } from './pl';
 import { pt } from './pt';
+import { ro } from './ro';
 
 export default {
     de,
@@ -18,4 +19,5 @@ export default {
     nl,
     pl,
     pt,
+    ro,
 } as const;

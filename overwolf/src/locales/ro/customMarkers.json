@@ -1,0 +1,15 @@
+{
+    "categories": {
+        "npc": "NPCs",
+        "chests": "Cufere",
+        "documents": "Documente",
+        "essences": "Esențe",
+        "fishing": "Pește",
+        "monsters": "Creaturi",
+        "ores": "Minereuri",
+        "plants": "Plante",
+        "pois": "Puncte de interes",
+        "town": "Oraș",
+        "woods": "Păduri"
+    }
+}
