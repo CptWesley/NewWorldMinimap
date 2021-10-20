@@ -3,7 +3,6 @@ import { generateRandomToken } from './util';
 
 export async function updateFriendLocation(id: string, name: string, location: Vector2, friends: string) {
     const settings = getDynamicSettings();
-    console.log(settings);
     if (settings && settings.friendServerEndpoint) {
         try {
             const req = await fetch(settings.friendServerEndpoint, {
