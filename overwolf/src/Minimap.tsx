@@ -249,10 +249,13 @@ export default function Minimap(props: IProps) {
         }
 
         for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(playerPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const imgPos = toMinimapCoordinate(mapCenterPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
-            const imgPosCorrected = { x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX, y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY };
+            const imgPosCorrected = {
+                x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            };
 
             if (lastDraw.current !== currentDraw) {
                 return;
