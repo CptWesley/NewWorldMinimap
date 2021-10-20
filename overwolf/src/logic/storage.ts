@@ -130,6 +130,7 @@ export function getStorageKeyScope(key: string): [KnownStorageScope | undefined,
         : [undefined, key];
 }
 
+const iconProperties: IconProperty[] = ['showLabel', 'visible'];
 /**
  * Obtains the category (and optionally, type) of an icon setting storage key.
  * @param identifier The identifier of the key, without the scope.
@@ -138,10 +139,11 @@ export function getStorageKeyScope(key: string): [KnownStorageScope | undefined,
 export function deconstructIconStorageKey(identifier: string) {
     const propertySplit = identifier.split('.');
     if (propertySplit.length !== 2) { return undefined; }
+    if (!iconProperties.includes(propertySplit[1] as IconProperty)) { return undefined; }
     const categoryAndType = propertySplit[0].split('--');
     if (categoryAndType.length < 1 || categoryAndType.length > 2) { return undefined; }
     return {
-        property: propertySplit[1],
+        property: propertySplit[1] as IconProperty,
         category: categoryAndType[0],
         type: categoryAndType.length === 2 ? categoryAndType[1] : undefined,
     };
