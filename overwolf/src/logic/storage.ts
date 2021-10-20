@@ -26,6 +26,7 @@ export const simpleStorageDefaultSettings = {
     townZoomLevel: 1,
     townZoom: true,
     interpolation: 'cosine-interpolation' as Interpolation,
+    resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
 };
 
@@ -42,6 +43,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoomLevel',
     'townZoom',
     'interpolation',
+    'resamplingRate',
 ];
 
 export const iconSettingStorageScope = 'icon';

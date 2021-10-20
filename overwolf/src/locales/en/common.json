@@ -49,7 +49,9 @@
             "interpolationLinearInter": "Linear Interpolation",
             "interpolationCosineInter": "Cosine Interpolation",
             "interpolationLinearExtra": "Linear Extrapolation",
-            "interpolationCosineExtra": "Cosine Extrapolation"
+            "interpolationCosineExtra": "Cosine Extrapolation",
+            "resamplingRate": "Upsampling factor",
+            "resamplingRateTooltip": "The number of samples taken when performing inter/extra-polation. A higher value will give a smoother experience, but has worse performance."
         },
         "overlay": {
             "_": "In-game overlay",
