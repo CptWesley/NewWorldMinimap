@@ -30,6 +30,7 @@ export const simpleStorageDefaultSettings = {
     friends: '',
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
+    friendServerUrl: '',
 };
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
@@ -46,6 +47,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'townZoom',
     'interpolation',
     'resamplingRate',
+    'friendServerUrl',
 ];
 
 export const iconSettingStorageScope = 'icon';
