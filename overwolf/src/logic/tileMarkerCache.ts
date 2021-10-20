@@ -1,5 +1,4 @@
 import { customMarkers } from '../Icons/MapIcons/customMarkers';
-import { getIconName } from './icons';
 import { getTileCacheKey } from './tileCache';
 import { getTileCacheKeyFromWorldCoordinate } from './tiles';
 
@@ -91,23 +90,15 @@ class TileMarkerCache {
                         nextCache.set(tileString, markerList);
                     }
 
-                    let text;
-                    if (category === 'monsters' && type === 'named') {
-                        // Get the right name of named monsters
-                        text = getIconName(category, (entryContent as { name: string }).name);
-                    } else if (category === 'pois') {
-                        // Get the right name of pois
-                        text = getIconName(category, (entryContent as { name: string }).name);
-                    } else {
-                        text = getIconName(category, type);
-                    }
+                    const name = (entryContent as { name?: string }).name;
 
                     const marker = {
                         category,
                         type,
                         pos,
-                        text,
+                        name,
                     };
+
                     markerList.push(marker);
                 }
             }

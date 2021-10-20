@@ -18,8 +18,8 @@ declare type Vector3 = {
 declare type Marker = {
     category: string;
     type: string;
+    name?: string | undefined;
     pos: Vector2;
-    text: string;
 }
 
 declare type Tile = {
