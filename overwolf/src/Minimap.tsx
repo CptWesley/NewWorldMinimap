@@ -411,7 +411,7 @@ export default function Minimap(props: IProps) {
 
         return function () {
             if (interval) {
-                clearInterval(interval as NodeJS.Timer);
+                clearInterval(interval);
             }
         };
     }, [interpolationEnabled, appContext.settings.resamplingRate]);
