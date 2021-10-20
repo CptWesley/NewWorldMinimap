@@ -431,21 +431,17 @@ export default function Minimap(props: IProps) {
             const dY = e.pageY - scrollingMap.current.position.y;
             const dragAllowed = scrollingMap.current.threshold || Math.abs(dX) > 3 || Math.abs(dY) > 3;
             if (dragAllowed) {
-                if (!isMapDragged) {
+                if (!scrollingMap.current.threshold) {
+                    scrollingMap.current.threshold = true;
+                    mapPositionOverride.current = { ...mapPositionOverride.current ?? currentPlayerPosition.current };
                     setIsMapDragged(true);
-                    // Reset the position to make the transition smoother
-                    scrollingMap.current.position.x = e.pageX;
-                    scrollingMap.current.position.y = e.pageY;
+                } else if (mapPositionOverride.current) {
+                    mapPositionOverride.current.x -= dX * appContext.settings.zoomLevel / 4;
+                    mapPositionOverride.current.y += dY * appContext.settings.zoomLevel / 4;
                 }
-                if (!mapPositionOverride.current) {
-                    mapPositionOverride.current = { ...currentPlayerPosition.current };
-                }
-                mapPositionOverride.current.x -= dX * appContext.settings.zoomLevel / 4;
-                mapPositionOverride.current.y += dY * appContext.settings.zoomLevel / 4;
-                scrollingMap.current.threshold = true;
+                redraw(true);
                 scrollingMap.current.position.x = e.pageX;
                 scrollingMap.current.position.y = e.pageY;
-                redraw(true);
             }
         }
     }
