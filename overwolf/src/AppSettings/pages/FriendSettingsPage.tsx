@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import GenerateIcon from '@/Icons/GenerateIcon';
+import { getFriendCode, regenerateFriendCode } from '@/logic/friends';
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
-import { getFriendCode, regenerateFriendCode } from '@/logic/friends';
 
 const useStyles = makeStyles()(theme => ({
     friendsGenerateButton: {
@@ -67,6 +67,19 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     {t('settings.friend.friends')}
                 </label>
             </div>
+            <details>
+                <summary title={t('settings.friend.advancedTooltip')}>{t('settings.friend.advanced')}</summary>
+                <div className={sharedClasses.setting}>
+                    <label className={sharedClasses.textbox} title={t('settings.friend.customServerUrlTooltip')}>
+                        <input
+                            type='text'
+                            onChange={e => updateSimpleSetting('friendServerUrl', e.currentTarget.value)}
+                            value={settings.friendServerUrl}
+                        />
+                        {t('settings.friend.customServerUrl')}
+                    </label>
+                </div>
+            </details>
         </div>
     </>;
 }

@@ -79,7 +79,11 @@
             "friendCodeTooltip": "Send this code to your friends to share your location.",
             "friends": "Your friends",
             "friendsTooltip": "List of your friends. One friend code per line.",
-            "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer."
+            "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer.",
+            "advanced": "Advanced Settings",
+            "advancedTooltip": "Settings for advanced users. Only change them if you know what you are doing.",
+            "customServerUrl": "Server endpoint URL",
+            "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server."
         }
     }
 }

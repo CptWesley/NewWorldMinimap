@@ -1,11 +1,19 @@
 import { getDynamicSettings } from './dynamicSettings';
 import { generateRandomToken } from './util';
 
-export async function updateFriendLocation(id: string, name: string, location: Vector2, friends: string) {
-    const settings = getDynamicSettings();
-    if (settings && settings.friendServerEndpoint) {
+export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, friends: string) {
+    let url = server.trim();
+
+    if (!url || url.length === 0) {
+        const settings = getDynamicSettings();
+        if (settings && settings.friendServerEndpoint) {
+            url = settings.friendServerEndpoint;
+        }
+    }
+
+    if (url && url.length > 0) {
         try {
-            const req = await fetch(settings.friendServerEndpoint, {
+            const req = await fetch(url, {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json',

@@ -34,6 +34,7 @@ export function loadAppContextSettings(): AppContextSettings {
         friends: load('friends'),
         resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
+        friendServerUrl: load('friendServerUrl'),
     };
 }
 
