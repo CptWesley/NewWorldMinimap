@@ -111,15 +111,14 @@ export function loadIconConfiguration(category: string, type: string | undefined
 }
 
 function getDefaultIconConfigurationValue(category: string, type: string | undefined, property: IconProperty): boolean {
-    if (property === 'showLabel') {
-        return true;
+    switch (property) {
+        case 'showLabel':
+            return true;
+        case 'visible':
+            return type
+                ? true // it's not a category
+                : !defaultHiddenIconCategories.includes(category); // it's a category
     }
-
-    if (!type) {
-        return !defaultHiddenIconCategories.includes(category);
-    }
-
-    return true;
 }
 
 /** Splits a storage key into its scope (if it exists and is known), and the rest of the key (which is called the identifier). */
