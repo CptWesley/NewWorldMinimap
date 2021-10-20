@@ -1,3 +1,89 @@
 {
-   "lng": "Español"
+   "lng": "Español",
+   "close": "Cerrar",
+   "selectAll": "Seleccionar todo",
+   "deselectAll": "Deseleccionar todo",
+   "header": {
+       "settings": "Configuración",
+       "openInGame": "Abrir mapa dentro del juego",
+       "openDesktop": "Abrir mapa en otra ventana"
+   },
+   "welcome": {
+       "title": "Bienvenid@ a CptWesley's Minimap",
+       "primary": "Para abrir el mini mapa debes abrir New World e ingresar a un mundo.",
+       "settings": "También puedes acceder a la configuración sin necesidad de abrir el juego.",
+       "discord": "Puedes unirte a nuestro Discord para responder preguntas, obtener ayuda y hacer sugerencias: <1>{{discord}}<1>.",
+       "devBuild": "Parece que tienes el modo desarrollo activado. Haz clic en el botón de abajo para abrir el mapa en la posición de debug.",
+       "forceMap": "Abrir mapa"
+   },
+   "minimap": {
+       "tilesLoading_one": "Cargando {{count}} objeto",
+       "tilesLoading_other": "Cargando {{count}} objetos"
+   },
+   "settings": {
+       "title": "Configuración",
+       "open": "Puede abrir este menú en cualquier momento haciendo click derecho.",
+       "window": {
+           "_": "Esta ventana",
+           "transparentHeader": "Header transparente",
+           "transparentHeaderTooltip": "Hacer que el header sea transparente mientras se ve el mapa.",
+           "transparentToolbar": "Barra de herramientas transparente",
+           "transparentToolbarTooltip": "Hacer transparente la barra de herramientas.",
+           "showHeader": "Mostrar header",
+           "showHeaderTooltip": "Miestra el texto y los botones del header mientras se vé el mapa.",
+           "showToolbar": "Mostrar barra de herramientas",
+           "showToolbarTooltip": "Mostrar la barra de herramientas debajo del mapa.",
+           "zoomLevel": "Zoom",
+           "zoomLevelTooltip": "Configura el nivel del zoom en el mapa. Un zoom muy amplio puede afectar el rendimiento del juego.",
+           "townZoom": "Aumentar el zoom automaticamente dentro de los pueblos",
+           "townZoomTooltip": "Activar esta opción permitirá tener un zoom diferente cuando estés dentro de los pueblos.",
+           "townZoomLevel": "Zoom para los pueblos",
+           "townZoomLevelTooltip": "Configura el nivel del zoom cuando estés dentro de un pueblo. Un zoom muy amplio puede afectar el rendimiento del juego.",
+           "iconScale": "Tamaño de los íconos",
+           "iconScaleTooltip": "Configura el tamaño de los íconos.",
+           "showText": "Mostrar nombres",
+           "showTextTooltip": "Si activas esta opción se mostrarán los nombres debajo de los íconos. Activar esta opción afectará el rendimiento del juego.",
+           "interpolation": "Interpolación / extrapolación de ubicación",
+           "interpolationTooltip": "Configura qué algoritmo se utiliza para detectar el movimiento alrededor del mapa. La 'interpolación' logra resultados más suaves, pero agrega un retraso en la detección. 'Ninguno' ofrece el mejor rendimiento, pero con cambios más bruscos.",
+           "interpolationNone": "Ninguno",
+           "interpolationLinearInter": "Interpolación linear",
+           "interpolationCosineInter": "Interpolación de coseno",
+           "interpolationLinearExtra": "Extrapolación linear",
+           "interpolationCosineExtra": "Extrapolación de coseno",
+           "resamplingRate": "Muestro superior",
+           "resamplingRateTooltip": "El número de muestras tomadas al realizar la interpolación / extrapolación. Un valor más alto proporcionará una experiencia más fluida, pero tendrá un peor rendimiento."
+       },
+       "overlay": {
+           "_": "Overlay dentor del juego",
+           "compassMode": "Modo compás",
+           "compassModeTooltip": "Si activas esta opción, tu posición siempre apuntará hacia el norte y el mapa girará alrededor de tu posición. Este es el comportamiento general de los minimapas.",
+           "opacity": "Opacidad de la ventana",
+           "opacityTooltip": "Configura que tan opaca/transparente será la ventana.",
+           "shape": "Forma del mapa",
+           "shapeTooltip": "Determina la forma del mapa.",
+           "shapeRectangular": "Rectangular",
+           "shapeEllipse": "Elipse (Circular)",
+           "shapeDiamond": "Diamante"
+       },
+       "icon": {
+           "_": "Íconos",
+           "toggleAll": "Activar todos",
+           "toggleVisible": "Activar visibilidad",
+           "toggleShowLabel": "Activar íconos que tengan el nombre visible"
+       },
+       "friend": {
+           "_": "Amigos",
+           "shareLocation": "Comparte la ubicación con tus amigos",
+           "shareLocationTooltip": "Comparte tu ubicación con las personas a las que le compartas tu código",
+           "friendCode": "Código de tu amigo",
+           "friendCodeTooltip": "Comparte este código con tus amigos para que vean tu ubicación.",
+           "friends": "Tus amigos",
+           "friendsTooltip": "Lista de tus amigos. Uno por linea.",
+           "regenerate": "Genera un nuevo código si quieres dejar de compartir tu ubicación con las personas que ya tienen tu código.",
+           "advanced": "Configuración avanzada",
+            "advancedTooltip": "Opciones para usuarios avanzados. Solo cambia esta configuración si estás seguro de lo que estás haciendo.",
+            "customServerUrl": "URL del servidor",
+            "customServerUrlTooltip": "La URL del endpoint al que deseas conectarte. Déjelo en blanco para user el servidor predeterminado."
+       }
+   }   
 }

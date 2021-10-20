@@ -1,0 +1,46 @@
+{
+    "categories": {
+        "npc": "NPCs",
+        "chests": "Cofres",
+        "documents": "Documentos",
+        "essences": "Esencia",
+        "fishing": "Zonas de pesca",
+        "monsters": "Criaturas",
+        "ores": "Minerales",
+        "plants": "Plantas",
+        "pois": "Puntos de interés",
+        "town": "Pueblos",
+        "woods": "Bosques"
+    },
+    "markers": {
+        "plants": {
+            "Single_Placeholder_DyePlant": "Planta de tinte",
+            "Single_Pumpkin": "Calabaza"
+        },
+        "town": {
+            "arcane_repository": "Depósito Arcano",
+            "covenant_adjudicator": "Mediador de pacto",
+            "forge": "Forja",
+            "governors_desk": "Escritorio del gobernador",
+            "inn": "Posada",
+            "kitchen": "Cocina",
+            "loom": "Telar",
+            "marauder_commander": "Comandante saqueador",
+            "outfitting_station": "Estación de equipamiento",
+            "smelter": "Fundición",
+            "stonecutting_table": "Mesa de cantería",
+            "storage_shed": "Almacenamiento",
+            "syndicate_alchemist": "Alquimista del sindicato",
+            "tannery": "Curtiembre",
+            "territory_planning_board": "Tablero de planificación de territorios",
+            "town_project_board": "Tablero de proyectos de pueblo",
+            "trading_post": "Tienda de intercambio",
+            "war_board": "Tablero de guerras",
+            "woodshop": "Taller de carpintería",
+            "workshop": "Taller"
+        },
+        "woods": {
+            "Briar": "Briar"
+        }
+    }
+}
