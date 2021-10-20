@@ -155,7 +155,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     type='range'
                     value={settings.resamplingRate}
                     min='10'
-                    max='40'
+                    max='60'
                     step='1'
                     disabled={settings.interpolation === 'none'}
                     onChange={e => updateSimpleSetting('resamplingRate', e.currentTarget.valueAsNumber)}
