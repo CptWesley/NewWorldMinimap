@@ -190,7 +190,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
                         type='checkbox'
-                        checked={hasAnyShowLabel}
+                        checked={hasAnyVisible}
                         onChange={e => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, 'visible', e.currentTarget.checked) })}
                     />
                     <FontAwesomeIcon
