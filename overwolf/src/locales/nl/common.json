@@ -49,7 +49,9 @@
             "interpolationLinearInter": "Lineaire Interpolatie",
             "interpolationCosineInter": "Cosinus Interpolatie",
             "interpolationLinearExtra": "Lineaire Extrapolatie",
-            "interpolationCosineExtra": "Cosinus Extrapolatie"
+            "interpolationCosineExtra": "Cosinus Extrapolatie",
+            "resamplingRate": "Opschalingsfactor",
+            "resamplingRateTooltip": "Het aantal monsters dat wordt genomen voor inter/extra-polatie."
         },
         "overlay": {
             "_": "In-game overlay",
