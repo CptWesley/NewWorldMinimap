@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import RecenterIcon from '@/Icons/RecenterIcon';
+import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { getFriendCode, updateFriendLocation } from './logic/friends';
@@ -16,8 +18,6 @@ import { toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import { makeStyles } from './theme';
-import MinimapToolbar from '@/MinimapToolbar';
-import RecenterIcon from '@/Icons/RecenterIcon';
 
 interface IProps {
     className?: string;
@@ -93,8 +93,8 @@ export default function Minimap(props: IProps) {
 
     const appContext = useContext(AppContext);
 
-    const currentMapPosition = useRef<Vector2>({x:9200, y:8110} );
-    const currentPlayerPosition = useRef<Vector2>({x:9200, y:8110});
+    const currentMapPosition = useRef<Vector2>({ x: 9200, y: 8110 });
+    const currentPlayerPosition = useRef<Vector2>({ x: 9200, y: 8110 });
     const currentFriends = useRef<FriendData[]>([]);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
@@ -107,7 +107,7 @@ export default function Minimap(props: IProps) {
 
     const lastDraw = useRef(0);
 
-    const scrollingMap = useRef(false);
+    const scrollingMap = useRef<{ pointerId: number, position: Vector2 }>();
     const mapScrolled = useRef(false);
     const currentMousePos = useRef<Vector2>({ x: 0, y: 0 } as Vector2);
     const lastMousePos = useRef<Vector2>({ x: 0, y: 0 } as Vector2);
@@ -369,7 +369,7 @@ export default function Minimap(props: IProps) {
         currentPlayerPosition.current = pos;
 
         if (!mapScrolled.current) {
-            currentMapPosition.current = {x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
+            currentMapPosition.current = { x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
         }
 
         store('lastKnownPosition', pos);
@@ -405,22 +405,26 @@ export default function Minimap(props: IProps) {
         zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
     }
 
-    function handleMouseDown() {
-        scrollingMap.current = true;
+    function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
+        scrollingMap.current = {
+            pointerId: e.pointerId,
+            position: { x: e.pageX, y: e.pageY },
+        };
+        e.currentTarget.setPointerCapture(e.pointerId);
     }
 
     function onRecenterMap() {
         mapScrolled.current = false;
         console.log(currentPlayerPosition.current);
-        currentMapPosition.current = {x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y};
+        currentMapPosition.current = { x: currentPlayerPosition.current.x, y: currentPlayerPosition.current.y };
         appContext.settings.showToolbar = false;
         appContext.update(appContext.settings);
     }
 
-    function handleMouseMove(e: React.MouseEvent<HTMLCanvasElement>) {
+    function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
         if (!appContext.isTransparentSurface) {
-            lastMousePos.current = {x: currentMousePos.current.x, y: currentMousePos.current.y };
-            currentMousePos.current = {x: e.pageX, y: e.pageY} as Vector2;
+            lastMousePos.current = { x: currentMousePos.current.x, y: currentMousePos.current.y };
+            currentMousePos.current = { x: e.pageX, y: e.pageY } as Vector2;
             const xMod = currentMousePos.current.x - lastMousePos.current.x;
             const yMod = currentMousePos.current.y - lastMousePos.current.y;
             if (scrollingMap.current && (mapScrolled.current || Math.abs(xMod) > 3 || Math.abs(yMod) > 3)) {
@@ -434,8 +438,11 @@ export default function Minimap(props: IProps) {
         }
     }
 
-    function handleMouseUp() {
-        scrollingMap.current = false;
+    function handlePointerUp(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
+            e.currentTarget.releasePointerCapture(e.pointerId);
+            scrollingMap.current = undefined;
+        }
     }
 
     // This effect triggers a redraw when the context value changes (relevant for settings).
@@ -533,9 +540,9 @@ export default function Minimap(props: IProps) {
             className={clsx(classes.canvas)}
             style={dynamicStyling}
             onWheel={handleWheel}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
+            onPointerDown={handlePointerDown}
+            onPointerUp={handlePointerUp}
+            onMouseMove={handlePointerMove}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&
@@ -544,7 +551,7 @@ export default function Minimap(props: IProps) {
         </div>
         <MinimapToolbar>
             <button className={clsx(classes.controlButton, classes.close)} onClick={onRecenterMap}>
-                <RecenterIcon/>
+                <RecenterIcon />
             </button>
         </MinimapToolbar>
     </div>;
