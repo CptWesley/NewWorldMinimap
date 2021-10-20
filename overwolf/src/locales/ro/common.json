@@ -53,18 +53,18 @@
             "interpolationCosineInter": "Interpolare cosinus",
             "interpolationLinearExtra": "Extrapolare liniară",
             "interpolationCosineExtra": "Extrapolare cosinus",
-            "resamplingRate": "Factor de Upsampling factor",
-            "resamplingRateTooltip": "Numărul de probe luate în timpul inter/extrapolării. O valoare mai mare oferă o experiență mai bună, dar are performanță mai scăzută."
+            "resamplingRate": "Factor de eșantionare",
+            "resamplingRateTooltip": "Numărul de eșantioane luate în timpul inter/extrapolării. O valoare mai mare oferă o experiență mai bună, dar are performanță mai scăzută."
         },
         "overlay": {
             "_": "Overlay în joc",
             "compassMode": "Overlay Mod Busolă",
             "compassModeTooltip": "Permiterea va face jucătorul să privească mereu nordul și rotește hartă în jurul jucătorului, ca un minimap clasic.",
-            "opacity": "Overlay Opacitate",
+            "opacity": "Opacitate overlay",
             "opacityTooltip": "Determină opacitatea overlay.",
-            "shape": "Overlay Formă",
+            "shape": "Formă overlay",
             "shapeTooltip": "Determină forma overlay.",
-            "shapeRectangular": "Dreptunghiulară",
+            "shapeRectangular": "Dreptunghi",
             "shapeEllipse": "Elipsă",
             "shapeDiamond": "Diamant"
         },
