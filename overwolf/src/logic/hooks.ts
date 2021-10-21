@@ -28,7 +28,12 @@ function onUpdate(info: any) {
     }
 
     for (const cb of callbacks) {
-        cb(playerData);
+        try {
+            cb(playerData);
+        } catch (error) {
+            console.error(error);
+            callbacks.delete(cb);
+        }
     }
 }
 
