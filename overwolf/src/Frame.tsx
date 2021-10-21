@@ -90,7 +90,7 @@ export default function Frame(props: IProps) {
 
         window.addEventListener('storage', handleStorageEvent);
 
-        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning);
+        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning, window);
 
         return () => {
             window.removeEventListener('storage', handleStorageEvent);

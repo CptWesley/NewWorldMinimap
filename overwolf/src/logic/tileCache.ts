@@ -1,3 +1,5 @@
+import UnloadingEvent from './unloadingEvent';
+
 export function getTileCacheKey(tilePos: Vector2) {
     return `${tilePos.x},${tilePos.y}`;
 }
@@ -24,7 +26,7 @@ class TileCache {
     private static _instance: TileCache;
     private tileBitmapCache = new Map<string, ImageBitmap>();
     private downloadingBitmapCache = new Map<string, Promise<ImageBitmap>>();
-    private onTileDownloadingCountChangeListeners = new Set<OnTileDownloadingCountChangeListener>();
+    private onTileDownloadingCountChangeEvent = new UnloadingEvent<OnTileDownloadingCountChangeListener>('tileCacheDownloadingCountChange');
 
     public static get isSupported() {
         return NWMM_APP_WINDOW === 'background';
@@ -61,24 +63,15 @@ class TileCache {
                 tileBitmapPromise.then(bitmap => {
                     this.tileBitmapCache.set(key, bitmap);
                     this.downloadingBitmapCache.delete(key);
-                    this.onTileDownloadingCountChangeListeners.forEach(l => {
-                        l(this.downloadingBitmapCache.size);
-                    });
+                    this.onTileDownloadingCountChangeEvent.fire(this.downloadingBitmapCache.size);
                 });
-                this.onTileDownloadingCountChangeListeners.forEach(l => {
-                    l(this.downloadingBitmapCache.size);
-                });
+                this.onTileDownloadingCountChangeEvent.fire(this.downloadingBitmapCache.size);
                 return { hit: false, downloading: false };
             }
         }
     }
 
-    public registerOnTileDownloadingCountChange = (listener: OnTileDownloadingCountChangeListener) => {
-        this.onTileDownloadingCountChangeListeners.add(listener);
-        return () => {
-            this.onTileDownloadingCountChangeListeners.delete(listener);
-        };
-    }
+    public registerOnTileDownloadingCountChange = this.onTileDownloadingCountChangeEvent.register;
 
     public clear = () => {
         this.downloadingBitmapCache.clear();

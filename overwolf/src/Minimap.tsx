@@ -485,9 +485,9 @@ export default function Minimap(props: IProps) {
             redraw(true);
         }
 
-        const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange);
-        const markerRegistration = markerCache.registerOnMarkersLoaded(handleAssetsLoaded);
-        const mapIconsCacheRegistration = mapIconsCache.registerMapIconsLoaded(handleAssetsLoaded);
+        const tileRegistration = tileCache.registerOnTileDownloadingCountChange(handleTileDownloadingCountChange, window);
+        const markerRegistration = markerCache.registerOnMarkersLoaded(handleAssetsLoaded, window);
+        const mapIconsCacheRegistration = mapIconsCache.registerMapIconsLoaded(handleAssetsLoaded, window);
         return () => {
             tileRegistration();
             markerRegistration();
@@ -499,8 +499,8 @@ export default function Minimap(props: IProps) {
         // This is alright, because the app window descriptor does not change.
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
-            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5));
-            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5));
+            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5), window);
+            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5), window);
             return () => { zoomInRegistration(); zoomOutRegistration(); };
         }, [appContext.settings.zoomLevel]);
     }
@@ -541,7 +541,7 @@ export default function Minimap(props: IProps) {
             if (info.name) {
                 playerName.current = info.name;
             }
-        });
+        }, window);
 
         return function () {
             callbackUnregister();

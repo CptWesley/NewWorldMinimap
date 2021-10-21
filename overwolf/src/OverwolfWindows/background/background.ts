@@ -1,5 +1,6 @@
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
 import { initializeHooks } from '@/logic/hooks';
+import UnloadingEvent from '@/logic/unloadingEvent';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
 import { initializeTileCache } from '../../logic/tileCache';
@@ -23,7 +24,7 @@ export class BackgroundController {
     private _openWindows = new Set<ConcreteWindow>();
     private _NewWorldGameListener: OWGameListener;
     private _gameRunning = false;
-    private _gameRunningEventListeners = new Set<GameRunningEventListener>();
+    private _gameRunningEvent = new UnloadingEvent<GameRunningEventListener>('gameRunning');
 
     private constructor() {
         this._windows = {
@@ -39,8 +40,8 @@ export class BackgroundController {
 
         if (!NWMM_APP_BUILD_PRODUCTION) {
             this.debug_setGameRunning = (running: boolean) => {
-                this._gameRunning = true;
-                this._gameRunningEventListeners.forEach(l => l(running));
+                this._gameRunning = running;
+                this._gameRunningEvent.fire(running);
             };
         }
     }
@@ -105,12 +106,7 @@ export class BackgroundController {
         }
     }
 
-    public listenOnGameRunningChange = (listener: GameRunningEventListener) => {
-        this._gameRunningEventListeners.add(listener);
-        return () => {
-            this._gameRunningEventListeners.delete(listener);
-        };
-    }
+    public listenOnGameRunningChange = this._gameRunningEvent.register;
 
     public debug_setGameRunning = (running: boolean) => {
         console.log(`Attempted to set gameRunning to ${running}, but this was a no-op.`);
@@ -123,7 +119,7 @@ export class BackgroundController {
 
         this._gameRunning = true;
         this.openWindow('inGame');
-        this._gameRunningEventListeners.forEach(l => l(true));
+        this._gameRunningEvent.fire(true);
     };
 
     private onGameEnded = async (info: RunningGameInfo) => {
@@ -133,7 +129,8 @@ export class BackgroundController {
 
         this._gameRunning = false;
         this.closeWindow('inGame');
-        this._gameRunningEventListeners.forEach(l => l(false));
+        this._gameRunningEvent.fire(false);
+
     };
 
     private async isNewWorldRunning(): Promise<boolean> {

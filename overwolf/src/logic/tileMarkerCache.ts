@@ -1,6 +1,7 @@
 import { customMarkers } from '../Icons/MapIcons/customMarkers';
 import { getTileCacheKey } from './tileCache';
 import { getTileCacheKeyFromWorldCoordinate } from './tiles';
+import UnloadingEvent from './unloadingEvent';
 
 export type MarkerCacheWindow = typeof window & {
     NWMM_MarkerCache: TileMarkerCache;
@@ -13,7 +14,7 @@ class TileMarkerCache {
     private static _instance: TileMarkerCache;
     private cache: ReadonlyMap<string, Marker[]> | undefined;
     private promise: Promise<ReadonlyMap<string, Marker[]>>;
-    private onMarkersLoadedListeners = new Set<OnMarkersLoadedListener>();
+    private onMarkersLoadedEvent = new UnloadingEvent<OnMarkersLoadedListener>('onMarkersLoaded');
 
     constructor() {
         this.promise = this.fillCache();
@@ -52,12 +53,7 @@ class TileMarkerCache {
         return this.cache.get(tileKey);
     }
 
-    public registerOnMarkersLoaded = (listener: OnMarkersLoadedListener) => {
-        this.onMarkersLoadedListeners.add(listener);
-        return () => {
-            this.onMarkersLoadedListeners.delete(listener);
-        };
-    }
+    public registerOnMarkersLoaded = this.onMarkersLoadedEvent.register;
 
     private fillCache = async () => {
         const tree = await this.getMarkerJson();
@@ -67,9 +63,7 @@ class TileMarkerCache {
         this.fillCacheWithTree(nextCache, customMarkers);
 
         this.cache = nextCache;
-        this.onMarkersLoadedListeners.forEach(l => {
-            l();
-        });
+        this.onMarkersLoadedEvent.fire();
         return nextCache as ReadonlyMap<string, Marker[]>;
     }
 
