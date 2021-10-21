@@ -40,11 +40,22 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Compass mode (rotate minimap around player instead of other way around).
 - Different interpolation and extrapolation modes for smoother movement on map (linear, cosine, none).
 - Seperately configureable zoom level for towns.
+- View live location of friends.
+- Localisation
+  - English (Complete)
+  - Italian (Complete)
+  - Spanish (Complete)
+  - German (Most menus, complete game references)
+  - French (Complete game references)
+  - Polish (Complete game references)
+  - Portugese (Complete game references)
+  - Danish (Complete menus)
+  - Dutch (Complete menus)
+  - Romanian (Complete menus)
 
 ## Planned Features
 - Private markers.
 - Paths along private markers.
-- View live location of friends.
 - (Speculative) GPS that points you to a marker following known roads.
 
 ## Known Issues
