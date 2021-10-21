@@ -4,7 +4,7 @@ import rateLimit = require('express-rate-limit');
 import process = require('process');
 import crypto = require('crypto');
 import { validatePlayerRequest } from './validation';
-import type { FriendsList, MapType, MapTypeDeprecated, PlayerData, PlayerDataPlain, PlayerId, PlayerRequestData } from './types';
+import type { FriendsList, MapType, MapTypeDeprecated, PlayerData, PlayerDataPlain, PlayerId, PlayerRequestData, PlayerResponseData } from './types';
 
 const app = express();
 const port = Number(process.env.PORT);
@@ -88,11 +88,14 @@ function updatePlayerData(request: PlayerId & PlayerRequestData) {
  */
 function getPlayersData(request: FriendsList & PlayerRequestData) {
     if (request.type !== undefined) {
-        const data: PlayerData[] = [];
+        const data: PlayerResponseData[] = [];
         for (const friendDigest of request.friends) {
             const playerData = onlinePlayers.get(friendDigest);
             if (playerData) {
-                data.push(playerData.data);
+                data.push({
+                    id: friendDigest,
+                    data: playerData.data,
+                });
             }
         }
         return data;

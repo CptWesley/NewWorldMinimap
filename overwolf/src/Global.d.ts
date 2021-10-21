@@ -55,8 +55,3 @@ declare type PlayerData = {
     name: string | undefined,
     world: string | undefined,
 }
-
-declare type FriendData = {
-    name: string,
-    location: Vector2,
-}

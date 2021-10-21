@@ -1,7 +1,40 @@
+import AES from 'crypto-js/aes';
+import encUtf8 from 'crypto-js/enc-utf8';
 import { getDynamicSettings } from './dynamicSettings';
 import { generateRandomToken } from './util';
 
-export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, friends: string) {
+export type PlayerDataPlain = {
+    name: string,
+    location: Vector2,
+};
+type PlayerDataPsk = string;
+type PlayerData = PlayerDataPlain | PlayerDataPsk;
+
+type PlayerRequestDataPlain = {
+    type: 'plain',
+    data: PlayerDataPlain,
+};
+type PlayerRequestDataPsk = {
+    type: 'psk',
+    data: PlayerDataPsk,
+};
+type PlayerRequestData = PlayerRequestDataPlain | PlayerRequestDataPsk;
+
+type PlayerRequest = PlayerRequestData & {
+    id: string,
+    friends: string[],
+};
+
+type PlayerResponseData = {
+    id: string,
+    data: PlayerData,
+};
+
+type PlayerResponse = {
+    friends: PlayerResponseData[],
+};
+
+export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, friends: string, psk: string): Promise<undefined | PlayerDataPlain[]> {
     let url = server.trim();
 
     if (!url || url.length === 0) {
@@ -11,28 +44,94 @@ export async function updateFriendLocation(server: string, id: string, name: str
         }
     }
 
-    if (url && url.length > 0) {
-        try {
-            const req = await fetch(url, {
-                method: 'post',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    id,
-                    data: {
-                        name,
-                        location: { x: location.x, y: location.y },
-                    },
-                    friends: friends.split('\n'),
-                }),
-            });
-            return await req.json();
-        } catch (_) { }
+    if (!url || url.length === 0) { return undefined; }
+
+    const friendList: string[] = [];
+    const friendPsk = new Map<string, string>();
+    for (const line of friends.split('\n')) {
+        const parts = line.split(':');
+        if (parts[0]) {
+            friendList.push(parts[0]);
+            if (parts[1]) {
+                friendPsk.set(parts[0], parts[1]);
+            }
+        }
     }
 
+    try {
+        const data: PlayerDataPlain = {
+            name,
+            location,
+        };
+        const friendsList = friends.split('\n');
+        let body: PlayerRequest;
+        if (psk) {
+            const encryptedData = AES.encrypt(JSON.stringify(data), psk).toString();
+            body = {
+                id,
+                type: 'psk',
+                data: encryptedData,
+                friends: friendsList,
+            };
+        } else {
+            body = {
+                id,
+                type: 'plain',
+                data,
+                friends: friendsList,
+            };
+        }
+
+        const req = await fetch(url, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(body),
+        });
+        const response = await req.json();
+        if (validatePlayerResponse(response as PlayerResponse)) {
+            // The server response looks valid
+            return (response as PlayerResponse).friends.map<PlayerDataPlain | null>(f => {
+                const { data, id } = f;
+                if (typeof data === 'string' && friendPsk.has(id)) {
+                    // It's encrypted data -- decrypt and validate it
+                    try {
+                        const decryptedData = AES.decrypt(data, friendPsk.get(id)!).toString(encUtf8);
+                        const deserialized = JSON.parse(decryptedData);
+                        if (validatePlayerDataPlain(deserialized)) {
+                            return deserialized;
+                        }
+                    } catch { }
+                    return null;
+                } else if (typeof data === 'object' && validatePlayerDataPlain(data)) {
+                    // It's valid location data
+                    return data;
+                }
+                return null;
+            }).filter(f => f !== null) as PlayerDataPlain[];
+        }
+    } catch { }
+
     return undefined;
+}
+
+function validatePlayerResponse(response: PlayerResponse): response is PlayerResponse {
+    return typeof response === 'object'
+        && Array.isArray(response.friends)
+        && response.friends.every(r => {
+            return typeof r === 'object'
+                && typeof r.id === 'string';
+        });
+}
+
+function validatePlayerDataPlain(data: PlayerDataPlain): data is PlayerDataPlain {
+    return typeof data === 'object'
+        && typeof data.name === 'string'
+        && typeof data.location === 'object'
+        && typeof data.location.x === 'number'
+        && typeof data.location.y === 'number';
 }
 
 export function getFriendCode() {

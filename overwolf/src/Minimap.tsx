@@ -8,7 +8,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
-import { getFriendCode, updateFriendLocation } from './logic/friends';
+import { getFriendCode, PlayerDataPlain, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getIconName } from './logic/icons';
@@ -93,7 +93,7 @@ export default function Minimap(props: IProps) {
 
     const mapPositionOverride = useRef<Vector2>();
     const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
-    const currentFriends = useRef<FriendData[]>([]);
+    const currentFriends = useRef<PlayerDataPlain[]>([]);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
     const lastAngle = useRef<number>(0);
@@ -363,10 +363,10 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(), playerName.current, pos, appContext.settings.friends);
+            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(), playerName.current, pos, appContext.settings.friends, '');
             sharedLocation.then(r => {
                 if (r !== undefined) {
-                    setFriends(r.friends);
+                    setFriends(r);
                 } else {
                     setFriends([]);
                 }
@@ -386,7 +386,7 @@ export default function Minimap(props: IProps) {
         redraw(true);
     }
 
-    function setFriends(friends: FriendData[]) {
+    function setFriends(friends: PlayerDataPlain[]) {
         if (friends.length === currentFriends.current.length) {
             for (const key in friends) {
                 if (friends[key].name === currentFriends.current[key].name

@@ -37,6 +37,11 @@ export type FriendsList = {
 
 export type PlayerRequest = PlayerRequestData & PlayerId & FriendsList;
 
+export type PlayerResponseData = {
+    id: string,
+    data: PlayerData,
+};
+
 export type MapType = {
     data: PlayerData,
     timestamp: bigint,
