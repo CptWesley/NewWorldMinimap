@@ -86,7 +86,8 @@
             "friendsTooltip": "List of your friends. One friend code per line.",
             "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer.",
             "customServerUrl": "Server endpoint URL",
-            "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server."
+            "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server.",
+            "privacy": "All data is stored temporarily. Data is either replaced by new data or deleted automatically after 30 seconds. The transmitted data is solely used to be transmitted to people that know your friend code. Data is only sent when the setting is enabled."
         }
     }
 }
