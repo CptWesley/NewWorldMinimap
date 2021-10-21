@@ -41,6 +41,7 @@ export function loadAppContextSettings(): AppContextSettings {
         autoLaunchInGame: load('autoLaunchInGame'),
         rotationSource: load('rotationSource'),
         enabledPreviewFunctionailities: load('enabledPreviewFunctionailities'),
+        featureCollection: load('featureCollection'),
     };
 }
 
