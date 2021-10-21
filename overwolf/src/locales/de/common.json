@@ -5,7 +5,7 @@
     "deselectAll": "Alles abwählen",
     "header": {
         "settings": "Optionen",
-        "openInGame": "in-game Fenster öffnen",
+        "openInGame": "In-Game Fenster öffnen",
         "openDesktop": "Fenster außerhalb des Spiels öffnen"
     },
     "welcome": {
@@ -13,7 +13,7 @@
         "primary": "Starte New World um auf die Minimap zuzugreifen.",
         "settings": "Du kannst auf die Applikationseinstellungen auch außerhalb des Spiels zugreifen.",
         "discord": "Du kannst unserem Discordserver beitreten wenn du Fragen oder Vorschläge hast, oder Hilfe brauchst: <1>{{discord}}<1>.",
-        "devBuild": "Dies ist eine Entwicklungsversion. Benutz den Knopf hierunter um die Minimap an einem debug Standort aufzurufen.",
+        "devBuild": "Dies ist eine Entwicklungsversion. Benutze den unteren Knopf um die Minimap an einem debug Standort aufzurufen.",
         "forceMap": "Karte Anzeigen"
     },
     "minimap": {

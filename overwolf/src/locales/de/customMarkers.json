@@ -1,0 +1,46 @@
+{
+    "categories": {
+        "npc": "NPCs",
+        "chests": "Kisten",
+        "documents": "Dokumente",
+        "essences": "Essenzen",
+        "fishing": "Fisch",
+        "monsters": "Kreaturen",
+        "ores": "Erze",
+        "plants": "Pflanzen",
+        "pois": "Sehenswürdigkeiten",
+        "town": "Stadt",
+        "woods": "Bäume"
+    },
+    "markers": {
+      "plants": {
+        "Single_Placeholder_DyePlant": "Prismabl\u00fcten",
+        "Single_Pumpkin": "Kürbis"
+      },
+        "town": {
+            "arcane_repository": "Arkane Repository",
+            "covenant_adjudicator": "Covenant Adjudicator",
+            "forge": "Schmiede",
+            "governors_desk": "Governor's Desk",
+            "inn": "Inn",
+            "kitchen": "Küche",
+            "loom": "Loom",
+            "marauder_commander": "Marauder Commander",
+            "outfitting_station": "Outfitting Station",
+            "smelter": "Schmelzofen",
+            "stonecutting_table": "Stonecutting Table",
+            "storage_shed": "Lager",
+            "syndicate_alchemist": "Syndicate Alchemist",
+            "tannery": "Gerberei",
+            "territory_planning_board": "Territory Planning Board",
+            "town_project_board": "Town Project Board",
+            "trading_post": "Handelsposten",
+            "war_board": "War Board",
+            "woodshop": "Woodshop",
+            "workshop": "Workshop"
+        },
+        "woods": {
+            "Briar": "Briar"
+        }
+    }
+}
