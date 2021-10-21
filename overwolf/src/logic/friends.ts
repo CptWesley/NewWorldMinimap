@@ -63,7 +63,6 @@ export async function updateFriendLocation(server: string, id: string, name: str
             name,
             location,
         };
-        const friendsList = friends.split('\n');
         let body: PlayerRequest;
         if (psk) {
             const encryptedData = AES.encrypt(JSON.stringify(data), psk).toString();
@@ -71,14 +70,14 @@ export async function updateFriendLocation(server: string, id: string, name: str
                 id,
                 type: 'psk',
                 data: encryptedData,
-                friends: friendsList,
+                friends: friendList,
             };
         } else {
             body = {
                 id,
                 type: 'plain',
                 data,
-                friends: friendsList,
+                friends: friendList,
             };
         }
 
@@ -99,11 +98,12 @@ export async function updateFriendLocation(server: string, id: string, name: str
                     // It's encrypted data -- decrypt and validate it
                     try {
                         const decryptedData = AES.decrypt(data, friendPsk.get(id)!).toString(encUtf8);
+                        if (!decryptedData) { return null; }
                         const deserialized = JSON.parse(decryptedData);
                         if (validatePlayerDataPlain(deserialized)) {
                             return deserialized;
                         }
-                    } catch { }
+                    } catch (err) { console.warn(err); }
                     return null;
                 } else if (typeof data === 'object' && validatePlayerDataPlain(data)) {
                     // It's valid location data
