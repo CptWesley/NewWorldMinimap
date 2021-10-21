@@ -36,6 +36,9 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
     return <>
         <div>
             <div className={sharedClasses.setting}>
+                {t('settings.friend.privacy')}
+            </div>
+            <div className={sharedClasses.setting}>
                 <label className={sharedClasses.checkbox} title={t('settings.friend.shareLocationTooltip')}>
                     <input
                         type='checkbox'
