@@ -23,19 +23,6 @@ export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
             </label>
         </div>
         <div className={classes.setting}>
-            <label className={classes.range} title={t('settings.overlay.opacityTooltip')}>
-                <input
-                    type='range'
-                    value={settings.opacity}
-                    min='0.1'
-                    max='1'
-                    step='0.05'
-                    onChange={e => updateSimpleSetting('opacity', e.currentTarget.valueAsNumber)}
-                />
-                {t('settings.overlay.opacity')}
-            </label>
-        </div>
-        <div className={classes.setting}>
             <label className={classes.select} title={t('settings.overlay.shapeTooltip')}>
                 <select
                     value={settings.shape}
@@ -48,5 +35,22 @@ export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.overlay.shape')}
             </label>
         </div>
+        <details>
+            <summary title={t('settings.advancedTooltip')} className={classes.summary} >{t('settings.advanced')}</summary>
+            <p className={classes.setting}>{t('settings.advancedTooltip')}</p>
+            <div className={classes.setting}>
+                <label className={classes.range} title={t('settings.overlay.opacityTooltip')}>
+                    <input
+                        type='range'
+                        value={settings.opacity}
+                        min='0.1'
+                        max='1'
+                        step='0.05'
+                        onChange={e => updateSimpleSetting('opacity', e.currentTarget.valueAsNumber)}
+                    />
+                    {t('settings.overlay.opacity')}
+                </label>
+            </div>
+        </details>
     </>;
 }
