@@ -12,13 +12,13 @@ import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getIconName } from './logic/icons';
-import { getMapTiles } from './logic/map';
+import {getMapTile, getMapTiles} from './logic/map';
 import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
 import { store, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
-import { toMinimapCoordinate } from './logic/tiles';
+import {canvasToMinimapCoordinate, toMinimapCoordinate} from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
@@ -55,6 +55,17 @@ const useStyles = makeStyles()(theme => ({
         width: '100%',
         height: '100%',
         position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: globalLayers.minimapCanvas,
+    },
+    passthroughCanvas: {
+        width: '100%',
+        height: '100%',
+        position: 'fixed',
+        pointerEvents: 'none',
         top: 0,
         left: 0,
         right: 0,
@@ -103,6 +114,7 @@ export default function Minimap(props: IProps) {
     const [mapIconsCache] = useState(() => new MapIconsCache());
     const [isMapDragged, setIsMapDragged] = useState(false);
     const canvas = useRef<HTMLCanvasElement>(null);
+    const hoverCanvas = useRef<HTMLCanvasElement>(null);
 
     const lastDraw = useRef(0);
 
@@ -111,6 +123,9 @@ export default function Minimap(props: IProps) {
     const interpolationEnabled = appContext.settings.interpolation !== 'none';
 
     const dynamicStyling: React.CSSProperties = {};
+
+    const hoverThreshold = 25;
+
     if (appContext.isTransparentSurface) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
@@ -118,6 +133,7 @@ export default function Minimap(props: IProps) {
     // eslint-disable-next-line complexity
     const draw = (playerPos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
+        const labelCtx = hoverCanvas.current?.getContext('2d');
         const currentDraw = performance.now();
         lastDraw.current = currentDraw;
 
@@ -130,9 +146,9 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
+        let renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
-        if (!ctx) {
+        if (!ctx || !labelCtx) {
             return;
         }
 
@@ -142,9 +158,10 @@ export default function Minimap(props: IProps) {
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
+        labelCtx.canvas.width = ctx.canvas.clientWidth;
+        labelCtx.canvas.height = ctx.canvas.clientHeight;
 
-        const centerX = ctx.canvas.width / 2;
-        const centerY = ctx.canvas.height / 2;
+        const center = {x: ctx.canvas.width / 2, y: ctx.canvas.height / 2 };
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
         const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
@@ -168,20 +185,20 @@ export default function Minimap(props: IProps) {
 
                 if (renderAsCompass) {
                     ctx.save();
-                    ctx.translate(centerX, centerY);
+                    ctx.translate(center.x, center.y);
                     ctx.rotate(-angle);
-                    ctx.translate(-centerX, -centerY);
+                    ctx.translate(-center.x, -center.y);
                     ctx.drawImage(bitmap,
-                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel * x + center.x - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + center.y - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
                         bitmap.height / zoomLevel
                     );
                     ctx.restore();
                 } else {
                     ctx.drawImage(bitmap,
-                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
+                        bitmap.width / zoomLevel * x + center.x - offset.x / zoomLevel,
+                        bitmap.height / zoomLevel * y + center.y - offset.y / zoomLevel,
                         bitmap.width / zoomLevel,
                         bitmap.height / zoomLevel
                     );
@@ -190,6 +207,10 @@ export default function Minimap(props: IProps) {
                 toDraw = toDraw.concat(tile.markers);
             }
         }
+
+        ctx.canvas.addEventListener('mousemove',e => {
+            onCanvasMouseMove({x: e.pageX, y: e.pageY}, playerPos, {x: center.x, y: center.y}, angle, renderAsCompass, mapCenterPos, labelCtx, zoomLevel, offset);
+        });
 
         const iconSettings = appContext.settings.iconSettings;
 
@@ -216,8 +237,8 @@ export default function Minimap(props: IProps) {
             const icon = mapIconsCache.getIcon(marker.type, marker.category);
             if (!icon) { continue; }
             const imgPosCorrected = {
-                x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+                y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
             };
 
             if (lastDraw.current !== currentDraw) {
@@ -225,28 +246,14 @@ export default function Minimap(props: IProps) {
             }
 
             if (renderAsCompass) {
-                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
                 ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
             } else {
                 ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
             }
 
             if (appContext.settings.showText && catSettings.showLabel && typeSettings.showLabel) {
-                ctx.textAlign = 'center';
-                ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
-                ctx.strokeStyle = '#000';
-                ctx.fillStyle = '#fff';
-
-                const markerText = getIconName(marker.category, marker.name ?? marker.type);
-
-                if (renderAsCompass) {
-                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                    ctx.strokeText(markerText, rotated.x, rotated.y + icon.height);
-                    ctx.fillText(markerText, rotated.x, rotated.y + icon.height);
-                } else {
-                    ctx.strokeText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                    ctx.fillText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                }
+                drawMarkerText(ctx, {x: center.x, y: center.y}, imgPosCorrected, angle, icon.height, marker, renderAsCompass);
             }
         }
 
@@ -255,8 +262,8 @@ export default function Minimap(props: IProps) {
             const icon = mapIconsCache.getFriendIcon();
             if (!icon) { continue; }
             const imgPosCorrected = {
-                x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                x: imgPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+                y: imgPos.y / zoomLevel - offset.y / zoomLevel + center.y,
             };
 
             if (lastDraw.current !== currentDraw) {
@@ -264,7 +271,7 @@ export default function Minimap(props: IProps) {
             }
 
             if (renderAsCompass) {
-                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
                 ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
             } else {
                 ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
@@ -277,7 +284,7 @@ export default function Minimap(props: IProps) {
                 ctx.fillStyle = '#fff';
 
                 if (renderAsCompass) {
-                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                    const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
                     ctx.strokeText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
                     ctx.fillText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
                 } else {
@@ -295,12 +302,12 @@ export default function Minimap(props: IProps) {
 
         if (playerIcon) {
             if (renderAsCompass) {
-                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+                ctx.drawImage(playerIcon, center.x - playerIcon.width / 2, center.y - playerIcon.height / 2);
             } else {
                 const mapPos = toMinimapCoordinate(mapCenterPos, playerPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
                 const imgPosCorrected = {
-                    x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                    y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                    x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+                    y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
                 };
                 ctx.save();
                 ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
@@ -311,6 +318,71 @@ export default function Minimap(props: IProps) {
             }
         }
     };
+
+    function onCanvasMouseMove(mousePos: Vector2, playerPos: Vector2, center: Vector2, angle: number, renderAsCompass: boolean, mapCenterPos: Vector2, labelCtx: CanvasRenderingContext2D, zoomLevel: number, offset: Vector2) {
+        try {
+            const rotated = rotateAround({ x: center.x, y: center.y }, mousePos, angle);
+            const finalPos = renderAsCompass ? rotated : mousePos;
+            const hoverPos = canvasToMinimapCoordinate(finalPos, mapCenterPos, zoomLevel, labelCtx.canvas.width, labelCtx.canvas.height);
+
+            const mapTile = getMapTile(hoverPos);
+            labelCtx.clearRect(0, 0, labelCtx.canvas.width, labelCtx.canvas.height);
+            const iconSettings = appContext.settings.iconSettings;
+
+            if (!iconSettings) {
+                return;
+            }
+
+            mapTile.markers.forEach(m => {
+                const catSettings = iconSettings.categories[m.category];
+                const typeSettings = catSettings.types[m.type];
+
+                if (!catSettings || !catSettings.visible || (typeSettings && !typeSettings.visible)) {
+                    return;
+                }
+
+                if (squaredDistance(hoverPos, m.pos) < hoverThreshold*zoomLevel) {
+                    const markerMapPos = toMinimapCoordinate(
+                        renderAsCompass ? playerPos : mapCenterPos,
+                        m.pos,
+                        labelCtx.canvas.width * zoomLevel,
+                        labelCtx.canvas.height * zoomLevel);
+                    const icon = mapIconsCache.getIcon(m.type, m.category);
+                    if (icon) {
+                        const imgPosCorrected = {
+                            x: markerMapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+                            y: markerMapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
+                        };
+                        drawMarkerText(labelCtx, {
+                            x: center.x,
+                            y: center.y,
+                        }, imgPosCorrected, angle, icon.height, m, renderAsCompass);
+                    }
+                }
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    function drawMarkerText(ctx: CanvasRenderingContext2D, centerPos: Vector2, imgPos: Vector2, angle: number, iconHeight: number, marker: Marker, renderAsCompass: boolean) {
+        ctx.textAlign = 'center';
+        ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
+        ctx.strokeStyle = '#000';
+        ctx.fillStyle = '#fff';
+
+        const markerText = getIconName(marker.category, marker.name ?? marker.type);
+
+        if (renderAsCompass) {
+            const rotated = rotateAround({ x: centerPos.x, y: centerPos.y }, imgPos, -angle);
+            ctx.strokeText(markerText, rotated.x, rotated.y + iconHeight);
+            ctx.fillText(markerText, rotated.x, rotated.y + iconHeight);
+        } else {
+            ctx.strokeText(markerText, imgPos.x, imgPos.y + iconHeight);
+            ctx.fillText(markerText, imgPos.x, imgPos.y + iconHeight);
+        }
+
+    }
 
     function drawWithInterpolation(force: boolean) {
         const curTime = performance.now();
@@ -559,6 +631,11 @@ export default function Minimap(props: IProps) {
             onPointerDown={handlePointerDown}
             onPointerUp={handlePointerUp}
             onPointerMove={handlePointerMove}
+        />
+        <canvas
+            ref={hoverCanvas}
+            className={clsx(classes.passthroughCanvas)}
+            style={dynamicStyling}
         />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 &&

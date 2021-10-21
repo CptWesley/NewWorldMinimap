@@ -29,3 +29,15 @@ export function getMapTiles(worldPos: Vector2, screenWidth: number, screenHeight
 
     return result;
 }
+
+export function getMapTile(worldPos: Vector2) : Tile {
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    const tileCoords: Vector2 = { x: tilePos.x, y: tilePos.y };
+    const image = tileCache.getTileBitmap(tileCoords);
+    const markers = getMarkers(tileCoords);
+
+    return {
+        image: image.hit ? image.bitmap : null,
+        markers,
+    } as Tile;
+}
