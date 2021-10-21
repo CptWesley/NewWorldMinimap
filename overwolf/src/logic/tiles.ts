@@ -56,3 +56,32 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
 
     return { x: imageX, y: imageY };
 }
+
+//    Function: canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, screenWidth, screenHeight)
+//    Translates a canvas position vector to a vector in worldspace. Respecting zoom provided.
+//
+//    Example Usage:
+//       x = mouse.pageX;
+//       y = mouse.pageY;
+//       // rotate for compass angle if required prior to translating
+//       const rotatedSourceVector = rotateAround({ x: centerX, y: centerY }, {x, y}, angle);
+//       const pos = renderAsCompass ? rotatedSourceVector : {x,y};
+//       const imgPos = canvasToMinimap(pos, mapCenterPos, zoomLevel, ctx.canvas.width, ctx.canvas.height);
+//
+export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2, zoomLevel: number, screenWidth: number, screenHeight: number) {
+    const totalWidth = tileWidth * width;
+    const totalHeight = tileHeight * height;
+    const viewWidthInWorld = (screenWidth * zoomLevel * gameMapWidth) / totalWidth;
+    const viewHeightInWorld = (screenHeight * zoomLevel * gameMapHeight) / totalHeight;
+
+    const x = canvasPos.x * zoomLevel;
+    const y = canvasPos.y * zoomLevel;
+
+    const worldOffsetX = Math.floor((x * gameMapWidth) / totalWidth);
+    const finalPosX = worldOffsetX + (centerPos.x - viewWidthInWorld/2);
+
+    const workdOffsetY = Math.floor(gameMapHeight - (gameMapHeight - (y * gameMapHeight) / totalHeight));
+    const finalPosY = (centerPos.y + viewHeightInWorld/2) - workdOffsetY;
+
+    return { x: finalPosX, y: finalPosY };
+}
