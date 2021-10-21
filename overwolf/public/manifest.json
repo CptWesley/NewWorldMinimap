@@ -43,8 +43,6 @@
       "in_game": {
         "file": "in_game.html",
         "in_game_only": true,
-        "focus_game_takeover": "ReleaseOnHidden",
-        "focus_game_takeover_release_hotkey": "showhide",
         "resizable": true,
         "transparent": true,
         "override_on_update": true,
