@@ -1,0 +1,20 @@
+{
+    "compilerOptions": {
+        "exactOptionalPropertyTypes": true,
+        "forceConsistentCasingInFileNames": true,
+        "module": "CommonJS",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noImplicitOverride": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "noImplicitThis": true,
+        "removeComments": true,
+        "sourceMap": true,
+        "strict": true,
+        "target": "es2017",
+    },
+    "exclude": [
+        "node_modules"
+    ]
+}
