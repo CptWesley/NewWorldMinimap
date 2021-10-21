@@ -1,5 +1,4 @@
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
-import { initializeHooks } from '@/logic/hooks';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
 import { initializeTileCache } from '../../logic/tileCache';
@@ -158,7 +157,6 @@ if (BackgroundController.isSupported) {
 }
 
 initializeDynamicSettings();
-initializeHooks();
 initializeTileCache();
 initializeTileMarkerCache();
 initializeHotkeyManager();
