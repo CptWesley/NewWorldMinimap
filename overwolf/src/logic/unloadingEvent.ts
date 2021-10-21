@@ -1,3 +1,8 @@
+/**
+ * An event registration mechanism, which requires a Window object to be passed
+ * with each registration. Once the window closes, the event subscription is
+ * automatically removed from the listener set.
+ */
 export default class UnloadingEvent<TListener extends (...args: any[]) => any> {
     private listeners = new Set<TListener>();
 
