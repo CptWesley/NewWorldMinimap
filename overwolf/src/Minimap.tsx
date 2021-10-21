@@ -208,9 +208,11 @@ export default function Minimap(props: IProps) {
                 continue;
             }
 
-            const mapPos = renderAsCompass
-                ? playerPos
-                : toMinimapCoordinate(mapCenterPos, marker.pos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const mapPos = toMinimapCoordinate(
+                renderAsCompass ? playerPos : mapCenterPos,
+                marker.pos,
+                ctx.canvas.width * zoomLevel,
+                ctx.canvas.height * zoomLevel);
             const icon = mapIconsCache.getIcon(marker.type, marker.category);
             if (!icon) { continue; }
             const imgPosCorrected = {
