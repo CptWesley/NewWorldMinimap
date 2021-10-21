@@ -1,0 +1,46 @@
+{
+    "categories" : {
+        "npc" : "PNJ",
+        "chests" : "Coffres",
+        "documents" : "Documents",
+        "Essences" : "Essences",
+        "fishing" : " P\u00EAche",
+        "monsters" : "Monstres",
+        "ores" : "Minerais",
+        "Plants" : "Plantes",
+        "pois" : "Points d'int\u00E9r\u00EAt",
+        "town" : "Ville",
+        "Woods " : " Bois "
+    },
+    "markers" : {
+        "plants" : {
+            "Single_Placeholder_DyePlant" : "Teintures v\u00E9g\u00E9tale",
+            "Single_Pumpkin" : " Potiron"
+        },
+        "town" : {
+            "arcane_repository" : "R\u00E9serve d\u00E9di\u00E9e aux arts obscures",
+            "covenant_adjudicator" : "Juge des Engag\u00E9s",
+            "forge" : "Forge",
+            "governors_desk" : "Bureau du Gouverneur",
+            "inn" : "Auberge",
+            "kitchen" : "Cuisine",
+            "Loom" : "M\u00E9tier \u00E0 tisser",
+            "marauder_commander" : "Commandant des Maraudeurs",
+            "outfitting_station" : "Poste d'\u00E9quipement",
+            "Smelter" : "Fonderie",
+            "Stonecutting_table" : "Table de taille de pierre",
+            "Storage_shed" : "Abri de rangement",
+            "syndicate_alchemist" : "Alchimiste de l'Ombre",
+            "Tannery" : "Tannerie",
+            "territory_planning_board" : "Comit\u00E9 de planification du territoire",
+            "town_project_board" : "Tableau Des projet urbains",
+            "trading_post" : "Comptoir",
+            "war_board" : "Tableau de guerre",
+            "Woodshop" : "Atelier de menuiserie",
+            "workshop" : "Atelier"
+        },
+        "woods" : {
+            "Briar" : "Bruy\u00E8re"
+        }
+    }
+}
