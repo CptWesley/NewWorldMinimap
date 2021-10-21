@@ -80,8 +80,6 @@
             "friends": "Tus amigos",
             "friendsTooltip": "Lista de tus amigos. Uno por linea.",
             "regenerate": "Genera un nuevo código si quieres dejar de compartir tu ubicación con las personas que ya tienen tu código.",
-            "advanced": "Configuración avanzada",
-            "advancedTooltip": "Opciones para usuarios avanzados. Solo cambia esta configuración si estás seguro de lo que estás haciendo.",
             "customServerUrl": "URL del servidor",
             "customServerUrlTooltip": "La URL del endpoint al que deseas conectarte. Déjelo en blanco para user el servidor predeterminado."
         }

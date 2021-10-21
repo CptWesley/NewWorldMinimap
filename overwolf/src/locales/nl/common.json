@@ -26,6 +26,8 @@
     "settings": {
         "title": "Instellingen",
         "open": "Open dit scherm wanneer u wilt door op de kaart op de rechter muisknop te klikken.",
+        "advanced": "Geavanceerde Instellingen",
+        "advancedTooltip": "Instellingen voor geavanceerde gebruikers. Verander ze alleen als je weet wat je doet.",
         "window": {
             "_": "Dit venster",
             "transparentHeader": "Doorzichtige titelbalk",
@@ -83,8 +85,6 @@
             "friends": "Jouw vrienden",
             "friendsTooltip": "Lijst van vrienden. Eén vriend code per regel.",
             "regenerate": "Genereer een nieuwe vriend code als je niet meer wilt dat sommige mensen je kunnen volgen.",
-            "advanced": "Geavanceerde Instellingen",
-            "advancedTooltip": "Instellingen voor geavanceerde gebruikers. Verander ze alleen als je weet wat je doet.",
             "customServerUrl": "Server endpoint URL",
             "customServerUrlTooltip": "De URL van de server waar je mee wilt verbinden. Leeg laten om gebruik te maken van de standaard server."
         }
