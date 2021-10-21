@@ -68,7 +68,8 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                 </label>
             </div>
             <details>
-                <summary title={t('settings.friend.advancedTooltip')} className={sharedClasses.summary} >{t('settings.friend.advanced')}</summary>
+                <summary title={t('settings.advancedTooltip')} className={sharedClasses.summary} >{t('settings.advanced')}</summary>
+                <p className={sharedClasses.setting}>{t('settings.advancedTooltip')}</p>
                 <div className={sharedClasses.setting}>
                     <label className={sharedClasses.textbox} title={t('settings.friend.customServerUrlTooltip')}>
                         <input

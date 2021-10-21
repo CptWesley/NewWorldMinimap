@@ -26,6 +26,8 @@
     "settings": {
         "title": "Settings",
         "open": "Open this menu at any time by right-clicking.",
+        "advanced": "Advanced Settings",
+        "advancedTooltip": "Settings for advanced users. Only change them if you know what you are doing.",
         "window": {
             "_": "This window",
             "transparentHeader": "Transparent header",
@@ -61,7 +63,7 @@
             "compassMode": "Overlay Compass Mode",
             "compassModeTooltip": "Enabling will make the player always face north and rotates the map around the player, like a classic minimap.",
             "opacity": "Overlay Opacity",
-            "opacityTooltip": "Determines the opacity of the overlay.",
+            "opacityTooltip": "Determines the opacity of the overlay. This setting might impact your performance significantly.",
             "shape": "Overlay Shape",
             "shapeTooltip": "Determines the shape of the overlay.",
             "shapeRectangular": "Rectangular",
@@ -83,8 +85,6 @@
             "friends": "Your friends",
             "friendsTooltip": "List of your friends. One friend code per line.",
             "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer.",
-            "advanced": "Advanced Settings",
-            "advancedTooltip": "Settings for advanced users. Only change them if you know what you are doing.",
             "customServerUrl": "Server endpoint URL",
             "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server."
         }

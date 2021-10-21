@@ -114,7 +114,10 @@ export default function Frame(props: IProps) {
 
     const dynamicStyling: React.CSSProperties = {};
     if (isTransparentSurface) {
-        dynamicStyling.opacity = appContextSettings.opacity;
+        const opacity = appContextSettings.opacity;
+        if (opacity < 0.95) {
+            dynamicStyling.opacity = opacity;
+        }
     }
 
     return (

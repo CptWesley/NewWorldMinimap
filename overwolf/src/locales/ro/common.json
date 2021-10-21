@@ -26,6 +26,8 @@
     "settings": {
         "title": "Setări",
         "open": "Deschide acest meniu prin clic-dreapta.",
+        "advanced": "Setări avansate",
+        "advancedTooltip": "Setări pentru jucători avansați. Schimbă-le doar dacă știi ce faci.",
         "window": {
             "_": "Această fereastră",
             "transparentHeader": "Antet transparent",
@@ -83,8 +85,6 @@
             "friends": "Prietenii tăi",
             "friendsTooltip": "Lista prietenilor tăi. Un cod al unui prieten pe linie.",
             "regenerate": "Genrează un cod nou al unui prieten dacă vrei ca diverși oameni să nu îți mai poată accesa datele.",
-            "advanced": "Setări avansate",
-            "advancedTooltip": "Setări pentru jucători avansați. Schimbă-le doar dacă știi ce faci.",
             "customServerUrl": "Server endpoint URL",
             "customServerUrlTooltip": "URL-ul pentru server endpoint la care vrei să te conectezi. Lasă necompletat pentru serverul standard."
         }
