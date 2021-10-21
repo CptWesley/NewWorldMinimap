@@ -18,7 +18,7 @@
     },
     "minimap" : {
         "tilesLoading_one" : "Chargement de la zone {{count}}",
-        "tilesLoading_other" : "Chargement de la zone {{count}}"
+        "tilesLoading_other" : "Chargement de la zone {{count}}",
         "zoomIn": "Agrandir",
         "zoomOut": "R\u00C9duire",
         "recenter": "Centrer sur l'emplacement du joueur"
@@ -71,11 +71,11 @@
             "shapeDiamond" : "Diamant"
         },
         "icon" : {
-            "_" : "Ic\u00f4nes"
+            "_" : "Ic\u00f4nes",
             "toggleAll": "Afficher tous",
             "toggleVisible": "Basculer la visibilit\u00C9",
             "toggleShowLabel": "Activer ou d\u00C9sactiver l'affichage de cette ic\u00f4ne"
-        }
+        },
         "ami": {
             "_": "amis",
             "shareLocation": "Partagez votre position avec vos amis",
