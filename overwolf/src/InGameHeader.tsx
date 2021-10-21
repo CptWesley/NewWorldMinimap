@@ -180,7 +180,7 @@ export default function InGameHeader() {
             } else if (inGameState.window_state === WindowState.MINIMIZED || inGameState.window_state === WindowState.CLOSED) {
                 backgroundController.openWindow('inGame');
             }
-        });
+        }, window);
     }, []);
 
     useEffect(() => {

@@ -1,5 +1,6 @@
 import { OWHotkeys } from '@overwolf/overwolf-api-ts/dist';
 import { hotkeys, newWorldId } from '../OverwolfWindows/consts';
+import UnloadingEvent from './unloadingEvent';
 
 export type HotkeyManagerWindow = typeof window & {
     NWMM_HotkeyManager: HotkeyManager;
@@ -10,14 +11,14 @@ type OnHotkeyInvokedListener = (hotkeyResult: overwolf.settings.hotkeys.OnPresse
 
 class HotkeyManager {
     private static _instance: HotkeyManager;
-    private hotkeyListeners: Readonly<Record<Hotkey, Set<OnHotkeyInvokedListener>>>;
+    private hotkeyEvents: Readonly<Record<Hotkey, UnloadingEvent<OnHotkeyInvokedListener>>>;
     private hotkeyTexts: Map<Hotkey, string>;
 
     constructor() {
-        this.hotkeyListeners = {
-            toggleInGame: new Set(),
-            zoomIn: new Set(),
-            zoomOut: new Set(),
+        this.hotkeyEvents = {
+            toggleInGame: new UnloadingEvent('toggleInGame'),
+            zoomIn: new UnloadingEvent('zoomIn'),
+            zoomOut: new UnloadingEvent('zoomOut'),
         };
         this.hotkeyTexts = new Map();
 
@@ -25,9 +26,7 @@ class HotkeyManager {
             const hotkeyKey = key as Hotkey;
 
             OWHotkeys.onHotkeyDown(overwolfBindName, (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent) => {
-                this.hotkeyListeners[hotkeyKey].forEach(l => {
-                    l(hotkeyResult);
-                });
+                this.hotkeyEvents[hotkeyKey].fire(hotkeyResult);
             });
 
             OWHotkeys.getHotkeyText(hotkeys.toggleInGame, newWorldId).then(hotkeyText => {
@@ -52,11 +51,8 @@ class HotkeyManager {
         return HotkeyManager._instance;
     }
 
-    public registerHotkey = (hotkey: Hotkey, listener: OnHotkeyInvokedListener) => {
-        this.hotkeyListeners[hotkey].add(listener);
-        return () => {
-            this.hotkeyListeners[hotkey].delete(listener);
-        };
+    public registerHotkey = (hotkey: Hotkey, listener: OnHotkeyInvokedListener, listenerWindow: Window) => {
+        return this.hotkeyEvents[hotkey].register(listener, listenerWindow);
     }
 
     public getHotkeyText = (hotkey: Hotkey) => this.hotkeyTexts.get(hotkey);

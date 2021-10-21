@@ -1,12 +1,13 @@
 import { debounce } from 'lodash-es';
 import { createMapIcons, MapIcons } from '../Icons/MapIcons/createMapIcons';
+import UnloadingEvent from './unloadingEvent';
 
 type OnMapIconsLoadedListener = () => void;
 
 export default class MapIconsCache {
     private cache: MapIcons | undefined;
     private lastInitializedScale = 0;
-    private onMapIconsLoadedListeners = new Set<OnMapIconsLoadedListener>();
+    private onMapIconsLoadedEvent = new UnloadingEvent<OnMapIconsLoadedListener>('onMapIconsLoaded');
 
     public initialize = (scale: number) => {
         this.lastInitializedScale = scale;
@@ -48,20 +49,13 @@ export default class MapIconsCache {
         return this.cache.friend;
     }
 
-    public registerMapIconsLoaded = (listener: OnMapIconsLoadedListener) => {
-        this.onMapIconsLoadedListeners.add(listener);
-        return () => {
-            this.onMapIconsLoadedListeners.delete(listener);
-        };
-    }
+    public registerMapIconsLoaded = this.onMapIconsLoadedEvent.register;
 
     private initializeIconCache = async (scale: number) => {
         const nextCache = await createMapIcons(scale);
         if (scale === this.lastInitializedScale) {
             this.cache = nextCache;
-            this.onMapIconsLoadedListeners.forEach(l => {
-                l();
-            });
+            this.onMapIconsLoadedEvent.fire();
         }
     }
 
