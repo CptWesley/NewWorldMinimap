@@ -1,24 +1,21 @@
 import { OWGamesEvents } from '@overwolf/overwolf-api-ts/dist';
 import { interestingFeatures } from '../OverwolfWindows/consts';
+import UnloadingEvent from './unloadingEvent';
+
+type OverwolfHookWindow = typeof window & {
+    NWMM_registerEventCallback: typeof onPlayerDataUpdateEvent.register;
+}
 
 export const positionUpdateRate = 1000;
 
-type cb = (info: PlayerData) => void;
+type OnPlayerDataUpdateListener = (info: PlayerData) => void;
 
-const callbacks: Set<cb> = new Set();
+const onPlayerDataUpdateEvent = new UnloadingEvent<OnPlayerDataUpdateListener>('onPlayerDataUpdate');
 const isBackground = NWMM_APP_WINDOW === 'background';
-const actualRegister = isBackground ? registerEventCallbackGlobal : (overwolf.windows.getMainWindow() as any).registerEventCallbackGlobal;
 
-export function registerEventCallback(callback: cb) {
-    return actualRegister(callback);
-}
-
-function registerEventCallbackGlobal(callback: cb) {
-    callbacks.add(callback);
-    return () => {
-        callbacks.delete(callback);
-    };
-}
+export const registerEventCallback = isBackground
+    ? onPlayerDataUpdateEvent.register
+    : (overwolf.windows.getMainWindow() as OverwolfHookWindow).NWMM_registerEventCallback;
 
 function onUpdate(info: any) {
     const playerData = transformData(info);
@@ -27,14 +24,7 @@ function onUpdate(info: any) {
         return;
     }
 
-    for (const cb of callbacks) {
-        try {
-            cb(playerData);
-        } catch (error) {
-            console.error(error);
-            callbacks.delete(cb);
-        }
-    }
+    onPlayerDataUpdateEvent.fire(playerData);
 }
 
 function transformData(info: any): PlayerData | undefined {
@@ -83,5 +73,5 @@ export function initializeHooks() {
     }, interestingFeatures);
     listener.start();
     setInterval(() => overwolf.games.events.getInfo(onUpdate), positionUpdateRate);
-    (window as any).registerEventCallbackGlobal = registerEventCallbackGlobal;
+    (window as OverwolfHookWindow).NWMM_registerEventCallback = onPlayerDataUpdateEvent.register;
 }

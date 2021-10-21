@@ -541,7 +541,7 @@ export default function Minimap(props: IProps) {
             if (info.name) {
                 playerName.current = info.name;
             }
-        });
+        }, window);
 
         return function () {
             callbackUnregister();
