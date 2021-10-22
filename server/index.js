@@ -84,6 +84,16 @@ function validateJSON(json) {
     return false;
 }
 
+function sanitizeData(data) {
+    return {
+        name: data.name,
+        location: {
+            x: data.location.x,
+            y: data.location.y,
+        },
+    };
+}
+
 app.post('/data/update', function(req, res) {
     const json = req.body;
 
@@ -92,7 +102,8 @@ app.post('/data/update', function(req, res) {
     }
 
     if (validateJSON(json)) {
-        updatePlayerData(json.id, json.data);
+        const sanitizedData = sanitizeData(json.data);
+        updatePlayerData(json.id, sanitizedData);
 
         const friends = getPlayersData(json.friends);
         return res.json({"friends": friends});

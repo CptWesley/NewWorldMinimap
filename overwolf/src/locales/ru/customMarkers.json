@@ -1,0 +1,46 @@
+{
+    "categories": {
+        "npc": "НИПы",
+        "chests": "Сундуки",
+        "documents": "Страницы",
+        "essences": "Эссенции",
+        "fishing": "Рыба",
+        "monsters": "Монстры",
+        "ores": "Руда",
+        "plants": "Растения",
+        "pois": "Точки интереса",
+        "town": "Города",
+        "woods": "Древесина"
+    },
+    "markers": {
+        "plants": {
+            "Single_Placeholder_DyePlant": "Краска",
+            "Single_Pumpkin": "Тыква"
+        },
+        "town": {
+            "arcane_repository": "Чародейское хранилище",
+            "covenant_adjudicator": "Судья Ковенанта",
+            "forge": "Кузня",
+            "governors_desk": "Стол губернатора",
+            "inn": "Таверна",
+            "kitchen": "Кухня",
+            "loom": "Ткацкий станок",
+            "marauder_commander": "Командир мародеров",
+            "outfitting_station": "Станция экипировки",
+            "smelter": "Плавильня",
+            "stonecutting_table": "Стол для резки камня",
+            "storage_shed": "Склад",
+            "syndicate_alchemist": "Алхимик Синдиката",
+            "tannery": "Кожевенный станок",
+            "territory_planning_board": "Стол развития территории",
+            "town_project_board": "Городская доска",
+            "trading_post": "Аукцион",
+            "war_board": "Военная доска",
+            "woodshop": "Деревообрабатывающий станок",
+            "workshop": "Мастерская"
+        },
+        "woods": {
+            "Briar": "Шиповник"
+        }
+    }
+}

@@ -45,13 +45,14 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
   - English (Complete)
   - Italian (Complete)
   - Spanish (Complete)
+  - French (Complete)
   - German (Most menus, complete game references)
-  - French (Complete game references)
   - Polish (Complete game references)
   - Portugese (Complete game references)
   - Danish (Complete menus)
   - Dutch (Complete menus)
   - Romanian (Complete menus)
+  - Russian (Complete menus)
 
 ## Planned Features
 - Private markers.
