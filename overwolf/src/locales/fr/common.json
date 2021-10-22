@@ -1,7 +1,7 @@
 {
     "lng": "Fran\u00e7ais",
     "close": " Fermer ",
-    "selectAll": "S\u00C900C9lectionner tout",
+    "selectAll": "S\u00C9lectionner tout",
     "deselectAll": "D\u00C9s\u00C9lectionner tout",
     "header": {
         "settings": "R\u00C9glages",
@@ -86,7 +86,8 @@
             "friendsTooltip": "Liste de vos amis. Un code ami par ligne.",
             "regenerate": "G\u00C9n\u00C9rez un nouveau code d'ami si vous ne voulez plus permettre \u00E0 certaines personnes de vous suivre.",
             "customServerUrl": "Noeud final de URL du serveur",
-            "customServerUrlTooltip": "Point de terminaison de l'URL du serveur auquel vous voulez vous connecter. Laissez vide pour le serveur par d\u00C9faut."
+            "customServerUrlTooltip": "Point de terminaison de l'URL du serveur auquel vous voulez vous connecter. Laissez vide pour le serveur par d\u00C9faut.",
+            "privacy": "Toutes les donn\u00C9es sont stock\u00C9es temporairement. Les donn\u00C9es sont soit remplac\u00C9es par de nouvelles donn\u00C9es, soit supprim\u00C9es automatiquement apr\u00E8s 30 secondes. Les donn\u00C9es transmises sont uniquement utilis\u00C9es pour \u00EAtre transmises aux personnes qui connaissent votre code ami. Les donn\u00C9es sont transmises uniquement lorsque le param\u00E8tre est activ\u00C9."
         }
     }
 }
