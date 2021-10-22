@@ -17,7 +17,7 @@ function createInterpolationState<T>(initial: T): InterpolationState<T> {
     };
 }
 
-export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, time: number, eq?: Equality<T>) {
+export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, duration: number, eq?: Equality<T>) {
     const stateRef = useRef<InterpolationState<T>>();
     if (!stateRef.current) {
         stateRef.current = createInterpolationState(initial);
@@ -31,7 +31,7 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, t
     }
 
     function isDone(): boolean {
-        return getTimeDifference() >= time;
+        return getTimeDifference() >= duration;
     }
 
     function get(): T {
@@ -41,11 +41,11 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, t
             return state.previous;
         }
 
-        if (timeDifference >= time) {
+        if (timeDifference >= duration) {
             return state.current;
         }
 
-        const progress = timeDifference / time;
+        const progress = timeDifference / duration;
         return interpolator(state.previous, state.current, progress);
     }
 
