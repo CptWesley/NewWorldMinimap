@@ -205,7 +205,7 @@ export default function Minimap(props: IProps) {
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(true), positionUpdateRate / appContext.settings.resamplingRate)
+            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
             : undefined;
 
         return function () {

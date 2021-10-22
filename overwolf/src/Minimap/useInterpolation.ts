@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-type Interpolator<T> = (start: T, end: T, progress: number) => T;
+export type Interpolator<T> = undefined | ((start: T, end: T, progress: number) => T);
 type InterpolationState<T> = {
     previous: T,
     updateTime: number,
@@ -33,17 +33,17 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
     }
 
     function isDone(): boolean {
-        return getTimeDifference() >= (state.duration || defaultDuration);
+        return !interpolator || getTimeDifference() >= (state.duration ?? defaultDuration);
     }
 
     function get(): T {
         const timeDifference = getTimeDifference();
 
-        if (timeDifference >= (state.duration || defaultDuration)) {
+        if (timeDifference >= (state.duration ?? defaultDuration) || !interpolator) {
             return state.current;
         }
 
-        const progress = timeDifference / (state.duration || defaultDuration);
+        const progress = timeDifference / (state.duration ?? defaultDuration);
         return interpolator(state.previous, state.current, progress);
     }
 
@@ -68,16 +68,4 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
         update,
         getCurrentValue,
     };
-}
-
-function interpolateNumbers(start: number, end: number, progress: number) {
-    return start * (1 - progress) + end * progress;
-}
-
-export function useNumberInterpolation(initial: number, time: number) {
-    return useInterpolation(
-        interpolateNumbers,
-        initial,
-        time,
-    );
 }

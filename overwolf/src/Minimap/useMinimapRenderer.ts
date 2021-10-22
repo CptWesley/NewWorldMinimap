@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
-import { positionUpdateRate } from '@/logic/hooks';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
 import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { toMinimapCoordinate } from '@/logic/tiles';
 import { getNearestTown } from '@/logic/townLocations';
-import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, squaredDistance } from '@/logic/util';
+import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interpolator, predictVector, squaredDistance, vector2Equal } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
-import { mapFastZoom, mapSlowZoom, townZoomDistance } from './mapConstants';
-import { useNumberInterpolation } from './useInterpolation';
+import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
+import { useInterpolation } from './useInterpolation';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
@@ -42,15 +41,26 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const [mapIconsCache] = useState(() => new MapIconsCache());
 
+    const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
+    const lastPositionUpdate = useRef<number>(performance.now());
+
     const {
         get: getInterpolatedZoomLevel,
         update: updateInterpolatedZoomLevel,
         getCurrentValue: getCurrentZoomValue,
-    } = useNumberInterpolation(appContext.settings.zoomLevel, mapFastZoom);
-
-    const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
-    const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
-    const lastPositionUpdate = useRef<number>(performance.now());
+        isDone: zoomInterpolationDone,
+    } = useInterpolation(getNumberInterpolator(appContext.settings.animationInterpolation), appContext.settings.zoomLevel, mapFastZoom);
+    const {
+        get: getInterpolatedAngle,
+        update: updateInterpolatedAngle,
+        isDone: angleInterpolationDone,
+    } = useInterpolation(getAngleInterpolator(appContext.settings.animationInterpolation), 0, angleInterpolationTime);
+    const {
+        get: getInterpolatedPlayerPosition,
+        update: updateInterpolatedPlayerPosition,
+        isDone: playerPositionInterpolationDone,
+    } = useInterpolation(getVector2Interpolator(appContext.settings.animationInterpolation), currentPlayerPosition.current, locationInterpolationTime, vector2Equal);
 
     const usingTownZoom = useRef(false);
     const lastAngle = useRef<number>(0);
@@ -60,12 +70,17 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     const currentFriends = useRef<FriendData[]>([]);
 
     // eslint-disable-next-line complexity
-    const draw = (playerPos: Vector2, angle: number) => {
+    const draw = () => {
         const ctx = canvas.current?.getContext('2d');
+        if (!ctx) {
+            return;
+        }
+
+        const playerPos = getInterpolatedPlayerPosition();
 
         let nextZoomLevel = appContext.settings.zoomLevel;
         let switchedZoomLevel = false;
-        if (appContext.settings.townZoom) {
+        if (appContext.settings.townZoom && !mapPositionOverride.current) {
             const town = getNearestTown(playerPos);
             if (town.distance <= townZoomDistance) {
                 nextZoomLevel = appContext.settings.townZoomLevel;
@@ -86,13 +101,10 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             updateInterpolatedZoomLevel(nextZoomLevel, switchedZoomLevel ? mapSlowZoom : undefined);
         }
 
+        const angle = getInterpolatedAngle();
         const zoomLevel = getInterpolatedZoomLevel();
 
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
-
-        if (!ctx) {
-            return;
-        }
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
@@ -143,46 +155,13 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     };
 
     function drawWithInterpolation(force: boolean) {
-        const curTime = performance.now();
-        const timeDif = curTime - lastPositionUpdate.current;
-        const currentAngle = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
+        const interpolationsDone = zoomInterpolationDone() && angleInterpolationDone() && playerPositionInterpolationDone();
 
-        if (timeDif > positionUpdateRate && !force) {
+        if (interpolationsDone && !force) {
             return;
         }
 
-        if (timeDif > positionUpdateRate
-            || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate
-            || appContext.settings.animationInterpolation === 'none') {
-            draw(currentPlayerPosition.current, currentAngle);
-            return;
-        }
-
-        const percentage = timeDif / positionUpdateRate;
-        let interpolatedPosition = currentPlayerPosition.current;
-        let interpolatedAngle = currentAngle;
-
-        if (!appContext.settings.extrapolateLocation) {
-            if (appContext.settings.animationInterpolation === 'linear') {
-                interpolatedPosition = interpolateVectorsLinear(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
-                interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
-            } else if (appContext.settings.animationInterpolation === 'cosine') {
-                interpolatedPosition = interpolateVectorsCosine(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
-                interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
-            }
-        } else {
-            const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
-
-            if (appContext.settings.animationInterpolation === 'linear') {
-                interpolatedPosition = interpolateVectorsLinear(currentPlayerPosition.current, predictedPosition, percentage);
-                interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
-            } else if (appContext.settings.animationInterpolation === 'cosine') {
-                interpolatedPosition = interpolateVectorsCosine(currentPlayerPosition.current, predictedPosition, percentage);
-                interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
-            }
-        }
-
-        draw(interpolatedPosition, interpolatedAngle);
+        draw();
     }
 
     // Store the `drawWithInterpolation` function in a ref object, so we can always access the latest one.
@@ -202,6 +181,17 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
+
+        const bigPositionChange = squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > tooLargeDistance;
+        const updateTime = bigPositionChange ? 0 : undefined;
+
+        if (!appContext.settings.extrapolateLocation) {
+            updateInterpolatedPlayerPosition(currentPlayerPosition.current, updateTime);
+        } else {
+            const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
+            updateInterpolatedPlayerPosition(predictedPosition, updateTime);
+        }
+        updateInterpolatedAngle(getAngle(lastPlayerPosition.current, currentPlayerPosition.current), updateTime);
 
         redraw(true);
     }
