@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
@@ -20,13 +21,30 @@ module.exports = (env, argv) => {
         prod,
     };
 
-    return {
+    /** @type webpack.Configuration */
+    const config = {
         entry: {
             background: './src/OverwolfWindows/background/background.ts',
             desktop: './src/OverwolfWindows/desktop/desktop.ts',
             in_game: './src/OverwolfWindows/in_game/in_game.ts'
         },
+        output: {
+            filename: '[name].bundle.js',
+            chunkFilename: '[name].chunk.js',
+        },
         devtool: 'source-map',
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    dependencies: {
+                        test: /[\\/]node_modules[\\/]/,
+                        reuseExistingChunk: true,
+                        filename: 'dependencies.chunk.js',
+                    },
+                },
+            },
+        },
         module: {
             rules: [
                 {
@@ -81,4 +99,5 @@ module.exports = (env, argv) => {
             ...(bundlesize ? [new BundleAnalyzerPlugin()] : []),
         ]
     };
+    return config;
 };
