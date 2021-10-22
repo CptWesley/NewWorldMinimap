@@ -98,9 +98,10 @@ export default function DesktopHeader() {
     useEffect(() => {
         async function handleResize() {
             const windowState = await desktopWindow.getWindowState();
-            setMaximized(windowState.window_state === 'maximized');
+            setMaximized(windowState.window_state === overwolf.windows.WindowStateEx.MAXIMIZED);
         }
 
+        handleResize(); // to set the initial maximized icon
         window.addEventListener('resize', handleResize);
         return () => {
             window.removeEventListener('resize', handleResize);
