@@ -6,6 +6,7 @@ type InterpolationState<T> = {
     updateTime: number,
     current: T,
     duration: number | undefined,
+    done: boolean,
 }
 
 type Equality<T> = (a: T, b: T) => boolean;
@@ -16,6 +17,7 @@ function createInterpolationState<T>(initial: T): InterpolationState<T> {
         previous: initial,
         updateTime: 0,
         duration: undefined,
+        done: true,
     };
 }
 
@@ -33,13 +35,14 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
     }
 
     function isDone(): boolean {
-        return !interpolator || getTimeDifference() >= (state.duration ?? defaultDuration);
+        return state.done;
     }
 
     function get(): T {
         const timeDifference = getTimeDifference();
 
         if (timeDifference >= (state.duration ?? defaultDuration) || !interpolator) {
+            state.done = true;
             return state.current;
         }
 
@@ -60,6 +63,7 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
         state.current = next;
         state.updateTime = performance.now();
         state.duration = duration;
+        state.done = false;
     }
 
     return {
