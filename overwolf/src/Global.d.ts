@@ -60,3 +60,13 @@ declare type FriendData = {
     name: string,
     location: Vector2,
 }
+
+declare type GraphNode = {
+    position: Vector2,
+    neighbors: number[],
+}
+
+declare type NavigationGraph = {
+    nodes: GraphNode[],
+    markedForDeletion: Set<number>,
+}

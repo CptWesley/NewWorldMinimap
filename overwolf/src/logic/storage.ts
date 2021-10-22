@@ -1,4 +1,5 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
+import { roadsToGraph } from './navigation';
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
@@ -65,6 +66,26 @@ export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value:
     }
 
     localStorage.setItem(storageKey, JSON.stringify(value));
+}
+
+export function storeRoads(graph: NavigationGraph) {
+    const arr: Vector2[] = [];
+
+    for (let i = 0; i < graph.nodes.length; i++) {
+        if (!graph.markedForDeletion.has(i)) {
+            arr.push(graph.nodes[i].position);
+        }
+    }
+
+    localStorage.setItem('roads', JSON.stringify(arr));
+}
+
+export function loadRoads(): NavigationGraph {
+    const arr = JSON.parse(localStorage.getItem('roads') ?? '[]');
+    return {
+        nodes: roadsToGraph(arr),
+        markedForDeletion: new Set<number>(),
+    };
 }
 
 /** Loads a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */

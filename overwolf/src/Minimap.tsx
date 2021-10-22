@@ -8,6 +8,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
+import { ro } from './locales/ro';
 import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
@@ -15,14 +16,18 @@ import { getIconName } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
-import { store, zoomLevelSettingBounds } from './logic/storage';
+import { findPath, roadsToGraph } from './logic/navigation';
+import { loadRoads, store, storeRoads, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
-import { toMinimapCoordinate } from './logic/tiles';
+import { canvasToMinimapCoordinate, toMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from './logic/util';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
+
+const roadGraph = loadRoads();
+let target: Vector2 | undefined = undefined;
 
 interface IProps {
     className?: string;
@@ -287,6 +292,67 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        for (let i = 0; i < roadGraph.nodes.length; i++) {
+
+            if (roadGraph.markedForDeletion.has(i)) {
+                continue;
+            }
+
+            const graphNode = roadGraph.nodes[i];
+            const pos = toMinimapCoordinate(mapCenterPos, graphNode.position, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const posCorrected = {
+                x: pos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                y: pos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            };
+            ctx.fillStyle = 'red';
+            ctx.fillRect(posCorrected.x - 8, posCorrected.y - 8, 16, 16);
+
+            for (const neighborIndex of graphNode.neighbors) {
+                if (roadGraph.markedForDeletion.has(neighborIndex)) {
+                    continue;
+                }
+
+                const neighborWorldPos = roadGraph.nodes[neighborIndex].position;
+                const neighborCanvasPos = toMinimapCoordinate(mapCenterPos, neighborWorldPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+                const neighborPosCorrected = {
+                    x: neighborCanvasPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                    y: neighborCanvasPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                };
+                ctx.beginPath();
+                ctx.moveTo(posCorrected.x, posCorrected.y);
+                ctx.lineTo(neighborPosCorrected.x, neighborPosCorrected.y);
+                ctx.strokeStyle = 'blue';
+                ctx.stroke();
+            }
+        }
+
+        /*
+        if (target) {
+            const path = findPath(roadGraph, playerPos, target);
+
+            const startPos = toMinimapCoordinate(mapCenterPos, path[0], ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const startPosCorrected = {
+                x: startPos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                y: startPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            };
+
+            ctx.strokeStyle = 'yellow';
+            ctx.lineWidth = 6;
+            ctx.beginPath();
+            ctx.moveTo(startPosCorrected.x, startPosCorrected.y);
+
+            for (let i = 1; i < path.length; i++) {
+                const nodePos = toMinimapCoordinate(mapCenterPos, path[i], ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+                const nodePosCorrected = {
+                    x: nodePos.x / zoomLevel - offset.x / zoomLevel + centerX,
+                    y: nodePos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                };
+                ctx.lineTo(nodePosCorrected.x, nodePosCorrected.y);
+            }
+            ctx.stroke();
+        }
+        */
+
         const playerIcon = mapIconsCache.getPlayerIcon();
 
         if (lastDraw.current !== currentDraw) {
@@ -418,13 +484,56 @@ export default function Minimap(props: IProps) {
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
         if (NWMM_APP_WINDOW !== 'desktop') { return; }
         // Left mouse button only
-        if (e.pointerType === 'mouse' && e.button !== 0) { return; }
-        scrollingMap.current = {
-            pointerId: e.pointerId,
-            position: { x: e.pageX, y: e.pageY },
-            threshold: false,
-        };
-        e.currentTarget.setPointerCapture(e.pointerId);
+        if (e.pointerType === 'mouse' && e.button === 1) {
+            scrollingMap.current = {
+                pointerId: e.pointerId,
+                position: { x: e.pageX, y: e.pageY },
+                threshold: false,
+            };
+            e.currentTarget.setPointerCapture(e.pointerId);
+        }
+
+        if (e.pointerType === 'mouse' && e.button === 0) {
+            if (!canvas.current) { return; }
+
+            const canvasPos = { x: e.clientX, y: e.clientY };
+            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+            const width = canvas.current.width;
+            const height = canvas.current.height;
+            const zoomLevel = appContext.settings.zoomLevel;
+
+            const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+            target = worldPos;
+
+            let shouldAdd = true;
+            const neighbors: number[] = [];
+            for (let i = 0; i < roadGraph.nodes.length; i++) {
+                if (roadGraph.markedForDeletion.has(i)) {
+                    continue;
+                }
+                const existingPos = roadGraph.nodes[i].position;
+                if (squaredDistance(existingPos, worldPos) < 5) {
+                    roadGraph.markedForDeletion.add(i);
+                    shouldAdd = false;
+                    break;
+                }
+
+                if (squaredDistance(existingPos, worldPos) < 200) {
+                    neighbors.push(i);
+                }
+            }
+
+            if (shouldAdd) {
+                const newNode: GraphNode = {
+                    position: worldPos,
+                    neighbors,
+                };
+                roadGraph.nodes.push(newNode);
+            }
+
+            storeRoads(roadGraph);
+            redraw(true);
+        }
     }
 
     function onRecenterMap() {
