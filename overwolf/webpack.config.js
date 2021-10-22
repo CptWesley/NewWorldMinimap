@@ -4,6 +4,7 @@ const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OverwolfPlugin = require('./overwolf.webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const appName = "CptWesley's Minimap";
 const appVersion = require('./package.json').version;
@@ -11,6 +12,7 @@ const appDate = new Date().toISOString();
 
 module.exports = (env, argv) => {
     const prod = argv['mode'] !== 'development';
+    const bundlesize = !!env.bundlesize;
     const templateParameters = {
         appName,
         appVersion,
@@ -75,7 +77,8 @@ module.exports = (env, argv) => {
                 chunks: ['in_game']
             }),
             new Dotenv(),
-            new OverwolfPlugin(env)
+            new OverwolfPlugin(env),
+            ...(bundlesize ? [new BundleAnalyzerPlugin()] : []),
         ]
     };
 };
