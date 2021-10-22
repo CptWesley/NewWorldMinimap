@@ -127,7 +127,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         if (timeDif > positionUpdateRate
             || squaredDistance(lastPlayerPosition.current, currentPlayerPosition.current) > positionUpdateRate
-            || appContext.settings.interpolation === 'none') {
+            || appContext.settings.animationInterpolation === 'none') {
             draw(currentPlayerPosition.current, currentAngle);
             return;
         }
@@ -136,22 +136,24 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         let interpolatedPosition = currentPlayerPosition.current;
         let interpolatedAngle = currentAngle;
 
-        if (appContext.settings.interpolation === 'linear-interpolation') {
-            interpolatedPosition = interpolateVectorsLinear(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
-            interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
-        } else if (appContext.settings.interpolation === 'cosine-interpolation') {
-            interpolatedPosition = interpolateVectorsCosine(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
-            interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
-        }
+        if (!appContext.settings.extrapolateLocation) {
+            if (appContext.settings.animationInterpolation === 'linear') {
+                interpolatedPosition = interpolateVectorsLinear(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
+                interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
+            } else if (appContext.settings.animationInterpolation === 'cosine') {
+                interpolatedPosition = interpolateVectorsCosine(lastPlayerPosition.current, currentPlayerPosition.current, percentage);
+                interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
+            }
+        } else {
+            const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
 
-        const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
-
-        if (appContext.settings.interpolation === 'linear-extrapolation') {
-            interpolatedPosition = interpolateVectorsLinear(currentPlayerPosition.current, predictedPosition, percentage);
-            interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
-        } else if (appContext.settings.interpolation === 'cosine-extrapolation') {
-            interpolatedPosition = interpolateVectorsCosine(currentPlayerPosition.current, predictedPosition, percentage);
-            interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
+            if (appContext.settings.animationInterpolation === 'linear') {
+                interpolatedPosition = interpolateVectorsLinear(currentPlayerPosition.current, predictedPosition, percentage);
+                interpolatedAngle = interpolateAngleLinear(lastAngle.current, currentAngle, percentage);
+            } else if (appContext.settings.animationInterpolation === 'cosine') {
+                interpolatedPosition = interpolateVectorsCosine(currentPlayerPosition.current, predictedPosition, percentage);
+                interpolatedAngle = interpolateAngleCosine(lastAngle.current, currentAngle, percentage);
+            }
         }
 
         draw(interpolatedPosition, interpolatedAngle);

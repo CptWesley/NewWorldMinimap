@@ -92,7 +92,7 @@ export default function Minimap(props: IProps) {
 
     const scrollingMap = useRef<{ pointerId: number, position: Vector2, threshold: boolean }>();
 
-    const interpolationEnabled = appContext.settings.interpolation !== 'none';
+    const interpolationEnabled = appContext.settings.animationInterpolation !== 'none';
 
     const dynamicStyling: React.CSSProperties = {};
     if (appContext.isTransparentSurface) {
