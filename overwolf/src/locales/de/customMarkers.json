@@ -8,22 +8,22 @@
     "monsters": "Kreaturen",
     "ores": "Erze",
     "plants": "Pflanzen",
-    "pois": "Sehensw\u00fcrdigkeiten",
+    "pois": "Sehenswürdigkeiten",
     "town": "Stadt",
-    "woods": "Baeume"
+    "woods": "Bäume"
   },
   "markers": {
     "plants": {
-      "Single_Placeholder_DyePlant": "Prismabl\u00fcten",
-      "Single_Pumpkin": "K�rbis"
+      "Single_Placeholder_DyePlant": "Prismablüten",
+      "Single_Pumpkin": "K�rbis"
     },
     "town": {
       "arcane_repository": "Arkanumarchiv",
-      "covenant_adjudicator": "B\u00fcndisrichter",
+      "covenant_adjudicator": "Bündisrichter",
       "forge": "Schmiede",
-      "governors_desk": "B\u00fcro des Gouverneurs",
+      "governors_desk": "Büro des Gouverneurs",
       "inn": "Gasthof",
-      "kitchen": "K\u00fcche",
+      "kitchen": "Küche",
       "loom": "Weberei",
       "marauder_commander": "Marodeurskommandant",
       "outfitting_station": "Kleidermacherei",
@@ -33,9 +33,9 @@
       "syndicate_alchemist": "Alchemist des Syndikats",
       "tannery": "Gerberei",
       "territory_planning_board": "Gebietsplanungstafel",
-      "town_project_board": "Stadtprojekt\u00fcbersicht",
+      "town_project_board": "Stadtprojektübersicht",
       "trading_post": "Handelsposten",
-      "war_board": "Kriegs\u00fcbersicht",
+      "war_board": "Kriegsübersicht",
       "woodshop": "Holzwerkstatt",
       "workshop": "Werkstatt"
     },
