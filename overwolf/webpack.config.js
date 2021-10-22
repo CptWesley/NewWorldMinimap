@@ -30,7 +30,6 @@ module.exports = (env, argv) => {
         },
         output: {
             filename: '[name].bundle.js',
-            chunkFilename: '[name].chunk.js',
         },
         devtool: 'source-map',
         optimization: {
@@ -40,7 +39,6 @@ module.exports = (env, argv) => {
                     dependencies: {
                         test: /[\\/]node_modules[\\/]/,
                         reuseExistingChunk: true,
-                        filename: 'dependencies.chunk.js',
                     },
                 },
             },
