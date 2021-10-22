@@ -6,7 +6,8 @@ import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { toMinimapCoordinate } from '@/logic/tiles';
 import { getNearestTown } from '@/logic/townLocations';
-import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from '@/logic/util';
+import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, squaredDistance } from '@/logic/util';
+import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
 import drawMapTiles from './drawMapTiles';
 
@@ -109,38 +110,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
-        for (const key in currentFriends.current) {
-            const imgPos = toMinimapCoordinate(mapCenterPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-            const icon = mapIconsCache.getFriendIcon();
-            if (!icon) { continue; }
-            const imgPosCorrected = {
-                x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY,
-            };
-
-            if (renderAsCompass) {
-                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
-            } else {
-                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
-            }
-
-            if (appContext.settings.showText) {
-                ctx.textAlign = 'center';
-                ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
-                ctx.strokeStyle = '#000';
-                ctx.fillStyle = '#fff';
-
-                if (renderAsCompass) {
-                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                    ctx.strokeText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
-                    ctx.fillText(currentFriends.current[key].name, rotated.x, rotated.y + icon.height);
-                } else {
-                    ctx.strokeText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                    ctx.fillText(currentFriends.current[key].name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                }
-            }
-        }
+        drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
         const playerIcon = mapIconsCache.getPlayerIcon();
 
