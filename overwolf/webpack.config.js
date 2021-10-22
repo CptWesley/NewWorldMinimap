@@ -1,9 +1,11 @@
+const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const OverwolfPlugin = require('./overwolf.webpack');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const appName = "CptWesley's Minimap";
 const appVersion = require('./package.json').version;
@@ -11,6 +13,7 @@ const appDate = new Date().toISOString();
 
 module.exports = (env, argv) => {
     const prod = argv['mode'] !== 'development';
+    const bundlesize = !!env.bundlesize;
     const templateParameters = {
         appName,
         appVersion,
@@ -18,13 +21,30 @@ module.exports = (env, argv) => {
         prod,
     };
 
-    return {
+    /** @type webpack.Configuration */
+    const config = {
         entry: {
             background: './src/OverwolfWindows/background/background.ts',
             desktop: './src/OverwolfWindows/desktop/desktop.ts',
             in_game: './src/OverwolfWindows/in_game/in_game.ts'
         },
+        output: {
+            filename: '[name].bundle.js',
+            chunkFilename: '[name].chunk.js',
+        },
         devtool: 'source-map',
+        optimization: {
+            splitChunks: {
+                chunks: 'all',
+                cacheGroups: {
+                    dependencies: {
+                        test: /[\\/]node_modules[\\/]/,
+                        reuseExistingChunk: true,
+                        filename: 'dependencies.chunk.js',
+                    },
+                },
+            },
+        },
         module: {
             rules: [
                 {
@@ -75,7 +95,9 @@ module.exports = (env, argv) => {
                 chunks: ['in_game']
             }),
             new Dotenv(),
-            new OverwolfPlugin(env)
+            new OverwolfPlugin(env),
+            ...(bundlesize ? [new BundleAnalyzerPlugin()] : []),
         ]
     };
+    return config;
 };
