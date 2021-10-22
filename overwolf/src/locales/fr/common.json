@@ -86,7 +86,8 @@
             "friendsTooltip": "Liste de vos amis. Un code ami par ligne.",
             "regenerate": "Générez un nouveau code d'ami si vous ne voulez plus permettre à certaines personnes de vous suivre.",
             "customServerUrl": "Noeud final de URL du serveur",
-            "customServerUrlTooltip": "Point de terminaison de l'URL du serveur auquel vous voulez vous connecter. Laissez vide pour le serveur par défaut."
+            "customServerUrlTooltip": "Point de terminaison de l'URL du serveur auquel vous voulez vous connecter. Laissez vide pour le serveur par défaut.",
+            "privacy": "Toutes les données sont stockées temporairement. Les données sont soit remplacées par de nouvelles données, soit supprimées automatiquement après 30 secondes. Les données transmises sont uniquement utilisées pour être transmises aux personnes qui connaissent votre code ami. Les données sont transmises uniquement lorsque le paramètre est activé."
         }
 
     }
