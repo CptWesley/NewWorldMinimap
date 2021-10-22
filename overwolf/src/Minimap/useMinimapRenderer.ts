@@ -2,13 +2,24 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
 import { positionUpdateRate } from '@/logic/hooks';
 import { getIconName } from '@/logic/icons';
-import { getMapTiles } from '@/logic/map';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { toMinimapCoordinate } from '@/logic/tiles';
 import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from '@/logic/util';
+import drawMapTiles from './drawMapTiles';
+
+export type MapRendererSettings = {
+    context: CanvasRenderingContext2D,
+    centerX: number,
+    centerY: number,
+
+    mapCenterPosition: Vector2,
+    renderAsCompass: boolean,
+    zoomLevel: number,
+    angle: number,
+}
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
@@ -53,45 +64,20 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         const centerY = ctx.canvas.height / 2;
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
-        const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel, renderAsCompass ? -angle : 0);
+
+        const mapRendererSettings: MapRendererSettings = {
+            angle,
+            centerX,
+            centerY,
+            context: ctx,
+            mapCenterPosition: mapCenterPos,
+            renderAsCompass,
+            zoomLevel,
+        };
+
         const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
 
-        let toDraw: Marker[] = [];
-
-        for (let x = 0; x < tiles.length; x++) {
-            const row = tiles[x];
-            for (let y = 0; y < row.length; y++) {
-                const tile = row[y];
-                const bitmap = tile.image;
-
-                if (!bitmap) {
-                    continue;
-                }
-
-                if (renderAsCompass) {
-                    ctx.save();
-                    ctx.translate(centerX, centerY);
-                    ctx.rotate(-angle);
-                    ctx.translate(-centerX, -centerY);
-                    ctx.drawImage(bitmap,
-                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
-                        bitmap.width / zoomLevel,
-                        bitmap.height / zoomLevel
-                    );
-                    ctx.restore();
-                } else {
-                    ctx.drawImage(bitmap,
-                        bitmap.width / zoomLevel * x + centerX - offset.x / zoomLevel,
-                        bitmap.height / zoomLevel * y + centerY - offset.y / zoomLevel,
-                        bitmap.width / zoomLevel,
-                        bitmap.height / zoomLevel
-                    );
-                }
-
-                toDraw = toDraw.concat(tile.markers);
-            }
-        }
+        const toDraw = drawMapTiles(mapRendererSettings);
 
         const iconSettings = appContext.settings.iconSettings;
 
