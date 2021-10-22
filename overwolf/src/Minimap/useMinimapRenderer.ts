@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
 import { positionUpdateRate } from '@/logic/hooks';
 import MapIconsCache from '@/logic/mapIconsCache';
+import { store, zoomLevelSettingBounds } from '@/logic/storage';
 import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { toMinimapCoordinate } from '@/logic/tiles';
@@ -11,6 +12,8 @@ import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
+import { mapFastZoom, mapSlowZoom, townZoomDistance } from './mapConstants';
+import { useNumberInterpolation } from './useInterpolation';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
@@ -39,10 +42,17 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const [mapIconsCache] = useState(() => new MapIconsCache());
 
+    const {
+        get: getInterpolatedZoomLevel,
+        update: updateInterpolatedZoomLevel,
+        getCurrentValue: getCurrentZoomValue,
+    } = useNumberInterpolation(appContext.settings.zoomLevel, mapFastZoom);
+
     const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
 
+    const usingTownZoom = useRef(false);
     const lastAngle = useRef<number>(0);
 
     const mapPositionOverride = useRef<Vector2>();
@@ -53,14 +63,30 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     const draw = (playerPos: Vector2, angle: number) => {
         const ctx = canvas.current?.getContext('2d');
 
-        let zoomLevel = appContext.settings.zoomLevel;
-
+        let nextZoomLevel = appContext.settings.zoomLevel;
+        let switchedZoomLevel = false;
         if (appContext.settings.townZoom) {
             const town = getNearestTown(playerPos);
-            if (town.distance <= 10000) {
-                zoomLevel = appContext.settings.townZoomLevel;
+            if (town.distance <= townZoomDistance) {
+                nextZoomLevel = appContext.settings.townZoomLevel;
+                if (!usingTownZoom.current) {
+                    usingTownZoom.current = true;
+                    switchedZoomLevel = true;
+                }
+            } else if (usingTownZoom.current) {
+                usingTownZoom.current = false;
+                switchedZoomLevel = true;
             }
+        } else if (usingTownZoom.current) {
+            usingTownZoom.current = false;
+            nextZoomLevel = appContext.settings.zoomLevel;
+            switchedZoomLevel = true;
         }
+        if (nextZoomLevel !== getCurrentZoomValue()) {
+            updateInterpolatedZoomLevel(nextZoomLevel, switchedZoomLevel ? mapSlowZoom : undefined);
+        }
+
+        const zoomLevel = getInterpolatedZoomLevel();
 
         const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
@@ -180,10 +206,20 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         redraw(true);
     }
 
-    // This effect triggers a redraw when the context value changes (relevant for settings).
-    useEffect(() => {
-        redraw(true);
-    }, [appContext]);
+    function getZoomLevel() {
+        return usingTownZoom.current ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
+    }
+
+    function zoomBy(delta: number) {
+        const nextZoomLevel = Math.max(
+            zoomLevelSettingBounds[0],
+            Math.min(
+                zoomLevelSettingBounds[1],
+                getZoomLevel() + delta));
+        const keyToUpdate = usingTownZoom.current ? 'townZoomLevel' : 'zoomLevel';
+        appContext.update({ [keyToUpdate]: nextZoomLevel });
+        store(keyToUpdate, nextZoomLevel);
+    }
 
     // Recreate the icons when the icon scale changes
     useEffect(() => {
@@ -212,11 +248,30 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         };
     }, []);
 
+    const updateOn = [
+        appContext.isTransparentSurface,
+        appContext.settings.animationInterpolation,
+        appContext.settings.compassMode,
+        appContext.settings.extrapolateLocation,
+        appContext.settings.iconScale,
+        appContext.settings.iconSettings,
+        appContext.settings.showText,
+        appContext.settings.townZoom,
+        appContext.settings.townZoomLevel,
+        appContext.settings.zoomLevel,
+    ];
+
+    useEffect(() => {
+        redraw(true);
+    }, updateOn);
+
     return {
         currentFriends,
         currentPlayerPosition: currentPlayerPosition as { readonly current: Readonly<Vector2> },
+        getZoomLevel,
         mapPositionOverride,
         redraw,
         setPlayerPosition,
+        zoomBy,
     };
 }

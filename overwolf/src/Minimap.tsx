@@ -12,7 +12,7 @@ import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
-import { store, zoomLevelSettingBounds } from './logic/storage';
+import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import useMinimapRenderer from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
@@ -102,9 +102,11 @@ export default function Minimap(props: IProps) {
     const {
         currentFriends,
         currentPlayerPosition,
+        getZoomLevel,
         mapPositionOverride,
         redraw,
         setPlayerPosition,
+        zoomBy,
     } = useMinimapRenderer(canvas);
 
     function setPosition(pos: Vector2) {
@@ -138,18 +140,8 @@ export default function Minimap(props: IProps) {
         redraw(true);
     }
 
-    function zoomBy(delta: number) {
-        const nextZoomLevel = Math.max(
-            zoomLevelSettingBounds[0],
-            Math.min(
-                zoomLevelSettingBounds[1],
-                appContext.settings.zoomLevel + delta));
-        appContext.update({ zoomLevel: nextZoomLevel });
-        store('zoomLevel', nextZoomLevel);
-    }
-
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-        zoomBy(Math.sign(e.deltaY) * appContext.settings.zoomLevel / 5 * Math.abs(e.deltaY) / 100);
+        zoomBy(Math.sign(e.deltaY) * getZoomLevel() / 5 * Math.abs(e.deltaY) / 100);
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
@@ -181,8 +173,8 @@ export default function Minimap(props: IProps) {
                     mapPositionOverride.current = { ...mapPositionOverride.current ?? currentPlayerPosition.current };
                     setIsMapDragged(true);
                 } else if (mapPositionOverride.current) {
-                    mapPositionOverride.current.x -= dX * appContext.settings.zoomLevel / 4;
-                    mapPositionOverride.current.y += dY * appContext.settings.zoomLevel / 4;
+                    mapPositionOverride.current.x -= dX * getZoomLevel() / 4;
+                    mapPositionOverride.current.y += dY * getZoomLevel() / 4;
                 }
                 redraw(true);
                 scrollingMap.current.position.x = e.pageX;
@@ -204,16 +196,16 @@ export default function Minimap(props: IProps) {
         // This is alright, because the app window descriptor does not change.
         // eslint-disable-next-line react-hooks/rules-of-hooks
         useEffect(() => {
-            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(appContext.settings.zoomLevel / 5), window);
-            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(appContext.settings.zoomLevel / -5), window);
+            const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(getZoomLevel() / 5), window);
+            const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(getZoomLevel() / -5), window);
             return () => { zoomInRegistration(); zoomOutRegistration(); };
-        }, [appContext.settings.zoomLevel]);
+        }, [getZoomLevel()]);
     }
 
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
         const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
+            ? setInterval(() => redraw(true), positionUpdateRate / appContext.settings.resamplingRate)
             : undefined;
 
         return function () {
@@ -270,10 +262,10 @@ export default function Minimap(props: IProps) {
         </div>
         {NWMM_APP_WINDOW === 'desktop' &&
             <MinimapToolbar className={classes.mapControls}>
-                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / -5)} title={t('minimap.zoomIn')}>
+                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
                     <ZoomInIcon />
                 </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton onClick={() => zoomBy(appContext.settings.zoomLevel / 5)} title={t('minimap.zoomOut')}>
+                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
                     <ZoomOutIcon />
                 </MinimapToolbarIconButton>
                 {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>

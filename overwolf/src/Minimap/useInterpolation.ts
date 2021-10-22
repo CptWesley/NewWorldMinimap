@@ -5,6 +5,7 @@ type InterpolationState<T> = {
     previous: T,
     updateTime: number,
     current: T,
+    duration: number | undefined,
 }
 
 type Equality<T> = (a: T, b: T) => boolean;
@@ -14,10 +15,11 @@ function createInterpolationState<T>(initial: T): InterpolationState<T> {
         current: initial,
         previous: initial,
         updateTime: 0,
+        duration: undefined,
     };
 }
 
-export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, duration: number, eq?: Equality<T>) {
+export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, defaultDuration: number, eq?: Equality<T>) {
     const stateRef = useRef<InterpolationState<T>>();
     if (!stateRef.current) {
         stateRef.current = createInterpolationState(initial);
@@ -31,25 +33,25 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
     }
 
     function isDone(): boolean {
-        return getTimeDifference() >= duration;
+        return getTimeDifference() >= (state.duration || defaultDuration);
     }
 
     function get(): T {
         const timeDifference = getTimeDifference();
 
-        if (timeDifference <= 0) {
-            return state.previous;
-        }
-
-        if (timeDifference >= duration) {
+        if (timeDifference >= (state.duration || defaultDuration)) {
             return state.current;
         }
 
-        const progress = timeDifference / duration;
+        const progress = timeDifference / (state.duration || defaultDuration);
         return interpolator(state.previous, state.current, progress);
     }
 
-    function update(next: T) {
+    function getCurrentValue() {
+        return state.current;
+    }
+
+    function update(next: T, duration?: number) {
         if (eq ? eq(state.current, next) : state.current === next) {
             return;
         }
@@ -57,12 +59,14 @@ export function useInterpolation<T>(interpolator: Interpolator<T>, initial: T, d
         state.previous = get();
         state.current = next;
         state.updateTime = performance.now();
+        state.duration = duration;
     }
 
     return {
         get,
         isDone,
         update,
+        getCurrentValue,
     };
 }
 
