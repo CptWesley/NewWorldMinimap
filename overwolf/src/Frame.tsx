@@ -1,4 +1,4 @@
-import '@fontsource/lato/400.css';
+import '@/style/lato-fonts.css';
 import clsx from 'clsx';
 import produce from 'immer';
 import React, { useCallback, useEffect, useState } from 'react';

@@ -1,0 +1,7 @@
+@font-face {
+  font-family: Lato;
+  font-weight: 400;
+  font-style: normal;
+  text-rendering: optimizeLegibility;
+  src: url("lato-font/fonts/lato-normal/lato-normal.woff2") format("woff2");
+}
