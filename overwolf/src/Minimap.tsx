@@ -204,14 +204,25 @@ export default function Minimap(props: IProps) {
 
     // This effect starts a timer if interpolation is enabled.
     useEffect(() => {
-        const interval = interpolationEnabled
-            ? setInterval(() => redraw(false), positionUpdateRate / appContext.settings.resamplingRate)
-            : undefined;
+        let allowed = true;
+        const minFrameTime = positionUpdateRate / appContext.settings.resamplingRate;
+        let lastTimestamp = performance.now();
+        function animationFrame(time: DOMHighResTimeStamp) {
+            if (time - lastTimestamp >= minFrameTime) {
+                lastTimestamp = time;
+                redraw(false);
+            }
+            start();
+        }
+        function start() {
+            if (allowed) {
+                requestAnimationFrame(animationFrame);
+            }
+        }
+        start();
 
         return function () {
-            if (interval) {
-                clearInterval(interval);
-            }
+            allowed = false;
         };
     }, [interpolationEnabled, appContext.settings.resamplingRate]);
 
