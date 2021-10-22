@@ -69,7 +69,6 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const currentFriends = useRef<FriendData[]>([]);
 
-    // eslint-disable-next-line complexity
     const draw = () => {
         const ctx = canvas.current?.getContext('2d');
         if (!ctx) {
