@@ -1,24 +1,33 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
 import { positionUpdateRate } from '@/logic/hooks';
-import { getIconName } from '@/logic/icons';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { toMinimapCoordinate } from '@/logic/tiles';
 import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, rotateAround, squaredDistance } from '@/logic/util';
+import drawMapMarkers from './drawMapMarkers';
 import drawMapTiles from './drawMapTiles';
 
-export type MapRendererSettings = {
+export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
     centerX: number,
     centerY: number,
+    offset: Vector2,
 
+    playerPosition: Vector2,
     mapCenterPosition: Vector2,
     renderAsCompass: boolean,
     zoomLevel: number,
     angle: number,
+}
+
+export type MapIconRendererParameters = {
+    settings: IconSettings | undefined,
+    mapIconsCache: MapIconsCache,
+    iconScale: number,
+    showText: boolean,
 }
 
 const tileCache = getTileCache();
@@ -65,19 +74,25 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const mapRendererSettings: MapRendererSettings = {
+        const offset = toMinimapCoordinate(
+            mapCenterPos,
+            mapCenterPos,
+            ctx.canvas.width * zoomLevel,
+            ctx.canvas.height * zoomLevel);
+
+        const mapRendererParameters: MapRendererParameters = {
             angle,
             centerX,
             centerY,
             context: ctx,
+            offset,
+            playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,
             zoomLevel,
         };
 
-        const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-
-        const toDraw = drawMapTiles(mapRendererSettings);
+        const toDraw = drawMapTiles(mapRendererParameters);
 
         const iconSettings = appContext.settings.iconSettings;
 
@@ -85,54 +100,14 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             return;
         }
 
-        for (const marker of toDraw) {
-            const catSettings = iconSettings.categories[marker.category];
-            if (!catSettings || !catSettings.visible) {
-                continue;
-            }
+        const mapIconRendererParameters: MapIconRendererParameters = {
+            iconScale: appContext.settings.iconScale,
+            mapIconsCache,
+            settings: iconSettings,
+            showText: appContext.settings.showText,
+        };
 
-            const typeSettings = catSettings.types[marker.type];
-            if (typeSettings && !typeSettings.visible) {
-                continue;
-            }
-
-            const mapPos = toMinimapCoordinate(
-                renderAsCompass ? playerPos : mapCenterPos,
-                marker.pos,
-                ctx.canvas.width * zoomLevel,
-                ctx.canvas.height * zoomLevel);
-            const icon = mapIconsCache.getIcon(marker.type, marker.category);
-            if (!icon) { continue; }
-            const imgPosCorrected = {
-                x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
-            };
-
-            if (renderAsCompass) {
-                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
-            } else {
-                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
-            }
-
-            if (appContext.settings.showText && catSettings.showLabel && typeSettings.showLabel) {
-                ctx.textAlign = 'center';
-                ctx.font = Math.round(appContext.settings.iconScale * 10) + 'px sans-serif';
-                ctx.strokeStyle = '#000';
-                ctx.fillStyle = '#fff';
-
-                const markerText = getIconName(marker.category, marker.name ?? marker.type);
-
-                if (renderAsCompass) {
-                    const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
-                    ctx.strokeText(markerText, rotated.x, rotated.y + icon.height);
-                    ctx.fillText(markerText, rotated.x, rotated.y + icon.height);
-                } else {
-                    ctx.strokeText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                    ctx.fillText(markerText, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                }
-            }
-        }
+        drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
         for (const key in currentFriends.current) {
             const imgPos = toMinimapCoordinate(mapCenterPos, { x: currentFriends.current[key].location.x, y: currentFriends.current[key].location.y } as Vector2, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);

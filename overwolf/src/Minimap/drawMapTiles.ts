@@ -1,29 +1,24 @@
 import { getMapTiles } from '@/logic/map';
-import { toMinimapCoordinate } from '@/logic/tiles';
-import { MapRendererSettings } from './useMinimapRenderer';
+import { MapRendererParameters } from './useMinimapRenderer';
 
-export default function drawMapTiles(settings: MapRendererSettings) {
+export default function drawMapTiles(params: MapRendererParameters) {
     const {
         context: ctx,
         centerX,
         centerY,
+        offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
         angle,
-    } = settings;
+    } = params;
 
     const tiles = getMapTiles(
         mapCenterPos,
         ctx.canvas.width * zoomLevel,
         ctx.canvas.height * zoomLevel,
         renderAsCompass ? -angle : 0);
-    const offset = toMinimapCoordinate(
-        mapCenterPos,
-        mapCenterPos,
-        ctx.canvas.width * zoomLevel,
-        ctx.canvas.height * zoomLevel);
 
     let foundMarkers: Marker[] = [];
 
