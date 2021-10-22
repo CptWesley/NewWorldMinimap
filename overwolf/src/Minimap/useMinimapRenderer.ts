@@ -9,6 +9,7 @@ import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, interpolateAngleCosine, interpolateAngleLinear, interpolateVectorsCosine, interpolateVectorsLinear, predictVector, squaredDistance } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
+import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
 
 export type MapRendererParameters = {
@@ -112,25 +113,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
-        const playerIcon = mapIconsCache.getPlayerIcon();
-
-        if (playerIcon) {
-            if (renderAsCompass) {
-                ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
-            } else {
-                const mapPos = toMinimapCoordinate(mapCenterPos, playerPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
-                const imgPosCorrected = {
-                    x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                    y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
-                };
-                ctx.save();
-                ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
-                ctx.rotate(angle);
-                ctx.translate(-imgPosCorrected.x, -imgPosCorrected.y);
-                ctx.drawImage(playerIcon, imgPosCorrected.x - playerIcon.width / 2, imgPosCorrected.y - playerIcon.height / 2);
-                ctx.restore();
-            }
-        }
+        drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
     };
 
     function drawWithInterpolation(force: boolean) {
