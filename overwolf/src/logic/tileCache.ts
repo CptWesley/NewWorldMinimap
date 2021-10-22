@@ -15,7 +15,7 @@ type TileCacheHit = {
 
 type TileCacheMiss = {
     hit: false,
-    downloading: boolean,
+    status: 'requested' | 'downloading' | 'failed',
 };
 
 type TileCacheResult = TileCacheHit | TileCacheMiss;
@@ -26,6 +26,7 @@ class TileCache {
     private static _instance: TileCache;
     private tileBitmapCache = new Map<string, ImageBitmap>();
     private downloadingBitmapCache = new Map<string, Promise<ImageBitmap>>();
+    private failedBitmapCache = new Set<string>();
     private onTileDownloadingCountChangeEvent = new UnloadingEvent<OnTileDownloadingCountChangeListener>('tileCacheDownloadingCountChange');
 
     public static get isSupported() {
@@ -55,8 +56,10 @@ class TileCache {
         if (hit) {
             return { hit: true, bitmap: hit };
         } else {
-            if (this.downloadingBitmapCache.has(key)) {
-                return { hit: false, downloading: true };
+            if (this.failedBitmapCache.has(key)) {
+                return { hit: false, status: 'failed' };
+            } else if (this.downloadingBitmapCache.has(key)) {
+                return { hit: false, status: 'downloading' };
             } else {
                 const tileBitmapPromise = this.getTileBitmapFromServer(position);
                 this.downloadingBitmapCache.set(key, tileBitmapPromise);
@@ -65,8 +68,13 @@ class TileCache {
                     this.downloadingBitmapCache.delete(key);
                     this.onTileDownloadingCountChangeEvent.fire(this.downloadingBitmapCache.size);
                 });
+                tileBitmapPromise.catch(() => {
+                    this.failedBitmapCache.add(key);
+                    this.downloadingBitmapCache.delete(key);
+                    this.onTileDownloadingCountChangeEvent.fire(this.downloadingBitmapCache.size);
+                });
                 this.onTileDownloadingCountChangeEvent.fire(this.downloadingBitmapCache.size);
-                return { hit: false, downloading: false };
+                return { hit: false, status: 'requested' };
             }
         }
     }
