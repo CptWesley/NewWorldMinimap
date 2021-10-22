@@ -69,6 +69,31 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const currentFriends = useRef<FriendData[]>([]);
 
+    function automaticTownZoom(playerPosition: Vector2) {
+        let nextZoomLevel = appContext.settings.zoomLevel;
+        const wasUsingTownZoom = usingTownZoom.current;
+
+        if (appContext.settings.townZoom && !mapPositionOverride.current) {
+            const town = getNearestTown(playerPosition);
+            if (town.distance <= townZoomDistance) {
+                nextZoomLevel = appContext.settings.townZoomLevel;
+                if (!usingTownZoom.current) {
+                    usingTownZoom.current = true;
+                }
+            } else if (usingTownZoom.current) {
+                usingTownZoom.current = false;
+            }
+        } else if (usingTownZoom.current) {
+            usingTownZoom.current = false;
+            nextZoomLevel = appContext.settings.zoomLevel;
+        }
+
+        if (nextZoomLevel !== getCurrentZoomValue()) {
+            // Use slow zoom if the town zoom marker changed, the default otherwise
+            updateInterpolatedZoomLevel(nextZoomLevel, wasUsingTownZoom !== usingTownZoom.current ? mapSlowZoom : undefined);
+        }
+    }
+
     const draw = () => {
         const ctx = canvas.current?.getContext('2d');
         if (!ctx) {
@@ -76,29 +101,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         }
 
         const playerPos = getInterpolatedPlayerPosition();
-
-        let nextZoomLevel = appContext.settings.zoomLevel;
-        let switchedZoomLevel = false;
-        if (appContext.settings.townZoom && !mapPositionOverride.current) {
-            const town = getNearestTown(playerPos);
-            if (town.distance <= townZoomDistance) {
-                nextZoomLevel = appContext.settings.townZoomLevel;
-                if (!usingTownZoom.current) {
-                    usingTownZoom.current = true;
-                    switchedZoomLevel = true;
-                }
-            } else if (usingTownZoom.current) {
-                usingTownZoom.current = false;
-                switchedZoomLevel = true;
-            }
-        } else if (usingTownZoom.current) {
-            usingTownZoom.current = false;
-            nextZoomLevel = appContext.settings.zoomLevel;
-            switchedZoomLevel = true;
-        }
-        if (nextZoomLevel !== getCurrentZoomValue()) {
-            updateInterpolatedZoomLevel(nextZoomLevel, switchedZoomLevel ? mapSlowZoom : undefined);
-        }
+        automaticTownZoom(playerPos);
 
         const angle = getInterpolatedAngle();
         const zoomLevel = getInterpolatedZoomLevel();
