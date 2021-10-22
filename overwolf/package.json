@@ -48,7 +48,6 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "@fortawesome/react-fontawesome": "^0.1.15",
     "clsx": "^1.1.1",
-    "dotenv-webpack": "^7.0.3",
     "i18next": "^21.3.2",
     "i18next-browser-languagedetector": "^6.1.2",
     "immer": "^9.0.6",
