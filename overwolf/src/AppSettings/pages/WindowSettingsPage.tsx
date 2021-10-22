@@ -62,6 +62,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showToolbar')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
             <label className={classes.range} title={t('settings.window.zoomLevelTooltip')}>
                 <input
@@ -109,6 +110,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.townZoomLevel')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
             <label className={classes.range} title={t('settings.window.iconScaleTooltip')}>
                 <input
@@ -134,6 +136,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showText')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
             <label className={classes.select} title={t('settings.window.animationInterpolationTooltip')}>
                 <select
