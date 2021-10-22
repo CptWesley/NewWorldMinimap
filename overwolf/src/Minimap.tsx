@@ -166,6 +166,7 @@ export default function Minimap(props: IProps) {
 
     function onRecenterMap() {
         mapPositionOverride.current = undefined;
+        redraw(true);
         setIsMapDragged(false);
     }
 
