@@ -1,46 +1,46 @@
 {
-    "categories": {
-        "npc": "NPCs",
-        "chests": "Kisten",
-        "documents": "Dokumente",
-        "essences": "Essenzen",
-        "fishing": "Fisch",
-        "monsters": "Kreaturen",
-        "ores": "Erze",
-        "plants": "Pflanzen",
-        "pois": "Sehenswürdigkeiten",
-        "town": "Stadt",
-        "woods": "Bäume"
+  "categories": {
+    "npc": "NPCs",
+    "chests": "Kisten",
+    "documents": "Dokumente",
+    "essences": "Essenzen",
+    "fishing": "Fisch",
+    "monsters": "Kreaturen",
+    "ores": "Erze",
+    "plants": "Pflanzen",
+    "pois": "Sehensw\u00fcrdigkeiten",
+    "town": "Stadt",
+    "woods": "Baeume"
+  },
+  "markers": {
+    "plants": {
+      "Single_Placeholder_DyePlant": "Prismabl\u00fcten",
+      "Single_Pumpkin": "Kürbis"
     },
-    "markers": {
-      "plants": {
-        "Single_Placeholder_DyePlant": "Prismabl\u00fcten",
-        "Single_Pumpkin": "Kürbis"
-      },
-        "town": {
-            "arcane_repository": "Arkane Repository",
-            "covenant_adjudicator": "Covenant Adjudicator",
-            "forge": "Schmiede",
-            "governors_desk": "Governor's Desk",
-            "inn": "Inn",
-            "kitchen": "Küche",
-            "loom": "Loom",
-            "marauder_commander": "Marauder Commander",
-            "outfitting_station": "Outfitting Station",
-            "smelter": "Schmelzofen",
-            "stonecutting_table": "Stonecutting Table",
-            "storage_shed": "Lager",
-            "syndicate_alchemist": "Syndicate Alchemist",
-            "tannery": "Gerberei",
-            "territory_planning_board": "Territory Planning Board",
-            "town_project_board": "Town Project Board",
-            "trading_post": "Handelsposten",
-            "war_board": "War Board",
-            "woodshop": "Woodshop",
-            "workshop": "Workshop"
-        },
-        "woods": {
-            "Briar": "Briar"
-        }
+    "town": {
+      "arcane_repository": "Arkanumarchiv",
+      "covenant_adjudicator": "B\u00fcndisrichter",
+      "forge": "Schmiede",
+      "governors_desk": "B\u00fcro des Gouverneurs",
+      "inn": "Gasthof",
+      "kitchen": "K\u00fcche",
+      "loom": "Weberei",
+      "marauder_commander": "Marodeurskommandant",
+      "outfitting_station": "Kleidermacherei",
+      "smelter": "Schmelzofen",
+      "stonecutting_table": "Steinmetztisch",
+      "storage_shed": "Lager",
+      "syndicate_alchemist": "Alchemist des Syndikats",
+      "tannery": "Gerberei",
+      "territory_planning_board": "Gebietsplanungstafel",
+      "town_project_board": "Stadtprojekt\u00fcbersicht",
+      "trading_post": "Handelsposten",
+      "war_board": "Kriegs\u00fcbersicht",
+      "woodshop": "Holzwerkstatt",
+      "workshop": "Werkstatt"
+    },
+    "woods": {
+      "Briar": "Briar"
     }
+  }
 }
