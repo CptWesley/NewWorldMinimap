@@ -292,6 +292,7 @@ export default function Minimap(props: IProps) {
             }
         }
 
+        /*
         for (let i = 0; i < roadGraph.nodes.length; i++) {
 
             if (roadGraph.markedForDeletion.has(i)) {
@@ -325,10 +326,10 @@ export default function Minimap(props: IProps) {
                 ctx.stroke();
             }
         }
+        */
 
-        /*
         if (target) {
-            const path = findPath(roadGraph, playerPos, target);
+            const path = findPath(roadGraph.nodes, playerPos, target);
 
             const startPos = toMinimapCoordinate(mapCenterPos, path[0], ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
             const startPosCorrected = {
@@ -351,7 +352,6 @@ export default function Minimap(props: IProps) {
             }
             ctx.stroke();
         }
-        */
 
         const playerIcon = mapIconsCache.getPlayerIcon();
 
@@ -505,6 +505,7 @@ export default function Minimap(props: IProps) {
             const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
             target = worldPos;
 
+            /*
             let shouldAdd = true;
             const neighbors: number[] = [];
             for (let i = 0; i < roadGraph.nodes.length; i++) {
@@ -532,6 +533,7 @@ export default function Minimap(props: IProps) {
             }
 
             storeRoads(roadGraph);
+            */
             redraw(true);
         }
     }

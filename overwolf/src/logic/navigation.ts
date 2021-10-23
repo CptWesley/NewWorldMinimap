@@ -33,7 +33,7 @@ export function findPath(graph: GraphNode[], start: Vector2, end: Vector2) {
     const closestToStart = findNearestNode(graph, start);
     const closestToEnd = findNearestNode(graph, end);
 
-    const chain = aStar(graph, closestToStart, closestToEnd, () => 0)!;
+    const chain = aStar(graph, closestToStart, closestToEnd, (g, s) => Math.sqrt(squaredDistance(g[s].position, end)))!;
 
     for (const i of chain) {
         result.push(graph[i].position);
@@ -101,7 +101,7 @@ function aStar(graph: GraphNode[], start: number, goal: number, h: (g: GraphNode
         const curNode = graph[current];
         for (const neighbor of curNode.neighbors) {
             const nNode = graph[neighbor];
-            const tentativeGScore = gScore.get(current)! + squaredDistance(curNode.position, nNode.position);
+            const tentativeGScore = gScore.get(current)! + Math.sqrt(squaredDistance(curNode.position, nNode.position));
             if (tentativeGScore < gScore.get(neighbor)!) {
                 cameFrom.set(neighbor, current);
                 gScore.set(neighbor, tentativeGScore);
