@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Interpolation, zoomLevelSettingBounds } from '@/logic/storage';
+import { zoomLevelSettingBounds } from '@/logic/storage';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
 
@@ -62,6 +62,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showToolbar')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
             <label className={classes.range} title={t('settings.window.zoomLevelTooltip')}>
                 <input
@@ -109,6 +110,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.townZoomLevel')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
             <label className={classes.range} title={t('settings.window.iconScaleTooltip')}>
                 <input
@@ -134,19 +136,29 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showText')}
             </label>
         </div>
+        <hr />
         <div className={classes.setting}>
-            <label className={classes.select} title={t('settings.window.interpolationTooltip')}>
+            <label className={classes.select} title={t('settings.window.animationInterpolationTooltip')}>
                 <select
-                    value={settings.interpolation}
-                    onChange={e => updateSimpleSetting('interpolation', e.currentTarget.value as Interpolation)}
+                    value={settings.animationInterpolation}
+                    onChange={e => updateSimpleSetting('animationInterpolation', e.currentTarget.value as AnimationInterpolation)}
                 >
-                    <option value='none'>{t('settings.window.interpolationNone')}</option>
-                    <option value='linear-interpolation'>{t('settings.window.interpolationLinearInter')}</option>
-                    <option value='cosine-interpolation'>{t('settings.window.interpolationCosineInter')}</option>
-                    <option value='linear-extrapolation'>{t('settings.window.interpolationLinearExtra')}</option>
-                    <option value='cosine-extrapolation'>{t('settings.window.interpolationCosineExtra')}</option>
+                    <option value='none'>{t('settings.window.animationInterpolationNone')}</option>
+                    <option value='linear'>{t('settings.window.animationInterpolationLinear')}</option>
+                    <option value='cosine'>{t('settings.window.animationInterpolationCosine')}</option>
                 </select>
-                {t('settings.window.interpolation')}
+                {t('settings.window.animationInterpolation')}
+            </label>
+        </div>
+        <div className={classes.setting}>
+            <label className={classes.checkbox} title={t('settings.window.extrapolateLocationTooltip')}>
+                <input
+                    type='checkbox'
+                    checked={settings.extrapolateLocation}
+                    onChange={e => updateSimpleSetting('extrapolateLocation', e.currentTarget.checked)}
+                    disabled={settings.animationInterpolation === 'none'}
+                />
+                {t('settings.window.extrapolateLocation')}
             </label>
         </div>
         <div className={classes.setting}>
@@ -157,7 +169,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     min='10'
                     max='60'
                     step='1'
-                    disabled={settings.interpolation === 'none'}
+                    disabled={settings.animationInterpolation === 'none'}
                     onChange={e => updateSimpleSetting('resamplingRate', e.currentTarget.valueAsNumber)}
                     onMouseDown={handleMapSliderMouseDown}
                     onMouseUp={handleMapSliderMouseUp}

@@ -133,6 +133,10 @@ const useStyles = makeStyles()(theme => ({
         '& > details > summary': {
             fontSize: 16,
         },
+
+        '& hr': {
+            margin: theme.spacing(1.5, 0),
+        },
     },
     footer: {
         gridArea: 'footer',

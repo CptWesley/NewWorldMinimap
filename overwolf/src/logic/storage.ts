@@ -5,12 +5,13 @@ const debugLocations = {
     city: { x: 8912, y: 5783 } as Vector2,
 };
 
-export type Interpolation =
+type DeprecatedInterpolation =
     | 'cosine-interpolation'
     | 'linear-interpolation'
     | 'cosine-extrapolation'
     | 'linear-extrapolation'
     | 'none';
+const deprecatedInterpolationKey = 'interpolation';
 
 export const simpleStorageDefaultSettings = {
     showHeader: true,
@@ -25,13 +26,38 @@ export const simpleStorageDefaultSettings = {
     compassMode: true,
     townZoomLevel: 1,
     townZoom: true,
-    interpolation: 'cosine-interpolation' as Interpolation,
+    animationInterpolation: 'cosine' as AnimationInterpolation,
+    extrapolateLocation: false,
     shareLocation: false,
     friends: '',
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
     friendServerUrl: '',
 };
+
+{
+    // TODO: Remove this block when the setting has been migrated fully
+    const deprecatedInterpolation = loadUntyped(deprecatedInterpolationKey, '') as DeprecatedInterpolation;
+    switch (deprecatedInterpolation) {
+        case 'cosine-extrapolation':
+            store('animationInterpolation', 'cosine');
+            store('extrapolateLocation', true);
+            break;
+        case 'cosine-interpolation':
+            store('animationInterpolation', 'cosine');
+            store('extrapolateLocation', false);
+            break;
+        case 'linear-extrapolation':
+            store('animationInterpolation', 'linear');
+            store('extrapolateLocation', true);
+            break;
+        case 'linear-interpolation':
+            store('animationInterpolation', 'linear');
+            store('extrapolateLocation', false);
+            break;
+    }
+    localStorage.removeItem(deprecatedInterpolationKey);
+}
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
 
@@ -45,7 +71,8 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'zoomLevel',
     'townZoomLevel',
     'townZoom',
-    'interpolation',
+    'animationInterpolation',
+    'extrapolateLocation',
     'resamplingRate',
     'friendServerUrl',
 ];
@@ -68,7 +95,7 @@ export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value:
 }
 
 /** Loads a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */
-export function load<TKey extends keyof SimpleStorageSetting>(key: TKey) {
+export function load<TKey extends keyof SimpleStorageSetting>(key: TKey): SimpleStorageSetting[TKey] {
     let storageKey: string = key;
 
     if (scopedSettings.includes(key) && NWMM_APP_WINDOW) {

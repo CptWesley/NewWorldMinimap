@@ -60,3 +60,10 @@ declare type FriendData = {
     name: string,
     location: Vector2,
 }
+
+type AnimationInterpolation =
+    | 'none'
+    | 'cosine'
+    | 'linear'
+    ;
+
