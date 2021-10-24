@@ -9,6 +9,7 @@ import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interpolator, predictVector, squaredDistance, vector2Equal } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
+import drawMapNavigation from './drawMapNavigation';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
@@ -148,6 +149,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             settings: iconSettings,
             showText: appContext.settings.showText,
         };
+
+        drawMapNavigation(mapRendererParameters);
 
         drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 

@@ -10,7 +10,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         centerY,
         offset,
 
-        playerPosition: playerPosition,
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
@@ -40,7 +39,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         }
 
         const mapPos = toMinimapCoordinate(
-            renderAsCompass ? playerPosition : mapCenterPos,
+            mapCenterPos,
             marker.pos,
             ctx.canvas.width * zoomLevel,
             ctx.canvas.height * zoomLevel);
@@ -61,6 +60,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         if (showText && catSettings.showLabel && typeSettings.showLabel) {
             ctx.textAlign = 'center';
             ctx.font = Math.round(iconScale * 10) + 'px sans-serif';
+            ctx.lineWidth = 3;
             ctx.strokeStyle = '#000';
             ctx.fillStyle = '#fff';
 

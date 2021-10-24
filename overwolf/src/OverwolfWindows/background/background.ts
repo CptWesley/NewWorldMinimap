@@ -1,5 +1,6 @@
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
 import { initializeHooks } from '@/logic/hooks';
+import { initializeNavigation } from '@/logic/navigation/navigation';
 import UnloadingEvent from '@/logic/unloadingEvent';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
@@ -159,3 +160,4 @@ initializeHooks();
 initializeTileCache();
 initializeTileMarkerCache();
 initializeHotkeyManager();
+initializeNavigation();

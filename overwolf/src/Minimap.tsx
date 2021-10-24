@@ -12,8 +12,10 @@ import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
+import { setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
+import { canvasToMinimapCoordinate } from './logic/tiles';
 import useMinimapRenderer from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
@@ -147,13 +149,27 @@ export default function Minimap(props: IProps) {
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
         if (NWMM_APP_WINDOW !== 'desktop') { return; }
         // Left mouse button only
-        if (e.pointerType === 'mouse' && e.button !== 0) { return; }
-        scrollingMap.current = {
-            pointerId: e.pointerId,
-            position: { x: e.pageX, y: e.pageY },
-            threshold: false,
-        };
-        e.currentTarget.setPointerCapture(e.pointerId);
+        if (e.pointerType === 'mouse' && e.button === 0) {
+            scrollingMap.current = {
+                pointerId: e.pointerId,
+                position: { x: e.pageX, y: e.pageY },
+                threshold: false,
+            };
+            e.currentTarget.setPointerCapture(e.pointerId);
+        }
+
+        if (e.pointerType === 'mouse' && e.button === 1) {
+            if (!canvas.current) { return; }
+            const canvasPos = { x: e.clientX, y: e.clientY };
+            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+            const width = canvas.current.width;
+            const height = canvas.current.height;
+            const zoomLevel = appContext.settings.zoomLevel;
+
+            const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+            setNav(currentPlayerPosition.current, worldPos);
+            redraw(true);
+        }
     }
 
     function onRecenterMap() {
