@@ -46,7 +46,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
   - Italian (Complete)
   - Spanish (Complete)
   - French (Complete)
-  - German (Most menus, complete game references)
+  - German (Complete)
   - Polish (Complete game references)
   - Portugese (Complete game references)
   - Danish (Complete menus)

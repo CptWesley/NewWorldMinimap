@@ -55,3 +55,9 @@ declare type PlayerData = {
     name: string | undefined,
     world: string | undefined,
 }
+
+type AnimationInterpolation =
+    | 'none'
+    | 'cosine'
+    | 'linear'
+    ;

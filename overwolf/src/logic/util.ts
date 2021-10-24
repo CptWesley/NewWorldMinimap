@@ -1,4 +1,42 @@
+import { Interpolator } from '@/Minimap/useInterpolation';
 import { getIconName } from './icons';
+
+export function getNumberInterpolator(animationInterpolation: AnimationInterpolation): Interpolator<number> {
+    switch (animationInterpolation) {
+        case 'cosine': return interpolateNumbersCosine;
+        case 'linear': return interpolateNumbersLinear;
+        case 'none': return undefined;
+    }
+}
+
+export function getAngleInterpolator(animationInterpolation: AnimationInterpolation): Interpolator<number> {
+    switch (animationInterpolation) {
+        case 'cosine': return interpolateAngleCosine;
+        case 'linear': return interpolateAngleLinear;
+        case 'none': return undefined;
+    }
+}
+
+export function getVector2Interpolator(animationInterpolation: AnimationInterpolation): Interpolator<Vector2> {
+    switch (animationInterpolation) {
+        case 'cosine': return interpolateVectorsCosine;
+        case 'linear': return interpolateVectorsLinear;
+        case 'none': return undefined;
+    }
+}
+
+export function vector2Equal(a: Vector2, b: Vector2) {
+    return a.x === b.x && a.y === b.y;
+}
+
+function interpolateNumbersLinear(start: number, end: number, progress: number) {
+    return start * (1 - progress) + end * progress;
+}
+
+function interpolateNumbersCosine(start: number, end: number, percentage: number) {
+    const mu = computeCosineInterpolationMu(percentage);
+    return start * (1 - mu) + end * mu;
+}
 
 export function compareNames([, v1]: [string, any], [, v2]: [string, any]) {
     const s1 = v1 as IconTypeSetting;
