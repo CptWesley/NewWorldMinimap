@@ -14,9 +14,10 @@ import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
-import useMinimapRenderer from './Minimap/useMinimapRenderer';
+import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
+import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 
 interface IProps {
     className?: string;
@@ -55,6 +56,17 @@ const useStyles = makeStyles()(theme => ({
         bottom: 0,
         zIndex: globalLayers.minimapCanvas,
     },
+    hoverCanvas: {
+        width: '100%',
+        height: '100%',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        zIndex: globalLayers.minimapCanvas,
+        pointerEvents: 'none',
+    },
     mapControls: {
         position: 'absolute',
         right: theme.spacing(1),
@@ -89,12 +101,14 @@ export default function Minimap(props: IProps) {
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const [isMapDragged, setIsMapDragged] = useState(false);
     const canvas = useRef<HTMLCanvasElement>(null);
+    const hoverLabelCanvas = useRef<HTMLCanvasElement>(null);
 
     const scrollingMap = useRef<{ pointerId: number, position: Vector2, threshold: boolean }>();
 
     const interpolationEnabled = appContext.settings.animationInterpolation !== 'none';
 
     const dynamicStyling: React.CSSProperties = {};
+
     if (appContext.isTransparentSurface) {
         dynamicStyling.clipPath = appContext.settings.shape;
     }
@@ -111,7 +125,8 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(), playerName.current, pos, appContext.settings.friends);
+            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(),
+                playerName.current, pos, appContext.settings.friends);
             sharedLocation.then(r => {
                 if (r !== undefined) {
                     setFriends(r.friends);
@@ -145,9 +160,13 @@ export default function Minimap(props: IProps) {
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
-        if (NWMM_APP_WINDOW !== 'desktop') { return; }
+        if (NWMM_APP_WINDOW !== 'desktop') {
+            return;
+        }
         // Left mouse button only
-        if (e.pointerType === 'mouse' && e.button !== 0) { return; }
+        if (e.pointerType === 'mouse' && e.button !== 0) {
+            return;
+        }
         scrollingMap.current = {
             pointerId: e.pointerId,
             position: { x: e.pageX, y: e.pageY },
@@ -163,6 +182,15 @@ export default function Minimap(props: IProps) {
     }
 
     function handlePointerMove(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (!hoverLabelCanvas) {
+            return;
+        }
+
+        if (!appContext.settings.showText) {
+            const mousePos = { x: e.pageX, y: e.pageY };
+            drawMapHoverLabel(mousePos, lastDrawCache, hoverLabelCanvas, appContext.settings.iconScale);
+        }
+
         if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
             const dX = e.pageX - scrollingMap.current.position.x;
             const dY = e.pageY - scrollingMap.current.position.y;
@@ -198,7 +226,10 @@ export default function Minimap(props: IProps) {
         useEffect(() => {
             const zoomInRegistration = hotkeyManager.registerHotkey('zoomIn', () => zoomBy(getZoomLevel() / 5), window);
             const zoomOutRegistration = hotkeyManager.registerHotkey('zoomOut', () => zoomBy(getZoomLevel() / -5), window);
-            return () => { zoomInRegistration(); zoomOutRegistration(); };
+            return () => {
+                zoomInRegistration();
+                zoomOutRegistration();
+            };
         }, [getZoomLevel()]);
     }
 
@@ -207,6 +238,7 @@ export default function Minimap(props: IProps) {
         let allowed = true;
         const minFrameTime = positionUpdateRate / appContext.settings.resamplingRate;
         let lastTimestamp = performance.now();
+
         function animationFrame(time: DOMHighResTimeStamp) {
             if (time - lastTimestamp >= minFrameTime) {
                 lastTimestamp = time;
@@ -214,11 +246,13 @@ export default function Minimap(props: IProps) {
             }
             start();
         }
+
         function start() {
             if (allowed) {
                 requestAnimationFrame(animationFrame);
             }
         }
+
         start();
 
         return function () {
@@ -266,23 +300,24 @@ export default function Minimap(props: IProps) {
             onPointerUp={handlePointerUp}
             onPointerMove={handlePointerMove}
         />
+        <canvas
+            ref={hoverLabelCanvas}
+            className={clsx(classes.hoverCanvas)}
+            style={dynamicStyling}
+        />
         <div className={classes.cacheStatus}>
-            {tilesDownloading > 0 &&
-                <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>
-            }
+            {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
         </div>
-        {NWMM_APP_WINDOW === 'desktop' &&
-            <MinimapToolbar className={classes.mapControls}>
-                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
-                    <ZoomInIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
-                    <ZoomOutIcon />
-                </MinimapToolbarIconButton>
-                {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
-                    <RecenterIcon />
-                </MinimapToolbarIconButton>}
-            </MinimapToolbar>
-        }
+        {NWMM_APP_WINDOW === 'desktop' && <MinimapToolbar className={classes.mapControls}>
+            <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
+                <ZoomInIcon/>
+            </MinimapToolbarIconButton>
+            <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
+                <ZoomOutIcon/>
+            </MinimapToolbarIconButton>
+            {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
+                <RecenterIcon/>
+            </MinimapToolbarIconButton>}
+        </MinimapToolbar>}
     </div>;
 }

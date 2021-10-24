@@ -4,7 +4,7 @@ import { getDimensions, getTileCoordinatesForWorldCoordinate } from './tiles';
 
 const tileCache = getTileCache();
 
-export function getMapTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number) {
+export function getMapTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number): Tile[][] {
     const dimensions = getDimensions(screenWidth, screenHeight, angle);
     const result: Tile[][] = [];
 
@@ -20,12 +20,22 @@ export function getMapTiles(worldPos: Vector2, screenWidth: number, screenHeight
             const image = tileCache.getTileBitmap(tileCoords);
             const markers = getMarkers(tileCoords);
             const tile: Tile = {
-                image: image.hit ? image.bitmap : null,
-                markers,
+                image: image.hit ? image.bitmap : null, markers,
             };
             col.push(tile);
         }
     }
 
     return result;
+}
+
+export function getMapTileByWorldPos(worldPos: Vector2): Tile {
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    const tileCoords: Vector2 = { x: tilePos.x, y: tilePos.y };
+    const image = tileCache.getTileBitmap(tileCoords);
+    const markers = getMarkers(tileCoords);
+
+    return {
+        image: image.hit ? image.bitmap : null, markers,
+    } as Tile;
 }
