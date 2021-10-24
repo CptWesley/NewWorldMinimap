@@ -129,3 +129,31 @@ function findLowestFScore(openSet: Set<number>, fScore: Map<number, number>) {
 
     return lowest;
 }
+
+export function findNearestTwo(graph: GraphNode[], point: Vector2) {
+    let distance1 = Infinity;
+    let distance2 = Infinity;
+    let node1 = undefined;
+    let node2 = undefined;
+
+    for (let i = 0; i < graph.length; i++) {
+        const d = squaredDistance(graph[i].position, point);
+
+        if (d < distance2) {
+            distance2 = d;
+            node2 = i;
+
+            if (distance2 < distance1) {
+                const tempD = distance1;
+                const tempN = node1;
+
+                distance1 = distance2;
+                node1 = node2;
+                distance2 = tempD;
+                node2 = tempN;
+            }
+        }
+    }
+
+    return { a: node1!, b: node2! };
+}

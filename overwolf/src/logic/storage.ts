@@ -77,14 +77,18 @@ export function storeRoads(graph: NavigationGraph) {
         }
     }
 
-    localStorage.setItem('roads', JSON.stringify(arr));
+    localStorage.setItem('roads', JSON.stringify({
+        nodes: arr,
+        cuts: graph.severNodes,
+    }));
 }
 
 export function loadRoads(): NavigationGraph {
-    const arr = JSON.parse(localStorage.getItem('roads') ?? '[]');
+    const obj = JSON.parse(localStorage.getItem('roads') ?? '[]');
     return {
-        nodes: roadsToGraph(arr),
+        nodes: roadsToGraph(obj.nodes),
         markedForDeletion: new Set<number>(),
+        severNodes: obj.cuts,
     };
 }
 

@@ -16,7 +16,7 @@ import { getIconName } from './logic/icons';
 import { getMapTiles } from './logic/map';
 import MapIconsCache from './logic/mapIconsCache';
 import { getMarkers } from './logic/markers';
-import { findPath, roadsToGraph } from './logic/navigation';
+import { findNearestTwo, findPath, roadsToGraph } from './logic/navigation';
 import { loadRoads, store, storeRoads, zoomLevelSettingBounds } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { getTileMarkerCache } from './logic/tileMarkerCache';
@@ -292,7 +292,6 @@ export default function Minimap(props: IProps) {
             }
         }
 
-        /*
         for (let i = 0; i < roadGraph.nodes.length; i++) {
 
             if (roadGraph.markedForDeletion.has(i)) {
@@ -326,8 +325,8 @@ export default function Minimap(props: IProps) {
                 ctx.stroke();
             }
         }
-        */
 
+        /*
         if (target) {
             const path = findPath(roadGraph.nodes, playerPos, target);
 
@@ -352,6 +351,7 @@ export default function Minimap(props: IProps) {
             }
             ctx.stroke();
         }
+        */
 
         const playerIcon = mapIconsCache.getPlayerIcon();
 
@@ -505,7 +505,6 @@ export default function Minimap(props: IProps) {
             const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
             target = worldPos;
 
-            /*
             let shouldAdd = true;
             const neighbors: number[] = [];
             for (let i = 0; i < roadGraph.nodes.length; i++) {
@@ -533,7 +532,42 @@ export default function Minimap(props: IProps) {
             }
 
             storeRoads(roadGraph);
-            */
+
+            redraw(true);
+        }
+
+        if (e.pointerType === 'mouse' && e.button === 2) {
+            if (!canvas.current) { return; }
+
+            const canvasPos = { x: e.clientX, y: e.clientY };
+            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+            const width = canvas.current.width;
+            const height = canvas.current.height;
+            const zoomLevel = appContext.settings.zoomLevel;
+
+            const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+
+            let shouldAdd = true;
+            const neighbors = findNearestTwo(roadGraph.nodes, worldPos);
+            for (let i = 0; i < roadGraph.severNodes.length; i++) {
+                if (roadGraph.markedForDeletion.has(i)) {
+                    continue;
+                }
+                const existingPos = roadGraph.severNodes[i];
+                if (squaredDistance(existingPos, worldPos) < 5) {
+                    roadGraph.markedForDeletion.add(i);
+                    shouldAdd = false;
+                    break;
+                }
+            }
+
+            if (shouldAdd) {
+                roadGraph.severNodes.push(worldPos);
+
+                roadGraph.nodes[neighbors.a].neighbors = roadGraph.nodes[neighbors.a].neighbors.filter(x => x !== neighbors.b);
+                roadGraph.nodes[neighbors.b].neighbors = roadGraph.nodes[neighbors.b].neighbors.filter(x => x !== neighbors.a);
+            }
+
             redraw(true);
         }
     }

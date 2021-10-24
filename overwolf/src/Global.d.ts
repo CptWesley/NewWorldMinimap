@@ -68,5 +68,6 @@ declare type GraphNode = {
 
 declare type NavigationGraph = {
     nodes: GraphNode[],
+    severNodes: Vector2[],
     markedForDeletion: Set<number>,
 }
