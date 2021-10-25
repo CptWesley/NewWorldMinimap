@@ -49,7 +49,7 @@ class TileCache {
         return this.downloadingBitmapCache.size;
     }
 
-    public getTileBitmap = (tileLevel: number, position: Vector2): TileCacheResult => {
+    public getTileBitmap = (tileLevel: TileLevel, position: Vector2): TileCacheResult => {
         const key = getTileCacheKey(tileLevel, position);
 
         const hit = this.tileBitmapCache.get(key);

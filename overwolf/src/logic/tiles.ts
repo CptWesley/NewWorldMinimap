@@ -7,7 +7,7 @@ const tileHeight = 256;
 const gameMapWidth = 14336;
 const gameMapHeight = 14336;
 
-export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: number) {
+export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: TileScale) {
     // Gets the dimensions of the map, in pixel space
     const totalWidth = width * tileWidth / tileScale;
     const totalHeight = height * tileHeight / tileScale;
@@ -45,7 +45,7 @@ export function getDimensions(screenWidth: number, screenHeight: number, angle?:
     return { x, y };
 }
 
-export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: number) {
+export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: TileScale) {
     // Gets the number of tiles that should be rendered in X/Y
     const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale);
 
@@ -123,6 +123,6 @@ export function getTileLevel(zoomLevel: number) {
     return 2;
 }
 
-export function getTileScale(tileLevel: number) {
-    return Math.pow(2, 8 - tileLevel);
+export function getTileScale(tileLevel: TileLevel): TileScale {
+    return 2 ** (8 - tileLevel) as TileScale;
 }

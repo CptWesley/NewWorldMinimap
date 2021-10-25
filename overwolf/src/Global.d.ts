@@ -4,6 +4,9 @@ declare const NWMM_APP_VERSION: string;
 declare const NWMM_APP_BUILD_DATE: string;
 declare const NWMM_APP_BUILD_PRODUCTION: boolean;
 
+declare type TileLevel = 2 | 3 | 4 | 5 | 6 | 7 | 8;
+declare type TileScale = 1 | 2 | 4 | 8 | 16 | 32 | 64;
+
 declare type Vector2 = {
     x: number;
     y: number;
@@ -25,7 +28,7 @@ declare type Marker = {
 declare type MapRenderData = {
     tiles: (ImageBitmap | null)[][];
     markers: Marker[];
-    tileScale: number;
+    tileScale: TileScale;
 }
 
 declare type IconTypeSetting = {
