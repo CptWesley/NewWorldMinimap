@@ -49,7 +49,7 @@ class TileMarkerCache {
             return undefined;
         }
 
-        const tileKey = getTileCacheKey(tilePosition);
+        const tileKey = getTileCacheKey(8, tilePosition);
         return this.cache.get(tileKey);
     }
 

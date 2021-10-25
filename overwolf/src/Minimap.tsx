@@ -156,7 +156,7 @@ export default function Minimap(props: IProps) {
     }
 
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
-        zoomBy(Math.sign(e.deltaY) * getZoomLevel() / 5 * Math.abs(e.deltaY) / 100);
+        zoomBy(getZoomLevel() / 5 * e.deltaY / 100);
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {

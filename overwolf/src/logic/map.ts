@@ -1,41 +1,64 @@
 import { getMarkers } from './markers';
 import { getTileCache } from './tileCache';
-import { getDimensions, getTileCoordinatesForWorldCoordinate } from './tiles';
+import { getDimensions, getTileCoordinatesForWorldCoordinate, getTileLevel, getTileScale } from './tiles';
 
 const tileCache = getTileCache();
 
-export function getMapTiles(worldPos: Vector2, screenWidth: number, screenHeight: number, angle: number): Tile[][] {
-    const dimensions = getDimensions(screenWidth, screenHeight, angle);
-    const result: Tile[][] = [];
+function getMarkersInternal(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number) {
+    const dimensions = getDimensions(screenWidth * zoomLevel, screenHeight * zoomLevel, angle);
 
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos, 1);
+    const markers: Marker[] = [];
 
     for (let x = 0; x < dimensions.x; ++x) {
-        const col: Tile[] = [];
-        result.push(col);
         for (let y = 0; y < dimensions.y; ++y) {
             const tileX = tilePos.x - Math.floor(dimensions.x / 2) + x;
             const tileY = tilePos.y - Math.floor(dimensions.y / 2) + y;
             const tileCoords: Vector2 = { x: tileX, y: tileY };
-            const image = tileCache.getTileBitmap(tileCoords);
-            const markers = getMarkers(tileCoords);
-            const tile: Tile = {
-                image: image.hit ? image.bitmap : null, markers,
-            };
-            col.push(tile);
+            const tileMarkers = getMarkers(tileCoords);
+            markers.push(...tileMarkers);
         }
     }
 
-    return result;
+    return markers;
 }
 
-export function getMapTileByWorldPos(worldPos: Vector2): Tile {
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
-    const tileCoords: Vector2 = { x: tilePos.x, y: tilePos.y };
-    const image = tileCache.getTileBitmap(tileCoords);
-    const markers = getMarkers(tileCoords);
+function getTilesInternal(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number) {
+    const tileLevel = getTileLevel(zoomLevel);
+    const tileScale = getTileScale(tileLevel);
+
+    const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale, angle);
+
+    const centerTilePos = getTileCoordinatesForWorldCoordinate(worldPos, tileScale);
+    const xStart = -Math.floor(dimensions.x / 2);
+    const yStart = -Math.floor(dimensions.y / 2);
+
+    const xEnd = xStart + dimensions.x;
+    const yEnd = yStart + dimensions.y;
+
+    const tiles: (ImageBitmap | null)[][] = [];
+
+    for (let x = xStart; x < xEnd; ++x) {
+        const col: (ImageBitmap | null)[] = [];
+        tiles.push(col);
+        for (let y = yStart; y < yEnd; ++y) {
+            const tileX = centerTilePos.x + x;
+            const tileY = centerTilePos.y + y;
+            const tileCoords: Vector2 = { x: tileX, y: tileY };
+            const image = tileCache.getTileBitmap(tileLevel, tileCoords);
+            col.push(image.hit ? image.bitmap : null);
+        }
+    }
+
+    return tiles;
+}
+
+export function getMap(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number): MapRenderData {
+    const tileScale = getTileScale(getTileLevel(zoomLevel));
 
     return {
-        image: image.hit ? image.bitmap : null, markers,
-    } as Tile;
+        markers: getMarkersInternal(worldPos, screenWidth, screenHeight, zoomLevel, angle),
+        tiles: getTilesInternal(worldPos, screenWidth, screenHeight, zoomLevel, angle),
+        tileScale,
+    };
 }

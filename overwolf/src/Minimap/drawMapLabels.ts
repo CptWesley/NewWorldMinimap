@@ -1,8 +1,8 @@
-import { getIconName } from '@/logic/icons';
-import { rotateAround } from '@/logic/util';
-import { getMapTileByWorldPos } from '@/logic/map';
-import { canvasToMinimapCoordinate, toMinimapCoordinate } from '@/logic/tiles';
 import React from 'react';
+import { getIconName } from '@/logic/icons';
+import { getMarkers } from '@/logic/markers';
+import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, toMinimapCoordinate } from '@/logic/tiles';
+import { rotateAround } from '@/logic/util';
 import { LastDrawCache } from '@/Minimap/useMinimapRenderer';
 
 export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Marker, iconScale: number, center: Vector2, imgPosCorrected: Vector2, angle: number, renderAsCompass: boolean, iconHeight: number) {
@@ -35,7 +35,7 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
 
     const {
         zoomLevel,
-        offset,
+        unscaledOffset: offset,
         center,
         mapCenterPosition,
         renderAsCompass,
@@ -52,13 +52,14 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
     const rotatedMousePos = rotateAround(center, mousePos, angle);
     const mouseInWorld = canvasToMinimapCoordinate(rotatedMousePos, mapCenterPosition, zoomLevel, ctx.canvas.width, ctx.canvas.height);
 
-    const tile = getMapTileByWorldPos(mouseInWorld);
+    const tilePos = getTileCoordinatesForWorldCoordinate(mouseInWorld, 1);
+    const markers = getMarkers(tilePos);
 
-    if (!tile) {
+    if (!markers) {
         return;
     }
 
-    tile.markers.forEach(m => {
+    markers.forEach(m => {
         const catSettings = lastDrawCache.iconRendererParams.settings?.categories[m.category];
         if (!catSettings || !catSettings.visible) {
             return;
@@ -72,8 +73,10 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
         const mapPos = toMinimapCoordinate(
             mapCenterPosition,
             m.pos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
         const icon = lastDrawCache.iconRendererParams.mapIconsCache.getIcon(m.type, m.category);
         if (!icon) {
             return;

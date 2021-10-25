@@ -4,7 +4,9 @@ import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRe
 
 export default function drawMapFriends(params: MapRendererParameters, iconParams: MapIconRendererParameters, friends: FriendData[]) {
     const {
-        context: ctx, center, offset,
+        context: ctx,
+        center,
+        unscaledOffset: offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -18,8 +20,13 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
     } = iconParams;
 
     for (const friend of friends) {
-        const imgPos = toMinimapCoordinate(mapCenterPos, friend.location, ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+        const imgPos = toMinimapCoordinate(
+            mapCenterPos,
+            friend.location,
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
         const icon = mapIconsCache.getFriendIcon();
         if (!icon) {
             continue;

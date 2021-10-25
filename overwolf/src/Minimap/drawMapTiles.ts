@@ -1,9 +1,11 @@
-import { getMapTiles } from '@/logic/map';
+import { getMap } from '@/logic/map';
+import { toMinimapCoordinate } from '@/logic/tiles';
 import { MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapTiles(params: MapRendererParameters) {
     const {
-        context: ctx, center, offset,
+        context: ctx,
+        center,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -11,16 +13,27 @@ export default function drawMapTiles(params: MapRendererParameters) {
         angle,
     } = params;
 
-    const tiles = getMapTiles(mapCenterPos, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel,
+    const map = getMap(
+        mapCenterPos,
+        ctx.canvas.width,
+        ctx.canvas.height,
+        zoomLevel,
         renderAsCompass ? -angle : 0);
 
-    let foundMarkers: Marker[] = [];
+    const tileVisualSize = 256 * map.tileScale;
 
-    for (let x = 0; x < tiles.length; x++) {
-        const row = tiles[x];
+    const tileScaledOffset = toMinimapCoordinate(
+        mapCenterPos,
+        mapCenterPos,
+        ctx.canvas.width,
+        ctx.canvas.height,
+        zoomLevel,
+        map.tileScale);
+
+    for (let x = 0; x < map.tiles.length; x++) {
+        const row = map.tiles[x];
         for (let y = 0; y < row.length; y++) {
-            const tile = row[y];
-            const bitmap = tile.image;
+            const bitmap = row[y];
 
             if (!bitmap) {
                 continue;
@@ -31,19 +44,23 @@ export default function drawMapTiles(params: MapRendererParameters) {
                 ctx.translate(center.x, center.y);
                 ctx.rotate(-angle);
                 ctx.translate(-center.x, -center.y);
-                ctx.drawImage(bitmap, bitmap.width / zoomLevel * x + center.x - offset.x / zoomLevel,
-                    bitmap.height / zoomLevel * y + center.y - offset.y / zoomLevel, bitmap.width / zoomLevel,
-                    bitmap.height / zoomLevel);
+                ctx.drawImage(bitmap,
+                    tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + center.y - tileScaledOffset.y / zoomLevel,
+                    tileVisualSize / zoomLevel,
+                    tileVisualSize / zoomLevel
+                );
                 ctx.restore();
             } else {
-                ctx.drawImage(bitmap, bitmap.width / zoomLevel * x + center.x - offset.x / zoomLevel,
-                    bitmap.height / zoomLevel * y + center.y - offset.y / zoomLevel, bitmap.width / zoomLevel,
-                    bitmap.height / zoomLevel);
+                ctx.drawImage(bitmap,
+                    tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + center.y - tileScaledOffset.y / zoomLevel,
+                    tileVisualSize / zoomLevel,
+                    tileVisualSize / zoomLevel
+                );
             }
-
-            foundMarkers = foundMarkers.concat(tile.markers);
         }
     }
 
-    return foundMarkers;
+    return map.markers;
 }

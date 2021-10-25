@@ -15,8 +15,9 @@ import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlow
 import { useInterpolation } from './useInterpolation';
 
 export type MapRendererParameters = {
-    context: CanvasRenderingContext2D, center: Vector2, offset: Vector2,
-
+    context: CanvasRenderingContext2D,
+    center: Vector2,
+    unscaledOffset: Vector2,
     playerPosition: Vector2,
     mapCenterPosition: Vector2,
     renderAsCompass: boolean,
@@ -123,14 +124,19 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const offset = toMinimapCoordinate(mapCenterPos, mapCenterPos, ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+        const unscaledOffset = toMinimapCoordinate(
+            mapCenterPos,
+            mapCenterPos,
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
 
         const mapRendererParameters: MapRendererParameters = {
             angle,
             center,
             context: ctx,
-            offset,
+            unscaledOffset,
             playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,

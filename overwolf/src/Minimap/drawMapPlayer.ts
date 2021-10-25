@@ -3,7 +3,9 @@ import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRe
 
 export default function drawMapPlayer(params: MapRendererParameters, iconParams: MapIconRendererParameters) {
     const {
-        context: ctx, center, offset,
+        context: ctx,
+        center,
+        unscaledOffset: offset,
 
         playerPosition,
         mapCenterPosition,
@@ -22,8 +24,7 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         if (renderAsCompass) {
             ctx.drawImage(playerIcon, center.x - playerIcon.width / 2, center.y - playerIcon.height / 2);
         } else {
-            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width * zoomLevel,
-                ctx.canvas.height * zoomLevel);
+            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel, 1);
             const imgPosCorrected = {
                 x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
                 y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
