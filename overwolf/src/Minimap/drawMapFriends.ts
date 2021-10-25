@@ -5,9 +5,8 @@ import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRe
 export default function drawMapFriends(params: MapRendererParameters, iconParams: MapIconRendererParameters, friends: FriendData[]) {
     const {
         context: ctx,
-        centerX,
-        centerY,
-        offset,
+        center,
+        unscaledOffset: offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -24,17 +23,21 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         const imgPos = toMinimapCoordinate(
             mapCenterPos,
             friend.location,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
         const icon = mapIconsCache.getFriendIcon();
-        if (!icon) { continue; }
+        if (!icon) {
+            continue;
+        }
         const imgPosCorrected = {
-            x: imgPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-            y: imgPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            x: imgPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+            y: imgPos.y / zoomLevel - offset.y / zoomLevel + center.y,
         };
 
         if (renderAsCompass) {
-            const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+            const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
             ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
         } else {
             ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
@@ -47,7 +50,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
             ctx.fillStyle = '#fff';
 
             if (renderAsCompass) {
-                const rotated = rotateAround({ x: centerX, y: centerY }, imgPosCorrected, -angle);
+                const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
                 ctx.strokeText(friend.name, rotated.x, rotated.y + icon.height);
                 ctx.fillText(friend.name, rotated.x, rotated.y + icon.height);
             } else {

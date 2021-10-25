@@ -17,10 +17,8 @@ import { useInterpolation } from './useInterpolation';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
-    centerX: number,
-    centerY: number,
-    offset: Vector2,
-
+    center: Vector2,
+    unscaledOffset: Vector2,
     playerPosition: Vector2,
     mapCenterPosition: Vector2,
     renderAsCompass: boolean,
@@ -34,6 +32,13 @@ export type MapIconRendererParameters = {
     iconScale: number,
     showText: boolean,
 }
+
+export type LastDrawCache = {
+    mapRendererParams: MapRendererParameters,
+    iconRendererParams: MapIconRendererParameters
+};
+
+export let lastDrawCache: LastDrawCache;
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
@@ -96,6 +101,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     }
 
     const draw = () => {
+
         const ctx = canvas.current?.getContext('2d');
         if (!ctx) {
             return;
@@ -112,23 +118,26 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
 
-        const centerX = ctx.canvas.width / 2;
-        const centerY = ctx.canvas.height / 2;
+        const center = {
+            x: ctx.canvas.width / 2,
+            y: ctx.canvas.height / 2,
+        };
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const offset = toMinimapCoordinate(
+        const unscaledOffset = toMinimapCoordinate(
             mapCenterPos,
             mapCenterPos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
 
         const mapRendererParameters: MapRendererParameters = {
             angle,
-            centerX,
-            centerY,
+            center,
             context: ctx,
-            offset,
+            unscaledOffset,
             playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,
@@ -157,6 +166,11 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
+
+        lastDrawCache = {
+            mapRendererParams: mapRendererParameters,
+            iconRendererParams: mapIconRendererParameters,
+        };
     };
 
     function drawWithInterpolation(force: boolean) {
@@ -208,8 +222,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     function zoomBy(delta: number) {
         const nextZoomLevel = Math.max(
             zoomLevelSettingBounds[0],
-            Math.min(
-                zoomLevelSettingBounds[1],
+            Math.min(zoomLevelSettingBounds[1],
                 getZoomLevel() + delta));
         const keyToUpdate = usingTownZoom.current ? 'townZoomLevel' : 'zoomLevel';
         appContext.update({ [keyToUpdate]: nextZoomLevel });

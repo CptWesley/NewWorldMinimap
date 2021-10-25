@@ -82,7 +82,7 @@ export type KnownStorageScope = ConcreteWindow | typeof iconSettingStorageScope;
 export const knownStorageScopes: KnownStorageScope[] = ['desktop', 'icon', 'inGame'];
 const defaultHiddenIconCategories = ['npc', 'pois'];
 
-export const zoomLevelSettingBounds = [0.5, 7] as const;
+export const zoomLevelSettingBounds = [0.5, 50] as const;
 
 /** Stores a simple storage setting. A scope will be added to the key, if the setting is a scoped setting. */
 export function store<TKey extends keyof SimpleStorageSetting>(key: TKey, value: SimpleStorageSetting[TKey]) {

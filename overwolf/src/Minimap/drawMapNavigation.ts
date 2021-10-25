@@ -6,9 +6,8 @@ import { MapRendererParameters } from './useMinimapRenderer';
 export default function drawMapNavigation(params: MapRendererParameters) {
     const {
         context: ctx,
-        centerX,
-        centerY,
-        offset,
+        center,
+        unscaledOffset: offset,
         renderAsCompass,
         playerPosition,
         mapCenterPosition,
@@ -20,14 +19,16 @@ export default function drawMapNavigation(params: MapRendererParameters) {
         const pos = toMinimapCoordinate(
             mapCenterPosition,
             worldPos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
         const posCorrected = {
-            x: pos.x / zoomLevel - offset.x / zoomLevel + centerX,
-            y: pos.y / zoomLevel - offset.y / zoomLevel + centerY,
+            x: pos.x / zoomLevel - offset.x / zoomLevel + center.x,
+            y: pos.y / zoomLevel - offset.y / zoomLevel + center.y,
         };
 
-        return renderAsCompass ? rotateAround({ x: centerX, y: centerY }, posCorrected, -angle) : posCorrected;
+        return renderAsCompass ? rotateAround(center, posCorrected, -angle) : posCorrected;
     }
 
     const path = getNavPath(playerPosition);
