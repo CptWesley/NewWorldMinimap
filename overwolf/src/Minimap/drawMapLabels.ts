@@ -82,9 +82,9 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
             x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
             y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
         };
-        const rotated = rotateAround(center, imgPosCorrected, -angle);
-        if ((mousePos.x >= rotated.x - icon.width / 2 && mousePos.y <= rotated.y + icon.height / 2)
-            && (mousePos.x <= rotated.x + icon.width / 2 && mousePos.y >= rotated.y - icon.height / 2)) {
+        const pos = renderAsCompass ? rotateAround(center, imgPosCorrected, -angle) : imgPosCorrected;
+        if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
+            && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
             drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
         }
     });
