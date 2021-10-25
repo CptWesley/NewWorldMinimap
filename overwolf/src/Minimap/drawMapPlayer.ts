@@ -25,7 +25,7 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         if (renderAsCompass) {
             ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
         } else {
-            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width * zoomLevel, ctx.canvas.height * zoomLevel);
+            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel);
             const imgPosCorrected = {
                 x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
                 y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,

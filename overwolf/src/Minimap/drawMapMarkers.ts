@@ -42,8 +42,9 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         const mapPos = toMinimapCoordinate(
             renderAsCompass ? playerPosition : mapCenterPos,
             marker.pos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel);
         const icon = mapIconsCache.getIcon(marker.type, marker.category);
         if (!icon) { continue; }
         const imgPosCorrected = {

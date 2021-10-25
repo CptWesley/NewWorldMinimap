@@ -24,8 +24,9 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         const imgPos = toMinimapCoordinate(
             mapCenterPos,
             friend.location,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel);
         const icon = mapIconsCache.getFriendIcon();
         if (!icon) { continue; }
         const imgPosCorrected = {

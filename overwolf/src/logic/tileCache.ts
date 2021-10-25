@@ -1,7 +1,7 @@
 import UnloadingEvent from './unloadingEvent';
 
-export function getTileCacheKey(tilePos: Vector2) {
-    return `${tilePos.x},${tilePos.y}`;
+export function getTileCacheKey(tileLevel: number, tilePos: Vector2) {
+    return `${tileLevel}@${tilePos.x},${tilePos.y}`;
 }
 
 export type TileCacheWindow = typeof window & {
@@ -49,8 +49,8 @@ class TileCache {
         return this.downloadingBitmapCache.size;
     }
 
-    public getTileBitmap = (position: Vector2): TileCacheResult => {
-        const key = getTileCacheKey(position);
+    public getTileBitmap = (tileLevel: number, position: Vector2): TileCacheResult => {
+        const key = getTileCacheKey(tileLevel, position);
 
         const hit = this.tileBitmapCache.get(key);
         if (hit) {
@@ -61,7 +61,7 @@ class TileCache {
             } else if (this.downloadingBitmapCache.has(key)) {
                 return { hit: false, status: 'downloading' };
             } else {
-                const tileBitmapPromise = this.getTileBitmapFromServer(position);
+                const tileBitmapPromise = this.getTileBitmapFromServer(tileLevel, position);
                 this.downloadingBitmapCache.set(key, tileBitmapPromise);
                 tileBitmapPromise.then(bitmap => {
                     this.tileBitmapCache.set(key, bitmap);
@@ -86,8 +86,8 @@ class TileCache {
         this.tileBitmapCache.clear();
     }
 
-    private getTileBitmapFromServer = async (position: Vector2) => {
-        const imageUrl = TileCache.getTileImageUrl(position);
+    private getTileBitmapFromServer = async (tileLevel: number, position: Vector2) => {
+        const imageUrl = TileCache.getTileImageUrl(tileLevel, position);
         const imageRequest = await fetch(imageUrl, {
             method: 'get',
         });
@@ -96,8 +96,8 @@ class TileCache {
         return bitmap;
     }
 
-    private static getTileImageUrl(tilePos: Vector2) {
-        return `https://cdn.newworldfans.com/newworldmap/8/${tilePos.x}/${tilePos.y}.png`;
+    private static getTileImageUrl(tileLevel: number, tilePos: Vector2) {
+        return `https://cdn.newworldfans.com/newworldmap/${tileLevel}/${tilePos.x}/${tilePos.y}.png`;
     }
 }
 

@@ -22,9 +22,10 @@ declare type Marker = {
     pos: Vector2;
 }
 
-declare type Tile = {
-    image: ImageBitmap | null;
+declare type MapRenderData = {
+    tiles: (ImageBitmap | null)[][];
     markers: Marker[];
+    tileScale: number;
 }
 
 declare type IconTypeSetting = {

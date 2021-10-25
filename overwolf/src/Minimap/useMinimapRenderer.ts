@@ -119,8 +119,9 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         const offset = toMinimapCoordinate(
             mapCenterPos,
             mapCenterPos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel);
 
         const mapRendererParameters: MapRendererParameters = {
             angle,

@@ -7,9 +7,9 @@ const tileHeight = 256;
 const gameMapWidth = 14336;
 const gameMapHeight = 14400;
 
-export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2) {
-    const totalWidth = width * tileWidth;
-    const totalHeight = height * tileHeight;
+export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: number = 1) {
+    const totalWidth = width * tileWidth / tileScale;
+    const totalHeight = height * tileHeight / tileScale;
 
     const imageX = worldPos.x / gameMapWidth * totalWidth;
     const imageY = (gameMapHeight - worldPos.y) / gameMapHeight * totalHeight;
@@ -22,7 +22,7 @@ export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2) {
 
 export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
     const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
-    return getTileCacheKey(tilePos);
+    return getTileCacheKey(8, tilePos);
 }
 
 export function getDimensions(screenWidth: number, screenHeight: number, angle?: number) {
@@ -42,8 +42,8 @@ export function getDimensions(screenWidth: number, screenHeight: number, angle?:
     return { x, y };
 }
 
-export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number) {
-    const dimensions = getDimensions(screenWidth, screenHeight);
+export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number) {
+    const dimensions = getDimensions(screenWidth * zoomLevel, screenHeight * zoomLevel);
     const totalWidth = tileWidth * width;
     const totalHeight = tileHeight * height;
     const { x: tileX, y: tileY } = getTileCoordinatesForWorldCoordinate(playerWorldPos);
@@ -78,10 +78,42 @@ export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2
     const y = canvasPos.y * zoomLevel;
 
     const worldOffsetX = Math.floor((x * gameMapWidth) / totalWidth);
-    const finalPosX = worldOffsetX + (centerPos.x - viewWidthInWorld/2);
+    const finalPosX = worldOffsetX + (centerPos.x - viewWidthInWorld / 2);
 
     const workdOffsetY = Math.floor(gameMapHeight - (gameMapHeight - (y * gameMapHeight) / totalHeight));
-    const finalPosY = (centerPos.y + viewHeightInWorld/2) - workdOffsetY;
+    const finalPosY = (centerPos.y + viewHeightInWorld / 2) - workdOffsetY;
 
     return { x: finalPosX, y: finalPosY };
+}
+
+export function getTileLevel(zoomLevel: number) {
+    if (zoomLevel < 2) {
+        return 8;
+    }
+
+    if (zoomLevel < 4) {
+        return 7;
+    }
+
+    if (zoomLevel < 8) {
+        return 6;
+    }
+
+    if (zoomLevel < 16) {
+        return 5;
+    }
+
+    if (zoomLevel < 32) {
+        return 4;
+    }
+
+    if (zoomLevel < 64) {
+        return 3;
+    }
+
+    return 2;
+}
+
+export function getTileScale(tileLevel: number) {
+    return Math.pow(2, 8 - tileLevel);
 }
