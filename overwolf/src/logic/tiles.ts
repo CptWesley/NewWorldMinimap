@@ -1,11 +1,11 @@
 import { getTileCacheKey } from './tileCache';
 
 const width = 224;
-const height = 225;
+const height = 224;
 const tileWidth = 256;
 const tileHeight = 256;
 const gameMapWidth = 14336;
-const gameMapHeight = 14400;
+const gameMapHeight = 14336;
 
 export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: number) {
     // Gets the dimensions of the map, in pixel space
@@ -18,7 +18,7 @@ export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScal
 
     // Converts the pixel position to a tile position
     const tileX = Math.floor(imageX / tileWidth);
-    const tileY = Math.floor(imageY / tileHeight - (1 / tileScale));
+    const tileY = Math.floor(imageY / tileHeight);
 
     return { x: tileX, y: tileY };
 }
@@ -61,7 +61,7 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     const pixelY = Math.floor((gameMapHeight - worldPos.y) / gameMapHeight * totalHeight);
 
     const imageX = pixelX - ((tileX - Math.floor(dimensions.x / 2)) * tileWidth);
-    const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2) + (1 / tileScale)) * tileHeight);
+    const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2)) * tileHeight);
 
     return { x: imageX * tileScale, y: imageY * tileScale };
 }
