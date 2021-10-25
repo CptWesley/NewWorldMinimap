@@ -7,7 +7,7 @@ const tileHeight = 256;
 const gameMapWidth = 14336;
 const gameMapHeight = 14400;
 
-export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: number = 1) {
+export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScale: number) {
     // Gets the dimensions of the map, in pixel space
     const totalWidth = width * tileWidth / tileScale;
     const totalHeight = height * tileHeight / tileScale;
@@ -18,13 +18,13 @@ export function getTileCoordinatesForWorldCoordinate(worldPos: Vector2, tileScal
 
     // Converts the pixel position to a tile position
     const tileX = Math.floor(imageX / tileWidth);
-    const tileY = Math.floor(imageY / tileHeight);
+    const tileY = Math.floor(imageY / tileHeight - (1 / tileScale));
 
-    return { x: tileX, y: tileY - 1 };
+    return { x: tileX, y: tileY };
 }
 
 export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos, 1);
     return getTileCacheKey(8, tilePos);
 }
 

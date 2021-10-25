@@ -7,7 +7,7 @@ const tileCache = getTileCache();
 function getMarkersInternal(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number) {
     const dimensions = getDimensions(screenWidth * zoomLevel, screenHeight * zoomLevel, angle);
 
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos);
+    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos, 1);
     const markers: Marker[] = [];
 
     for (let x = 0; x < dimensions.x; ++x) {
@@ -32,16 +32,21 @@ function getTilesInternal(worldPos: Vector2, screenWidth: number, screenHeight: 
     // console.log('Original Dimensions:');
     // console.log(dimensions);
 
-    const tilePos = getTileCoordinatesForWorldCoordinate(worldPos, tileScale);
+    const centerTilePos = getTileCoordinatesForWorldCoordinate(worldPos, tileScale);
+    const xStart = -Math.floor(dimensions.x / 2);
+    const yStart = -Math.floor(dimensions.y / 2);
+
+    const xEnd = xStart + dimensions.x;
+    const yEnd = yStart + dimensions.y;
 
     const tiles: (ImageBitmap | null)[][] = [];
 
-    for (let x = 0; x < dimensions.x; ++x) {
+    for (let x = xStart; x < xEnd; ++x) {
         const col: (ImageBitmap | null)[] = [];
         tiles.push(col);
-        for (let y = 0; y < dimensions.y; ++y) {
-            const tileX = tilePos.x - Math.floor(dimensions.x / 2) + x;
-            const tileY = tilePos.y - Math.floor(dimensions.y / 2) + y;
+        for (let y = yStart; y < yEnd; ++y) {
+            const tileX = centerTilePos.x + x;
+            const tileY = centerTilePos.y + y;
             const tileCoords: Vector2 = { x: tileX, y: tileY };
             // console.log('Tile Coord (' + x + ', ' + y + '):');
             // console.log(tileCoords);
