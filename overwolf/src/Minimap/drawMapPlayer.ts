@@ -4,8 +4,7 @@ import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRe
 export default function drawMapPlayer(params: MapRendererParameters, iconParams: MapIconRendererParameters) {
     const {
         context: ctx,
-        centerX,
-        centerY,
+        center,
         unscaledOffset: offset,
 
         playerPosition,
@@ -23,18 +22,19 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
 
     if (playerIcon) {
         if (renderAsCompass) {
-            ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
+            ctx.drawImage(playerIcon, center.x - playerIcon.width / 2, center.y - playerIcon.height / 2);
         } else {
             const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel, 1);
             const imgPosCorrected = {
-                x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
-                y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,
+                x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
+                y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
             };
             ctx.save();
             ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
             ctx.rotate(angle);
             ctx.translate(-imgPosCorrected.x, -imgPosCorrected.y);
-            ctx.drawImage(playerIcon, imgPosCorrected.x - playerIcon.width / 2, imgPosCorrected.y - playerIcon.height / 2);
+            ctx.drawImage(playerIcon, imgPosCorrected.x - playerIcon.width / 2,
+                imgPosCorrected.y - playerIcon.height / 2);
             ctx.restore();
         }
     }

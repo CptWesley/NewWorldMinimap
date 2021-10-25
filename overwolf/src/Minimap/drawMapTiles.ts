@@ -5,8 +5,7 @@ import { MapRendererParameters } from './useMinimapRenderer';
 export default function drawMapTiles(params: MapRendererParameters) {
     const {
         context: ctx,
-        centerX,
-        centerY,
+        center,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -42,20 +41,20 @@ export default function drawMapTiles(params: MapRendererParameters) {
 
             if (renderAsCompass) {
                 ctx.save();
-                ctx.translate(centerX, centerY);
+                ctx.translate(center.x, center.y);
                 ctx.rotate(-angle);
-                ctx.translate(-centerX, -centerY);
+                ctx.translate(-center.x, -center.y);
                 ctx.drawImage(bitmap,
-                    tileVisualSize / zoomLevel * x + centerX - tileScaledOffset.x / zoomLevel,
-                    tileVisualSize / zoomLevel * y + centerY - tileScaledOffset.y / zoomLevel,
+                    tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + center.y - tileScaledOffset.y / zoomLevel,
                     tileVisualSize / zoomLevel,
                     tileVisualSize / zoomLevel
                 );
                 ctx.restore();
             } else {
                 ctx.drawImage(bitmap,
-                    tileVisualSize / zoomLevel * x + centerX - tileScaledOffset.x / zoomLevel,
-                    tileVisualSize / zoomLevel * y + centerY - tileScaledOffset.y / zoomLevel,
+                    tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + center.y - tileScaledOffset.y / zoomLevel,
                     tileVisualSize / zoomLevel,
                     tileVisualSize / zoomLevel
                 );
