@@ -18,7 +18,7 @@ export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
     centerX: number,
     centerY: number,
-    offset: Vector2,
+    unscaledOffset: Vector2,
 
     playerPosition: Vector2,
     mapCenterPosition: Vector2,
@@ -116,19 +116,20 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const offset = toMinimapCoordinate(
+        const unscaledOffset = toMinimapCoordinate(
             mapCenterPos,
             mapCenterPos,
             ctx.canvas.width,
             ctx.canvas.height,
-            zoomLevel);
+            zoomLevel,
+            1);
 
         const mapRendererParameters: MapRendererParameters = {
             angle,
             centerX,
             centerY,
             context: ctx,
-            offset,
+            unscaledOffset,
             playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,

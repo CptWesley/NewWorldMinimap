@@ -6,7 +6,7 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         context: ctx,
         centerX,
         centerY,
-        offset,
+        unscaledOffset: offset,
 
         playerPosition,
         mapCenterPosition,
@@ -25,7 +25,7 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         if (renderAsCompass) {
             ctx.drawImage(playerIcon, centerX - playerIcon.width / 2, centerY - playerIcon.height / 2);
         } else {
-            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel);
+            const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel, 1);
             const imgPosCorrected = {
                 x: mapPos.x / zoomLevel - offset.x / zoomLevel + centerX,
                 y: mapPos.y / zoomLevel - offset.y / zoomLevel + centerY,

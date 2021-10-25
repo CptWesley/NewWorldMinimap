@@ -23,7 +23,7 @@ export default function drawMapTiles(params: MapRendererParameters) {
 
     const tileVisualSize = 256 * map.tileScale;
 
-    const offset = toMinimapCoordinate(
+    const tileScaledOffset = toMinimapCoordinate(
         mapCenterPos,
         mapCenterPos,
         ctx.canvas.width,
@@ -46,16 +46,16 @@ export default function drawMapTiles(params: MapRendererParameters) {
                 ctx.rotate(-angle);
                 ctx.translate(-centerX, -centerY);
                 ctx.drawImage(bitmap,
-                    tileVisualSize / zoomLevel * x + centerX - offset.x / zoomLevel,
-                    tileVisualSize / zoomLevel * y + centerY - offset.y / zoomLevel,
+                    tileVisualSize / zoomLevel * x + centerX - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + centerY - tileScaledOffset.y / zoomLevel,
                     tileVisualSize / zoomLevel,
                     tileVisualSize / zoomLevel
                 );
                 ctx.restore();
             } else {
                 ctx.drawImage(bitmap,
-                    tileVisualSize / zoomLevel * x + centerX - offset.x / zoomLevel,
-                    tileVisualSize / zoomLevel * y + centerY - offset.y / zoomLevel,
+                    tileVisualSize / zoomLevel * x + centerX - tileScaledOffset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + centerY - tileScaledOffset.y / zoomLevel,
                     tileVisualSize / zoomLevel,
                     tileVisualSize / zoomLevel
                 );

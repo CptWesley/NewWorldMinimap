@@ -8,7 +8,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         context: ctx,
         centerX,
         centerY,
-        offset,
+        unscaledOffset: offset,
 
         playerPosition: playerPosition,
         mapCenterPosition: mapCenterPos,
@@ -44,7 +44,8 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
             marker.pos,
             ctx.canvas.width,
             ctx.canvas.height,
-            zoomLevel);
+            zoomLevel,
+            1);
         const icon = mapIconsCache.getIcon(marker.type, marker.category);
         if (!icon) { continue; }
         const imgPosCorrected = {

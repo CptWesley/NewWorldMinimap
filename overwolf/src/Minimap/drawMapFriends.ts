@@ -7,7 +7,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         context: ctx,
         centerX,
         centerY,
-        offset,
+        unscaledOffset: offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -26,7 +26,8 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
             friend.location,
             ctx.canvas.width,
             ctx.canvas.height,
-            zoomLevel);
+            zoomLevel,
+            1);
         const icon = mapIconsCache.getFriendIcon();
         if (!icon) { continue; }
         const imgPosCorrected = {
