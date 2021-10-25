@@ -8,7 +8,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         context: ctx,
         center,
         unscaledOffset,
-        playerPosition: playerPosition,
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
