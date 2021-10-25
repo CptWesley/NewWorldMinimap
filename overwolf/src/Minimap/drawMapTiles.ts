@@ -1,4 +1,5 @@
 import { getMap } from '@/logic/map';
+import { toMinimapCoordinate } from '@/logic/tiles';
 import { MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapTiles(params: MapRendererParameters) {
@@ -6,7 +7,6 @@ export default function drawMapTiles(params: MapRendererParameters) {
         context: ctx,
         centerX,
         centerY,
-        offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -22,7 +22,14 @@ export default function drawMapTiles(params: MapRendererParameters) {
         renderAsCompass ? -angle : 0);
 
     const tileVisualSize = 256 * map.tileScale;
-    const xyz = 256 * (map.tileScale - 1);
+
+    const offset = toMinimapCoordinate(
+        mapCenterPos,
+        mapCenterPos,
+        ctx.canvas.width,
+        ctx.canvas.height,
+        zoomLevel,
+        map.tileScale);
 
     for (let x = 0; x < map.tiles.length; x++) {
         const row = map.tiles[x];
@@ -47,8 +54,8 @@ export default function drawMapTiles(params: MapRendererParameters) {
                 ctx.restore();
             } else {
                 ctx.drawImage(bitmap,
-                    tileVisualSize / zoomLevel * x + centerX - (offset.x + xyz) / zoomLevel,
-                    tileVisualSize / zoomLevel * y + centerY - (offset.y + xyz) / zoomLevel,
+                    tileVisualSize / zoomLevel * x + centerX - offset.x / zoomLevel,
+                    tileVisualSize / zoomLevel * y + centerY - offset.y / zoomLevel,
                     tileVisualSize / zoomLevel,
                     tileVisualSize / zoomLevel
                 );
