@@ -29,9 +29,6 @@ function getTilesInternal(worldPos: Vector2, screenWidth: number, screenHeight: 
 
     const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale, angle);
 
-    // console.log('Original Dimensions:');
-    // console.log(dimensions);
-
     const centerTilePos = getTileCoordinatesForWorldCoordinate(worldPos, tileScale);
     const xStart = -Math.floor(dimensions.x / 2);
     const yStart = -Math.floor(dimensions.y / 2);
@@ -48,8 +45,6 @@ function getTilesInternal(worldPos: Vector2, screenWidth: number, screenHeight: 
             const tileX = centerTilePos.x + x;
             const tileY = centerTilePos.y + y;
             const tileCoords: Vector2 = { x: tileX, y: tileY };
-            // console.log('Tile Coord (' + x + ', ' + y + '):');
-            // console.log(tileCoords);
             const image = tileCache.getTileBitmap(tileLevel, tileCoords);
             col.push(image.hit ? image.bitmap : null);
         }
