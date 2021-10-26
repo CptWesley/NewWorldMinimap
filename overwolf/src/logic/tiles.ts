@@ -58,8 +58,8 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     const { x: tileX, y: tileY } = tileCoordinates;
 
     // Convert world position to pixel space
-    const pixelX = Math.floor(worldPos.x / gameMapWidth * totalWidth);
-    const pixelY = Math.floor((gameMapHeight - worldPos.y) / gameMapHeight * totalHeight);
+    const pixelX = worldPos.x / gameMapWidth * totalWidth;
+    const pixelY = (gameMapHeight - worldPos.y) / gameMapHeight * totalHeight;
 
     const imageX = pixelX - ((tileX - Math.floor(dimensions.x / 2)) * tileWidth);
     const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2)) * tileHeight);
@@ -87,10 +87,10 @@ export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2
     const x = canvasPos.x * zoomLevel;
     const y = canvasPos.y * zoomLevel;
 
-    const worldOffsetX = Math.floor((x * gameMapWidth) / totalWidth);
+    const worldOffsetX = (x * gameMapWidth) / totalWidth;
     const finalPosX = worldOffsetX + (centerPos.x - viewWidthInWorld / 2);
 
-    const workdOffsetY = Math.floor(gameMapHeight - (gameMapHeight - (y * gameMapHeight) / totalHeight));
+    const workdOffsetY = gameMapHeight - (gameMapHeight - (y * gameMapHeight) / totalHeight);
     const finalPosY = (centerPos.y + viewHeightInWorld / 2) - workdOffsetY;
 
     return { x: finalPosX, y: finalPosY };
