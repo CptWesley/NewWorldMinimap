@@ -17,7 +17,9 @@ import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { canvasToMinimapCoordinate } from './logic/tiles';
+import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
+import { townZoomDistance } from './Minimap/mapConstants';
 import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
@@ -170,7 +172,9 @@ export default function Minimap(props: IProps) {
             const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
             const width = canvas.current.width;
             const height = canvas.current.height;
-            const zoomLevel = appContext.settings.zoomLevel;
+
+            const town = getNearestTown(centerPos);
+            const zoomLevel = town.distance <= townZoomDistance ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
 
             let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
             if (appContext.settings.compassMode) {
