@@ -71,3 +71,7 @@ type AnimationInterpolation =
     | 'linear'
     ;
 
+declare type GraphNode = {
+    position: Vector2,
+    neighbors: number[],
+}

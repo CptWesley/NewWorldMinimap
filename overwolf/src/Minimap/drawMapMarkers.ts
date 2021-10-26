@@ -8,7 +8,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         context: ctx,
         center,
         unscaledOffset,
-        playerPosition: playerPosition,
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
@@ -38,7 +37,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         }
 
         const mapPos = toMinimapCoordinate(
-            renderAsCompass ? playerPosition : mapCenterPos,
+            mapCenterPos,
             marker.pos,
             ctx.canvas.width,
             ctx.canvas.height,
@@ -54,7 +53,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         };
 
         if (renderAsCompass) {
-            const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
+            const rotated = rotateAround(center, imgPosCorrected, -angle);
             ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
         } else {
             ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);

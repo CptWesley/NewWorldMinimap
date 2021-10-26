@@ -23,6 +23,7 @@ import KitchenIcon from './KitchenIcon';
 import LeopardIcon from './LeopardIcon';
 import LoomIcon from './LoomIcon';
 import MarauderIcon from './MarauderIcon';
+import MarkerIcon from './MarkerIcon';
 import OreIcon from './OreIcon';
 import OutfittingStationIcon from './OutfittingStationIcon';
 import PigIcon from './PigIcon';
@@ -53,6 +54,7 @@ export type MapIcons = typeof createMapIcons extends (...args: any[]) => Promise
 
 export async function createMapIcons(scale: number) {
     return {
+        nav: await svgMapIconToImageBitmap(MarkerIcon, { fill: 'yellow', scale: scale * 2, viewBox: '0 0 32 32' }),
         player: await svgMapIconToImageBitmap(PlayerIcon, { fill: 'yellow', scale }),
         friend: await svgMapIconToImageBitmap(FriendIcon, { fill: 'blue', scale }),
         unknown: await svgMapIconToImageBitmap(UnknownIcon, { fill: 'red', scale }),

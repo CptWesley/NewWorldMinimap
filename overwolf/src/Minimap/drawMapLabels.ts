@@ -10,6 +10,7 @@ export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Mark
     ctx.font = Math.round(iconScale * 10) + 'px sans-serif';
     ctx.strokeStyle = '#000';
     ctx.fillStyle = '#fff';
+    ctx.lineWidth = 2.5;
 
     const markerText = getIconName(marker.category, marker.name ?? marker.type);
 

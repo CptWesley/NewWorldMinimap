@@ -3,6 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { keyframes } from 'tss-react';
 import RecenterIcon from '@/Icons/RecenterIcon';
+import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
@@ -12,12 +13,14 @@ import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
+import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
+import { canvasToMinimapCoordinate } from './logic/tiles';
+import { squaredDistance } from './logic/util';
 import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
-import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 
 interface IProps {
     className?: string;
@@ -164,15 +167,34 @@ export default function Minimap(props: IProps) {
             return;
         }
         // Left mouse button only
-        if (e.pointerType === 'mouse' && e.button !== 0) {
-            return;
+        if (e.pointerType === 'mouse' && e.button === 0) {
+            scrollingMap.current = {
+                pointerId: e.pointerId,
+                position: { x: e.pageX, y: e.pageY },
+                threshold: false,
+            };
+            e.currentTarget.setPointerCapture(e.pointerId);
         }
-        scrollingMap.current = {
-            pointerId: e.pointerId,
-            position: { x: e.pageX, y: e.pageY },
-            threshold: false,
-        };
-        e.currentTarget.setPointerCapture(e.pointerId);
+
+        if (e.pointerType === 'mouse' && e.button === 1) {
+            if (!canvas.current) { return; }
+            const canvasPos = { x: e.clientX, y: e.clientY };
+            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+            const width = canvas.current.width;
+            const height = canvas.current.height;
+            const zoomLevel = appContext.settings.zoomLevel;
+
+            const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+            const currentTarget = getNavTarget();
+
+            if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
+                resetNav();
+            } else {
+                setNav(currentPlayerPosition.current, worldPos);
+            }
+
+            redraw(true);
+        }
     }
 
     function onRecenterMap() {
@@ -310,13 +332,13 @@ export default function Minimap(props: IProps) {
         </div>
         {NWMM_APP_WINDOW === 'desktop' && <MinimapToolbar className={classes.mapControls}>
             <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
-                <ZoomInIcon/>
+                <ZoomInIcon />
             </MinimapToolbarIconButton>
             <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
-                <ZoomOutIcon/>
+                <ZoomOutIcon />
             </MinimapToolbarIconButton>
             {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
-                <RecenterIcon/>
+                <RecenterIcon />
             </MinimapToolbarIconButton>}
         </MinimapToolbar>}
     </div>;
