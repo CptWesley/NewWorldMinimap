@@ -101,7 +101,7 @@ export default function FriendSetting(props: IProps) {
         >
             {title}
         </summary>
-        <form className={classes.content}>
+        {open && <form className={classes.content}>
             <div className={sharedClasses.setting}>
                 <p>
                     <label htmlFor={`friend-setting-id-${inputToken}`}>{t('settings.friend.friendId')}</label>
@@ -146,6 +146,6 @@ export default function FriendSetting(props: IProps) {
                     : <Button onClick={handleDelete}>{t('delete')}</Button>
                 }
             </div>
-        </form>
+        </form>}
     </details>;
 }
