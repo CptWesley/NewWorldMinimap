@@ -50,6 +50,7 @@
     "@fortawesome/react-fontawesome": "^0.1.15",
     "clsx": "^1.1.1",
     "crypto-js": "^4.1.1",
+    "dexie": "^3.0.3",
     "i18next": "^21.3.2",
     "i18next-browser-languagedetector": "^6.1.2",
     "immer": "^9.0.6",

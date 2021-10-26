@@ -1,12 +1,14 @@
 import encHex from 'crypto-js/enc-hex';
 import sha256 from 'crypto-js/sha256';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Button from '@/Button';
 import GenerateIcon from '@/Icons/GenerateIcon';
-import { getFriendCode, regenerateFriendCode } from '@/logic/friends';
+import { getFriendCode, getFriends, regenerateFriendCode, StoredFriend } from '@/logic/friends';
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
+import FriendSetting from './FriendSetting';
 
 const useStyles = makeStyles()(theme => ({
     friendsGenerateButton: {
@@ -28,6 +30,9 @@ const useStyles = makeStyles()(theme => ({
         maxWidth: '100%',
         resize: 'vertical',
     },
+    addFriend: {
+        marginTop: theme.spacing(1),
+    },
 }));
 
 export default function FriendSettingsPage(props: IAppSettingsPageProps) {
@@ -38,10 +43,21 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
     const { t } = useTranslation();
+
+    const [friends, setFriends] = useState<StoredFriend[]>();
     const [friendCode, setFriendCode] = useState(getFriendCode());
+    const [isAddingNew, setIsAddingNew] = useState(false);
     const friendCodeHash = useMemo(() => {
         return sha256(friendCode).toString(encHex);
     }, [friendCode]);
+
+    useEffect(() => {
+        loadFriends();
+    }, []);
+
+    async function loadFriends() {
+        setFriends(await getFriends());
+    }
 
     return <>
         <div>
@@ -60,7 +76,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
             </div>
             <div className={sharedClasses.setting}>
                 <p>
-                    <label htmlFor='settings-friend-code-hash' className={sharedClasses.textbox} title={t('settings.friend.friendCodeTooltip')}>
+                    <label htmlFor='settings-friend-code-hash' title={t('settings.friend.friendCodeTooltip')}>
                         {t('settings.friend.friendCode')}
                         <button className={classes.friendsGenerateButton} title={t('settings.friend.regenerate')} onClick={() => setFriendCode(regenerateFriendCode())}>
                             <GenerateIcon />
@@ -76,26 +92,33 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     title={t('settings.friend.friendCodeTooltip')}
                 />
             </div>
-            <div className={sharedClasses.setting}>
-                <p>
-                    <label htmlFor='settings-friend-codes-list' className={sharedClasses.textarea} title={t('settings.friend.friendsTooltip')}>
-                        {t('settings.friend.friends')}
-                    </label>
-                </p>
-                <textarea
-                    id='settings-friend-codes-list'
-                    className={classes.wideInput}
-                    value={settings.friends}
-                    onChange={e => updateSimpleSetting('friends', e.currentTarget.value)}
-                    title={t('settings.friend.friendsTooltip')}
+            <p>{t('settings.friend.friends')}</p>
+            {friends?.map(f =>
+                <FriendSetting
+                    key={f.id}
+                    onChange={loadFriends}
+                    friend={f}
                 />
-            </div>
+            ) || null}
+            {isAddingNew
+                ? <FriendSetting
+                    onChange={() => {
+                        setIsAddingNew(false);
+                        loadFriends();
+                    }}
+                    onCanceled={() => setIsAddingNew(false)}
+                    friend={{ id: '', name: '' }}
+                    isNew
+                />
+                : <Button className={classes.addFriend} onClick={() => setIsAddingNew(true)}>Add friend</Button>
+            }
+            <hr />
             <details>
                 <summary title={t('settings.advancedTooltip')} className={sharedClasses.summary} >{t('settings.advanced')}</summary>
                 <p className={sharedClasses.setting}>{t('settings.advancedTooltip')}</p>
                 <div className={sharedClasses.setting}>
                     <p>
-                        <label htmlFor='settings-friends-custom-server-url' className={sharedClasses.textbox} title={t('settings.friend.customServerUrlTooltip')}>
+                        <label htmlFor='settings-friends-custom-server-url' title={t('settings.friend.customServerUrlTooltip')}>
                             {t('settings.friend.customServerUrl')}
                         </label>
                     </p>
@@ -108,7 +131,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                 </div>
                 <div className={sharedClasses.setting}>
                     <p>
-                        <label htmlFor='settings-friends-psk' className={sharedClasses.textbox} title={t('settings.friend.friendsPskTooltip')}>
+                        <label htmlFor='settings-friends-psk' title={t('settings.friend.friendsPskTooltip')}>
                             {t('settings.friend.friendsPsk')}
                         </label>
                     </p>

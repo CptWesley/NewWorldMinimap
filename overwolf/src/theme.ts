@@ -36,7 +36,15 @@ export const theme = {
     buttonBorderColorHover: '#ffffff',
     buttonBorderColorPress: '#ffffff',
 
+    textboxBorderColor: '#ffffff',
+    textboxBackground: '#333333',
+    textboxColor: '#ffffff',
+    textboxHoverBackground: '#444444',
+    textboxFocusBackground: '#ffffff',
+    textboxFocusColor: '#111111',
+
     scrollbarColor: '#ffffff',
+    detailsBoxBorderColor: 'rgba(255, 255, 255, 0.5)',
 
     spacing: (...spacings: number[]) => spacings.map(s => `${s * 10}px`).join(' '),
 } as const;

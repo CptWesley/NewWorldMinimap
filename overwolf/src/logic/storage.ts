@@ -1,4 +1,5 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
+import { putFriend } from './friends';
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
@@ -35,6 +36,18 @@ export const simpleStorageDefaultSettings = {
     friendServerUrl: '',
     friendsPsk: '',
 };
+
+const deprecatedFriendsStorageKey = 'friends';
+{
+    // TODO: Remove this block when the setting has been migrated fully
+    const deprecatedFriends = loadUntyped(deprecatedFriendsStorageKey, '');
+    for (const line of deprecatedFriends.split('\n')) {
+        if (line) {
+            putFriend({ id: line, name: '' });
+        }
+    }
+    localStorage.removeItem(deprecatedFriendsStorageKey);
+}
 
 {
     // TODO: Remove this block when the setting has been migrated fully

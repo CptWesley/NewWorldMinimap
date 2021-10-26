@@ -1,5 +1,6 @@
 import AES from 'crypto-js/aes';
 import encUtf8 from 'crypto-js/enc-utf8';
+import Dexie from 'dexie';
 import { getDynamicSettings } from './dynamicSettings';
 import { generateRandomToken } from './util';
 
@@ -33,6 +34,12 @@ type PlayerResponseData = {
 type PlayerResponse = {
     friends: PlayerResponseData[],
 };
+
+export type StoredFriend = {
+    id: string,
+    name: string,
+    psk?: string,
+}
 
 export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, friends: string, psk: string): Promise<undefined | PlayerDataPlain[]> {
     let url = server.trim();
@@ -115,6 +122,43 @@ export async function updateFriendLocation(server: string, id: string, name: str
     } catch { }
 
     return undefined;
+}
+
+class FriendsDatabase extends Dexie {
+    friends: Dexie.Table<StoredFriend, StoredFriend['id']>;
+
+    constructor() {
+        super('friends');
+        this
+            .version(1)
+            .stores({
+                // Store only the keys that should be indexed
+                friends: '&id,name',
+            });
+
+        this.friends = this.table('friends');
+    }
+}
+
+export async function getFriends() {
+    const db = new FriendsDatabase();
+    const friends = await db.friends.toArray();
+    return friends;
+}
+
+export async function putFriend(friend: StoredFriend) {
+    const db = new FriendsDatabase();
+    await db.friends.put(friend, friend.id);
+}
+
+export async function updateFriend(key: StoredFriend['id'], changes: Partial<StoredFriend>) {
+    const db = new FriendsDatabase();
+    await db.friends.update(key, changes);
+}
+
+export async function deleteFriend(friend: StoredFriend) {
+    const db = new FriendsDatabase();
+    await db.friends.delete(friend.id);
 }
 
 function validatePlayerResponse(response: PlayerResponse): response is PlayerResponse {
