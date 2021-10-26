@@ -6,9 +6,12 @@ export type RoadGraph = Record<number, GraphNode | undefined> & {
 
 const data: RoadGraph = require('./roadGraphData.js');
 
+// Decide the maximum key in the data
 let max = 0;
 for (const k in data) {
-    max = Math.max(max, Number(k));
+    const numeric = Number(k);
+    if (isNaN(numeric)) { continue; }
+    max = Math.max(max, numeric);
 }
 
 data.max = max;
