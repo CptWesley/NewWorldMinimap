@@ -70,9 +70,6 @@ export default function FriendSetting(props: IProps) {
 
     function toggleOpen(e: React.MouseEvent<HTMLElement>) {
         e.preventDefault();
-        if (open && onCanceled) {
-            onCanceled();
-        }
         setOpen(isNew || !open);
     }
 
