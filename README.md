@@ -69,7 +69,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example8.gif?raw=true" width="512" height="288"><br>GPS navigation.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example9.png?raw=true" width="512" height="288"><br>GPS navigation.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example9.PNG?raw=true" width="512" height="288"><br>GPS navigation.  
 
 ## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
