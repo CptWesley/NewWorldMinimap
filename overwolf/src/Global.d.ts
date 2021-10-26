@@ -42,13 +42,13 @@ declare type IconCategorySetting = {
     category: string,
     visible: boolean,
     showLabel: boolean,
-    types: Record<string, IconTypeSetting>,
+    types: Record<string, IconTypeSetting | undefined>,
 }
 
 type IconProperty = Extract<keyof (IconCategorySetting | IconTypeSetting), 'visible' | 'showLabel'>;
 
 declare type IconSettings = {
-    categories: Record<string, IconCategorySetting>,
+    categories: Record<string, IconCategorySetting | undefined>,
 }
 
 declare type PlayerData = {

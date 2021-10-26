@@ -28,7 +28,7 @@ export type MapRendererParameters = {
 }
 
 export type MapIconRendererParameters = {
-    settings: IconSettings | undefined,
+    settings: IconSettings,
     mapIconsCache: MapIconsCache,
     iconScale: number,
     showText: boolean,
