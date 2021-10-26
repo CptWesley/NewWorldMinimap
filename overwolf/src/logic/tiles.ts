@@ -1,5 +1,4 @@
 import { getTileCacheKey } from './tileCache';
-import { rotateAround } from './util';
 
 const width = 224;
 const height = 224;
@@ -78,7 +77,7 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
 //       const pos = renderAsCompass ? rotatedSourceVector : {x,y};
 //       const imgPos = canvasToMinimap(pos, mapCenterPos, zoomLevel, ctx.canvas.width, ctx.canvas.height);
 //
-export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2, zoomLevel: number, screenWidth: number, screenHeight: number, angle?: number) {
+export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2, zoomLevel: number, screenWidth: number, screenHeight: number) {
     const totalWidth = tileWidth * width;
     const totalHeight = tileHeight * height;
     const viewWidthInWorld = (screenWidth * zoomLevel * gameMapWidth) / totalWidth;
