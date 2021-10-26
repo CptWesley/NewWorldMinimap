@@ -4,6 +4,9 @@ declare const NWMM_APP_VERSION: string;
 declare const NWMM_APP_BUILD_DATE: string;
 declare const NWMM_APP_BUILD_PRODUCTION: boolean;
 
+declare type TileLevel = 2 | 3 | 4 | 5 | 6 | 7 | 8;
+declare type TileScale = 1 | 2 | 4 | 8 | 16 | 32 | 64;
+
 declare type Vector2 = {
     x: number;
     y: number;
@@ -22,9 +25,10 @@ declare type Marker = {
     pos: Vector2;
 }
 
-declare type Tile = {
-    image: ImageBitmap | null;
+declare type MapRenderData = {
+    tiles: (ImageBitmap | null)[][];
     markers: Marker[];
+    tileScale: TileScale;
 }
 
 declare type IconTypeSetting = {
@@ -38,13 +42,13 @@ declare type IconCategorySetting = {
     category: string,
     visible: boolean,
     showLabel: boolean,
-    types: Record<string, IconTypeSetting>,
+    types: Record<string, IconTypeSetting | undefined>,
 }
 
 type IconProperty = Extract<keyof (IconCategorySetting | IconTypeSetting), 'visible' | 'showLabel'>;
 
 declare type IconSettings = {
-    categories: Record<string, IconCategorySetting>,
+    categories: Record<string, IconCategorySetting | undefined>,
 }
 
 declare type PlayerData = {
@@ -61,3 +65,8 @@ type AnimationInterpolation =
     | 'cosine'
     | 'linear'
     ;
+
+declare type GraphNode = {
+    position: Vector2,
+    neighbors: number[],
+}

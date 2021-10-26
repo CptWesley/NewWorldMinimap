@@ -69,35 +69,46 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     const { classes } = useStyles();
     const { classes: sharedClasses } = useSharedSettingsStyles();
 
-    function updateIconCategorySettings(name: string, property: IconProperty, value: boolean) {
+    function updateIconCategorySettings(categoryName: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
-        storeIconConfiguration(name, undefined, property, value);
+        storeIconConfiguration(categoryName, undefined, property, value);
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                draft.categories[name][property] = value;
+                const category = draft.categories[categoryName];
+                if (category) {
+                    category[property] = value;
+                }
             });
         }
         return iconSettings;
     }
 
-    function updateIconSettings(category: string, type: string, property: IconProperty, value: boolean) {
+    function updateIconSettings(categoryName: string, typeName: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
-        storeIconConfiguration(category, type, property, value);
+        storeIconConfiguration(categoryName, typeName, property, value);
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                draft.categories[category].types[type][property] = value;
+                const type = draft.categories[categoryName]?.types[typeName];
+                if (type) {
+                    type[property] = value;
+                }
             });
         }
         return iconSettings;
     }
 
-    function selectAllIconsByCategory(category: string, property: IconProperty, value: boolean) {
+    function selectAllIconsByCategory(categoryName: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         if (iconSettings) {
             return produce(iconSettings, draft => {
-                for (const type in draft.categories[category].types) {
-                    draft.categories[category].types[type][property] = value;
-                    storeIconConfiguration(category, type, property, value);
+                const category = draft.categories[categoryName];
+                if (category) {
+                    for (const [typeName, type] of Object.entries(category.types)) {
+                        if (type) {
+                            type[property] = value;
+                        }
+                        storeIconConfiguration(categoryName, typeName, property, value);
+                    }
                 }
             });
         }
@@ -108,7 +119,9 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
     }
 
     const elements = Object.entries(settings.iconSettings.categories).sort(compareNames).map(([categoryKey, category]) => {
+        if (!category) { return null; }
         const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
+            if (!type) { return null; }
             return <div key={typeKey}>
                 <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                     <input
@@ -140,8 +153,8 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
             </div>;
         });
 
-        const hasAnyVisible = Object.values(category.types).some(t => t.visible);
-        const hasAnyShowLabel = Object.values(category.types).some(t => t.showLabel);
+        const hasAnyVisible = Object.values(category.types).some(t => t?.visible ?? false);
+        const hasAnyShowLabel = Object.values(category.types).some(t => t?.showLabel ?? false);
 
         return <details key={categoryKey}>
             <summary className={sharedClasses.summary}>

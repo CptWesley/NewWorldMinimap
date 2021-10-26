@@ -110,6 +110,10 @@ export function squaredDistance(start: Vector2, end: Vector2) {
     return x * x + y * y;
 }
 
+export function distance(start: Vector2, end: Vector2) {
+    return Math.sqrt(squaredDistance(start, end));
+}
+
 export function getAngle(start: Vector2, end: Vector2) {
     return Math.atan2(end.x - start.x, end.y - start.y);
 }

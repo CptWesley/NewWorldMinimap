@@ -41,6 +41,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Different interpolation and extrapolation modes for smoother movement on map (linear, cosine, none).
 - Seperately configureable zoom level for towns.
 - View live location of friends.
+- GPS that points you to a marker following known roads.
 - Localisation
   - English (Complete)
   - Italian (Complete)
@@ -57,7 +58,6 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 ## Planned Features
 - Private markers.
 - Paths along private markers.
-- (Speculative) GPS that points you to a marker following known roads.
 
 ## Known Issues
 - Compass mode might not show some corners of the map, depending on the size of the window.
@@ -68,6 +68,8 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example4.png?raw=true" width="402" height="374"><br>Different minimap shapes.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example8.gif?raw=true" width="512" height="288"><br>GPS navigation.  
+<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example9.PNG?raw=true" width="512" height="288"><br>GPS navigation.  
 
 ## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).

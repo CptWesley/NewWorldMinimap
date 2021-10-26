@@ -10,6 +10,8 @@ import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interpolator, predictVector, squaredDistance, vector2Equal } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
+import drawMapNavigation from './drawMapNavigation';
+import drawMapNavigationTarget from './drawMapNavigationTarget';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
@@ -17,10 +19,8 @@ import { useInterpolation } from './useInterpolation';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
-    centerX: number,
-    centerY: number,
-    offset: Vector2,
-
+    center: Vector2,
+    unscaledOffset: Vector2,
     playerPosition: Vector2,
     mapCenterPosition: Vector2,
     renderAsCompass: boolean,
@@ -29,22 +29,29 @@ export type MapRendererParameters = {
 }
 
 export type MapIconRendererParameters = {
-    settings: IconSettings | undefined,
+    settings: IconSettings,
     mapIconsCache: MapIconsCache,
     iconScale: number,
     showText: boolean,
 }
 
+export type LastDrawParameters = {
+    mapRendererParams: Omit<MapRendererParameters, 'context'>,
+    iconRendererParams: MapIconRendererParameters
+};
+
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
-export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasElement>) {
+export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasElement>, hoverCanvas: React.RefObject<HTMLCanvasElement>) {
     const appContext = useContext(AppContext);
 
     const [mapIconsCache] = useState(() => new MapIconsCache());
 
     const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const currentPlayerAngle = useRef<number>(0);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
+    const lastDrawParameters = useRef<LastDrawParameters>();
 
     const {
         get: getInterpolatedZoomLevel,
@@ -56,7 +63,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         get: getInterpolatedAngle,
         update: updateInterpolatedAngle,
         isDone: angleInterpolationDone,
-    } = useInterpolation(getAngleInterpolator(appContext.settings.animationInterpolation), 0, angleInterpolationTime);
+    } = useInterpolation(getAngleInterpolator(appContext.settings.animationInterpolation), currentPlayerAngle.current, angleInterpolationTime);
     const {
         get: getInterpolatedPlayerPosition,
         update: updateInterpolatedPlayerPosition,
@@ -64,7 +71,6 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     } = useInterpolation(getVector2Interpolator(appContext.settings.animationInterpolation), currentPlayerPosition.current, locationInterpolationTime, vector2Equal);
 
     const usingTownZoom = useRef(false);
-    const lastAngle = useRef<number>(0);
 
     const mapPositionOverride = useRef<Vector2>();
 
@@ -96,8 +102,10 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     }
 
     const draw = () => {
+
         const ctx = canvas.current?.getContext('2d');
-        if (!ctx) {
+        const hoverCtx = hoverCanvas.current?.getContext('2d');
+        if (!ctx || !hoverCtx) {
             return;
         }
 
@@ -111,24 +119,29 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
+        hoverCtx.canvas.width = hoverCtx.canvas.clientWidth;
+        hoverCtx.canvas.height = hoverCtx.canvas.clientHeight;
 
-        const centerX = ctx.canvas.width / 2;
-        const centerY = ctx.canvas.height / 2;
+        const center = {
+            x: ctx.canvas.width / 2,
+            y: ctx.canvas.height / 2,
+        };
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const offset = toMinimapCoordinate(
+        const unscaledOffset = toMinimapCoordinate(
             mapCenterPos,
             mapCenterPos,
-            ctx.canvas.width * zoomLevel,
-            ctx.canvas.height * zoomLevel);
+            ctx.canvas.width,
+            ctx.canvas.height,
+            zoomLevel,
+            1);
 
         const mapRendererParameters: MapRendererParameters = {
             angle,
-            centerX,
-            centerY,
+            center,
             context: ctx,
-            offset,
+            unscaledOffset,
             playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,
@@ -150,11 +163,20 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             showText: appContext.settings.showText,
         };
 
+        const navTarget = drawMapNavigation(mapRendererParameters);
+
         drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
         drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
+        drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
+
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
+
+        lastDrawParameters.current = {
+            mapRendererParams: mapRendererParameters,
+            iconRendererParams: mapIconRendererParameters,
+        };
     };
 
     function drawWithInterpolation(force: boolean) {
@@ -180,7 +202,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             return;
         }
 
-        lastAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
+        currentPlayerAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
@@ -206,8 +228,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     function zoomBy(delta: number) {
         const nextZoomLevel = Math.max(
             zoomLevelSettingBounds[0],
-            Math.min(
-                zoomLevelSettingBounds[1],
+            Math.min(zoomLevelSettingBounds[1],
                 getZoomLevel() + delta));
         const keyToUpdate = usingTownZoom.current ? 'townZoomLevel' : 'zoomLevel';
         appContext.update({ [keyToUpdate]: nextZoomLevel });
@@ -261,6 +282,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     return {
         currentFriends,
         currentPlayerPosition: currentPlayerPosition as { readonly current: Readonly<Vector2> },
+        currentPlayerAngle: currentPlayerAngle as { readonly current: Readonly<number> },
+        lastDrawParameters: lastDrawParameters as { readonly current: undefined | Readonly<LastDrawParameters> },
         getZoomLevel,
         mapPositionOverride,
         redraw,
