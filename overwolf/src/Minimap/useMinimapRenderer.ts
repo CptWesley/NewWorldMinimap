@@ -41,7 +41,7 @@ export let lastDrawCache: LastDrawCache;
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
-export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasElement>) {
+export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasElement>, hoverCanvas: React.RefObject<HTMLCanvasElement>) {
     const appContext = useContext(AppContext);
 
     const [mapIconsCache] = useState(() => new MapIconsCache());
@@ -102,7 +102,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     const draw = () => {
 
         const ctx = canvas.current?.getContext('2d');
-        if (!ctx) {
+        const hoverCtx = hoverCanvas.current?.getContext('2d');
+        if (!ctx || !hoverCtx) {
             return;
         }
 
@@ -116,6 +117,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
+        hoverCtx.canvas.width = hoverCtx.canvas.clientWidth;
+        hoverCtx.canvas.height = hoverCtx.canvas.clientHeight;
 
         const center = {
             x: ctx.canvas.width / 2,

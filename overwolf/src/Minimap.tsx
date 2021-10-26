@@ -121,7 +121,7 @@ export default function Minimap(props: IProps) {
         redraw,
         setPlayerPosition,
         zoomBy,
-    } = useMinimapRenderer(canvas);
+    } = useMinimapRenderer(canvas, hoverLabelCanvas);
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
