@@ -33,8 +33,8 @@ export function getDimensions(screenWidth: number, screenHeight: number, angle?:
         angle = 0;
     }
 
-    const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 1;
-    const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 1;
+    const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 3;
+    const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 3;
 
     if (angle === 0) {
         return { x, y };
