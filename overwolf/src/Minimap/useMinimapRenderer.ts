@@ -49,6 +49,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     const [mapIconsCache] = useState(() => new MapIconsCache());
 
     const currentPlayerPosition = useRef<Vector2>(appContext.settings.lastKnownPosition);
+    const currentPlayerAngle = useRef<number>(0);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
 
@@ -62,7 +63,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         get: getInterpolatedAngle,
         update: updateInterpolatedAngle,
         isDone: angleInterpolationDone,
-    } = useInterpolation(getAngleInterpolator(appContext.settings.animationInterpolation), 0, angleInterpolationTime);
+    } = useInterpolation(getAngleInterpolator(appContext.settings.animationInterpolation), currentPlayerAngle.current, angleInterpolationTime);
     const {
         get: getInterpolatedPlayerPosition,
         update: updateInterpolatedPlayerPosition,
@@ -70,7 +71,6 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     } = useInterpolation(getVector2Interpolator(appContext.settings.animationInterpolation), currentPlayerPosition.current, locationInterpolationTime, vector2Equal);
 
     const usingTownZoom = useRef(false);
-    const lastAngle = useRef<number>(0);
 
     const mapPositionOverride = useRef<Vector2>();
 
@@ -202,7 +202,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             return;
         }
 
-        lastAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
+        currentPlayerAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
@@ -282,6 +282,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     return {
         currentFriends,
         currentPlayerPosition: currentPlayerPosition as { readonly current: Readonly<Vector2> },
+        currentPlayerAngle: currentPlayerAngle as { readonly current: Readonly<number> },
         getZoomLevel,
         mapPositionOverride,
         redraw,

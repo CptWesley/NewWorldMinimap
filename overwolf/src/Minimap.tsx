@@ -17,7 +17,7 @@ import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { canvasToMinimapCoordinate } from './logic/tiles';
-import { squaredDistance } from './logic/util';
+import { rotateAround, squaredDistance } from './logic/util';
 import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
@@ -119,6 +119,7 @@ export default function Minimap(props: IProps) {
     const {
         currentFriends,
         currentPlayerPosition,
+        currentPlayerAngle,
         getZoomLevel,
         mapPositionOverride,
         redraw,
@@ -163,6 +164,29 @@ export default function Minimap(props: IProps) {
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
+        if (e.pointerType === 'mouse' && e.button === 1) {
+            if (!canvas.current) { return; }
+            const canvasPos = { x: e.clientX, y: e.clientY };
+            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+            const width = canvas.current.width;
+            const height = canvas.current.height;
+            const zoomLevel = appContext.settings.zoomLevel;
+
+            let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+            if (appContext.settings.compassMode) {
+                worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
+            }
+            const currentTarget = getNavTarget();
+
+            if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
+                resetNav();
+            } else {
+                setNav(currentPlayerPosition.current, worldPos);
+            }
+
+            redraw(true);
+        }
+
         if (NWMM_APP_WINDOW !== 'desktop') {
             return;
         }
@@ -174,26 +198,6 @@ export default function Minimap(props: IProps) {
                 threshold: false,
             };
             e.currentTarget.setPointerCapture(e.pointerId);
-        }
-
-        if (e.pointerType === 'mouse' && e.button === 1) {
-            if (!canvas.current) { return; }
-            const canvasPos = { x: e.clientX, y: e.clientY };
-            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
-            const width = canvas.current.width;
-            const height = canvas.current.height;
-            const zoomLevel = appContext.settings.zoomLevel;
-
-            const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
-            const currentTarget = getNavTarget();
-
-            if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
-                resetNav();
-            } else {
-                setNav(currentPlayerPosition.current, worldPos);
-            }
-
-            redraw(true);
         }
     }
 
