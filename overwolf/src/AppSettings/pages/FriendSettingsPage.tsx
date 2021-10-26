@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import encHex from 'crypto-js/enc-hex';
 import sha256 from 'crypto-js/sha256';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -85,7 +86,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                 </p>
                 <input
                     id='settings-friend-code-hash'
-                    className={classes.wideInput}
+                    className={clsx(sharedClasses.textbox, classes.wideInput)}
                     type='text'
                     readOnly
                     value={friendCodeHash}
@@ -110,7 +111,12 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     friend={{ id: '', name: '' }}
                     isNew
                 />
-                : <Button className={classes.addFriend} onClick={() => setIsAddingNew(true)}>Add friend</Button>
+                : <Button
+                    className={classes.addFriend}
+                    onClick={() => setIsAddingNew(true)}
+                >
+                    {t('settings.friend.add')}
+                </Button>
             }
             <hr />
             <details>

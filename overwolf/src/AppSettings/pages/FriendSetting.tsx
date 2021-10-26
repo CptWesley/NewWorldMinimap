@@ -60,7 +60,7 @@ export default function FriendSetting(props: IProps) {
     const displayFriend = { ...friend, ...changes };
 
     const shortId = displayFriend.id.substr(0, 10);
-    const title = displayFriend.name || shortId || 'New friend';
+    const title = displayFriend.name || shortId || t('settings.friend.new');
     const inputToken = useMemo(generateRandomToken, [displayFriend.id]);
     const canSave = displayFriend.id.length > 0 && !isEqual(friend, displayFriend);
 
@@ -107,9 +107,7 @@ export default function FriendSetting(props: IProps) {
         <form className={classes.content}>
             <div className={sharedClasses.setting}>
                 <p>
-                    <label htmlFor={`friend-setting-id-${inputToken}`} title='The ID of this friend.'>
-                        ID
-                    </label>
+                    <label htmlFor={`friend-setting-id-${inputToken}`}>{t('settings.friend.friendId')}</label>
                 </p>
                 <input
                     id={`friend-setting-id-${inputToken}`}
@@ -121,9 +119,7 @@ export default function FriendSetting(props: IProps) {
             </div>
             <div className={sharedClasses.setting}>
                 <p>
-                    <label htmlFor={`friend-setting-name-${inputToken}`} title='The name used to display this friend.'>
-                        Name
-                    </label>
+                    <label htmlFor={`friend-setting-name-${inputToken}`}>{t('settings.friend.friendName')}</label>
                 </p>
                 <input
                     id={`friend-setting-name-${inputToken}`}
@@ -135,9 +131,7 @@ export default function FriendSetting(props: IProps) {
             </div>
             <div className={sharedClasses.setting}>
                 <p>
-                    <label htmlFor={`friend-setting-psk-${inputToken}`} title="The pre-shared key that is used to decrypt this friend's data.">
-                        Pre-shared key
-                    </label>
+                    <label htmlFor={`friend-setting-psk-${inputToken}`}>{t('settings.friend.friendPsk')}</label>
                 </p>
                 <input
                     id={`friend-setting-psk-${inputToken}`}
@@ -149,10 +143,10 @@ export default function FriendSetting(props: IProps) {
             </div>
 
             <div className={classes.buttons}>
-                <Button type='submit' disabled={!canSave}>Save</Button>
+                <Button type='submit' disabled={!canSave}>{t('save')}</Button>
                 {isNew
                     ? <Button onClick={handleCancel}>{t('cancel')}</Button>
-                    : <Button onClick={handleDelete}>Delete</Button>
+                    : <Button onClick={handleDelete}>{t('delete')}</Button>
                 }
             </div>
         </form>
