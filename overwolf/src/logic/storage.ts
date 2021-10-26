@@ -43,7 +43,7 @@ const deprecatedFriendsStorageKey = 'friends';
     const deprecatedFriends = loadUntyped(deprecatedFriendsStorageKey, '');
     for (const line of deprecatedFriends.split('\n')) {
         if (line) {
-            putFriend({ id: line, name: '' });
+            putFriend({ id: line, name: '', psk: '' });
         }
     }
     localStorage.removeItem(deprecatedFriendsStorageKey);

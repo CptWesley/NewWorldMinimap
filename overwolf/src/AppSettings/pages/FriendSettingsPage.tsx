@@ -108,7 +108,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                         loadFriends();
                     }}
                     onCanceled={() => setIsAddingNew(false)}
-                    friend={{ id: '', name: '' }}
+                    friend={{ id: '', name: '', psk: '' }}
                     isNew
                 />
                 : <Button

@@ -38,10 +38,10 @@ type PlayerResponse = {
 export type StoredFriend = {
     id: string,
     name: string,
-    psk?: string,
+    psk: string,
 }
 
-export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, friends: string, psk: string): Promise<undefined | PlayerDataPlain[]> {
+export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, psk: string): Promise<undefined | PlayerDataPlain[]> {
     let url = server.trim();
 
     if (!url || url.length === 0) {
@@ -53,17 +53,8 @@ export async function updateFriendLocation(server: string, id: string, name: str
 
     if (!url || url.length === 0) { return undefined; }
 
-    const friendList: string[] = [];
-    const friendPsk = new Map<string, string>();
-    for (const line of friends.split('\n')) {
-        const parts = line.split(':');
-        if (parts[0]) {
-            friendList.push(parts[0]);
-            if (parts[1]) {
-                friendPsk.set(parts[0], parts[1]);
-            }
-        }
-    }
+    const friends = await getFriends();
+    const friendIds = friends.map(f => f.id);
 
     try {
         const data: PlayerDataPlain = {
@@ -77,14 +68,14 @@ export async function updateFriendLocation(server: string, id: string, name: str
                 id,
                 type: 'psk',
                 data: encryptedData,
-                friends: friendList,
+                friends: friendIds,
             };
         } else {
             body = {
                 id,
                 type: 'plain',
                 data,
-                friends: friendList,
+                friends: friendIds,
             };
         }
 
@@ -101,10 +92,14 @@ export async function updateFriendLocation(server: string, id: string, name: str
             // The server response looks valid
             return (response as PlayerResponse).friends.map<PlayerDataPlain | null>(f => {
                 const { data, id } = f;
-                if (typeof data === 'string' && friendPsk.has(id)) {
+                if (typeof data === 'string') {
                     // It's encrypted data -- decrypt and validate it
+                    const friend = friends.find(f => f.id === id);
+                    if (!friend?.psk) {
+                        return null;
+                    }
                     try {
-                        const decryptedData = AES.decrypt(data, friendPsk.get(id)!).toString(encUtf8);
+                        const decryptedData = AES.decrypt(data, friend.psk).toString(encUtf8);
                         if (!decryptedData) { return null; }
                         const deserialized = JSON.parse(decryptedData);
                         if (validatePlayerDataPlain(deserialized)) {
