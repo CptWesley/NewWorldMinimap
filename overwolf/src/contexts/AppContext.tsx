@@ -32,7 +32,6 @@ export function loadAppContextSettings(): AppContextSettings {
         animationInterpolation: load('animationInterpolation'),
         extrapolateLocation: load('extrapolateLocation'),
         shareLocation: load('shareLocation'),
-        friends: load('friends'),
         resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
         friendServerUrl: load('friendServerUrl'),
