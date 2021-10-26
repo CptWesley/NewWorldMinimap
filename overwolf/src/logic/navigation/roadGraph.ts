@@ -1,4 +1,4 @@
-
+/** A sparse array of graph nodes. */
 export type RoadGraph = Record<number, GraphNode | undefined> & {
     /** The non-inclusive highest node index in the road graph. */
     max: number,
@@ -11,7 +11,7 @@ let max = 0;
 for (const k in data) {
     const numeric = Number(k);
     if (isNaN(numeric)) { continue; }
-    max = Math.max(max, numeric);
+    max = Math.max(max, numeric + 1);
 }
 
 data.max = max;
