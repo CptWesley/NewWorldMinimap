@@ -1,27 +1,36 @@
 import { distance, squaredDistance } from '../util';
-import { roadGraph } from './roadGraph';
+import { RoadGraph, roadGraph } from './roadGraph';
 
 export function findPath(start: Vector2, end: Vector2) {
     const result: Vector2[] = [start];
     const closestToStart = findNearestNode(roadGraph, start);
     const closestToEnd = findNearestNode(roadGraph, end);
 
-    const chain = aStar(roadGraph, closestToStart, closestToEnd, (g, s) => distance(g[s].position, end))!;
+    const chain = aStar(
+        roadGraph,
+        closestToStart,
+        closestToEnd,
+        (g, s) => {
+            const node = g[s];
+            return node ? distance(node.position, end) : Infinity;
+        });
 
     for (const i of chain) {
-        result.push(roadGraph[i].position);
+        result.push(roadGraph[i]!.position);
     }
 
     result.push(end);
     return result;
 }
 
-function findNearestNode(graph: GraphNode[], pos: Vector2) {
+function findNearestNode(graph: RoadGraph, pos: Vector2) {
     let distance = Infinity;
     let closest = -1;
 
-    for (let i = 0; i < graph.length; i++) {
-        const candidateDistance = squaredDistance(pos, graph[i].position);
+    for (let i = 0; i < graph.max; i++) {
+        const node = graph[i];
+        if (!node) { continue; }
+        const candidateDistance = squaredDistance(pos, node.position);
         if (candidateDistance < distance) {
             distance = candidateDistance;
             closest = i;
@@ -45,14 +54,14 @@ function reconstructPath(cameFrom: Map<number, number>, current: number) {
     }
 }
 
-function aStar(graph: GraphNode[], start: number, goal: number, h: (g: GraphNode[], s: number) => number) {
+function aStar(graph: RoadGraph, start: number, goal: number, h: (g: RoadGraph, s: number) => number) {
     const openSet = new Set<number>();
     openSet.add(start);
     const cameFrom = new Map<number, number>();
     const gScore = new Map<number, number>();
     const fScore = new Map<number, number>();
 
-    for (let i = 0; i < graph.length; i++) {
+    for (let i = 0; i < graph.max; i++) {
         gScore.set(i, Infinity);
         fScore.set(i, Infinity);
     }
@@ -71,8 +80,19 @@ function aStar(graph: GraphNode[], start: number, goal: number, h: (g: GraphNode
 
         openSet.delete(current);
         const curNode = graph[current];
+        if (!curNode) {
+            // The node does not exist in the graph (anymore).
+            continue;
+        }
+
         for (const neighbor of curNode.neighbors) {
             const nNode = graph[neighbor];
+
+            if (!nNode) {
+                // The node does not exist in the graph (anymore).
+                continue;
+            }
+
             const tentativeGScore = gScore.get(current)! + distance(curNode.position, nNode.position);
             if (tentativeGScore < gScore.get(neighbor)!) {
                 cameFrom.set(neighbor, current);
@@ -83,7 +103,7 @@ function aStar(graph: GraphNode[], start: number, goal: number, h: (g: GraphNode
         }
     }
 
-    return undefined;
+    return [];
 }
 
 function findLowestFScore(openSet: Set<number>, fScore: Map<number, number>) {
