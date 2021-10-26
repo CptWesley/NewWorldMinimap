@@ -10,6 +10,7 @@ import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interp
 import drawMapFriends from './drawMapFriends';
 import drawMapMarkers from './drawMapMarkers';
 import drawMapNavigation from './drawMapNavigation';
+import drawMapNavigationTarget from './drawMapNavigationTarget';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
@@ -162,11 +163,13 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             showText: appContext.settings.showText,
         };
 
-        drawMapNavigation(mapRendererParameters);
+        const navTarget = drawMapNavigation(mapRendererParameters);
 
         drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
         drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
+
+        drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
 

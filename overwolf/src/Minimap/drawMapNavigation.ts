@@ -31,8 +31,9 @@ export default function drawMapNavigation(params: MapRendererParameters) {
         return renderAsCompass ? rotateAround(center, posCorrected, -angle) : posCorrected;
     }
 
+    let lastPos = undefined;
     const path = getNavPath(playerPosition);
-    if (path) {
+    if (path && path.length > 0) {
         const startPos = getCanvasCoord(path[0]);
 
         ctx.strokeStyle = 'yellow';
@@ -41,9 +42,12 @@ export default function drawMapNavigation(params: MapRendererParameters) {
 
         for (let i = 1; i < path.length; i++) {
             const pos = getCanvasCoord(path[i]);
+            lastPos = pos;
             ctx.lineTo(pos.x, pos.y);
         }
 
         ctx.stroke();
     }
+
+    return lastPos;
 }
