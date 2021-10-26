@@ -145,6 +145,8 @@ const useStyles = makeStyles()(theme => ({
     },
     bottomRightMenu: {
         display: 'flex',
+        alignItems: 'center',
+        flexShrink: 0,
         gap: theme.spacing(1),
     },
 }));
