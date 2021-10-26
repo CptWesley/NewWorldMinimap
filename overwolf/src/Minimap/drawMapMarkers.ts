@@ -21,10 +21,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         iconScale,
     } = iconParams;
 
-    if (!iconSettings) {
-        return;
-    }
-
     for (const marker of markers) {
         const catSettings = iconSettings.categories[marker.category];
         if (!catSettings || !catSettings.visible) {
