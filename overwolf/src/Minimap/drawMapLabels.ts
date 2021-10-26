@@ -3,7 +3,7 @@ import { getIconName } from '@/logic/icons';
 import { getMarkers } from '@/logic/markers';
 import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, toMinimapCoordinate } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
-import { LastDrawCache } from '@/Minimap/useMinimapRenderer';
+import { LastDrawParameters } from '@/Minimap/useMinimapRenderer';
 
 export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Marker, iconScale: number, center: Vector2, imgPosCorrected: Vector2, angle: number, renderAsCompass: boolean, iconHeight: number) {
     ctx.textAlign = 'center';
@@ -24,7 +24,7 @@ export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Mark
     }
 }
 
-export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCache, canvas: React.RefObject<HTMLCanvasElement>, iconScale: number) {
+export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawParameters, canvas: React.RefObject<HTMLCanvasElement>, iconScale: number) {
     if (!canvas.current) {
         return;
     }

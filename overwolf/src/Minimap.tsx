@@ -20,7 +20,7 @@ import { canvasToMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
 import { townZoomDistance } from './Minimap/mapConstants';
-import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
+import useMinimapRenderer from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
 
@@ -122,6 +122,7 @@ export default function Minimap(props: IProps) {
         currentFriends,
         currentPlayerPosition,
         currentPlayerAngle,
+        lastDrawParameters,
         getZoomLevel,
         mapPositionOverride,
         redraw,
@@ -216,9 +217,9 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (!appContext.settings.showText) {
+        if (hoverLabelCanvas && lastDrawParameters.current && !appContext.settings.showText) {
             const mousePos = { x: e.pageX, y: e.pageY };
-            drawMapHoverLabel(mousePos, lastDrawCache, hoverLabelCanvas, appContext.settings.iconScale);
+            drawMapHoverLabel(mousePos, lastDrawParameters.current, hoverLabelCanvas, appContext.settings.iconScale);
         }
 
         if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
