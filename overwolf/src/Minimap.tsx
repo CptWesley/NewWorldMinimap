@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { keyframes } from 'tss-react';
+import { CSSObject, keyframes } from 'tss-react';
 import RecenterIcon from '@/Icons/RecenterIcon';
 import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 import MinimapToolbar from '@/MinimapToolbar';
@@ -20,7 +20,7 @@ import { canvasToMinimapCoordinate } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
 import { townZoomDistance } from './Minimap/mapConstants';
-import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
+import useMinimapRenderer from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
 
@@ -39,19 +39,8 @@ const showRecenterButton = keyframes({
     },
 });
 
-const useStyles = makeStyles()(theme => ({
-    minimap: {
-        position: 'relative',
-    },
-    cacheStatus: {
-        background: 'rgba(0, 0, 0, 0.5)',
-        color: '#ffffff',
-        position: 'absolute',
-        left: 0,
-        bottom: 0,
-        zIndex: globalLayers.minimapCacheStatus,
-    },
-    canvas: {
+const useStyles = makeStyles()(theme => {
+    const canvasStyling: CSSObject = {
         width: '100%',
         height: '100%',
         position: 'fixed',
@@ -59,35 +48,45 @@ const useStyles = makeStyles()(theme => ({
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: globalLayers.minimapCanvas,
-    },
-    hoverCanvas: {
-        width: '100%',
-        height: '100%',
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        zIndex: globalLayers.minimapCanvas,
-        pointerEvents: 'none',
-    },
-    mapControls: {
-        position: 'absolute',
-        right: theme.spacing(1),
-        bottom: theme.spacing(1),
-        display: 'flex',
-        flexDirection: 'row-reverse',
-    },
-    recenter: {
-        animation: `300ms ease ${showRecenterButton}`,
-        display: 'flex',
-        alignItems: 'center',
-        '& > svg': {
-            width: '100%',
+    };
+    return {
+        minimap: {
+            position: 'relative',
         },
-    },
-}));
+        cacheStatus: {
+            background: 'rgba(0, 0, 0, 0.5)',
+            color: '#ffffff',
+            position: 'absolute',
+            left: 0,
+            bottom: 0,
+            zIndex: globalLayers.minimapCacheStatus,
+        },
+        canvas: {
+            ...canvasStyling,
+            zIndex: globalLayers.minimapCanvas,
+        },
+        hoverCanvas: {
+            ...canvasStyling,
+            zIndex: globalLayers.minimapHoverCanvas,
+            pointerEvents: 'none',
+        },
+        mapControls: {
+            position: 'absolute',
+            right: theme.spacing(1),
+            bottom: theme.spacing(1),
+            display: 'flex',
+            flexDirection: 'row-reverse',
+        },
+        recenter: {
+            animation: `300ms ease ${showRecenterButton}`,
+            display: 'flex',
+            alignItems: 'center',
+            '& > svg': {
+                width: '100%',
+            },
+        },
+    };
+});
 
 const tileCache = getTileCache();
 
@@ -122,6 +121,7 @@ export default function Minimap(props: IProps) {
         currentFriends,
         currentPlayerPosition,
         currentPlayerAngle,
+        lastDrawParameters,
         getZoomLevel,
         mapPositionOverride,
         redraw,
@@ -216,9 +216,9 @@ export default function Minimap(props: IProps) {
             return;
         }
 
-        if (!appContext.settings.showText) {
+        if (hoverLabelCanvas && lastDrawParameters.current && !appContext.settings.showText) {
             const mousePos = { x: e.pageX, y: e.pageY };
-            drawMapHoverLabel(mousePos, lastDrawCache, hoverLabelCanvas, appContext.settings.iconScale);
+            drawMapHoverLabel(mousePos, lastDrawParameters.current, hoverLabelCanvas, appContext.settings.iconScale);
         }
 
         if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {

@@ -28,18 +28,16 @@ export type MapRendererParameters = {
 }
 
 export type MapIconRendererParameters = {
-    settings: IconSettings | undefined,
+    settings: IconSettings,
     mapIconsCache: MapIconsCache,
     iconScale: number,
     showText: boolean,
 }
 
-export type LastDrawCache = {
-    mapRendererParams: MapRendererParameters,
+export type LastDrawParameters = {
+    mapRendererParams: Omit<MapRendererParameters, 'context'>,
     iconRendererParams: MapIconRendererParameters
 };
-
-export let lastDrawCache: LastDrawCache;
 
 const tileCache = getTileCache();
 const markerCache = getTileMarkerCache();
@@ -52,6 +50,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     const currentPlayerAngle = useRef<number>(0);
     const lastPlayerPosition = useRef<Vector2>(currentPlayerPosition.current);
     const lastPositionUpdate = useRef<number>(performance.now());
+    const lastDrawParameters = useRef<LastDrawParameters>();
 
     const {
         get: getInterpolatedZoomLevel,
@@ -173,7 +172,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
 
-        lastDrawCache = {
+        lastDrawParameters.current = {
             mapRendererParams: mapRendererParameters,
             iconRendererParams: mapIconRendererParameters,
         };
@@ -283,6 +282,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         currentFriends,
         currentPlayerPosition: currentPlayerPosition as { readonly current: Readonly<Vector2> },
         currentPlayerAngle: currentPlayerAngle as { readonly current: Readonly<number> },
+        lastDrawParameters: lastDrawParameters as { readonly current: undefined | Readonly<LastDrawParameters> },
         getZoomLevel,
         mapPositionOverride,
         redraw,

@@ -31,7 +31,7 @@ export default function drawMapNavigation(params: MapRendererParameters) {
         return renderAsCompass ? rotateAround(center, posCorrected, -angle) : posCorrected;
     }
 
-    let lastPos = undefined;
+    let lastPos: Vector2 | undefined = undefined;
     const path = getNavPath(playerPosition);
     if (path && path.length > 0) {
         const startPos = getCanvasCoord(path[0]);

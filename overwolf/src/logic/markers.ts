@@ -30,7 +30,8 @@ export async function getDefaultIconSettings() {
                 };
             }
 
-            const category = categories[marker.category];
+            // The ! assertion is allowed because the previous if-block sets it
+            const category = categories[marker.category]!;
 
             if (!category.types[marker.type]) {
                 category.types[marker.type] = {

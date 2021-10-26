@@ -21,10 +21,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         iconScale,
     } = iconParams;
 
-    if (!iconSettings) {
-        return;
-    }
-
     for (const marker of markers) {
         const catSettings = iconSettings.categories[marker.category];
         if (!catSettings || !catSettings.visible) {
@@ -59,7 +55,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
             ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
         }
 
-        if (showText && catSettings.showLabel && typeSettings.showLabel) {
+        if (showText && catSettings.showLabel && typeSettings?.showLabel) {
             drawMapLabel(ctx, marker, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
         }
     }

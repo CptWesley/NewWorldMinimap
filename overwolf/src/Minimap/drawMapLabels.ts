@@ -3,7 +3,7 @@ import { getIconName } from '@/logic/icons';
 import { getMarkers } from '@/logic/markers';
 import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, toMinimapCoordinate } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
-import { LastDrawCache } from '@/Minimap/useMinimapRenderer';
+import { LastDrawParameters } from '@/Minimap/useMinimapRenderer';
 
 export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Marker, iconScale: number, center: Vector2, imgPosCorrected: Vector2, angle: number, renderAsCompass: boolean, iconHeight: number) {
     ctx.textAlign = 'center';
@@ -24,7 +24,7 @@ export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Mark
     }
 }
 
-export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCache, canvas: React.RefObject<HTMLCanvasElement>, iconScale: number) {
+export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawParameters, canvas: React.RefObject<HTMLCanvasElement>, iconScale: number) {
     if (!canvas.current) {
         return;
     }
@@ -60,7 +60,10 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
         return;
     }
 
-    markers.forEach(m => {
+    // Iterate the list in reverse, so we always render the label for the top-most icon
+    for (let i = markers.length - 1; i >= 0; --i) {
+        const m = markers[i];
+
         const catSettings = lastDrawCache.iconRendererParams.settings?.categories[m.category];
         if (!catSettings || !catSettings.visible) {
             return;
@@ -90,6 +93,8 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawCach
         if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
             && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
             drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
+            // Render only a single label, so exit the loop
+            break;
         }
-    });
+    }
 }
