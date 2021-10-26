@@ -41,6 +41,7 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Different interpolation and extrapolation modes for smoother movement on map (linear, cosine, none).
 - Seperately configureable zoom level for towns.
 - View live location of friends.
+- GPS that points you to a marker following known roads.
 - Localisation
   - English (Complete)
   - Italian (Complete)
@@ -57,7 +58,6 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 ## Planned Features
 - Private markers.
 - Paths along private markers.
-- (Speculative) GPS that points you to a marker following known roads.
 
 ## Known Issues
 - Compass mode might not show some corners of the map, depending on the size of the window.
