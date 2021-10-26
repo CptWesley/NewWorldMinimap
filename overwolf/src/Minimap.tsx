@@ -13,10 +13,11 @@ import { getFriendCode, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
-import { setNav } from './logic/navigation/navigation';
+import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
 import { canvasToMinimapCoordinate } from './logic/tiles';
+import { squaredDistance } from './logic/util';
 import useMinimapRenderer, { lastDrawCache } from './Minimap/useMinimapRenderer';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
@@ -184,7 +185,14 @@ export default function Minimap(props: IProps) {
             const zoomLevel = appContext.settings.zoomLevel;
 
             const worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
-            setNav(currentPlayerPosition.current, worldPos);
+            const currentTarget = getNavTarget();
+
+            if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
+                resetNav();
+            } else {
+                setNav(currentPlayerPosition.current, worldPos);
+            }
+
             redraw(true);
         }
     }
