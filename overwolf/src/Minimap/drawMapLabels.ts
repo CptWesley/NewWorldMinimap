@@ -93,6 +93,7 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
         if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
             && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
             drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
+            // Render only a single label, so exit the loop
             break;
         }
     }
