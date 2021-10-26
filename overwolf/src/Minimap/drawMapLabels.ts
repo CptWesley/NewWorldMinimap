@@ -60,7 +60,10 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
         return;
     }
 
-    markers.forEach(m => {
+    // Iterate the list in reverse, so we always render the label for the top-most icon
+    for (let i = markers.length - 1; i >= 0; --i) {
+        const m = markers[i];
+
         const catSettings = lastDrawCache.iconRendererParams.settings?.categories[m.category];
         if (!catSettings || !catSettings.visible) {
             return;
@@ -90,6 +93,7 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
         if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
             && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
             drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
+            break;
         }
-    });
+    }
 }
