@@ -6,7 +6,7 @@ type OverwolfHookWindow = typeof window & {
     NWMM_registerEventCallback: typeof onPlayerDataUpdateEvent.register;
 }
 
-export const positionUpdateRate = 1000;
+export const positionUpdateRate = 500;
 
 type OnPlayerDataUpdateListener = (info: PlayerData) => void;
 
