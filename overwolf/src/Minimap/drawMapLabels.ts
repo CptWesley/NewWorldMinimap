@@ -50,8 +50,8 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
         return;
     }
 
-    const rotatedMousePos = rotateAround(center, mousePos, angle);
-    const mouseInWorld = canvasToMinimapCoordinate(rotatedMousePos, mapCenterPosition, zoomLevel, ctx.canvas.width, ctx.canvas.height);
+    const finalPos = renderAsCompass ? rotateAround(center, mousePos, angle) : mousePos;
+    const mouseInWorld = canvasToMinimapCoordinate(finalPos, mapCenterPosition, zoomLevel, ctx.canvas.width, ctx.canvas.height);
 
     const tilePos = getTileCoordinatesForWorldCoordinate(mouseInWorld, 1);
     const markers = getMarkers(tilePos);
@@ -93,7 +93,6 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
         if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
             && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
             drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
-            // Render only a single label, so exit the loop
             break;
         }
     }
