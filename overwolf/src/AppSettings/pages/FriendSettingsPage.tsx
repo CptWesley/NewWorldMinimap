@@ -29,7 +29,10 @@ const useStyles = makeStyles()(theme => ({
     wideInput: {
         width: 600,
         maxWidth: '100%',
-        resize: 'vertical',
+    },
+    semiWideInput: {
+        width: 300,
+        maxWidth: '100%',
     },
     addFriend: {
         marginTop: theme.spacing(1),
@@ -131,6 +134,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     <input
                         id='settings-friends-custom-server-url'
                         type='text'
+                        className={clsx(sharedClasses.textbox, classes.semiWideInput)}
                         onChange={e => updateSimpleSetting('friendServerUrl', e.currentTarget.value)}
                         value={settings.friendServerUrl}
                     />
@@ -144,6 +148,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     <input
                         id='settings-friends-psk'
                         type='text'
+                        className={sharedClasses.textbox}
                         value={settings.friendsPsk}
                         onChange={e => updateSimpleSetting('friendsPsk', e.currentTarget.value)}
                         title={t('settings.friend.friendsPskTooltip')}
