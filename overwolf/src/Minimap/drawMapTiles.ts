@@ -47,8 +47,8 @@ export default function drawMapTiles(params: MapRendererParameters) {
                 ctx.drawImage(bitmap,
                     tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,
                     tileVisualSize / zoomLevel * y + center.y - tileScaledOffset.y / zoomLevel,
-                    tileVisualSize / zoomLevel,
-                    tileVisualSize / zoomLevel
+                    tileVisualSize / zoomLevel + 1,
+                    tileVisualSize / zoomLevel + 1
                 );
                 ctx.restore();
             } else {
