@@ -28,6 +28,11 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    color: {
+        '& > input[type="color"]': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
     range: {
         '& > input[type="range"]': {
             margin: theme.spacing(0, 1, 0, 0),

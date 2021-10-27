@@ -1,47 +1,75 @@
 import AES from 'crypto-js/aes';
 import encUtf8 from 'crypto-js/enc-utf8';
+import SHA256 from 'crypto-js/sha256';
 import Dexie from 'dexie';
+import { v4 as uuidV4, validate as validateUuid } from 'uuid';
 import { getDynamicSettings } from './dynamicSettings';
-import { generateRandomToken } from './util';
 
-export type PlayerDataPlain = {
+const friendIdKey = 'friendId';
+const deprecatedFriendCodeKey = 'friendCode';
+export function createNewChannel(): StoredChannel {
+    return {
+        color: '#ffffff',
+        id: uuidV4(),
+        label: '',
+        psk: SHA256(uuidV4()).toString(),
+    };
+}
+
+localStorage.removeItem(deprecatedFriendCodeKey);
+
+type SharedPlayerData = {
     name: string,
     location: Vector2,
-};
-type PlayerDataPsk = string;
-type PlayerData = PlayerDataPlain | PlayerDataPsk;
+}
 
-type PlayerRequestDataPlain = {
-    type: 'plain',
-    data: PlayerDataPlain,
-};
-type PlayerRequestDataPsk = {
+export type ChannelData = {
+    channel: string,
+    players: SharedPlayerData[],
+    color: string,
+}
+
+type PlainTextPlayerData = {
+    /** The player's name. */
+    n: string,
+    /** The player's location. */
+    l: Vector2,
+}
+
+type PlayerDataPsk = {
     type: 'psk',
-    data: PlayerDataPsk,
+    /** The ciphertext. */
+    c: string,
 };
-type PlayerRequestData = PlayerRequestDataPlain | PlayerRequestDataPsk;
+type TransportPlayerData = PlayerDataPsk;
 
-type PlayerRequest = PlayerRequestData & {
-    id: string,
-    friends: string[],
+type PlayerChannelRequestData = {
+    channel: string,
+    data: TransportPlayerData,
 };
 
-type PlayerResponseData = {
+type PlayerRequest = {
     id: string,
-    data: PlayerData,
+    channels: PlayerChannelRequestData[],
+}
+
+type PlayerChannelResponseData = {
+    channel: string,
+    data: TransportPlayerData[],
 };
 
 type PlayerResponse = {
-    friends: PlayerResponseData[],
-};
-
-export type StoredFriend = {
-    id: string,
-    name: string,
-    psk: string,
+    channels: PlayerChannelResponseData[];
 }
 
-export async function updateFriendLocation(server: string, id: string, name: string, location: Vector2, psk: string): Promise<undefined | PlayerDataPlain[]> {
+export type StoredChannel = {
+    id: string,
+    psk: string,
+    label: string,
+    color: string,
+}
+
+export async function updateFriendLocation(server: string, name: string, location: Vector2): Promise<undefined | ChannelData[]> {
     let url = server.trim();
 
     if (!url || url.length === 0) {
@@ -53,31 +81,24 @@ export async function updateFriendLocation(server: string, id: string, name: str
 
     if (!url || url.length === 0) { return undefined; }
 
-    const friends = await getFriends();
-    const friendIds = friends.map(f => f.id);
+    const id = getFriendId();
+    const channels = await getChannels();
 
     try {
-        const data: PlayerDataPlain = {
-            name,
-            location,
+        const data: PlainTextPlayerData = {
+            n: name,
+            l: location,
         };
-        let body: PlayerRequest;
-        if (psk) {
-            const encryptedData = AES.encrypt(JSON.stringify(data), psk).toString();
-            body = {
-                id,
-                type: 'psk',
-                data: encryptedData,
-                friends: friendIds,
-            };
-        } else {
-            body = {
-                id,
-                type: 'plain',
-                data,
-                friends: friendIds,
-            };
-        }
+        const body: PlayerRequest = {
+            id,
+            channels: channels.map<PlayerChannelRequestData>(c => ({
+                channel: c.id,
+                data: {
+                    type: 'psk',
+                    c: AES.encrypt(JSON.stringify(data), c.psk).toString(),
+                },
+            })),
+        };
 
         const req = await fetch(url, {
             method: 'post',
@@ -89,97 +110,115 @@ export async function updateFriendLocation(server: string, id: string, name: str
         });
         const response = await req.json();
         if (validatePlayerResponse(response as PlayerResponse)) {
-            // The server response looks valid
-            return (response as PlayerResponse).friends.map<PlayerDataPlain | null>(f => {
-                const { data, id } = f;
-                if (typeof data === 'string') {
-                    // It's encrypted data -- decrypt and validate it
-                    const friend = friends.find(f => f.id === id);
-                    if (!friend?.psk) {
-                        return null;
-                    }
-                    try {
-                        const decryptedData = AES.decrypt(data, friend.psk).toString(encUtf8);
-                        if (!decryptedData) { return null; }
-                        const deserialized = JSON.parse(decryptedData);
-                        if (validatePlayerDataPlain(deserialized)) {
-                            return deserialized;
+            const channelData: ChannelData[] = [];
+
+            for (const channelDatum of (response as PlayerResponse).channels) {
+                const originalChannel = channels.find(c => c.id === channelDatum.channel);
+                if (!originalChannel) { continue; }
+                const players: SharedPlayerData[] = [];
+                for (const playerData of channelDatum.data) {
+                    if (playerData.type === 'psk') {
+                        try {
+                            const decryptedData = AES.decrypt(playerData.c, originalChannel.psk).toString(encUtf8);
+                            if (!decryptedData) { continue; }
+                            const deserialized = JSON.parse(decryptedData);
+                            if (validatePlayerDataPlain(deserialized)) {
+                                players.push({ name: deserialized.n, location: { x: deserialized.l.x, y: deserialized.l.y } });
+                            }
+                        } catch {
+                            // Just don't add
                         }
-                    } catch (err) { console.warn(err); }
-                    return null;
-                } else if (typeof data === 'object' && validatePlayerDataPlain(data)) {
-                    // It's valid location data
-                    return data;
+                    }
                 }
-                return null;
-            }).filter(f => f !== null) as PlayerDataPlain[];
+                channelData.push({
+                    channel: channelDatum.channel,
+                    color: originalChannel.color,
+                    players,
+                });
+            }
+
+            return channelData;
         }
     } catch { }
 
     return undefined;
 }
 
-class FriendsDatabase extends Dexie {
-    friends: Dexie.Table<StoredFriend, StoredFriend['id']>;
+class ChannelsDatabase extends Dexie {
+    channels: Dexie.Table<StoredChannel, StoredChannel['id']>;
 
     constructor() {
-        super('friends');
+        super('channels');
         this
             .version(1)
             .stores({
                 // Store only the keys that should be indexed
-                friends: '&id,name',
+                channels: '&id,name',
             });
 
-        this.friends = this.table('friends');
+        this.channels = this.table('channels');
     }
 }
 
-export async function getFriends() {
-    const db = new FriendsDatabase();
-    const friends = await db.friends.toArray();
+export async function getChannels() {
+    const db = new ChannelsDatabase();
+    const friends = await db.channels.toArray();
     return friends;
 }
 
-export async function putFriend(friend: StoredFriend) {
-    const db = new FriendsDatabase();
-    await db.friends.put(friend, friend.id);
+export async function putChannel(channel: StoredChannel) {
+    const db = new ChannelsDatabase();
+    await db.channels.put(channel, channel.id);
 }
 
-export async function updateFriend(key: StoredFriend['id'], changes: Partial<StoredFriend>) {
-    const db = new FriendsDatabase();
-    await db.friends.update(key, changes);
+export async function updateChannel(key: StoredChannel['id'], changes: Partial<StoredChannel>) {
+    const db = new ChannelsDatabase();
+    await db.channels.update(key, changes);
 }
 
-export async function deleteFriend(friend: StoredFriend) {
-    const db = new FriendsDatabase();
-    await db.friends.delete(friend.id);
+export async function deleteChannel(friend: StoredChannel) {
+    const db = new ChannelsDatabase();
+    await db.channels.delete(friend.id);
 }
 
 function validatePlayerResponse(response: PlayerResponse): response is PlayerResponse {
-    return typeof response === 'object'
-        && Array.isArray(response.friends)
-        && response.friends.every(r => {
-            return typeof r === 'object'
-                && typeof r.id === 'string';
-        });
+    return !!response
+        && typeof response === 'object'
+        && Array.isArray(response.channels)
+        && response.channels.every(c => validateChannelData(c));
 }
 
-function validatePlayerDataPlain(data: PlayerDataPlain): data is PlayerDataPlain {
+function validateChannelData(channelData: PlayerChannelResponseData): channelData is PlayerChannelResponseData {
+    return !!channelData
+        && typeof channelData === 'object'
+        && typeof channelData.channel === 'string'
+        && validateUuid(channelData.channel)
+        && Array.isArray(channelData.data)
+        && channelData.data.every(cd => validatePlayerData(cd));
+}
+
+function validatePlayerData(data: TransportPlayerData): data is TransportPlayerData {
+    return !!data
+        && typeof data === 'object'
+        && data.type === 'psk'
+        && typeof data.c === 'string';
+}
+
+function validatePlayerDataPlain(data: PlainTextPlayerData): data is PlainTextPlayerData {
     return typeof data === 'object'
-        && typeof data.name === 'string'
-        && typeof data.location === 'object'
-        && typeof data.location.x === 'number'
-        && typeof data.location.y === 'number';
+        && typeof data.n === 'string'
+        && typeof data.l === 'object'
+        && typeof data.l.x === 'number'
+        && typeof data.l.y === 'number';
 }
 
-export function getFriendCode() {
-    const code = localStorage.getItem('friendCode');
-    return !code ? regenerateFriendCode() : code;
+export function getFriendId() {
+    const code = localStorage.getItem(friendIdKey);
+    return code || regenerateFriendId();
 }
 
-export function regenerateFriendCode() {
-    const code = generateRandomToken();
-    localStorage.setItem('friendCode', code);
+export function regenerateFriendId() {
+    const code = uuidV4();
+    localStorage.setItem('friendId', code);
     return code;
 }

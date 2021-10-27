@@ -9,7 +9,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
-import { getFriendCode, PlayerDataPlain, updateFriendLocation } from './logic/friends';
+import { ChannelData, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
@@ -118,7 +118,7 @@ export default function Minimap(props: IProps) {
     }
 
     const {
-        currentFriends,
+        currentFriendChannels,
         currentPlayerPosition,
         currentPlayerAngle,
         lastDrawParameters,
@@ -131,32 +131,16 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(), playerName.current, pos, appContext.settings.friendsPsk);
-            sharedLocation.then(r => {
-                if (r !== undefined) {
-                    setFriends(r);
-                } else {
-                    setFriends([]);
-                }
-            });
+            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, playerName.current, pos);
+            sharedLocation.then(setFriendChannels);
         }
 
         store('lastKnownPosition', pos);
         setPlayerPosition(pos);
     }
 
-    function setFriends(friends: PlayerDataPlain[]) {
-        if (friends.length === currentFriends.current.length) {
-            for (const key in friends) {
-                if (friends[key].name === currentFriends.current[key].name
-                    && friends[key].location.x === currentFriends.current[key].location.x
-                    && friends[key].location.y === currentFriends.current[key].location.y) {
-                    return;
-                }
-            }
-        }
-
-        currentFriends.current = friends;
+    function setFriendChannels(channels: undefined | ChannelData[]) {
+        currentFriendChannels.current = channels ?? [];
         redraw(true);
     }
 
@@ -304,7 +288,7 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
-        (window as any).setFriends = setFriends;
+        (window as any).setFriendChannels = setFriendChannels;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);

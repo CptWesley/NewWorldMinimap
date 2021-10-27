@@ -1,44 +1,45 @@
-import type { PlayerDataDeprecated, PlayerRequest, PlayerRequestDataPlain, PlayerRequestDataPsk, Vector2 } from './types';
+import type { DeprecatedPlayerRequest, PlayerChannelRequestData, PlayerDataPsk, PlayerRequest } from './types';
+import { validate as validateUuid } from 'uuid';
 
-export function validateVector2(vector2: Vector2): vector2 is Vector2 {
-    return typeof vector2 === 'object'
-        && typeof vector2.x === 'number'
-        && typeof vector2.y === 'number';
+const maxChannels = 10;
+const maxPskDataLength = 128;
+
+function validatePlayerDataPsk(data: PlayerDataPsk): data is PlayerDataPsk {
+    return !!data
+        && typeof data === 'object'
+        && data.type === 'psk'
+        && typeof data.c === 'string'
+        && data.c.length <= maxPskDataLength;
 }
 
-function validatePlayerDataPlain(req: PlayerRequestDataPlain): req is PlayerRequestDataPlain {
-    return typeof req === 'object'
-        && req.type === 'plain'
-        && typeof req.data === 'object'
-        && typeof req.data.name === 'string'
-        && validateVector2(req.data.location);
+function validatePlayerChannelData(channel: PlayerChannelRequestData): channel is PlayerChannelRequestData {
+    return !!channel
+    && typeof channel === 'object'
+    && typeof channel.channel === 'string'
+    && validateUuid(channel.channel)
+    && validatePlayerDataPsk(channel.data);
 }
 
-function validatePlayerDataPsk(req: PlayerRequestDataPsk): req is PlayerRequestDataPsk {
-    return typeof req === 'object'
-        && req.type === 'psk'
-        && typeof req.data === 'string'
-        && req.data.length < 128;
+export function validatePlayerRequest(req: PlayerRequest): req is PlayerRequest {
+    return !!req
+        && typeof req === 'object'
+        && typeof req.id === 'string'
+        && validateUuid(req.id)
+        && Array.isArray(req.channels)
+        && req.channels.length < maxChannels
+        && req.channels.every(c => validatePlayerChannelData(c));
 }
 
-function validatePlayerDataDeprecated(req: PlayerDataDeprecated): req is PlayerDataDeprecated {
-    return typeof req === 'object'
-        && typeof req.type === 'undefined'
+export function validateDeprecatedPlayerRequest(req: DeprecatedPlayerRequest): req is DeprecatedPlayerRequest {
+    return !!req
+        && typeof req === 'object'
+        && typeof req.id === 'string'
+        && Array.isArray(req.friends)
+        && req.friends.every(f => typeof f === 'string')
+        && !!req.data
         && typeof req.data === 'object'
         && typeof req.data.name === 'string'
         && typeof req.data.location === 'object'
         && typeof req.data.location.x === 'number'
         && typeof req.data.location.y === 'number';
-}
-
-export function validatePlayerRequest(req: PlayerRequest): req is PlayerRequest {
-    return typeof req === 'object'
-        && typeof req.id === 'string'
-        && Array.isArray(req.friends)
-        && req.friends.every(f => typeof f === 'string')
-        && (
-            validatePlayerDataPlain(req as PlayerRequestDataPlain)
-            || validatePlayerDataPsk(req as PlayerRequestDataPsk)
-            || validatePlayerDataDeprecated(req as PlayerDataDeprecated)
-        );
 }

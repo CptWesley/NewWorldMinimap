@@ -24,6 +24,7 @@
     "@types/node": "^16.11.0",
     "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
+    "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.33.0",
     "@typescript-eslint/parser": "^4.33.0",
     "clean-webpack-plugin": "^4.0.0",
@@ -59,6 +60,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-i18next": "^11.12.0",
-    "tss-react": "^0.9.4"
+    "tss-react": "^0.9.4",
+    "uuid": "^8.3.2"
   }
 }

@@ -2,9 +2,8 @@ require('dotenv').config();
 import express = require('express');
 import rateLimit = require('express-rate-limit');
 import process = require('process');
-import crypto = require('crypto');
-import { validatePlayerRequest } from './validation';
-import type { FriendsList, MapType, MapTypeDeprecated, PlayerData, PlayerDataPlain, PlayerId, PlayerRequestData, PlayerResponseData } from './types';
+import { validateDeprecatedPlayerRequest, validatePlayerRequest } from './validation';
+import type { DeprecatedPlayerData, MapType, DeprecatedMapType, DeprecatedPlayerRequest, PlayerRequest, PlayerData, PlayerResponse, PlayerChannelResponseData } from './types';
 
 const app = express();
 const port = Number(process.env.PORT);
@@ -33,94 +32,116 @@ app.use(limiter);
 // Set json body parser
 app.use(express.json());
 app.use(function (err: any, req: express.Request, res: express.Response, next: express.NextFunction) {
-    if (err instanceof SyntaxError && (err as any).status === 400 && "body" in err) {
-        res.status(400).send("400 Bad request");
+    if (err instanceof SyntaxError && (err as any).status === 400 && 'body' in err) {
+        res.status(400).send('400 Bad request');
     } else next();
 });
 
-const onlinePlayers = new Map<string, MapType>();
-const onlinePlayersDeprecated = new Map<string, MapTypeDeprecated>();
+const channels = new Map<string, Map<string, MapType>>();
 
-function getSanitizedData<T extends PlayerRequestData>(data: T): PlayerData {
-    switch (data.type) {
-        case 'plain':
-        case undefined:
-            return {
-                name: data.data.name,
-                location: {
-                    x: data.data.location.x,
-                    y: data.data.location.y,
-                },
-            };
-        case 'psk':
-            return data.data;
+function updatePlayerData(request: PlayerRequest) {
+    const timestamp = process.hrtime.bigint();
+    for (const channelData of request.channels) {
+        const stored: MapType = {
+            data: channelData.data,
+            timestamp,
+        };
+        let channel = channels.get(channelData.channel);
+        if (!channel) {
+            channel = new Map();
+            channels.set(channelData.channel, channel);
+        }
+        channel.set(request.id, stored);
     }
 }
 
-/**
- * Adds a player to the online players map.
- * The player ID is digested, and the digest is used as the key.
- * All players are added to the non-deprecated map.
- * If the request type is deprecated, its data will also be added to the
- * deprecated map, without being digested.
- * @param request The request data.
- */
-function updatePlayerData(request: PlayerId & PlayerRequestData) {
-    const idDigest = crypto.createHash('sha256').update(request.id).digest('hex');
-    onlinePlayers.set(idDigest, {
-        data: getSanitizedData(request),
-        timestamp: process.hrtime.bigint(),
-    });
-    if (request.type === undefined) {
-        onlinePlayersDeprecated.set(request.id, {
-            data: getSanitizedData(request) as MapTypeDeprecated['data'],
-            timestamp: process.hrtime.bigint(),
+function getPlayersResponseData(request: PlayerRequest) {
+    const data: PlayerChannelResponseData[] = [];
+    for (const channelData of request.channels) {
+        const channel = channels.get(channelData.channel);
+        if (!channel) { continue; }
+
+        const players: PlayerData[] = [];
+        for (const mapItem of channel.values()) {
+            players.push(mapItem.data);
+        }
+
+        data.push({
+            channel: channelData.channel,
+            data: players,
         });
     }
+    return data;
 }
 
-/**
- * Gets the list of player data for the friends of this request.
- * If the request is deprecated, only other players using the deprecated
- * client will be returned.
- * @param request The request data.
- * @returns A list of player data for the friends of this request.
- */
-function getPlayersData(request: FriendsList & PlayerRequestData) {
-    if (request.type !== undefined) {
-        const data: PlayerResponseData[] = [];
-        for (const friendDigest of request.friends) {
-            const playerData = onlinePlayers.get(friendDigest);
-            if (playerData) {
-                data.push({
-                    id: friendDigest,
-                    data: playerData.data,
-                });
-            }
-        }
-        return data;
-    } else {
-        const data: PlayerDataPlain[] = [];
-        for (const friend of request.friends) {
-            const playerData = onlinePlayersDeprecated.get(friend);
-            if (playerData) {
-                data.push(playerData.data);
-            }
-        }
-        return data;
+app.post('/data/channel', function (req, res) {
+    const json = req.body;
+
+    if (debug) {
+        console.log(json);
     }
-}
+
+    if (validatePlayerRequest(json)) {
+        updatePlayerData(json);
+
+        const channels = getPlayersResponseData(json);
+        const result: PlayerResponse = {
+            channels,
+        };
+        return res.json(result);
+    }
+    return res.status(400).send('400 Bad request');
+});
 
 function evictPlayersData() {
     const now = process.hrtime.bigint();
-    for (const [key, value] of onlinePlayers) {
-        if (now - value.timestamp > expireNanoseconds) {
-            onlinePlayers.delete(key);
+    for (const [channelId, channel] of channels) {
+        for (const [playerId, playerMapData] of channel) {
+            if (now - playerMapData.timestamp > expireNanoseconds) {
+                channel.delete(playerId);
+            }
+        }
+        if (channel.size === 0) {
+            channels.delete(channelId);
         }
     }
-    for (const [key, value] of onlinePlayersDeprecated) {
+}
+
+const deprecatedOnlinePlayers = new Map<string, DeprecatedMapType>();
+
+function deprecatedGetSanitizedData(data: DeprecatedPlayerData): DeprecatedPlayerData {
+    return {
+        name: data.name,
+        location: {
+            x: data.location.x,
+            y: data.location.y,
+        },
+    };
+}
+
+function deprecatedUpdatePlayerData(request: DeprecatedPlayerRequest) {
+    deprecatedOnlinePlayers.set(request.id, {
+        data: deprecatedGetSanitizedData(request.data),
+        timestamp: process.hrtime.bigint(),
+    });
+}
+
+function deprecatedGetPlayersData(request: DeprecatedPlayerRequest) {
+    const data: DeprecatedPlayerData[] = [];
+    for (const friend of request.friends) {
+        const playerData = deprecatedOnlinePlayers.get(friend);
+        if (playerData) {
+            data.push(playerData.data);
+        }
+    }
+    return data;
+}
+
+function deprecatedEvictPlayersData() {
+    const now = process.hrtime.bigint();
+    for (const [key, value] of deprecatedOnlinePlayers) {
         if (now - value.timestamp > expireNanoseconds) {
-            onlinePlayersDeprecated.delete(key);
+            deprecatedOnlinePlayers.delete(key);
         }
     }
 }
@@ -132,15 +153,15 @@ app.post('/data/update', function (req, res) {
         console.log(json);
     }
 
-    if (validatePlayerRequest(json)) {
-        updatePlayerData(json);
+    if (validateDeprecatedPlayerRequest(json)) {
+        deprecatedUpdatePlayerData(json);
 
-        const friends = getPlayersData(json);
+        const friends = deprecatedGetPlayersData(json);
         return res.json({
             friends: friends,
         });
     }
-    return res.status(400).send("400 Bad request");
+    return res.status(400).send('400 Bad request');
 });
 
 app.listen(port, () => {
@@ -148,6 +169,7 @@ app.listen(port, () => {
 
     setInterval(function () {
         evictPlayersData();
-        console.log(`Currently are stored ${onlinePlayers.size} (${onlinePlayersDeprecated.size}) players`);
+        deprecatedEvictPlayersData();
+        console.log(`Currently are stored ${channels.size} channels (${deprecatedOnlinePlayers.size} legacy)`);
     }, 5000);
 });

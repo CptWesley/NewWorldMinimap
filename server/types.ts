@@ -3,50 +3,54 @@ export type Vector2 = {
     y: number,
 };
 
-export type PlayerDataPlain = {
-    name: string,
-    location: Vector2,
-};
-export type PlayerDataPsk = string;
-export type PlayerData = PlayerDataPlain | PlayerDataPsk;
-
-export type PlayerDataDeprecated = {
-    type: undefined,
-    data: PlayerDataPlain,
-};
-
-export type PlayerRequestDataPlain = {
-    type: 'plain',
-    data: PlayerDataPlain,
-};
-
-export type PlayerRequestDataPsk = {
+export type PlayerDataPsk = {
     type: 'psk',
-    data: PlayerDataPsk,
+    /** The ciphertext. */
+    c: string,
 };
+export type PlayerData = PlayerDataPsk;
 
-export type PlayerRequestData = PlayerRequestDataPlain | PlayerRequestDataPsk | PlayerDataDeprecated;
-
-export type PlayerId = {
-    id: string,
-};
-
-export type FriendsList = {
-    friends: string[],
-};
-
-export type PlayerRequest = PlayerRequestData & PlayerId & FriendsList;
-
-export type PlayerResponseData = {
-    id: string,
+export type PlayerChannelRequestData = {
+    channel: string,
     data: PlayerData,
 };
+
+export type PlayerRequest = {
+    id: string,
+    channels: PlayerChannelRequestData[],
+}
 
 export type MapType = {
     data: PlayerData,
     timestamp: bigint,
+};
+
+export type PlayerChannelResponseData = {
+    channel: string,
+    data: PlayerData[],
+};
+
+export type PlayerResponse = {
+    channels: PlayerChannelResponseData[];
 }
-export type MapTypeDeprecated = {
-    data: PlayerDataPlain,
+
+export type DeprecatedPlayerData = {
+    name: string,
+    location: Vector2,
+};
+
+export type DeprecatedPlayerRequest = {
+    id: string,
+    data: DeprecatedPlayerData,
+    friends: string[],
+};
+
+export type DeprecatedMapType = {
+    data: DeprecatedPlayerData,
     timestamp: bigint,
 }
+
+export type DeprecatedPlayerResponse = {
+    id: string,
+    data: DeprecatedPlayerData,
+};
