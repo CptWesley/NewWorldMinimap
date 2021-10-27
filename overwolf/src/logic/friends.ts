@@ -159,10 +159,10 @@ class ChannelsDatabase extends Dexie {
     constructor() {
         super('channels');
         this
-            .version(1)
+            .version(3)
             .stores({
                 // Store only the keys that should be indexed
-                channels: '&id,name',
+                channels: '&id',
             });
 
         this.channels = this.table('channels');
@@ -172,6 +172,7 @@ class ChannelsDatabase extends Dexie {
 export async function getChannels() {
     const db = new ChannelsDatabase();
     const friends = await db.channels.toArray();
+    friends.sort((a, b) => a.label.localeCompare(b.label, undefined, { sensitivity: 'base' }));
     return friends;
 }
 
