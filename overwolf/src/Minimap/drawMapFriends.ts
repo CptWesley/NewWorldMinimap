@@ -18,6 +18,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
     const {
         mapIconsCache,
         showText,
+        iconScale,
     } = iconParams;
 
     for (const channel of channels) {
@@ -38,12 +39,17 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
                 y: imgPos.y / zoomLevel - offset.y / zoomLevel + center.y,
             };
 
-            if (renderAsCompass) {
-                const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
-                ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
-            } else {
-                ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
-            }
+            const canvasPosition = renderAsCompass
+                ? rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle)
+                : imgPosCorrected;
+
+            ctx.beginPath();
+            ctx.ellipse(canvasPosition.x, canvasPosition.y, 5 * iconScale, 5 * iconScale, 0, 0, 2 * Math.PI);
+            ctx.fillStyle = channel.color;
+            ctx.fill();
+            ctx.strokeStyle = '#000000';
+            ctx.lineWidth = 2;
+            ctx.stroke();
 
             if (showText) {
                 ctx.textAlign = 'center';
@@ -51,14 +57,8 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
                 ctx.strokeStyle = '#000';
                 ctx.fillStyle = '#fff';
 
-                if (renderAsCompass) {
-                    const rotated = rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle);
-                    ctx.strokeText(friend.name, rotated.x, rotated.y + icon.height);
-                    ctx.fillText(friend.name, rotated.x, rotated.y + icon.height);
-                } else {
-                    ctx.strokeText(friend.name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                    ctx.fillText(friend.name, imgPosCorrected.x, imgPosCorrected.y + icon.height);
-                }
+                ctx.strokeText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
+                ctx.fillText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
             }
         }
     }
