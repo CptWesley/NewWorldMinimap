@@ -37,6 +37,13 @@ const useStyles = makeStyles()(theme => ({
         display: 'flex',
         gap: theme.spacing(1),
     },
+    colorDot: {
+        display: 'inline-block',
+        width: '0.8em',
+        height: '0.8em',
+        borderRadius: '50%',
+        marginLeft: theme.spacing(1),
+    },
 }));
 
 export default function FriendChannelSetting(props: IProps) {
@@ -130,7 +137,7 @@ export default function FriendChannelSetting(props: IProps) {
             className={clsx(sharedClasses.summary, classes.summary)}
             onClick={toggleOpen}
         >
-            {title}
+            {title} <div className={classes.colorDot} style={{ backgroundColor: displayChannel.color }} />
         </summary>
         {isOpen && <form className={classes.content}>
             {isAdding &&
