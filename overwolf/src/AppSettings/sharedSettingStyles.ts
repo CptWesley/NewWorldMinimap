@@ -68,6 +68,10 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
             background: theme.textboxFocusBackground,
             color: theme.textboxFocusColor,
         },
+
+        '&:disabled': {
+            opacity: 0.5,
+        },
     },
     textarea: {
         display: 'flex',

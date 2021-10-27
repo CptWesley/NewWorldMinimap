@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import { isEqual } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { validate as validateUuid } from 'uuid';
 import Button from '@/Button';
 import { deleteChannel, putChannel, StoredChannel, updateChannel } from '@/logic/friends';
 import { generateRandomToken } from '@/logic/util';
@@ -13,6 +14,7 @@ interface IProps {
     onChange: () => void;
     onCanceled?: () => void;
     isNew?: boolean;
+    isAdding?: boolean;
 }
 
 const useStyles = makeStyles()(theme => ({
@@ -28,7 +30,7 @@ const useStyles = makeStyles()(theme => ({
         padding: theme.spacing(1),
     },
     wide: {
-        width: 350,
+        width: 600,
         maxWidth: '100%',
     },
     buttons: {
@@ -43,6 +45,7 @@ export default function FriendChannelSetting(props: IProps) {
         onChange,
         onCanceled,
         isNew,
+        isAdding,
     } = props;
     const { t } = useTranslation();
     const { classes } = useStyles();
@@ -50,11 +53,16 @@ export default function FriendChannelSetting(props: IProps) {
 
     const [open, setOpen] = useState(false);
     const [changes, setChanges] = useState<Partial<StoredChannel>>({});
+    const [code, setCode] = useState<string>('');
 
     useEffect(() => {
         if (!open) {
             setChanges({});
         }
+    }, [open]);
+
+    useEffect(() => {
+        setCode('');
     }, [open]);
 
     const displayChannel = { ...channel, ...changes };
@@ -63,7 +71,12 @@ export default function FriendChannelSetting(props: IProps) {
         ? t('settings.friendChannels.newChannel')
         : t('settings.friendChannels.channel'));
     const inputToken = useMemo(generateRandomToken, [displayChannel.id]);
-    const canSave = displayChannel.label.length > 0 && !isEqual(channel, displayChannel);
+
+    const canSave =
+        displayChannel.label.length > 0
+        && displayChannel.id.length > 0
+        && displayChannel.psk.length > 0
+        && !isEqual(channel, displayChannel);
 
     function registerChange<TKey extends keyof StoredChannel>(key: TKey, value: StoredChannel[TKey]) {
         setChanges(c => ({ ...c, [key]: value }));
@@ -71,7 +84,7 @@ export default function FriendChannelSetting(props: IProps) {
 
     function toggleOpen(e: React.MouseEvent<HTMLElement>) {
         e.preventDefault();
-        setOpen(isNew || !open);
+        setOpen(isNew || isAdding || !open);
     }
 
     function handleCancel() {
@@ -80,7 +93,7 @@ export default function FriendChannelSetting(props: IProps) {
 
     async function handleSave(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        if (isNew) {
+        if (isNew || isAdding) {
             await putChannel(displayChannel);
         } else {
             await updateChannel(channel.id, changes);
@@ -95,7 +108,22 @@ export default function FriendChannelSetting(props: IProps) {
         onChange();
     }
 
-    const isOpen = isNew || open;
+    function handleCodeChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const next = e.currentTarget.value;
+        setCode(next);
+        const parts = next.split(':');
+        // Test for UUID and SHA256 hash
+        if (parts.length === 2 && validateUuid(parts[0]) && /^[0-9a-f]{64}$/i.test(parts[1])) {
+            registerChange('id', parts[0]);
+            registerChange('psk', parts[1]);
+        }
+    }
+
+    function copyChannelCode() {
+        overwolf.utils.placeOnClipboard(`${displayChannel.id}:${displayChannel.psk}`);
+    }
+
+    const isOpen = isNew || isAdding || open;
 
     return <details className={classes.root} open={isOpen} onSubmit={handleSave}>
         <summary
@@ -105,30 +133,21 @@ export default function FriendChannelSetting(props: IProps) {
             {title}
         </summary>
         {isOpen && <form className={classes.content}>
-            <div className={sharedClasses.setting}>
-                <p>
-                    <label htmlFor={`friend-setting-id-${inputToken}`}>{t('settings.friendChannels.channelId')}</label>
-                </p>
-                <input
-                    id={`friend-setting-id-${inputToken}`}
-                    type='text'
-                    className={clsx(sharedClasses.textbox, classes.wide)}
-                    onChange={e => registerChange('id', e.currentTarget.value)}
-                    value={displayChannel.id}
-                />
-            </div>
-            <div className={sharedClasses.setting}>
-                <p>
-                    <label htmlFor={`friend-setting-psk-${inputToken}`}>{t('settings.friendChannels.channelPsk')}</label>
-                </p>
-                <input
-                    id={`friend-setting-psk-${inputToken}`}
-                    type='text'
-                    className={clsx(sharedClasses.textbox, classes.wide)}
-                    onChange={e => registerChange('psk', e.currentTarget.value)}
-                    value={displayChannel.psk}
-                />
-            </div>
+            {isAdding &&
+                <div className={sharedClasses.setting}>
+                    <p>
+                        <label htmlFor={`friend-setting-code-${inputToken}`}>{t('settings.friendChannels.channelCode')}</label>
+                    </p>
+                    <input
+                        id={`friend-setting-code-${inputToken}`}
+                        type='text'
+                        className={clsx(sharedClasses.textbox, classes.wide)}
+                        onChange={handleCodeChange}
+                        disabled={displayChannel.id.length > 0}
+                        value={code}
+                    />
+                </div>
+            }
             <div className={sharedClasses.setting}>
                 <p>
                     <label htmlFor={`friend-setting-label-${inputToken}`}>{t('settings.friendChannels.channelLabel')}</label>
@@ -154,9 +173,12 @@ export default function FriendChannelSetting(props: IProps) {
 
             <div className={classes.buttons}>
                 <Button type='submit' disabled={!canSave}>{t('save')}</Button>
-                {isNew
-                    ? <Button onClick={handleCancel}>{t('cancel')}</Button>
-                    : <Button onClick={handleDelete}>{t('delete')}</Button>
+                {isNew || isAdding
+                    ? <Button type='button' onClick={handleCancel}>{t('cancel')}</Button>
+                    : <Button type='button' onClick={handleDelete}>{t('delete')}</Button>
+                }
+                {!(isNew || isAdding) &&
+                    <Button type='button' onClick={copyChannelCode}>{t('settings.friendChannels.copyChannel')}</Button>
                 }
             </div>
         </form>}

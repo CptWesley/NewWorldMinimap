@@ -5,6 +5,7 @@ import Dexie from 'dexie';
 import { v4 as uuidV4, validate as validateUuid } from 'uuid';
 import { getDynamicSettings } from './dynamicSettings';
 
+export const maxChannels = 10;
 const friendIdKey = 'friendId';
 const deprecatedFriendCodeKey = 'friendCode';
 export function createNewChannel(): StoredChannel {
@@ -13,6 +14,14 @@ export function createNewChannel(): StoredChannel {
         id: uuidV4(),
         label: '',
         psk: SHA256(uuidV4()).toString(),
+    };
+}
+export function createEmptyChannel(): StoredChannel {
+    return {
+        color: '#ffffff',
+        id: '',
+        label: '',
+        psk: '',
     };
 }
 

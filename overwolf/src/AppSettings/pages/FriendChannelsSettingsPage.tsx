@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Button from '@/Button';
 import GenerateIcon from '@/Icons/GenerateIcon';
-import { createNewChannel, getChannels, getFriendId, regenerateFriendId, StoredChannel } from '@/logic/friends';
+import { createEmptyChannel, createNewChannel, getChannels, getFriendId, maxChannels, regenerateFriendId, StoredChannel } from '@/logic/friends';
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
@@ -34,7 +34,8 @@ const useStyles = makeStyles()(theme => ({
         width: 300,
         maxWidth: '100%',
     },
-    addFriend: {
+    addButton: {
+        display: 'block',
         marginTop: theme.spacing(1),
     },
 }));
@@ -50,7 +51,10 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
 
     const [channels, setChannels] = useState<StoredChannel[]>();
     const [friendId, setFriendId] = useState(getFriendId());
-    const [isAddingNew, setIsAddingNew] = useState<StoredChannel | false>(false);
+    const [addingExisting, setAddingExisting] = useState<StoredChannel | false>(false);
+    const [creatingNew, setCreatingNew] = useState<StoredChannel | false>(false);
+
+    const canAddChannels = channels && channels.length < maxChannels;
 
     useEffect(() => {
         loadFriends();
@@ -77,6 +81,20 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
             </div>
             <hr />
             <p>{t('settings.friendChannels.yourChannels')}</p>
+            {addingExisting
+                ? <FriendChannelSetting
+                    onChange={() => {
+                        setAddingExisting(false);
+                        loadFriends();
+                    }}
+                    onCanceled={() => setCreatingNew(false)}
+                    channel={addingExisting}
+                    isAdding
+                />
+                : canAddChannels && <Button className={classes.addButton} onClick={() => setAddingExisting(createEmptyChannel())}>
+                    {t('settings.friendChannels.addChannel')}
+                </Button>
+            }
             {channels?.map(c =>
                 <FriendChannelSetting
                     key={c.id}
@@ -84,21 +102,18 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     channel={c}
                 />
             ) || null}
-            {isAddingNew
+            {creatingNew
                 ? <FriendChannelSetting
                     onChange={() => {
-                        setIsAddingNew(false);
+                        setCreatingNew(false);
                         loadFriends();
                     }}
-                    onCanceled={() => setIsAddingNew(false)}
-                    channel={isAddingNew}
+                    onCanceled={() => setCreatingNew(false)}
+                    channel={creatingNew}
                     isNew
                 />
-                : <Button
-                    className={classes.addFriend}
-                    onClick={() => setIsAddingNew(createNewChannel())}
-                >
-                    {t('settings.friendChannels.addChannel')}
+                : canAddChannels && <Button className={classes.addButton} onClick={() => setCreatingNew(createNewChannel())}>
+                    {t('settings.friendChannels.createChannel')}
                 </Button>
             }
             <hr />
