@@ -26,7 +26,7 @@ export function validatePlayerRequest(req: PlayerRequest): req is PlayerRequest 
         && typeof req.id === 'string'
         && validateUuid(req.id)
         && Array.isArray(req.channels)
-        && req.channels.length < maxChannels
+        && req.channels.length <= maxChannels
         && req.channels.every(c => validatePlayerChannelData(c));
 }
 
