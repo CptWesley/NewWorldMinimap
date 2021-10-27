@@ -62,8 +62,10 @@ function getPlayersResponseData(request: PlayerRequest) {
         if (!channel) { continue; }
 
         const players: PlayerData[] = [];
-        for (const mapItem of channel.values()) {
-            players.push(mapItem.data);
+        for (const [playerId, mapItem] of channel) {
+            if (playerId !== request.id) {
+                players.push(mapItem.data);
+            }
         }
 
         data.push({
