@@ -79,25 +79,24 @@
             "toggleVisible": "Zichtbaarheid in/uitschakelen",
             "toggleShowLabel": "Zichtbaarheid van tekst onder dit icoon in/uitschakelen"
         },
-        "friend": {
-            "_": "Vrienden",
-            "shareLocation": "Locatie delen met vrienden",
-            "shareLocationTooltip": "Deel je locatie met iedereen die je vriendcode heeft.",
-            "friendCode": "Jouw vriendcode",
-            "friendCodeTooltip": "Stuur deze code naar je vrienden om je locatie te delen.",
-            "friends": "Jouw vrienden",
-            "add": "Vriend toevoegen",
-            "new": "Nieuwe vriend",
-            "friendId": "Vriendcode",
-            "friendName": "Naam",
-            "friendPsk": "Pre-shared key (optioneel)",
-            "regenerate": "Genereer een nieuwe vriendcode als je niet meer wilt dat sommige mensen je kunnen volgen.",
+        "friendChannels": {
+            "_": "Vriendkanalen",
+            "shareLocation": "Deel je locatie met vrienden",
+            "shareLocationTooltip": "Deel je locatie in het spel met vrienden die in jouw kanalen zitten.",
+            "privacy": "Alle gegevens worden tijdelijk op de server opgeslagen. Gegevens worden vervangen, of verwijderd na 30 seconden. De verzonden gegevens worden alleen verstuurd naar mensen met wie je een kanaal deelt. Er worden geen gegevens verzonden wanner de optie uitgeschakeld is.",
+            "yourChannels": "Jouw kanalen",
+            "channel": "Kanaal",
+            "addChannel": "Bestaand kanaal toevoegen",
+            "createChannel": "Nieuw kanaal maken",
+            "newChannel": "Nieuw kanaal",
+            "channelCode": "Kanaalcode",
+            "channelLabel": "Label (alleen voor instellingen)",
+            "channelColor": "Kleur (voor punten op de kaart)",
+            "copyChannel": "Kanaalcode kopiëren",
             "customServerUrl": "Server endpoint URL",
             "customServerUrlTooltip": "De URL van de server waar je mee wilt verbinden. Leeg laten om gebruik te maken van de standaard server.",
-            "privacy": "Alle data wordt tijdelijk opgeslagen. Data wordt of vervangen of na 30 seconden automatisch vernietigd. De verzonden data wordt uitsluitend gebruikt om je positie door te geven aan mensen die jouw vriendcode weten. Data wordt alleen verzonden als de instelling aan staat.",
-            "unhashedFriendCode": "Je niet-gehashte vriendcode is '{{code}}'. Houd deze waarde geheim.",
-            "friendsPsk": "PSK vrienden",
-            "friendsPskTooltip": "De pre-shared key die gebruikt wordt om locatiegegevens te versleutelen. Deel deze met vrienden, zodat ze je gegevens kunnen gebruiken. Laat leeg om uit te schakelen."
+            "friendId": "Jouw vriend-ID is '{{id}}'.",
+            "regenerateId": "Genereer een nieuwe vriend-ID. Heeft geen effect, verandert alleen de ID die de server ontvangt."
         }
     }
 }

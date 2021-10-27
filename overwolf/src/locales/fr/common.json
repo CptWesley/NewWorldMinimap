@@ -75,19 +75,6 @@
             "toggleAll": "Afficher tous",
             "toggleVisible": "Basculer la visibilité",
             "toggleShowLabel": "Activer ou désactiver l'affichage de cette icône"
-        },
-        "friend": {
-            "_": "Amis",
-            "shareLocation": "Partagez votre position avec vos amis",
-            "shareLocationTooltip": "Partagez votre position dans le jeu avec chaque joueur qui possède votre code.",
-            "friendCode": "Votre code ami",
-            "friendCodeTooltip": "Envoyez ce code à vos amis pour partager votre position.",
-            "friends": "Vos amis",
-            "friendsTooltip": "Liste de vos amis. Un code ami par ligne.",
-            "regenerate": "Générez un nouveau code d'ami si vous ne voulez plus permettre à certaines personnes de vous suivre.",
-            "customServerUrl": "Noeud final de URL du serveur",
-            "customServerUrlTooltip": "Point de terminaison de l'URL du serveur auquel vous voulez vous connecter. Laissez vide pour le serveur par défaut.",
-            "privacy": "Toutes les données sont stockées temporairement. Les données sont soit remplacées par de nouvelles données, soit supprimées automatiquement après 30 secondes. Les données transmises sont uniquement utilisées pour être transmises aux personnes qui connaissent votre code ami. Les données sont transmises uniquement lorsque le paramètre est activé."
         }
     }
 }
