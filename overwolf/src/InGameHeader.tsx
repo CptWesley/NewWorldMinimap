@@ -27,7 +27,7 @@ const useStyles = makeStyles()(theme => ({
         overflow: 'hidden',
         zIndex: globalLayers.header,
 
-        '@media screen and (max-width: 149.95px)': {
+        '@media screen and (max-width: 149.95px), screen and (max-height: 79.95px)': {
             display: 'none',
         },
     },
