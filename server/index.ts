@@ -68,10 +68,12 @@ function getPlayersResponseData(request: PlayerRequest) {
             }
         }
 
-        data.push({
-            channel: channelData.channel,
-            data: players,
-        });
+        if (players.length > 0) {
+            data.push({
+                channel: channelData.channel,
+                data: players,
+            });
+        }
     }
     return data;
 }
