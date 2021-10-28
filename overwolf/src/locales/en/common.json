@@ -88,7 +88,6 @@
             "channel": "Channel",
             "addChannel": "Add existing channel",
             "createChannel": "Create new channel",
-            "newChannel": "New channel",
             "channelCode": "Code",
             "channelLabel": "Label (used for settings only)",
             "channelColor": "Color (used for map icons)",

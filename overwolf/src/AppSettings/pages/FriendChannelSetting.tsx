@@ -26,6 +26,9 @@ const useStyles = makeStyles()(theme => ({
     summary: {
         marginBottom: 0,
     },
+    disabledSummary: {
+        background: 'transparent !important',
+    },
     content: {
         padding: theme.spacing(1),
     },
@@ -70,9 +73,10 @@ export default function FriendChannelSetting(props: IProps) {
 
     const displayChannel = { ...channel, ...changes };
 
-    const title = displayChannel.label || (isNew
-        ? t('settings.friendChannels.newChannel')
-        : t('settings.friendChannels.channel'));
+    const title = displayChannel.label
+        || (isNew && t('settings.friendChannels.createChannel'))
+        || (isAdding && t('settings.friendChannels.addChannel'))
+        || t('settings.friendChannels.channel');
     const inputToken = useMemo(generateRandomToken, [displayChannel.id]);
 
     const canSave =
@@ -127,10 +131,11 @@ export default function FriendChannelSetting(props: IProps) {
     }
 
     const isOpen = isNew || isAdding || open;
+    const disableToggleOpen = isNew || isAdding;
 
     return <details className={classes.root} open={isOpen} onSubmit={handleSave}>
         <summary
-            className={clsx(sharedClasses.summary, classes.summary)}
+            className={clsx(sharedClasses.summary, classes.summary, disableToggleOpen && classes.disabledSummary)}
             onClick={toggleOpen}
         >
             {title} <div className={classes.colorDot} style={{ backgroundColor: displayChannel.color }} />

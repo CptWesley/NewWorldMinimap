@@ -88,7 +88,6 @@
             "channel": "Kanaal",
             "addChannel": "Bestaand kanaal toevoegen",
             "createChannel": "Nieuw kanaal maken",
-            "newChannel": "Nieuw kanaal",
             "channelCode": "Kanaalcode",
             "channelLabel": "Label (alleen voor instellingen)",
             "channelColor": "Kleur (voor punten op de kaart)",
