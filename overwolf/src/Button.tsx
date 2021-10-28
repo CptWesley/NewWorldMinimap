@@ -9,7 +9,7 @@ const useStyles = makeStyles()(theme => ({
         borderColor: theme.buttonBorderColor,
         borderRadius: 40,
         color: theme.buttonColor,
-        padding: theme.spacing(1, 2),
+        padding: theme.spacing(0.5, 2),
         fontFamily: theme.bodyFontFamily,
         fontSize: theme.bodyFontSize,
 
@@ -25,6 +25,12 @@ const useStyles = makeStyles()(theme => ({
         '&:active': {
             background: theme.buttonBackgroundPress,
             borderColor: theme.buttonBorderColorPress,
+        },
+
+        '&:disabled': {
+            background: theme.buttonBackground,
+            border: '2px solid',
+            opacity: 0.5,
         },
     },
 }));

@@ -1,6 +1,9 @@
 {
     "lng": "English",
     "close": "Close",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
     "selectAll": "Select all",
     "deselectAll": "Deselect all",
     "header": {
@@ -77,18 +80,23 @@
             "toggleVisible": "Toggle visibility",
             "toggleShowLabel": "Toggle whether this icon's label is shown"
         },
-        "friend": {
-            "_": "Friends",
+        "friendChannels": {
+            "_": "Friend channels",
             "shareLocation": "Share location with friends",
-            "shareLocationTooltip": "Share your in-game location with any player that has your code.",
-            "friendCode": "Your friend code",
-            "friendCodeTooltip": "Send this code to your friends to share your location.",
-            "friends": "Your friends",
-            "friendsTooltip": "List of your friends. One friend code per line.",
-            "regenerate": "Generate a new friend code if you don't want to let certain people trace you any longer.",
+            "shareLocationTooltip": "Share your in-game location with players you share a channel with.",
+            "privacy": "All data is stored on the server temporarily. Data is either replaced by new data, or deleted automatically after 30 seconds. The transmitted data is only sent to people in the same channels as you. No data is sent when the option is disabled.",
+            "yourChannels": "Your channels",
+            "channel": "Channel",
+            "addChannel": "Add existing channel",
+            "createChannel": "Create new channel",
+            "channelCode": "Code",
+            "channelLabel": "Label (used for settings only)",
+            "channelColor": "Color (used for map icons)",
+            "copyChannel": "Copy channel code",
             "customServerUrl": "Server endpoint URL",
             "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server.",
-            "privacy": "All data is stored temporarily. Data is either replaced by new data or deleted automatically after 30 seconds. The transmitted data is solely used to be transmitted to people that know your friend code. Data is only sent when the setting is enabled."
+            "friendId": "Your friend ID is '{{id}}'.",
+            "regenerateId": "Generate a new friend ID. Does not affect operations, only the ID that the server receives."
         }
     }
 }

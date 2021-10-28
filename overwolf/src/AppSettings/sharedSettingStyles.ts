@@ -28,6 +28,11 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
             margin: theme.spacing(0, 1, 0, 0),
         },
     },
+    color: {
+        '& > input[type="color"]': {
+            margin: theme.spacing(0, 1, 0, 0),
+        },
+    },
     range: {
         '& > input[type="range"]': {
             margin: theme.spacing(0, 1, 0, 0),
@@ -44,8 +49,28 @@ export const useSharedSettingsStyles = makeStyles()(theme => ({
         },
     },
     textbox: {
-        '& > input[type="text"]': {
-            margin: theme.spacing(0, 1, 0, 0),
+        fontFamily: theme.bodyFontFamily,
+        fontSize: typeof theme.bodyFontSize === 'number'
+            ? theme.bodyFontSize - 1
+            : `calc(${theme.bodyFontSize} - 1px)`,
+        border: `1px solid ${theme.textboxBorderColor}`,
+        borderRadius: theme.borderRadiusSmall,
+        background: theme.textboxBackground,
+        color: theme.textboxColor,
+        padding: '3px 6px',
+
+        '&:hover': {
+            background: theme.textboxHoverBackground,
+        },
+
+        '&:focus': {
+            outline: 'none',
+            background: theme.textboxFocusBackground,
+            color: theme.textboxFocusColor,
+        },
+
+        '&:disabled': {
+            opacity: 0.5,
         },
     },
     textarea: {

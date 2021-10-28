@@ -67,16 +67,6 @@
       },
       "icon": {
          "_": "Ikoner"
-      },
-      "friend": {
-         "_": "Venner",
-         "shareLocation": "Del placering med venner",
-         "shareLocationTooltip": "Del din placering i spillet med enhver spiller, som har din kode.",
-         "friendCode": "Din vennekode",
-         "friendCodeTooltip": "Send denne kode til dine venner for at dele din placering.",
-         "friends": "Dine venner",
-         "friendsTooltip": "Liste af dine venner. Én vennekode pr. linje.",
-         "regenerate": "Generer en ny vennekode, hvis du ikke vil lade bestemte personer følge dig."
       }
    }
 }

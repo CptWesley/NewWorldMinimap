@@ -9,7 +9,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
-import { getFriendCode, updateFriendLocation } from './logic/friends';
+import { FriendData, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
@@ -131,33 +131,16 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, getFriendCode(),
-                playerName.current, pos, appContext.settings.friends);
-            sharedLocation.then(r => {
-                if (r !== undefined) {
-                    setFriends(r.friends);
-                } else {
-                    setFriends([]);
-                }
-            });
+            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, playerName.current, pos);
+            sharedLocation.then(setFriends);
         }
 
         store('lastKnownPosition', pos);
         setPlayerPosition(pos);
     }
 
-    function setFriends(friends: FriendData[]) {
-        if (friends.length === currentFriends.current.length) {
-            for (const key in friends) {
-                if (friends[key].name === currentFriends.current[key].name
-                    && friends[key].location.x === currentFriends.current[key].location.x
-                    && friends[key].location.y === currentFriends.current[key].location.y) {
-                    return;
-                }
-            }
-        }
-
-        currentFriends.current = friends;
+    function setFriends(channels: undefined | FriendData[]) {
+        currentFriends.current = channels ?? [];
         redraw(true);
     }
 

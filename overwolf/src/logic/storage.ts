@@ -29,7 +29,6 @@ export const simpleStorageDefaultSettings = {
     animationInterpolation: 'cosine' as AnimationInterpolation,
     extrapolateLocation: false,
     shareLocation: false,
-    friends: '',
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
     friendServerUrl: '',
@@ -74,7 +73,6 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'animationInterpolation',
     'extrapolateLocation',
     'resamplingRate',
-    'friendServerUrl',
 ];
 
 export const iconSettingStorageScope = 'icon';

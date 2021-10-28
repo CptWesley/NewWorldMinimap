@@ -9,7 +9,7 @@ import CloseOIcon from '@/Icons/CloseOIcon';
 import LanguagePicker from '@/LanguagePicker';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
-import FriendSettingsPage from './pages/FriendSettingsPage';
+import FriendSettingsPage from './pages/FriendChannelsSettingsPage';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
@@ -166,6 +166,8 @@ const useStyles = makeStyles()(theme => {
         },
         bottomRightMenu: {
             display: 'flex',
+            alignItems: 'center',
+            flexShrink: 0,
             gap: theme.spacing(1),
         },
     };
@@ -175,14 +177,14 @@ const settingsPageMap = {
     window: WindowSettingsPage,
     overlay: OverlaySettingsPage,
     icon: IconSettingsPage,
-    friend: FriendSettingsPage,
+    friendChannels: FriendSettingsPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
     'window',
     'overlay',
     'icon',
-    'friend',
+    'friendChannels',
 ];
 
 export default function AppSettings(props: IProps) {

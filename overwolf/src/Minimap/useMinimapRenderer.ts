@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
+import { FriendData } from '@/logic/friends';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
 import { getTileCache } from '@/logic/tileCache';

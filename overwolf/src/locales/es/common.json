@@ -70,18 +70,6 @@
             "toggleAll": "Activar todos",
             "toggleVisible": "Activar visibilidad",
             "toggleShowLabel": "Activar íconos que tengan el nombre visible"
-        },
-        "friend": {
-            "_": "Amigos",
-            "shareLocation": "Comparte la ubicación con tus amigos",
-            "shareLocationTooltip": "Comparte tu ubicación con las personas a las que le compartas tu código",
-            "friendCode": "Código de tu amigo",
-            "friendCodeTooltip": "Comparte este código con tus amigos para que vean tu ubicación.",
-            "friends": "Tus amigos",
-            "friendsTooltip": "Lista de tus amigos. Uno por linea.",
-            "regenerate": "Genera un nuevo código si quieres dejar de compartir tu ubicación con las personas que ya tienen tu código.",
-            "customServerUrl": "URL del servidor",
-            "customServerUrlTooltip": "La URL del endpoint al que deseas conectarte. Déjelo en blanco para user el servidor predeterminado."
         }
     }
 }

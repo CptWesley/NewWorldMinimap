@@ -75,18 +75,6 @@
             "toggleAll": "(Dez)activează tot",
             "toggleVisible": "(Dez)activează vizibilitatea",
             "toggleShowLabel": "(Dez)activează eticheta pictogramei"
-        },
-        "friend": {
-            "_": "Prieteni",
-            "shareLocation": "Trimite locația prietenilor",
-            "shareLocationTooltip": "Trimite locația ta din joc oricărui jucător care are codul tău.",
-            "friendCode": "Codul prietenului tău",
-            "friendCodeTooltip": "Trimite acest cod prietenilor tăi ca să le trimiți locația ta.",
-            "friends": "Prietenii tăi",
-            "friendsTooltip": "Lista prietenilor tăi. Un cod al unui prieten pe linie.",
-            "regenerate": "Genrează un cod nou al unui prieten dacă vrei ca diverși oameni să nu îți mai poată accesa datele.",
-            "customServerUrl": "Server endpoint URL",
-            "customServerUrlTooltip": "URL-ul pentru server endpoint la care vrei să te conectezi. Lasă necompletat pentru serverul standard."
         }
     }
 }

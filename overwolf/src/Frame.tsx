@@ -124,6 +124,9 @@ export default function Frame(props: IProps) {
         <AppContext.Provider value={appContextValue}>
             <GlobalStyles
                 styles={{
+                    '* ': {
+                        boxSizing: 'border-box',
+                    },
                     body: {
                         fontFamily: theme.bodyFontFamily,
                         fontSize: theme.bodyFontSize,

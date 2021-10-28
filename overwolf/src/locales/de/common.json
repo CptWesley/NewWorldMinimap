@@ -65,16 +65,6 @@
     },
     "icon": {
       "_": "Icons"
-    },
-    "friend": {
-      "_": "Freunde",
-      "shareLocation": "Standort mit Freunden teilen",
-      "shareLocationTooltip": "Teilt deinen In-Game Standort mit jedem Spieler der deinen Code hat.",
-      "friendCode": "Dein Freundescode",
-      "friendCodeTooltip": "Schick diesen Code deinen Freunden um deinen Standort zu teilen.",
-      "friends": "Deine Freunde",
-      "friendsTooltip": "Liste deiner Freunde. Ein Freundescode pro Zeile.",
-      "regenerate": "Generiert einen neuen Freundescode, wenn du deinen Standort nicht mehr Teilen willst"
     }
   }
 }
