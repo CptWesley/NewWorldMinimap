@@ -35,7 +35,6 @@ export function loadAppContextSettings(): AppContextSettings {
         resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
         friendServerUrl: load('friendServerUrl'),
-        friendsPsk: load('friendsPsk'),
     };
 }
 

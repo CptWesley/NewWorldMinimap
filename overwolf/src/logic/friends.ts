@@ -8,6 +8,7 @@ import { getDynamicSettings } from './dynamicSettings';
 export const maxChannels = 10;
 const friendIdKey = 'friendId';
 const deprecatedFriendCodeKey = 'friendCode';
+const deprecatedFriendPskKey = 'friendsPsk';
 export function createNewChannel(): StoredChannel {
     return {
         color: '#ffffff',
@@ -26,6 +27,7 @@ export function createEmptyChannel(): StoredChannel {
 }
 
 localStorage.removeItem(deprecatedFriendCodeKey);
+localStorage.removeItem(deprecatedFriendPskKey);
 
 export type FriendData = {
     name: string,

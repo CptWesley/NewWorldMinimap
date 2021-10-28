@@ -32,7 +32,6 @@ export const simpleStorageDefaultSettings = {
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
     friendServerUrl: '',
-    friendsPsk: '',
 };
 
 {
