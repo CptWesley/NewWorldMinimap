@@ -288,7 +288,7 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
-        (window as any).setFriendChannels = setFriends;
+        (window as any).setFriends = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
