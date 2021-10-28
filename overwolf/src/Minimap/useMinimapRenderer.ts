@@ -74,7 +74,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const mapPositionOverride = useRef<Vector2>();
 
-    const currentFriendChannels = useRef<FriendData[]>([]);
+    const currentFriends = useRef<FriendData[]>([]);
 
     function automaticTownZoom(playerPosition: Vector2) {
         let nextZoomLevel = appContext.settings.zoomLevel;
@@ -167,7 +167,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
-        drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriendChannels.current);
+        drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
         drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
 
@@ -280,7 +280,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
     }, updateOn);
 
     return {
-        currentFriendChannels,
+        currentFriends,
         currentPlayerPosition: currentPlayerPosition as { readonly current: Readonly<Vector2> },
         currentPlayerAngle: currentPlayerAngle as { readonly current: Readonly<number> },
         lastDrawParameters: lastDrawParameters as { readonly current: undefined | Readonly<LastDrawParameters> },

@@ -118,7 +118,7 @@ export default function Minimap(props: IProps) {
     }
 
     const {
-        currentFriendChannels,
+        currentFriends,
         currentPlayerPosition,
         currentPlayerAngle,
         lastDrawParameters,
@@ -132,15 +132,15 @@ export default function Minimap(props: IProps) {
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
             const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, playerName.current, pos);
-            sharedLocation.then(setFriendChannels);
+            sharedLocation.then(setFriends);
         }
 
         store('lastKnownPosition', pos);
         setPlayerPosition(pos);
     }
 
-    function setFriendChannels(channels: undefined | FriendData[]) {
-        currentFriendChannels.current = channels ?? [];
+    function setFriends(channels: undefined | FriendData[]) {
+        currentFriends.current = channels ?? [];
         redraw(true);
     }
 
@@ -288,7 +288,7 @@ export default function Minimap(props: IProps) {
         // Expose the setPosition and getMarkers window on the global Window object
         (window as any).setPosition = setPosition;
         (window as any).getMarkers = getMarkers;
-        (window as any).setFriendChannels = setFriendChannels;
+        (window as any).setFriendChannels = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
             setPosition(info.position);
