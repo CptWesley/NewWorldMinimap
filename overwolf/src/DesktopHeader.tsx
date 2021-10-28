@@ -38,6 +38,16 @@ const useStyles = makeStyles()(theme => ({
         display: 'flex',
         alignItems: 'center',
         paddingLeft: theme.spacing(1),
+        minWidth: 0,
+
+        '& > *': {
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+        },
+    },
+    buttons: {
+        flexShrink: 0,
     },
     controlButton: {
         width: 42,
@@ -133,23 +143,25 @@ export default function DesktopHeader() {
         <div ref={draggable} className={classes.draggable} onDoubleClick={handleMaximizeRestore}>
             <span>{desktopAppTitle}</span>
         </div>
-        {context.gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow} title={t('header.openInGame')}>
-            <DesktopWindowIcon />
-        </button>}
-        <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu} title={t('header.settings')}>
-            <SettingsIcon />
-        </button>
-        <button className={clsx(classes.controlButton)} onClick={handleMinimize}>
-            <Minimizeicon />
-        </button>
-        <button className={clsx(classes.controlButton)} onClick={handleMaximizeRestore}>
-            {maximized
-                ? <RestoreIcon />
-                : <MaximizeIcon />
-            }
-        </button>
-        <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
-            <CloseIcon />
-        </button>
+        <div className={classes.buttons}>
+            {context.gameRunning && <button className={clsx(classes.controlButton)} onClick={handleShowInGameWindow} title={t('header.openInGame')}>
+                <DesktopWindowIcon />
+            </button>}
+            <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu} title={t('header.settings')}>
+                <SettingsIcon />
+            </button>
+            <button className={clsx(classes.controlButton)} onClick={handleMinimize}>
+                <Minimizeicon />
+            </button>
+            <button className={clsx(classes.controlButton)} onClick={handleMaximizeRestore}>
+                {maximized
+                    ? <RestoreIcon />
+                    : <MaximizeIcon />
+                }
+            </button>
+            <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
+                <CloseIcon />
+            </button>
+        </div>
     </header>;
 }

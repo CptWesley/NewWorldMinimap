@@ -26,6 +26,7 @@
     "settings": {
         "title": "Instellingen",
         "open": "Open dit scherm wanneer u wilt door op de kaart op de rechter muisknop te klikken.",
+        "tooSmall": "Maak dit venster groter om de instellingen te gebruiken.",
         "advanced": "Geavanceerde Instellingen",
         "advancedTooltip": "Instellingen voor geavanceerde gebruikers. Verander ze alleen als je weet wat je doet.",
         "window": {
