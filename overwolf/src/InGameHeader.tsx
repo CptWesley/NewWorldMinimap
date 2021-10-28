@@ -26,6 +26,10 @@ const useStyles = makeStyles()(theme => ({
         flexShrink: 0,
         overflow: 'hidden',
         zIndex: globalLayers.header,
+
+        '@media screen and (max-width: 149.95px), screen and (max-height: 79.95px)': {
+            display: 'none',
+        },
     },
     transparent: {
         background: 'rgba(0, 0, 0, 0.01)',
@@ -40,10 +44,20 @@ const useStyles = makeStyles()(theme => ({
         alignItems: 'center',
         paddingLeft: theme.spacing(1),
         cursor: 'move',
+        minWidth: 0,
+
+        '& > *': {
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+        },
     },
     hotkey: {
         marginLeft: '0.5em',
         opacity: 0.5,
+    },
+    buttons: {
+        flexShrink: 0,
     },
     controlButton: {
         width: 42,
@@ -209,18 +223,22 @@ export default function InGameHeader() {
     return <>
         <header className={clsx(classes.root, useTransparency && classes.transparent, !context.settings.showHeader && classes.hidden)}>
             <div ref={draggable} className={classes.draggable}>
-                <span>{inGameAppTitle}</span>
-                {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}
+                <span>
+                    <span>{inGameAppTitle}</span>
+                    {hotkeyText && <span className={classes.hotkey}>({hotkeyText})</span>}
+                </span>
             </div>
-            <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow} title={t('header.openDesktop')}>
-                <DesktopWindowIcon />
-            </button>
-            <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>
-                <SettingsIcon />
-            </button>
-            <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
-                <CloseIcon />
-            </button>
+            <div className={classes.buttons}>
+                <button className={clsx(classes.controlButton)} onClick={handleShowDesktopWindow} title={t('header.openDesktop')}>
+                    <DesktopWindowIcon />
+                </button>
+                <button className={clsx(classes.controlButton)} onClick={context.toggleFrameMenu}>
+                    <SettingsIcon />
+                </button>
+                <button className={clsx(classes.controlButton, classes.close)} onClick={handleClose}>
+                    <CloseIcon />
+                </button>
+            </div>
         </header>
         <div className={clsx(classes.resize, 'n')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.Top)} />
         <div className={clsx(classes.resize, 'nw')} onMouseDown={createHandleDragTop(overwolf.windows.enums.WindowDragEdge.TopLeft)} />

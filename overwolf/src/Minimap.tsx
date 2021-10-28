@@ -160,7 +160,7 @@ export default function Minimap(props: IProps) {
             const zoomLevel = town.distance <= townZoomDistance ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
 
             let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
-            if (appContext.settings.compassMode) {
+            if (appContext.settings.compassMode && (appContext.isTransparentSurface ?? false)) {
                 worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
             }
             const currentTarget = getNavTarget();

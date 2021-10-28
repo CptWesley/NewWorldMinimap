@@ -29,6 +29,7 @@
     "settings": {
         "title": "Settings",
         "open": "Open this menu at any time by right-clicking.",
+        "tooSmall": "Make this window larger to access settings.",
         "advanced": "Advanced Settings",
         "advancedTooltip": "Settings for advanced users. Only change them if you know what you are doing.",
         "window": {
