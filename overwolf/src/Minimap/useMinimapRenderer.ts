@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
-import { ChannelData } from '@/logic/friends';
+import { FriendData } from '@/logic/friends';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
 import { getTileCache } from '@/logic/tileCache';
@@ -74,7 +74,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
     const mapPositionOverride = useRef<Vector2>();
 
-    const currentFriendChannels = useRef<ChannelData[]>([]);
+    const currentFriendChannels = useRef<FriendData[]>([]);
 
     function automaticTownZoom(playerPosition: Vector2) {
         let nextZoomLevel = appContext.settings.zoomLevel;

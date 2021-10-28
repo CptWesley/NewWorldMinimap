@@ -9,7 +9,7 @@ import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
-import { ChannelData, updateFriendLocation } from './logic/friends';
+import { FriendData, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
 import { getMarkers } from './logic/markers';
@@ -139,7 +139,7 @@ export default function Minimap(props: IProps) {
         setPlayerPosition(pos);
     }
 
-    function setFriendChannels(channels: undefined | ChannelData[]) {
+    function setFriendChannels(channels: undefined | FriendData[]) {
         currentFriendChannels.current = channels ?? [];
         redraw(true);
     }

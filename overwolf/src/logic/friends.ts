@@ -27,15 +27,10 @@ export function createEmptyChannel(): StoredChannel {
 
 localStorage.removeItem(deprecatedFriendCodeKey);
 
-type SharedPlayerData = {
+export type FriendData = {
     name: string,
     location: Vector2,
-}
-
-export type ChannelData = {
-    channel: string,
-    players: SharedPlayerData[],
-    color: string,
+    colors: string[],
 }
 
 type PlainTextPlayerData = {
@@ -78,7 +73,7 @@ export type StoredChannel = {
     color: string,
 }
 
-export async function updateFriendLocation(server: string, name: string, location: Vector2): Promise<undefined | ChannelData[]> {
+export async function updateFriendLocation(server: string, name: string, location: Vector2): Promise<undefined | FriendData[]> {
     let url = server.trim();
 
     if (!url || url.length === 0) {
@@ -119,12 +114,19 @@ export async function updateFriendLocation(server: string, name: string, locatio
         });
         const response = await req.json();
         if (validatePlayerResponse(response as PlayerResponse)) {
-            const channelData: ChannelData[] = [];
+            const friendData: FriendData[] = [];
+            function addFriend(player: PlainTextPlayerData, channel: StoredChannel) {
+                let friend = friendData.find(fd => fd.name === player.n);
+                if (!friend) {
+                    friend = { colors: [], location: { x: player.l.x, y: player.l.y }, name: player.n };
+                    friendData.push(friend);
+                }
+                friend.colors.push(channel.color);
+            }
 
             for (const channelDatum of (response as PlayerResponse).channels) {
                 const originalChannel = channels.find(c => c.id === channelDatum.channel);
                 if (!originalChannel) { continue; }
-                const players: SharedPlayerData[] = [];
                 for (const playerData of channelDatum.data) {
                     if (playerData.type === 'psk') {
                         try {
@@ -132,21 +134,16 @@ export async function updateFriendLocation(server: string, name: string, locatio
                             if (!decryptedData) { continue; }
                             const deserialized = JSON.parse(decryptedData);
                             if (validatePlayerDataPlain(deserialized)) {
-                                players.push({ name: deserialized.n, location: { x: deserialized.l.x, y: deserialized.l.y } });
+                                addFriend(deserialized, originalChannel);
                             }
                         } catch {
                             // Just don't add
                         }
                     }
                 }
-                channelData.push({
-                    channel: channelDatum.channel,
-                    color: originalChannel.color,
-                    players,
-                });
             }
 
-            return channelData;
+            return friendData;
         }
     } catch { }
 
