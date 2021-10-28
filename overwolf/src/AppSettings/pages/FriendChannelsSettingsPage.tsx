@@ -87,7 +87,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                         setAddingExisting(false);
                         loadFriends();
                     }}
-                    onCanceled={() => setCreatingNew(false)}
+                    onCanceled={() => setAddingExisting(false)}
                     channel={addingExisting}
                     isAdding
                 />
