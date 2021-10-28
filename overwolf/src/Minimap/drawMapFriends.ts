@@ -3,6 +3,8 @@ import { toMinimapCoordinate } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
+const sliceRotationOffset = -Math.PI / 2;
+
 export default function drawMapFriends(params: MapRendererParameters, iconParams: MapIconRendererParameters, friends: FriendData[]) {
     const {
         context: ctx,
@@ -48,7 +50,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         const ellipseSteps = friend.colors.length;
         const ellipseSegmentSize = 2 * Math.PI / ellipseSteps;
         for (let segment = 0; segment < ellipseSteps; ++segment) {
-            const segmentStart = segment * ellipseSegmentSize;
+            const segmentStart = segment * ellipseSegmentSize + sliceRotationOffset;
             const segmentEnd = segmentStart + ellipseSegmentSize;
             ctx.beginPath();
             ctx.moveTo(canvasPosition.x, canvasPosition.y); // center point
