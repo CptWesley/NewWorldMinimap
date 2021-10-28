@@ -68,10 +68,6 @@ export default function FriendChannelSetting(props: IProps) {
         }
     }, [open]);
 
-    useEffect(() => {
-        setCode('');
-    }, [open]);
-
     const displayChannel = { ...channel, ...changes };
 
     const title = displayChannel.label || (isNew
