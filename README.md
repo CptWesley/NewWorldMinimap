@@ -78,7 +78,8 @@ Looking for the legacy C# app? You can find it [here](https://github.com/CptWesl
 ## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
 - You now have 4 options:
-  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
+  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.  
+    <a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank"><img src="https://overwolf.github.io/docs/assets/GetItOnOW-Dark.png" style="height: 33px"></a>
   - Get the latest release available from the [releases page](https://github.com/CptWesley/NewWorldMinimap/releases). These are the latest releases that might not have yet been inspected by the Overwolf QA team.
   - Get the latest build artifact [here](https://nightly.link/CptWesley/NewWorldMinimap/workflows/overwolf/master/app-artifact.zip). These builds are automatically created and might be very unstable, but will contain the newest features.
     - Download the `app-artifact.zip` at the bottom of the page. This `.zip` will contain the produced `.opk` file.
