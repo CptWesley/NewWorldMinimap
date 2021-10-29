@@ -12,6 +12,8 @@ Minimap for [Amazon's New World](https://www.newworld.com/).
 The application uses [Overwolf's](https://www.overwolf.com/) approved API for getting character positions.
 It then utilizes data obtained from [StudioLoot's New World Interactive Map](https://www.newworld-map.com/) to render all objects of interest around the player.
 
+Get it from the <a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank">Overwolf Appstore</a> or see the [installation instructions](https://github.com/CptWesley/NewWorldMinimap#installation-and-usage) below.
+
 Join the [Discord](https://discord.gg/dCgStTDaet)!
 
 Looking for the legacy C# app? You can find it [here](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet)!
