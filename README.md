@@ -5,7 +5,7 @@
 
 <a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank"><img src="https://overwolf.github.io/docs/assets/GetItOnOW-Dark.png" style="height: 66px"></a>
 
-[![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet) 
+<a href="https://discord.gg/dCgStTDaet" target="_blank"><img src="https://img.shields.io/discord/895561413819498556" alt="Discord" ></a>
 <a href="https://www.buymeacoffee.com/cptwesley" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 20px;width: 102px" ></a>
 
 Minimap for [Amazon's New World](https://www.newworld.com/).
