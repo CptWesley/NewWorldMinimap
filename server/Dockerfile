@@ -4,7 +4,7 @@ FROM node@sha256:8f1827381eb7fca5a79ad21cb42e935546bedf67d9f668519a7db69d77d812b
 
 WORKDIR /server-build
 
-COPY server .
+COPY . .
 
 RUN ls -al && yarn &&  \
     yarn build
@@ -18,7 +18,7 @@ WORKDIR /home/node/app
 ENV NODE_ENV=production
 
 COPY --from=build --chown=node:node /server-build/build dist/.
-COPY --chown=node:node server/package.json server/yarn.lock ./
+COPY --chown=node:node package.json yarn.lock ./
 
 RUN yarn &&  \
     find . -type f -exec chmod 644 {} \; &&  \
