@@ -151,4 +151,4 @@ The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMin
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
 
 ## Support Me
-Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley) ! But don't feel obliged to!
+Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley)! But don't feel obliged to!
