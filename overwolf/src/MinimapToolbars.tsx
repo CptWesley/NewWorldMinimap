@@ -107,14 +107,16 @@ export default function MinimapToolbars(props: IProps) {
                 </MinimapToolbarIconButton>
             </MinimapToolbar>
         }
-        {NWMM_APP_WINDOW === 'desktop' &&
+        {NWMM_APP_WINDOW === 'desktop' && (appContext.settings.showToolbar || isMapDragged) &&
             <MinimapToolbar className={classes.mapControls}>
-                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
-                    <ZoomInIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
-                    <ZoomOutIcon />
-                </MinimapToolbarIconButton>
+                {appContext.settings.showToolbar && <>
+                    <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
+                        <ZoomInIcon />
+                    </MinimapToolbarIconButton>
+                    <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
+                        <ZoomOutIcon />
+                    </MinimapToolbarIconButton>
+                </>}
                 {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
                     <RecenterIcon />
                 </MinimapToolbarIconButton>}
