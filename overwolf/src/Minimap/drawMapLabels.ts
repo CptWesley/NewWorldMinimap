@@ -64,14 +64,14 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
     for (let i = markers.length - 1; i >= 0; --i) {
         const m = markers[i];
 
-        const catSettings = lastDrawCache.iconRendererParams.settings?.categories[m.category];
+        const catSettings = lastDrawCache.iconRendererParams.settings.categories[m.category];
         if (!catSettings || !catSettings.visible) {
-            return;
+            continue;
         }
 
         const typeSettings = catSettings.types[m.type];
         if (typeSettings && !typeSettings.visible) {
-            return;
+            continue;
         }
 
         const mapPos = toMinimapCoordinate(
@@ -83,7 +83,7 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
             1);
         const icon = lastDrawCache.iconRendererParams.mapIconsCache.getIcon(m.type, m.category);
         if (!icon) {
-            return;
+            continue;
         }
         const imgPosCorrected = {
             x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
