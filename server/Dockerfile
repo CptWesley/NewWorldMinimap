@@ -1,3 +1,6 @@
+# Node image: 16.13.0-alpine3.13
+# Digest: 8f1827381eb7fca5a79ad21cb42e935546bedf67d9f668519a7db69d77d812bf
+
 # 1. Build the TypeScript app in one container.
 
 FROM node@sha256:8f1827381eb7fca5a79ad21cb42e935546bedf67d9f668519a7db69d77d812bf as build
