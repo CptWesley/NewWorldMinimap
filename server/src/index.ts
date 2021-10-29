@@ -179,6 +179,6 @@ app.listen(port, () => {
     setInterval(function () {
         evictPlayersData();
         deprecatedEvictPlayersData();
-        console.log(`Currently are stored ${channels.size} channels (${deprecatedOnlinePlayers.size} legacy)`);
+        console.log(`Currently are stored ${channels.size} channels (${deprecatedOnlinePlayers.size} legacy friends)`);
     }, 5000);
 });
