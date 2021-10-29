@@ -17,7 +17,7 @@ WORKDIR /home/node/app
 
 ENV NODE_ENV=production
 
-COPY --from=build --chown=node:node /server-build/build .
+COPY --from=build --chown=node:node /server-build/build dist/.
 COPY --chown=node:node server/package.json server/yarn.lock ./
 
 RUN yarn &&  \
@@ -27,4 +27,4 @@ RUN yarn &&  \
 
 USER node
 
-CMD ["node", "index.js"]
+CMD ["node", "dist/index.js"]
