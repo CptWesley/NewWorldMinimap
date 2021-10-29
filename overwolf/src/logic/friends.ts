@@ -80,8 +80,8 @@ export async function updateFriendLocation(server: string, name: string, locatio
 
     if (!url || url.length === 0) {
         const settings = getDynamicSettings();
-        if (settings && settings.friendServerEndpoint) {
-            url = settings.friendServerEndpoint;
+        if (settings && settings.channelsServerEndpoint) {
+            url = settings.channelsServerEndpoint;
         }
     }
 
