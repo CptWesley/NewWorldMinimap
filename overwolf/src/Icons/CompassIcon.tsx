@@ -2,17 +2,23 @@ import React from 'react';
 
 export default function CompassIcon() {
     return (
-        <svg viewBox='0 0 30 30' stroke='currentColor' fill='none' strokeWidth='1' >
+        <svg viewBox='0 0 30 30' stroke='currentColor' fill='none' strokeWidth='1' transform='rotate(25)'>
             <circle
-                r='10.5'
+                r='13'
                 cy='15'
                 cx='15'
             />
             <path
-                d='m 15,7 -3,7.5 h 6 z'
+                d='m 15,6 -4,9 4,9 4,-9 z'
             />
             <path
-                d='m 15,23 -3,-7.5 h 6 z'
+                d='M 11,15 H 15 V 25 Z'
+                stroke='none'
+                fill='currentColor'
+            />
+            <path
+                d='M 19,15 H 15 V 5 Z'
+                stroke='none'
                 fill='currentColor'
             />
         </svg>
