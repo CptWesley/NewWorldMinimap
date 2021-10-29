@@ -1,16 +1,22 @@
-[![Discord](https://img.shields.io/discord/895561413819498556)](https://discord.gg/dCgStTDaet)  
-<a href="https://www.buymeacoffee.com/cptwesley" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 20px;width: 102px" ></a>  
-
-Looking for the legacy C# app? You can find it [here](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet)!
 
 <img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/logo.png?raw=true" width="128" height="128">
 
 # CptWesley's Minimap
+
+<a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank"><img src="https://overwolf.github.io/docs/assets/GetItOnOW-Dark.png" style="height: 66px"></a>
+
+<a href="https://discord.gg/dCgStTDaet" target="_blank"><img src="https://img.shields.io/discord/895561413819498556" alt="Discord" ></a>
+<a href="https://www.buymeacoffee.com/cptwesley" target="_blank"><img src="https://www.buymeacoffee.com/assets/img/custom_images/yellow_img.png" alt="Buy Me A Coffee" style="height: 20px;width: 102px" ></a>
+
 Minimap for [Amazon's New World](https://www.newworld.com/).
 The application uses [Overwolf's](https://www.overwolf.com/) approved API for getting character positions.
 It then utilizes data obtained from [StudioLoot's New World Interactive Map](https://www.newworld-map.com/) to render all objects of interest around the player.
 
+Get it from the <a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank">Overwolf Appstore</a> or see the [installation instructions](https://github.com/CptWesley/NewWorldMinimap#installation-and-usage) below.
+
 Join the [Discord](https://discord.gg/dCgStTDaet)!
+
+Looking for the legacy C# app? You can find it [here](https://github.com/CptWesley/NewWorldMinimap/tree/master/dotnet)!
 
 ## Table of Contents
 - [Current Features](https://github.com/CptWesley/NewWorldMinimap#current-features)
@@ -63,18 +69,19 @@ Join the [Discord](https://discord.gg/dCgStTDaet)!
 - Compass mode might not show some corners of the map, depending on the size of the window.
 
 ## Examples
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example7.png?raw=true" width="512" height="288"><br>Second monitor full-screen window.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example3.gif?raw=true" width="512" height="288"><br>In-game semi-transparent (configureable) overlay.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example4.png?raw=true" width="402" height="374"><br>Different minimap shapes.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example5.gif?raw=true" width="512" height="288"><br>Compass mode.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example6.gif?raw=true" width="512" height="288"><br>Cosine interpolation.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example8.gif?raw=true" width="512" height="288"><br>GPS navigation.  
-<img src="https://github.com/CptWesley/NewWorldMinimap/blob/master/docs/example9.PNG?raw=true" width="512" height="288"><br>GPS navigation.  
+<img src="docs/example7.png" width="512" height="288"><br>Second monitor full-screen window.  
+<img src="docs/example3.gif" width="512" height="288"><br>In-game semi-transparent (configureable) overlay.  
+<img src="docs/example4.png" width="402" height="374"><br>Different minimap shapes.  
+<img src="docs/example5.gif" width="512" height="288"><br>Compass mode.  
+<img src="docs/example6.gif" width="512" height="288"><br>Cosine interpolation.  
+<img src="docs/example8.gif" width="512" height="288"><br>GPS navigation.  
+<img src="docs/example9.PNG" width="512" height="288"><br>GPS navigation.  
 
 ## Installation and Usage
 - Make sure you have installed [Overwolf](https://download.overwolf.com/install/Download).
 - You now have 4 options:
-  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.
+  - Get the latest release available on our [Overwolf store page](https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap). There releases have been inspected by the Overwolf QA team.  
+    <a href="https://www.overwolf.com/app/Wesley_Baartman-CptWesley_s_Minimap" target="_blank"><img src="https://overwolf.github.io/docs/assets/GetItOnOW-Dark.png" style="height: 33px"></a>
   - Get the latest release available from the [releases page](https://github.com/CptWesley/NewWorldMinimap/releases). These are the latest releases that might not have yet been inspected by the Overwolf QA team.
   - Get the latest build artifact [here](https://nightly.link/CptWesley/NewWorldMinimap/workflows/overwolf/master/app-artifact.zip). These builds are automatically created and might be very unstable, but will contain the newest features.
     - Download the `app-artifact.zip` at the bottom of the page. This `.zip` will contain the produced `.opk` file.
@@ -144,4 +151,4 @@ The source code is fully [MIT licensed](https://github.com/CptWesley/NewWorldMin
 Any help is welcome. Feel free to open [issues or feature requests](https://github.com/CptWesley/NewWorldMinimap/issues) or create a [pull request](https://github.com/CptWesley/NewWorldMinimap/pulls).
 
 ## Support Me
-Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley) ! But don't feel obliged to!
+Want to support me in other ways? You can [buy me a coffee](https://www.buymeacoffee.com/cptwesley)! But don't feel obliged to!
