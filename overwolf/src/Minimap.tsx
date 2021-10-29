@@ -1,16 +1,10 @@
 import clsx from 'clsx';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CSSObject, keyframes } from 'tss-react';
-import RecenterIcon from '@/Icons/RecenterIcon';
+import { CSSObject } from 'tss-react';
 import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
-import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
-import DragIcon from './Icons/DragIcon';
-import NavigationIcon from './Icons/NavigationIcon';
-import ZoomInIcon from './Icons/ZoomInIcon';
-import ZoomOutIcon from './Icons/ZoomOutIcon';
 import { FriendData, updateFriendLocation } from './logic/friends';
 import { positionUpdateRate, registerEventCallback } from './logic/hooks';
 import { getHotkeyManager } from './logic/hotkeyManager';
@@ -23,25 +17,14 @@ import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
 import { townZoomDistance } from './Minimap/mapConstants';
 import useMinimapRenderer from './Minimap/useMinimapRenderer';
-import MinimapToolbarIconButton from './MinimapToolbarIconButton';
+import MinimapToolbars, { MinimapInteractionMode } from './MinimapToolbars';
 import { makeStyles } from './theme';
 
 interface IProps {
     className?: string;
 }
 
-const showRecenterButton = keyframes({
-    from: {
-        width: 0,
-        padding: 0,
-    },
-    to: {
-        width: 40,
-        padding: 5,
-    },
-});
-
-const useStyles = makeStyles()(theme => {
+const useStyles = makeStyles()(() => {
     const canvasStyling: CSSObject = {
         width: '100%',
         height: '100%',
@@ -72,28 +55,6 @@ const useStyles = makeStyles()(theme => {
             zIndex: globalLayers.minimapHoverCanvas,
             pointerEvents: 'none',
         },
-        mapToolbar: {
-            position: 'absolute',
-            top: theme.spacing(1),
-            left: theme.spacing(1),
-            display: 'flex',
-            flexDirection: 'row',
-        },
-        mapControls: {
-            position: 'absolute',
-            right: theme.spacing(1),
-            bottom: theme.spacing(1),
-            display: 'flex',
-            flexDirection: 'row-reverse',
-        },
-        recenter: {
-            animation: `300ms ease ${showRecenterButton}`,
-            display: 'flex',
-            alignItems: 'center',
-            '& > svg': {
-                width: '100%',
-            },
-        },
     };
 });
 
@@ -114,7 +75,7 @@ export default function Minimap(props: IProps) {
     const [tilesDownloading, setTilesDownloading] = useState(0);
     const [isMapDragging, setIsMapDragging] = useState(false);
     const [isMapDragged, setIsMapDragged] = useState(false);
-    const [interactionMode, setInteractionMode] = useState<'drag' | 'navigate'>('drag');
+    const [interactionMode, setInteractionMode] = useState<MinimapInteractionMode>('drag');
     const canvas = useRef<HTMLCanvasElement>(null);
     const hoverLabelCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -336,29 +297,16 @@ export default function Minimap(props: IProps) {
             className={clsx(classes.hoverCanvas)}
             style={dynamicStyling}
         />
-        {appContext.settings.showToolbar &&
-            <MinimapToolbar className={classes.mapToolbar}>
-                <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')} title={t('minimap.mode_drag')}>
-                    <DragIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')} title={t('minimap.mode_navigate')}>
-                    <NavigationIcon />
-                </MinimapToolbarIconButton>
-            </MinimapToolbar>
-        }
+        <MinimapToolbars
+            getZoomLevel={getZoomLevel}
+            interactionMode={interactionMode}
+            isMapDragged={isMapDragged}
+            onRecenterMap={onRecenterMap}
+            setInteractionMode={setInteractionMode}
+            zoomBy={zoomBy}
+        />
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
         </div>
-        {NWMM_APP_WINDOW === 'desktop' && <MinimapToolbar className={classes.mapControls}>
-            <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
-                <ZoomInIcon />
-            </MinimapToolbarIconButton>
-            <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
-                <ZoomOutIcon />
-            </MinimapToolbarIconButton>
-            {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
-                <RecenterIcon />
-            </MinimapToolbarIconButton>}
-        </MinimapToolbar>}
     </div>;
 }
