@@ -336,14 +336,16 @@ export default function Minimap(props: IProps) {
             className={clsx(classes.hoverCanvas)}
             style={dynamicStyling}
         />
-        <MinimapToolbar className={classes.mapToolbar}>
-            <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')} title={t('minimap.mode_drag')}>
-                <DragIcon />
-            </MinimapToolbarIconButton>
-            <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')} title={t('minimap.mode_navigate')}>
-                <NavigationIcon />
-            </MinimapToolbarIconButton>
-        </MinimapToolbar>
+        {appContext.settings.showToolbar &&
+            <MinimapToolbar className={classes.mapToolbar}>
+                <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')} title={t('minimap.mode_drag')}>
+                    <DragIcon />
+                </MinimapToolbarIconButton>
+                <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')} title={t('minimap.mode_navigate')}>
+                    <NavigationIcon />
+                </MinimapToolbarIconButton>
+            </MinimapToolbar>
+        }
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
         </div>

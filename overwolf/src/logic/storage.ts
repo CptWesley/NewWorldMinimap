@@ -17,7 +17,7 @@ const deprecatedFriendServerUrlKey = 'friendServerUrl';
 
 export const simpleStorageDefaultSettings = {
     showHeader: true,
-    showToolbar: false,
+    showToolbar: true,
     transparentHeader: true,
     transparentToolbar: true,
     showText: false,
