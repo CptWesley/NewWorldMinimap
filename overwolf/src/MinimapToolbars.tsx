@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
 import { keyframes } from 'tss-react';
 import { AppContext } from './contexts/AppContext';
+import CompassIcon from './Icons/CompassIcon';
 import DragIcon from './Icons/DragIcon';
 import NavigationIcon from './Icons/NavigationIcon';
 import RecenterIcon from './Icons/RecenterIcon';
@@ -56,6 +57,11 @@ const useStyles = makeStyles()(theme => {
                 width: '100%',
             },
         },
+        separator: {
+            background: theme.buttonBackgroundHover,
+            width: 1,
+            margin: theme.spacing(0.5),
+        },
     };
 });
 
@@ -71,6 +77,8 @@ export default function MinimapToolbars(props: IProps) {
     const appContext = useContext(AppContext);
     const { classes } = useStyles();
     const { t } = useTranslation();
+
+    const separator = <div className={classes.separator} />;
 
     return <>
         {appContext.settings.showToolbar &&
@@ -88,6 +96,14 @@ export default function MinimapToolbars(props: IProps) {
                     title={t('minimap.mode_navigate')}
                 >
                     <NavigationIcon />
+                </MinimapToolbarIconButton>
+                {separator}
+                <MinimapToolbarIconButton
+                    isSelected={appContext.settings.compassMode}
+                    onClick={() => appContext.update({ compassMode: !appContext.settings.compassMode })}
+                    title={t('minimap.compassMode')}
+                >
+                    <CompassIcon />
                 </MinimapToolbarIconButton>
             </MinimapToolbar>
         }

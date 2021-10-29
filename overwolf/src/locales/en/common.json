@@ -26,7 +26,8 @@
         "zoomOut": "Zoom out",
         "recenter": "Center on player location",
         "mode_drag": "Drag",
-        "mode_navigate": "Navigate"
+        "mode_navigate": "Navigate",
+        "compassMode": "Compass Mode (overlay)"
     },
     "settings": {
         "title": "Settings",
