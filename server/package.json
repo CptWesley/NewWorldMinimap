@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node -r ts-node/register index.ts",
+    "start": "node -r ts-node/register src/index.ts",
     "build": "tsc",
     "deploy": "git subtree push --prefix server heroku master"
   },
