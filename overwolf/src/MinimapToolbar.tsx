@@ -11,18 +11,23 @@ interface IProps {
 
 const useStyles = makeStyles()(theme => ({
     toolbar: {
+        display: 'flex',
+        alignItems: 'center',
         zIndex: globalLayers.minimapToolbar,
         padding: theme.spacing(0.5),
         background: theme.toolbarBackground,
         color: theme.toolbarColor,
         borderRadius: theme.borderRadiusMedium,
+        opacity: 1,
+        transition: 'opacity 600ms ease',
     },
     transparent: {
         background: theme.toolbarTransparentBackground,
         backdropFilter: theme.toolbarBackdropFilter,
     },
     hidden: {
-        display: 'none !important',
+        opacity: 0,
+        pointerEvents: 'none',
     },
 }));
 
@@ -36,9 +41,10 @@ export default function MinimapToolbar(props: React.PropsWithChildren<IProps>) {
     const { classes } = useStyles();
 
     const rootClass = clsx(
+        className,
         classes.toolbar,
         context.settings.transparentToolbar && classes.transparent,
-        hidden && classes.transparent,
+        hidden && classes.hidden,
         className);
 
     return (

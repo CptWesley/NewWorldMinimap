@@ -39,15 +39,11 @@ const useStyles = makeStyles()(theme => {
             position: 'absolute',
             top: theme.spacing(1),
             left: theme.spacing(1),
-            display: 'flex',
-            flexDirection: 'row',
         },
         mapControls: {
             position: 'absolute',
             right: theme.spacing(1),
             bottom: theme.spacing(1),
-            display: 'flex',
-            flexDirection: 'row-reverse',
         },
         recenter: {
             animation: `300ms ease ${showRecenterButton}`,
@@ -59,8 +55,9 @@ const useStyles = makeStyles()(theme => {
         },
         separator: {
             background: theme.buttonBackgroundHover,
-            width: 1,
+            flexBasis: 1,
             margin: theme.spacing(0.5),
+            alignSelf: 'stretch',
         },
     };
 });
@@ -81,45 +78,56 @@ export default function MinimapToolbars(props: IProps) {
     const separator = <div className={classes.separator} />;
 
     return <>
-        {appContext.settings.showToolbar &&
-            <MinimapToolbar className={classes.mapToolbar}>
+        <MinimapToolbar className={classes.mapToolbar} hidden={!appContext.settings.showToolbar}>
+            <MinimapToolbarIconButton
+                isSelected={interactionMode === 'drag'}
+                onClick={() => setInteractionMode('drag')}
+                title={t('minimap.mode_drag')}
+            >
+                <DragIcon />
+            </MinimapToolbarIconButton>
+            <MinimapToolbarIconButton
+                isSelected={interactionMode === 'navigate'}
+                onClick={() => setInteractionMode('navigate')}
+                title={t('minimap.mode_navigate')}
+            >
+                <NavigationIcon />
+            </MinimapToolbarIconButton>
+            {separator}
+            <MinimapToolbarIconButton
+                isSelected={appContext.settings.compassMode}
+                onClick={() => appContext.update({ compassMode: !appContext.settings.compassMode })}
+                title={t('minimap.compassMode')}
+            >
+                <CompassIcon />
+            </MinimapToolbarIconButton>
+        </MinimapToolbar>
+        {NWMM_APP_WINDOW === 'desktop' &&
+            <MinimapToolbar
+                className={classes.mapControls}
+                hidden={!(appContext.settings.showToolbar || isMapDragged)}
+            >
                 <MinimapToolbarIconButton
-                    isSelected={interactionMode === 'drag'}
-                    onClick={() => setInteractionMode('drag')}
-                    title={t('minimap.mode_drag')}
+                    onClick={onRecenterMap}
+                    title={t('minimap.recenter')}
+                    hidden={!isMapDragged}
                 >
-                    <DragIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton
-                    isSelected={interactionMode === 'navigate'}
-                    onClick={() => setInteractionMode('navigate')}
-                    title={t('minimap.mode_navigate')}
-                >
-                    <NavigationIcon />
-                </MinimapToolbarIconButton>
-                {separator}
-                <MinimapToolbarIconButton
-                    isSelected={appContext.settings.compassMode}
-                    onClick={() => appContext.update({ compassMode: !appContext.settings.compassMode })}
-                    title={t('minimap.compassMode')}
-                >
-                    <CompassIcon />
-                </MinimapToolbarIconButton>
-            </MinimapToolbar>
-        }
-        {NWMM_APP_WINDOW === 'desktop' && (appContext.settings.showToolbar || isMapDragged) &&
-            <MinimapToolbar className={classes.mapControls}>
-                {appContext.settings.showToolbar && <>
-                    <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
-                        <ZoomInIcon />
-                    </MinimapToolbarIconButton>
-                    <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / 5)} title={t('minimap.zoomOut')}>
-                        <ZoomOutIcon />
-                    </MinimapToolbarIconButton>
-                </>}
-                {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
                     <RecenterIcon />
-                </MinimapToolbarIconButton>}
+                </MinimapToolbarIconButton>
+                <MinimapToolbarIconButton
+                    onClick={() => zoomBy(getZoomLevel() / 5)}
+                    title={t('minimap.zoomOut')}
+                    hidden={!appContext.settings.showToolbar}
+                >
+                    <ZoomOutIcon />
+                </MinimapToolbarIconButton>
+                <MinimapToolbarIconButton
+                    onClick={() => zoomBy(getZoomLevel() / -5)}
+                    title={t('minimap.zoomIn')}
+                    hidden={!appContext.settings.showToolbar}
+                >
+                    <ZoomInIcon />
+                </MinimapToolbarIconButton>
             </MinimapToolbar>
         }
     </>;
