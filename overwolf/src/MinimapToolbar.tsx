@@ -15,7 +15,7 @@ const useStyles = makeStyles()(theme => ({
         padding: theme.spacing(0.5),
         background: theme.toolbarBackground,
         color: theme.toolbarColor,
-        borderRadius: 4,
+        borderRadius: theme.borderRadiusMedium,
     },
     transparent: {
         background: theme.toolbarTransparentBackground,
