@@ -337,10 +337,10 @@ export default function Minimap(props: IProps) {
             style={dynamicStyling}
         />
         <MinimapToolbar className={classes.mapToolbar}>
-            <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')}>
+            <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')} title={t('minimap.mode_drag')}>
                 <DragIcon />
             </MinimapToolbarIconButton>
-            <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')}>
+            <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')} title={t('minimap.mode_navigate')}>
                 <NavigationIcon />
             </MinimapToolbarIconButton>
         </MinimapToolbar>
