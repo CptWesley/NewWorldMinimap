@@ -93,8 +93,8 @@
             "channelLabel": "Label (alleen voor instellingen)",
             "channelColor": "Kleur (voor punten op de kaart)",
             "copyChannel": "Kanaalcode kopiëren",
-            "customServerUrl": "Server endpoint URL",
-            "customServerUrlTooltip": "De URL van de server waar je mee wilt verbinden. Leeg laten om gebruik te maken van de standaard server.",
+            "customServerUrl": "Server-URL voor kanalen",
+            "customServerUrlTooltip": "De URL van de server waar je mee wilt verbinden voor kanalen. Leeg laten om gebruik te maken van de standaard server.",
             "friendId": "Jouw vriend-ID is '{{id}}'.",
             "regenerateId": "Genereer een nieuwe vriend-ID. Heeft geen effect, verandert alleen de ID die de server ontvangt."
         }

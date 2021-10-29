@@ -131,7 +131,7 @@ export default function Minimap(props: IProps) {
 
     function setPosition(pos: Vector2) {
         if (appContext.settings.shareLocation) {
-            const sharedLocation = updateFriendLocation(appContext.settings.friendServerUrl, playerName.current, pos);
+            const sharedLocation = updateFriendLocation(appContext.settings.channelsServerUrl, playerName.current, pos);
             sharedLocation.then(setFriends);
         }
 

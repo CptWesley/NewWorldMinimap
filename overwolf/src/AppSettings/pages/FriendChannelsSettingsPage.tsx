@@ -130,8 +130,8 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                         id='settings-friends-custom-server-url'
                         type='text'
                         className={clsx(sharedClasses.textbox, classes.semiWideInput)}
-                        onChange={e => updateSimpleSetting('friendServerUrl', e.currentTarget.value)}
-                        value={settings.friendServerUrl}
+                        onChange={e => updateSimpleSetting('channelsServerUrl', e.currentTarget.value)}
+                        value={settings.channelsServerUrl}
                     />
                 </div>
                 <div className={sharedClasses.setting}>

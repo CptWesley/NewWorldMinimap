@@ -34,7 +34,7 @@ export function loadAppContextSettings(): AppContextSettings {
         shareLocation: load('shareLocation'),
         resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
-        friendServerUrl: load('friendServerUrl'),
+        channelsServerUrl: load('channelsServerUrl'),
     };
 }
 

@@ -93,8 +93,8 @@
             "channelLabel": "Label (used for settings only)",
             "channelColor": "Color (used for map icons)",
             "copyChannel": "Copy channel code",
-            "customServerUrl": "Server endpoint URL",
-            "customServerUrlTooltip": "The URL of the server endpoint that you want to connect to. Leave blank for default server.",
+            "customServerUrl": "Server channels URL",
+            "customServerUrlTooltip": "The URL of the server channels endpoint that you want to connect to. Leave blank for default server.",
             "friendId": "Your friend ID is '{{id}}'.",
             "regenerateId": "Generate a new friend ID. Does not affect operations, only the ID that the server receives."
         }

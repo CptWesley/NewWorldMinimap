@@ -13,6 +13,8 @@ type DeprecatedInterpolation =
     | 'none';
 const deprecatedInterpolationKey = 'interpolation';
 
+const deprecatedFriendServerUrlKey = 'friendServerUrl';
+
 export const simpleStorageDefaultSettings = {
     showHeader: true,
     showToolbar: false,
@@ -31,7 +33,7 @@ export const simpleStorageDefaultSettings = {
     shareLocation: false,
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
-    friendServerUrl: '',
+    channelsServerUrl: '',
 };
 
 {
@@ -57,6 +59,8 @@ export const simpleStorageDefaultSettings = {
     }
     localStorage.removeItem(deprecatedInterpolationKey);
 }
+
+localStorage.removeItem(deprecatedFriendServerUrlKey);
 
 export type SimpleStorageSetting = typeof simpleStorageDefaultSettings;
 
