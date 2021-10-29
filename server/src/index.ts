@@ -10,7 +10,7 @@ const port = Number(process.env.PORT);
 const debug = process.env.DEBUG === 'true';
 const expireSeconds: number = Number(process.env.EXPIRE) || 30;
 const expireNanoseconds = BigInt(expireSeconds) * BigInt(1_000_000_000);
-const meta= require('../package.json');
+const meta = require('../package.json');
 
 if (!port) {
     throw new Error(`Invalid port: ${port}`);
