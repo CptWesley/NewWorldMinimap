@@ -2,6 +2,10 @@ import clsx from 'clsx';
 import React from 'react';
 import { makeStyles } from './theme';
 
+interface IProps {
+    isSelected?: boolean;
+}
+
 const useStyles = makeStyles()(theme => ({
     button: {
         background: theme.buttonBackground,
@@ -24,17 +28,26 @@ const useStyles = makeStyles()(theme => ({
 
         '&:active': {
             background: theme.buttonBackgroundPress,
-            borderColor: theme.buttonBorderColorPress,
         },
+    },
+    selected: {
+        // background: theme.buttonBackgroundHover,
+        background: `radial-gradient(circle, transparent 0%, ${theme.buttonBackgroundHover} 100%)`,
     },
 }));
 
-export default function MinimapToolbarIconButton(props: React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>) {
+type PropsType = IProps & React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>;
+
+export default function MinimapToolbarIconButton(props: PropsType) {
     const { classes } = useStyles();
     const {
         className,
+        isSelected,
         ...otherProps
     } = props;
 
-    return <button className={clsx(classes.button, className)} {...otherProps} />;
+    return <button
+        className={clsx(classes.button, isSelected && classes.selected, className)}
+        {...otherProps}
+    />;
 }

@@ -7,6 +7,8 @@ import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 import MinimapToolbar from '@/MinimapToolbar';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
+import DragIcon from './Icons/DragIcon';
+import NavigationIcon from './Icons/NavigationIcon';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
 import { FriendData, updateFriendLocation } from './logic/friends';
@@ -70,6 +72,13 @@ const useStyles = makeStyles()(theme => {
             zIndex: globalLayers.minimapHoverCanvas,
             pointerEvents: 'none',
         },
+        mapToolbar: {
+            position: 'absolute',
+            top: theme.spacing(1),
+            left: theme.spacing(1),
+            display: 'flex',
+            flexDirection: 'row',
+        },
         mapControls: {
             position: 'absolute',
             right: theme.spacing(1),
@@ -103,7 +112,9 @@ export default function Minimap(props: IProps) {
     const playerName = useRef<string>('UnknownFriend');
 
     const [tilesDownloading, setTilesDownloading] = useState(0);
+    const [isMapDragging, setIsMapDragging] = useState(false);
     const [isMapDragged, setIsMapDragged] = useState(false);
+    const [interactionMode, setInteractionMode] = useState<'drag' | 'navigate'>('drag');
     const canvas = useRef<HTMLCanvasElement>(null);
     const hoverLabelCanvas = useRef<HTMLCanvasElement>(null);
 
@@ -144,47 +155,47 @@ export default function Minimap(props: IProps) {
         redraw(true);
     }
 
+    function setNavigation(canvasPos: Vector2) {
+        if (!canvas.current) { return; }
+        const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+        const width = canvas.current.width;
+        const height = canvas.current.height;
+
+        const town = getNearestTown(centerPos);
+        const zoomLevel = town.distance <= townZoomDistance ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
+
+        let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+        if (appContext.settings.compassMode && (appContext.isTransparentSurface ?? false)) {
+            worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
+        }
+        const currentTarget = getNavTarget();
+
+        if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
+            resetNav();
+        } else {
+            setNav(currentPlayerPosition.current, worldPos);
+        }
+
+        redraw(true);
+    }
+
     function handleWheel(e: React.WheelEvent<HTMLCanvasElement>) {
         zoomBy(getZoomLevel() / 5 * e.deltaY / 100);
     }
 
     function handlePointerDown(e: React.PointerEvent<HTMLCanvasElement>) {
-        if (e.pointerType === 'mouse' && e.button === 1) {
-            if (!canvas.current) { return; }
-            const canvasPos = { x: e.clientX, y: e.clientY };
-            const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
-            const width = canvas.current.width;
-            const height = canvas.current.height;
-
-            const town = getNearestTown(centerPos);
-            const zoomLevel = town.distance <= townZoomDistance ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
-
-            let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
-            if (appContext.settings.compassMode && (appContext.isTransparentSurface ?? false)) {
-                worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
+        if ((interactionMode === 'drag' && e.button === 0) || (interactionMode !== 'drag' && e.button === 1)) {
+            if (NWMM_APP_WINDOW === 'desktop') {
+                scrollingMap.current = {
+                    pointerId: e.pointerId,
+                    position: { x: e.pageX, y: e.pageY },
+                    threshold: false,
+                };
+                setIsMapDragging(true);
+                e.currentTarget.setPointerCapture(e.pointerId);
             }
-            const currentTarget = getNavTarget();
-
-            if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
-                resetNav();
-            } else {
-                setNav(currentPlayerPosition.current, worldPos);
-            }
-
-            redraw(true);
-        }
-
-        if (NWMM_APP_WINDOW !== 'desktop') {
-            return;
-        }
-        // Left mouse button only
-        if (e.pointerType === 'mouse' && e.button === 0) {
-            scrollingMap.current = {
-                pointerId: e.pointerId,
-                position: { x: e.pageX, y: e.pageY },
-                threshold: false,
-            };
-            e.currentTarget.setPointerCapture(e.pointerId);
+        } else if ((interactionMode === 'navigate' && e.button === 0) || (interactionMode === 'drag' && e.button === 1)) {
+            setNavigation({ x: e.pageX, y: e.pageY });
         }
     }
 
@@ -228,6 +239,7 @@ export default function Minimap(props: IProps) {
         if (scrollingMap.current && scrollingMap.current.pointerId === e.pointerId) {
             e.currentTarget.releasePointerCapture(e.pointerId);
             scrollingMap.current = undefined;
+            setIsMapDragging(false);
         }
     }
 
@@ -303,6 +315,12 @@ export default function Minimap(props: IProps) {
         };
     }, [appContext.settings]);
 
+    if (isMapDragging) {
+        dynamicStyling.cursor = 'move';
+    } else if (interactionMode === 'navigate') {
+        dynamicStyling.cursor = 'crosshair';
+    }
+
     return <div className={clsx(classes.minimap, className)}>
         <canvas
             ref={canvas}
@@ -318,6 +336,14 @@ export default function Minimap(props: IProps) {
             className={clsx(classes.hoverCanvas)}
             style={dynamicStyling}
         />
+        <MinimapToolbar className={classes.mapToolbar}>
+            <MinimapToolbarIconButton isSelected={interactionMode === 'drag'} onClick={() => setInteractionMode('drag')}>
+                <DragIcon />
+            </MinimapToolbarIconButton>
+            <MinimapToolbarIconButton isSelected={interactionMode === 'navigate'} onClick={() => setInteractionMode('navigate')}>
+                <NavigationIcon />
+            </MinimapToolbarIconButton>
+        </MinimapToolbar>
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
         </div>
