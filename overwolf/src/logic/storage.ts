@@ -17,7 +17,7 @@ const deprecatedFriendServerUrlKey = 'friendServerUrl';
 
 export const simpleStorageDefaultSettings = {
     showHeader: true,
-    showToolbar: true,
+    showToolbar: NWMM_APP_WINDOW === 'desktop',
     transparentHeader: true,
     transparentToolbar: true,
     showText: false,
