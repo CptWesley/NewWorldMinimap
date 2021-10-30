@@ -176,7 +176,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
 
-        drawPlayerCoordinates(mapRendererParameters);
+        drawPlayerCoordinates(mapRendererParameters, mapIconRendererParameters);
 
         lastDrawParameters.current = {
             mapRendererParams: mapRendererParameters,

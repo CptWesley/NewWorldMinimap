@@ -1,7 +1,7 @@
 import { toMinimapCoordinate } from '@/logic/tiles';
-import { MapRendererParameters } from './useMinimapRenderer';
+import {MapIconRendererParameters, MapRendererParameters} from './useMinimapRenderer';
 
-export default function drawPlayerCoordinates(params: MapRendererParameters) {
+export default function drawPlayerCoordinates(params: MapRendererParameters, iconParams: MapIconRendererParameters) {
     const {
         context: ctx,
         center,
@@ -11,6 +11,10 @@ export default function drawPlayerCoordinates(params: MapRendererParameters) {
         zoomLevel,
         showPlayerCoordinates,
     } = params;
+
+    const {
+        iconScale,
+    } = iconParams;
 
     if (showPlayerCoordinates) {
         const playerPosString = `[${playerPosition.x.toFixed(3)}, ${playerPosition.y.toFixed(3)}]`;
@@ -23,7 +27,7 @@ export default function drawPlayerCoordinates(params: MapRendererParameters) {
         };
 
         const textX = imgPosCorrected.x - 50;
-        const textY = imgPosCorrected.y + 30;
+        const textY = imgPosCorrected.y + 20 * iconScale;
         ctx.strokeText(playerPosString, textX, textY);
         ctx.fillText(playerPosString, textX, textY);
     }
