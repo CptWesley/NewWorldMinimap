@@ -40,6 +40,7 @@ export function loadAppContextSettings(): AppContextSettings {
         alwaysLaunchDesktop: load('alwaysLaunchDesktop'),
         autoLaunchInGame: load('autoLaunchInGame'),
         rotationSource: load('rotationSource'),
+        enabledPreviewFunctionailities: load('enabledPreviewFunctionailities'),
     };
 }
 

@@ -15,6 +15,10 @@ const deprecatedInterpolationKey = 'interpolation';
 
 const deprecatedFriendServerUrlKey = 'friendServerUrl';
 
+type PreviewFunctionaility =
+    | 'feature-collection-render'
+    | 'feature-collection-edit'
+
 export const simpleStorageDefaultSettings = {
     showHeader: true,
     showToolbar: NWMM_APP_WINDOW === 'desktop',
@@ -39,6 +43,7 @@ export const simpleStorageDefaultSettings = {
     alwaysLaunchDesktop: false,
     autoLaunchInGame: true,
     rotationSource: 'api' as RotationSource,
+    enabledPreviewFunctionailities: [] as PreviewFunctionaility[],
 };
 
 {
