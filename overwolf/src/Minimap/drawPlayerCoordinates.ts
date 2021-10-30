@@ -29,9 +29,8 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
         const textX = imgPosCorrected.x;
         const textY = imgPosCorrected.y + 20 * iconScale;
 
-        // Reset to default style first
-        // TODO: Move and reuse me
         ctx.textAlign = 'center';
+        ctx.font = Math.round(iconScale * 10) + 'px sans-serif';
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
 
