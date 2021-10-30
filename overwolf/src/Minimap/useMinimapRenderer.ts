@@ -274,6 +274,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         appContext.settings.extrapolateLocation,
         appContext.settings.iconScale,
         appContext.settings.iconSettings,
+        appContext.settings.showPlayerCoordinates,
         appContext.settings.showText,
         appContext.settings.townZoom,
         appContext.settings.townZoomLevel,
