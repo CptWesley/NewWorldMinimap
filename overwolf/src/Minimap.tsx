@@ -214,12 +214,9 @@ export default function Minimap(props: IProps) {
                     mapPositionOverride.current = { ...mapPositionOverride.current ?? currentPlayerPosition.current };
                     setIsMapDragged(true);
                 } else if (mapPositionOverride.current) {
-                    const rotatedDX = lastDrawParameters.current && lastDrawParameters.current.mapRendererParams.renderAsCompass
-                        ? dX * Math.cos(lastDrawParameters.current.mapRendererParams.angle) - dY * Math.sin(lastDrawParameters.current.mapRendererParams.angle)
-                        : dX;
-                    const rotatedDY = lastDrawParameters.current && lastDrawParameters.current.mapRendererParams.renderAsCompass
-                        ? dY * Math.cos(lastDrawParameters.current.mapRendererParams.angle) + dX * Math.sin(lastDrawParameters.current.mapRendererParams.angle)
-                        : dY;
+                    const angle = lastDrawParameters.current?.mapRendererParams.renderAsCompass && lastDrawParameters.current.mapRendererParams.angle;
+                    const rotatedDX = angle ? dX * Math.cos(angle) - dY * Math.sin(angle) : dX;
+                    const rotatedDY = angle ? dY * Math.cos(angle) + dX * Math.sin(angle) : dY;
                     mapPositionOverride.current.x -= rotatedDX * getZoomLevel() / 4;
                     mapPositionOverride.current.y += rotatedDY * getZoomLevel() / 4;
                 }
