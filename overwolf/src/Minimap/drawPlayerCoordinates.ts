@@ -24,7 +24,6 @@ export default function drawPlayerCoordinates(params: MapRendererParameters) {
 
         const textX = imgPosCorrected.x - 50;
         const textY = imgPosCorrected.y + 30;
-        console.log(textX, textY);
         ctx.strokeText(playerPosString, textX, textY);
         ctx.fillText(playerPosString, textX, textY);
     }
