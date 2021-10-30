@@ -102,33 +102,31 @@ export default function MinimapToolbars(props: IProps) {
                 <CompassIcon />
             </MinimapToolbarIconButton>
         </MinimapToolbar>
-        {NWMM_APP_WINDOW === 'desktop' &&
-            <MinimapToolbar
-                className={classes.mapControls}
-                hidden={!(appContext.settings.showToolbar || isMapDragged)}
+        <MinimapToolbar
+            className={classes.mapControls}
+            hidden={!(appContext.settings.showToolbar || isMapDragged)}
+        >
+            <MinimapToolbarIconButton
+                onClick={onRecenterMap}
+                title={t('minimap.recenter')}
+                hidden={!isMapDragged}
             >
-                <MinimapToolbarIconButton
-                    onClick={onRecenterMap}
-                    title={t('minimap.recenter')}
-                    hidden={!isMapDragged}
-                >
-                    <RecenterIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton
-                    onClick={() => zoomBy(getZoomLevel() / 5)}
-                    title={t('minimap.zoomOut')}
-                    hidden={!appContext.settings.showToolbar}
-                >
-                    <ZoomOutIcon />
-                </MinimapToolbarIconButton>
-                <MinimapToolbarIconButton
-                    onClick={() => zoomBy(getZoomLevel() / -5)}
-                    title={t('minimap.zoomIn')}
-                    hidden={!appContext.settings.showToolbar}
-                >
-                    <ZoomInIcon />
-                </MinimapToolbarIconButton>
-            </MinimapToolbar>
-        }
+                <RecenterIcon />
+            </MinimapToolbarIconButton>
+            <MinimapToolbarIconButton
+                onClick={() => zoomBy(getZoomLevel() / 5)}
+                title={t('minimap.zoomOut')}
+                hidden={!appContext.settings.showToolbar}
+            >
+                <ZoomOutIcon />
+            </MinimapToolbarIconButton>
+            <MinimapToolbarIconButton
+                onClick={() => zoomBy(getZoomLevel() / -5)}
+                title={t('minimap.zoomIn')}
+                hidden={!appContext.settings.showToolbar}
+            >
+                <ZoomInIcon />
+            </MinimapToolbarIconButton>
+        </MinimapToolbar>
     </>;
 }
