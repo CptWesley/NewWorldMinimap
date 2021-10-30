@@ -26,11 +26,12 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
             y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
         };
 
-        const textX = imgPosCorrected.x - 50;
+        const textX = imgPosCorrected.x;
         const textY = imgPosCorrected.y + 20 * iconScale;
 
         // Reset to default style first
         // TODO: Move and reuse me
+        ctx.textAlign = 'center';
         ctx.strokeStyle = '#000000';
         ctx.lineWidth = 1;
 
