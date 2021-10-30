@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { keyframes } from 'tss-react';
 import { AppContext } from './contexts/AppContext';
 import CompassIcon from './Icons/CompassIcon';
+import DestinationIcon from './Icons/DestinationIcon';
 import DragIcon from './Icons/DragIcon';
-import NavigationIcon from './Icons/NavigationIcon';
 import RecenterIcon from './Icons/RecenterIcon';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
@@ -12,7 +12,7 @@ import MinimapToolbar from './MinimapToolbar';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
 
-export type MinimapInteractionMode = 'drag' | 'navigate';
+export type MinimapInteractionMode = 'drag' | 'destination';
 interface IProps {
     interactionMode: MinimapInteractionMode;
     setInteractionMode: (mode: MinimapInteractionMode) => void;
@@ -87,11 +87,11 @@ export default function MinimapToolbars(props: IProps) {
                 <DragIcon />
             </MinimapToolbarIconButton>
             <MinimapToolbarIconButton
-                isSelected={interactionMode === 'navigate'}
-                onClick={() => setInteractionMode('navigate')}
+                isSelected={interactionMode === 'destination'}
+                onClick={() => setInteractionMode('destination')}
                 title={t('minimap.mode_navigate')}
             >
-                <NavigationIcon />
+                <DestinationIcon />
             </MinimapToolbarIconButton>
             {separator}
             <MinimapToolbarIconButton

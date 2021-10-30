@@ -155,7 +155,7 @@ export default function Minimap(props: IProps) {
                 setIsMapDragging(true);
                 e.currentTarget.setPointerCapture(e.pointerId);
             }
-        } else if ((interactionMode === 'navigate' && e.button === 0) || (interactionMode === 'drag' && e.button === 1)) {
+        } else if ((interactionMode === 'destination' && e.button === 0) || (interactionMode === 'drag' && e.button === 1)) {
             setNavigation({ x: e.pageX, y: e.pageY });
         }
     }
@@ -278,7 +278,7 @@ export default function Minimap(props: IProps) {
 
     if (isMapDragging) {
         dynamicStyling.cursor = 'move';
-    } else if (interactionMode === 'navigate') {
+    } else if (interactionMode === 'destination') {
         dynamicStyling.cursor = 'crosshair';
     }
 
