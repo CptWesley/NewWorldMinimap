@@ -66,6 +66,7 @@ export default function MinimapToolbarIconButton(props: PropsType) {
 
     return <button
         className={clsx(classes.button, isSelected && classes.selected, hidden && classes.hidden, className)}
+        tabIndex={hidden ? -1 : 0}
         {...otherProps}
     />;
 }
