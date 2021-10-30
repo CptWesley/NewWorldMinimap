@@ -28,6 +28,12 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
 
         const textX = imgPosCorrected.x - 50;
         const textY = imgPosCorrected.y + 20 * iconScale;
+
+        // Reset to default style first
+        // TODO: Move and reuse me
+        ctx.strokeStyle = '#000000';
+        ctx.lineWidth = 1;
+
         ctx.strokeText(playerPosString, textX, textY);
         ctx.fillText(playerPosString, textX, textY);
     }
