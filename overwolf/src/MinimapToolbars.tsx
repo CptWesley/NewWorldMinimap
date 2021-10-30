@@ -89,7 +89,7 @@ export default function MinimapToolbars(props: IProps) {
             <MinimapToolbarIconButton
                 isSelected={interactionMode === 'destination'}
                 onClick={() => setInteractionMode('destination')}
-                title={t('minimap.mode_navigate')}
+                title={t('minimap.mode_destination')}
             >
                 <DestinationIcon />
             </MinimapToolbarIconButton>

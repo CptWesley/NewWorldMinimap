@@ -26,7 +26,7 @@
         "zoomOut": "Uitzoomen",
         "recenter": "Centreren op spelerslocatie",
         "mode_drag": "Slepen",
-        "mode_navigate": "Navigeren",
+        "mode_destination": "Bestemming aangeven",
         "compassMode": "Kompasmodus (overlay)"
     },
     "settings": {
