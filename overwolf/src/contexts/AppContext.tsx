@@ -36,6 +36,7 @@ export function loadAppContextSettings(): AppContextSettings {
         resamplingRate: load('resamplingRate'),
         lastKnownPosition: load('lastKnownPosition'),
         channelsServerUrl: load('channelsServerUrl'),
+        showNavMesh: load('showNavMesh'),
     };
 }
 

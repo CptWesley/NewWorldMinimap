@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { zoomLevelSettingBounds } from '@/logic/storage';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
+import AdvancedSettings from './AdvancedSettings';
 
 export default function WindowSettingsPage(props: IAppSettingsPageProps) {
     const {
@@ -177,7 +178,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.resamplingRate')}
             </label>
         </div>
-        <div className={classes.setting}>
+        <div className={classes.setting} title={t('settings.window.showPlayerCoordinatesTooltip')}>
             <label className={classes.checkbox}>
                 <input
                     type='checkbox'
@@ -187,5 +188,17 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showPlayerCoordinates')}
             </label>
         </div>
+        <AdvancedSettings>
+            <div className={classes.setting} title={t('settings.window.showNavMeshTooltip')}>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={settings.showNavMesh}
+                        onChange={e => updateSimpleSetting('showNavMesh', e.currentTarget.checked)}
+                    />
+                    {t('settings.window.showNavMesh')}
+                </label>
+            </div>
+        </AdvancedSettings>
     </>;
 }

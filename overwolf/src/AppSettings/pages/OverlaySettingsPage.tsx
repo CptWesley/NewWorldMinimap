@@ -2,6 +2,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
+import AdvancedSettings from './AdvancedSettings';
 
 export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
     const {
@@ -35,9 +36,7 @@ export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.overlay.shape')}
             </label>
         </div>
-        <details>
-            <summary title={t('settings.advancedTooltip')} className={classes.summary} >{t('settings.advanced')}</summary>
-            <p className={classes.setting}>{t('settings.advancedTooltip')}</p>
+        <AdvancedSettings>
             <div className={classes.setting}>
                 <label className={classes.range} title={t('settings.overlay.opacityTooltip')}>
                     <input
@@ -51,6 +50,6 @@ export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
                     {t('settings.overlay.opacity')}
                 </label>
             </div>
-        </details>
+        </AdvancedSettings>
     </>;
 }
