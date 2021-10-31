@@ -1,5 +1,6 @@
 import { toMinimapCoordinate } from '@/logic/tiles';
-import {MapIconRendererParameters, MapRendererParameters} from './useMinimapRenderer';
+import setTextStyle from './setTextStyle';
+import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawPlayerCoordinates(params: MapRendererParameters, iconParams: MapIconRendererParameters) {
     const {
@@ -29,10 +30,7 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
         const textX = imgPosCorrected.x;
         const textY = imgPosCorrected.y + 20 * iconScale;
 
-        ctx.textAlign = 'center';
-        ctx.font = Math.round(iconScale * 10) + 'px sans-serif';
-        ctx.strokeStyle = '#000000';
-        ctx.lineWidth = 1;
+        setTextStyle(ctx, iconScale);
 
         ctx.strokeText(playerPosString, textX, textY);
         ctx.fillText(playerPosString, textX, textY);
