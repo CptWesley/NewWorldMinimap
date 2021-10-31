@@ -1,7 +1,8 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { IAppContext } from '@/contexts/AppContext';
+import { containedByInclusive } from '@/logic/dom';
 import { getIconName } from '@/logic/icons';
 import { compareNames } from '@/logic/util';
 import { makeStyles } from '@/theme';
@@ -80,9 +81,19 @@ export default function IconSettingsCategory(props: IProps) {
     const { classes: sharedClasses } = useSharedSettingsStyles();
     const { t } = useTranslation();
 
+    const [expanded, setExpanded] = useState(false);
+
     if (!category) { return null; }
 
-    const typeChildren = Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
+    function toggleOpen(e: React.MouseEvent<HTMLElement>) {
+        // Do not toggle if a label was clicked.
+        if (!containedByInclusive(e.target as HTMLElement, el => el instanceof HTMLLabelElement)) {
+            e.preventDefault();
+            setExpanded(!expanded);
+        }
+    }
+
+    const renderTypes = () => Object.entries(category.types).sort(compareNames).map(([typeKey, type]) => {
         if (!type) { return null; }
         return <div key={typeKey}>
             <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
@@ -118,8 +129,8 @@ export default function IconSettingsCategory(props: IProps) {
     const hasAnyVisible = Object.values(category.types).some(t => t?.visible ?? false);
     const hasAnyShowLabel = Object.values(category.types).some(t => t?.showLabel ?? false);
 
-    return <details key={categoryKey}>
-        <summary className={sharedClasses.summary}>
+    return <details key={categoryKey} open={expanded}>
+        <summary className={sharedClasses.summary} onClick={toggleOpen}>
             <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
                 <input
                     type='checkbox'
@@ -149,39 +160,43 @@ export default function IconSettingsCategory(props: IProps) {
             <span>{getIconName(category.category)}</span>
         </summary>
 
-        <div className={classes.toggleAllEntry}>
-            <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
-                <input
-                    type='checkbox'
-                    checked={hasAnyVisible}
-                    onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'visible', e.currentTarget.checked) })}
-                />
-                <FontAwesomeIcon
-                    icon={hasAnyVisible ? faEye : faEyeSlash}
-                    opacity={hasAnyVisible ? 1 : 0.5}
-                    fixedWidth={true}
-                />
-            </label>
+        {expanded &&
+            <div className={classes.toggleAllEntry}>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleVisible')}>
+                    <input
+                        type='checkbox'
+                        checked={hasAnyVisible}
+                        onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'visible', e.currentTarget.checked) })}
+                    />
+                    <FontAwesomeIcon
+                        icon={hasAnyVisible ? faEye : faEyeSlash}
+                        opacity={hasAnyVisible ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
+                </label>
 
-            <label className={classes.checkboxIcon} title={t('settings.icon.toggleShowLabel')}>
-                <input
-                    type='checkbox'
-                    checked={hasAnyShowLabel}
-                    onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'showLabel', e.currentTarget.checked) })}
-                />
-                <FontAwesomeIcon
-                    icon={hasAnyShowLabel ? faComment : faCommentSlash}
-                    opacity={hasAnyShowLabel ? 1 : 0.5}
-                    fixedWidth={true}
-                />
-            </label>
+                <label className={classes.checkboxIcon} title={t('settings.icon.toggleShowLabel')}>
+                    <input
+                        type='checkbox'
+                        checked={hasAnyShowLabel}
+                        onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'showLabel', e.currentTarget.checked) })}
+                    />
+                    <FontAwesomeIcon
+                        icon={hasAnyShowLabel ? faComment : faCommentSlash}
+                        opacity={hasAnyShowLabel ? 1 : 0.5}
+                        fixedWidth={true}
+                    />
+                </label>
 
-            <span className={classes.categoryTypeName}>{t('settings.icon.toggleAll')}</span>
-        </div>
+                <span className={classes.categoryTypeName}>{t('settings.icon.toggleAll')}</span>
+            </div>
+        }
 
-        <div className={classes.iconTypeContainer}>
-            {typeChildren}
-        </div>
+        {expanded &&
+            <div className={classes.iconTypeContainer}>
+                {renderTypes()}
+            </div>
+        }
     </details>;
 
 }
