@@ -1,7 +1,6 @@
 import { roadGraph } from '@/logic/navigation/roadGraph';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { onCanvas, rotateAround } from '@/logic/util';
-import drawMapLabel from '@/Minimap/drawMapLabels';
 import setNavMeshStyle from './setNavMeshStyle';
 import setTextStyle from './setTextStyle';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
@@ -22,8 +21,6 @@ export default function drawNavMesh(params: MapRendererParameters, iconParams: M
     }
 
     const {
-        mapIconsCache,
-        settings: iconSettings,
         showText,
         iconScale,
     } = iconParams;
