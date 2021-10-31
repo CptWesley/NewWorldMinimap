@@ -4,13 +4,10 @@ import { getMarkers } from '@/logic/markers';
 import { canvasCoordinateToWorld, getTileCoordinatesForWorldCoordinate, worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { LastDrawParameters } from '@/Minimap/useMinimapRenderer';
+import setTextStyle from './setTextStyle';
 
 export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Marker, iconScale: number, center: Vector2, imgPosCorrected: Vector2, angle: number, renderAsCompass: boolean, iconHeight: number) {
-    ctx.textAlign = 'center';
-    ctx.font = Math.round(iconScale * 10) + 'px sans-serif';
-    ctx.strokeStyle = '#000';
-    ctx.fillStyle = '#fff';
-    ctx.lineWidth = 2.5;
+    setTextStyle(ctx, iconScale);
 
     const markerText = getIconName(marker.category, marker.name ?? marker.type);
 

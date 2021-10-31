@@ -10,6 +10,7 @@ const port = Number(process.env.PORT);
 const debug = process.env.DEBUG === 'true';
 const expireSeconds: number = Number(process.env.EXPIRE) || 30;
 const expireNanoseconds = BigInt(expireSeconds) * BigInt(1_000_000_000);
+const meta = require('../package.json');
 
 if (!port) {
     throw new Error(`Invalid port: ${port}`);
@@ -168,12 +169,16 @@ app.post('/data/update', function (req, res) {
     return res.status(400).send('400 Bad request');
 });
 
+app.get('/', function (req, res) {
+    return res.send(`${meta.name} ${meta.version}`);
+});
+
 app.listen(port, () => {
     console.log(`Newworld minimap server started at the port: ${port}`);
 
     setInterval(function () {
         evictPlayersData();
         deprecatedEvictPlayersData();
-        console.log(`Currently are stored ${channels.size} channels (${deprecatedOnlinePlayers.size} legacy)`);
+        console.log(`Currently are stored ${channels.size} channels (${deprecatedOnlinePlayers.size} legacy friends)`);
     }, 5000);
 });

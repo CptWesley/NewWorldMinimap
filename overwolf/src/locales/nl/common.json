@@ -24,7 +24,10 @@
         "tilesLoading_other": "{{count}} tegels aan het laden",
         "zoomIn": "Inzoomen",
         "zoomOut": "Uitzoomen",
-        "recenter": "Centreren op spelerslocatie"
+        "recenter": "Centreren op spelerslocatie",
+        "mode_drag": "Slepen",
+        "mode_destination": "Bestemming aangeven",
+        "compassMode": "Kompasmodus (overlay)"
     },
     "settings": {
         "title": "Instellingen",

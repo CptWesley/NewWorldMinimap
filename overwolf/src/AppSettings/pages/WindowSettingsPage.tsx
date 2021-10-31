@@ -32,7 +32,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.transparentHeader')}
             </label>
         </div>
-        <div className={classes.setting} hidden>
+        <div className={classes.setting}>
             <label className={classes.checkbox} title={t('settings.window.transparentToolbarTooltip')}>
                 <input
                     type='checkbox'
@@ -52,7 +52,7 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.showHeader')}
             </label>
         </div>
-        <div className={classes.setting} hidden>
+        <div className={classes.setting}>
             <label className={classes.checkbox} title={t('settings.window.showToolbarTooltip')}>
                 <input
                     type='checkbox'
@@ -175,6 +175,16 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                     onMouseUp={handleMapSliderMouseUp}
                 />
                 {t('settings.window.resamplingRate')}
+            </label>
+        </div>
+        <div className={classes.setting}>
+            <label className={classes.checkbox}>
+                <input
+                    type='checkbox'
+                    checked={settings.showPlayerCoordinates}
+                    onChange={e => updateSimpleSetting('showPlayerCoordinates', e.currentTarget.checked)}
+                />
+                {t('settings.window.showPlayerCoordinates')}
             </label>
         </div>
     </>;

@@ -1,6 +1,7 @@
 import { getNavPath } from '@/logic/navigation/navigation';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
+import setLineStyle from './setLineStyle';
 import { MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapNavigation(params: MapRendererParameters) {
@@ -33,8 +34,7 @@ export default function drawMapNavigation(params: MapRendererParameters) {
     if (path && path.length > 0) {
         const startPos = getCanvasCoord(path[0]);
 
-        ctx.strokeStyle = 'yellow';
-        ctx.lineWidth = 6;
+        setLineStyle(ctx);
         ctx.moveTo(startPos.x, startPos.y);
 
         for (let i = 1; i < path.length; i++) {
