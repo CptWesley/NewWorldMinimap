@@ -1,6 +1,7 @@
 import { FriendData } from '@/logic/friends';
 import { toMinimapCoordinate } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
+import setTextStyle from './setTextStyle';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
 const sliceRotationOffset = -Math.PI / 2;
@@ -67,11 +68,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         ctx.stroke();
 
         if (showText) {
-            ctx.textAlign = 'center';
-            ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
-            ctx.strokeStyle = '#000';
-            ctx.fillStyle = '#fff';
-
+            setTextStyle(ctx, iconScale);
             ctx.strokeText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
             ctx.fillText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
         }
