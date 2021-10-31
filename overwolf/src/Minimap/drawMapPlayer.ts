@@ -1,4 +1,4 @@
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
@@ -6,7 +6,6 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
     const {
         context: ctx,
         center,
-        unscaledOffset: offset,
 
         playerPosition,
         mapCenterPosition,
@@ -24,28 +23,24 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         return;
     }
 
-    const mapPos = toMinimapCoordinate(
-        mapCenterPosition,
+    const position = worldCoordinateToCanvas(
         playerPosition,
+        mapCenterPosition,
+        zoomLevel,
         ctx.canvas.width,
         ctx.canvas.height,
-        zoomLevel,
-        1);
-    const imgPosCorrected = {
-        x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
-        y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
-    };
+    );
 
     if (renderAsCompass) {
-        const rotated = rotateAround(center, imgPosCorrected, -angle);
+        const rotated = rotateAround(center, position, -angle);
         ctx.drawImage(playerIcon, rotated.x - playerIcon.width / 2, rotated.y - playerIcon.height / 2);
     } else {
         ctx.save();
-        ctx.translate(imgPosCorrected.x, imgPosCorrected.y);
+        ctx.translate(position.x, position.y);
         ctx.rotate(angle);
-        ctx.translate(-imgPosCorrected.x, -imgPosCorrected.y);
-        ctx.drawImage(playerIcon, imgPosCorrected.x - playerIcon.width / 2,
-            imgPosCorrected.y - playerIcon.height / 2);
+        ctx.translate(-position.x, -position.y);
+        ctx.drawImage(playerIcon, position.x - playerIcon.width / 2,
+            position.y - playerIcon.height / 2);
         ctx.restore();
     }
 }

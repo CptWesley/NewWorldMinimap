@@ -5,7 +5,6 @@ import MapIconsCache from '@/logic/mapIconsCache';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
 import { getTileCache } from '@/logic/tileCache';
 import { getTileMarkerCache } from '@/logic/tileMarkerCache';
-import { toMinimapCoordinate } from '@/logic/tiles';
 import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interpolator, predictVector, squaredDistance, vector2Equal } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
@@ -20,7 +19,6 @@ import { useInterpolation } from './useInterpolation';
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
     center: Vector2,
-    unscaledOffset: Vector2,
     playerPosition: Vector2,
     mapCenterPosition: Vector2,
     renderAsCompass: boolean,
@@ -115,7 +113,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         const angle = getInterpolatedAngle();
         const zoomLevel = getInterpolatedZoomLevel();
 
-        const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
+        const renderAsCompass = appContext.settings.compassMode;
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
@@ -129,19 +127,10 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         const mapCenterPos = mapPositionOverride.current ?? playerPos;
 
-        const unscaledOffset = toMinimapCoordinate(
-            mapCenterPos,
-            mapCenterPos,
-            ctx.canvas.width,
-            ctx.canvas.height,
-            zoomLevel,
-            1);
-
         const mapRendererParameters: MapRendererParameters = {
             angle,
             center,
             context: ctx,
-            unscaledOffset,
             playerPosition: playerPos,
             mapCenterPosition: mapCenterPos,
             renderAsCompass,

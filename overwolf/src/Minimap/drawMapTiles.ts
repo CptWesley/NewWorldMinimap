@@ -1,5 +1,5 @@
 import { getMap } from '@/logic/map';
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { getMinimapTilePosition } from '@/logic/tiles';
 import { MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapTiles(params: MapRendererParameters) {
@@ -22,7 +22,7 @@ export default function drawMapTiles(params: MapRendererParameters) {
 
     const tileVisualSize = 256 * map.tileScale;
 
-    const tileScaledOffset = toMinimapCoordinate(
+    const tileScaledOffset = getMinimapTilePosition(
         mapCenterPos,
         mapCenterPos,
         ctx.canvas.width,

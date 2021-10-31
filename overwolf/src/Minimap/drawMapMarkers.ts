@@ -1,4 +1,4 @@
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import drawMapLabel from '@/Minimap/drawMapLabels';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
@@ -7,7 +7,6 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
     const {
         context: ctx,
         center,
-        unscaledOffset,
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
@@ -32,31 +31,27 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
             continue;
         }
 
-        const mapPos = toMinimapCoordinate(
-            mapCenterPos,
-            marker.pos,
-            ctx.canvas.width,
-            ctx.canvas.height,
-            zoomLevel,
-            1);
         const icon = mapIconsCache.getIcon(marker.type, marker.category);
         if (!icon) {
             continue;
         }
-        const imgPosCorrected = {
-            x: mapPos.x / zoomLevel - unscaledOffset.x / zoomLevel + center.x,
-            y: mapPos.y / zoomLevel - unscaledOffset.y / zoomLevel + center.y,
-        };
+        const position = worldCoordinateToCanvas(
+            marker.pos,
+            mapCenterPos,
+            zoomLevel,
+            ctx.canvas.width,
+            ctx.canvas.height,
+        );
 
         if (renderAsCompass) {
-            const rotated = rotateAround(center, imgPosCorrected, -angle);
+            const rotated = rotateAround(center, position, -angle);
             ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
         } else {
-            ctx.drawImage(icon, imgPosCorrected.x - icon.width / 2, imgPosCorrected.y - icon.height / 2);
+            ctx.drawImage(icon, position.x - icon.width / 2, position.y - icon.height / 2);
         }
 
         if (showText && catSettings.showLabel && typeSettings?.showLabel) {
-            drawMapLabel(ctx, marker, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
+            drawMapLabel(ctx, marker, iconScale, center, position, angle, renderAsCompass, icon.height);
         }
     }
 }

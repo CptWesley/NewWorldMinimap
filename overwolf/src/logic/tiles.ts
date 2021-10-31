@@ -45,7 +45,7 @@ export function getDimensions(screenWidth: number, screenHeight: number, angle?:
     return { x, y };
 }
 
-export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: number) {
+export function getMinimapTilePosition(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: number) {
     // Gets the number of tiles that should be rendered in X/Y
     const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale);
 
@@ -64,6 +64,45 @@ export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, 
     const imageY = pixelY - ((tileY - Math.floor(dimensions.y / 2)) * tileHeight);
 
     return { x: imageX * tileScale, y: imageY * tileScale };
+}
+
+/**
+ * Converts world coordinates to canvas coordinates.
+ * @param worldPos The world position to convert to canvas coordinates.
+ * @param centerPos The world position the map is centered on.
+ * @param zoomLevel The current zoom level of the canvas.
+ * @param canvasWidth The width of the canvas.
+ * @param canvasHeight The height of the canvas.
+ * @returns The computed canvas coordinates.
+ */
+export function worldCoordinateToCanvas(worldPos: Vector2, centerPos: Vector2, zoomLevel: number, canvasWidth: number, canvasHeight: number): Vector2 {
+    // Compute the distance between worldPos and centerPos.
+    // Unit: world
+    const centerDistanceX = centerPos.x - worldPos.x;
+    const centerDistanceY = centerPos.y - worldPos.y;
+
+    // Compute the scaling factor to go from world space to pixel space.
+    // Unit: pixel / world
+    const scaleWorldToCanvasX = (width * tileWidth) / gameMapWidth;
+    const scaleWorldToCanvasY = (height * tileHeight) / gameMapHeight;
+
+    // Compute the actual scaling factor, taking zoom into account.
+    // Unit: (pixel / world) / (pixel / canvasPixel) = canvasPixel / world
+    const scaleX = scaleWorldToCanvasX / zoomLevel;
+    const scaleY = scaleWorldToCanvasY / zoomLevel;
+
+    // Compute the center of the canvas.
+    // Unit: canvasPixel
+    const centerCanvasX = canvasWidth / 2;
+    const centerCanvasY = canvasHeight / 2;
+
+    // Compute the canvas coordinates.
+    // Unit: canvasPixel - (world * (canvasPixel / world)) = canvasPixel
+    const x = centerCanvasX - (centerDistanceX * scaleX);
+    // Use addition, because the Y axis is inverted (and double minus = plus)
+    const y = centerCanvasY + (centerDistanceY * scaleY);
+
+    return { x, y };
 }
 
 //    Function: canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, screenWidth, screenHeight)

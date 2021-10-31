@@ -1,5 +1,5 @@
 import { FriendData } from '@/logic/friends';
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
@@ -9,7 +9,6 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
     const {
         context: ctx,
         center,
-        unscaledOffset: offset,
 
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
@@ -24,25 +23,21 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
     } = iconParams;
 
     for (const friend of friends) {
-        const imgPos = toMinimapCoordinate(
-            mapCenterPos,
-            friend.location,
-            ctx.canvas.width,
-            ctx.canvas.height,
-            zoomLevel,
-            1);
         const icon = mapIconsCache.getFriendIcon();
         if (!icon) {
             continue;
         }
-        const imgPosCorrected = {
-            x: imgPos.x / zoomLevel - offset.x / zoomLevel + center.x,
-            y: imgPos.y / zoomLevel - offset.y / zoomLevel + center.y,
-        };
+        const position = worldCoordinateToCanvas(
+            friend.location,
+            mapCenterPos,
+            zoomLevel,
+            ctx.canvas.width,
+            ctx.canvas.height,
+        );
 
         const canvasPosition = renderAsCompass
-            ? rotateAround({ x: center.x, y: center.y }, imgPosCorrected, -angle)
-            : imgPosCorrected;
+            ? rotateAround({ x: center.x, y: center.y }, position, -angle)
+            : position;
 
         const radius = 5 * iconScale;
 

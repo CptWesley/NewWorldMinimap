@@ -1,7 +1,7 @@
 import React from 'react';
 import { getIconName } from '@/logic/icons';
 import { getMarkers } from '@/logic/markers';
-import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, toMinimapCoordinate } from '@/logic/tiles';
+import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { LastDrawParameters } from '@/Minimap/useMinimapRenderer';
 
@@ -36,7 +36,6 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
 
     const {
         zoomLevel,
-        unscaledOffset: offset,
         center,
         mapCenterPosition,
         renderAsCompass,
@@ -74,25 +73,21 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
             continue;
         }
 
-        const mapPos = toMinimapCoordinate(
-            mapCenterPosition,
-            m.pos,
-            ctx.canvas.width,
-            ctx.canvas.height,
-            zoomLevel,
-            1);
         const icon = lastDrawCache.iconRendererParams.mapIconsCache.getIcon(m.type, m.category);
         if (!icon) {
             continue;
         }
-        const imgPosCorrected = {
-            x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
-            y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
-        };
-        const pos = renderAsCompass ? rotateAround(center, imgPosCorrected, -angle) : imgPosCorrected;
+        const position = worldCoordinateToCanvas(
+            m.pos,
+            mapCenterPosition,
+            zoomLevel,
+            ctx.canvas.width,
+            ctx.canvas.height,
+        );
+        const pos = renderAsCompass ? rotateAround(center, position, -angle) : position;
         if ((mousePos.x >= pos.x - icon.width / 2 && mousePos.y <= pos.y + icon.height / 2)
             && (mousePos.x <= pos.x + icon.width / 2 && mousePos.y >= pos.y - icon.height / 2)) {
-            drawMapLabel(ctx, m, iconScale, center, imgPosCorrected, angle, renderAsCompass, icon.height);
+            drawMapLabel(ctx, m, iconScale, center, position, angle, renderAsCompass, icon.height);
             break;
         }
     }

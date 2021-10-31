@@ -1,5 +1,5 @@
 import { getNavPath } from '@/logic/navigation/navigation';
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { MapRendererParameters } from './useMinimapRenderer';
 
@@ -7,7 +7,6 @@ export default function drawMapNavigation(params: MapRendererParameters) {
     const {
         context: ctx,
         center,
-        unscaledOffset: offset,
         renderAsCompass,
         playerPosition,
         mapCenterPosition,
@@ -16,19 +15,17 @@ export default function drawMapNavigation(params: MapRendererParameters) {
     } = params;
 
     function getCanvasCoord(worldPos: Vector2) {
-        const pos = toMinimapCoordinate(
-            mapCenterPosition,
+        const posCorrected = worldCoordinateToCanvas(
             worldPos,
+            mapCenterPosition,
+            zoomLevel,
             ctx.canvas.width,
             ctx.canvas.height,
-            zoomLevel,
-            1);
-        const posCorrected = {
-            x: pos.x / zoomLevel - offset.x / zoomLevel + center.x,
-            y: pos.y / zoomLevel - offset.y / zoomLevel + center.y,
-        };
+        );
 
-        return renderAsCompass ? rotateAround(center, posCorrected, -angle) : posCorrected;
+        return renderAsCompass
+            ? rotateAround(center, posCorrected, -angle)
+            : posCorrected;
     }
 
     let lastPos: Vector2 | undefined = undefined;
