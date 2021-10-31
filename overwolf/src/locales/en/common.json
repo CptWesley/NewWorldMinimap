@@ -24,7 +24,10 @@
         "tilesLoading_other": "Loading {{count}} tiles",
         "zoomIn": "Zoom in",
         "zoomOut": "Zoom out",
-        "recenter": "Center on player location"
+        "recenter": "Center on player location",
+        "mode_drag": "Drag",
+        "mode_destination": "Mark destination",
+        "compassMode": "Compass Mode (overlay)"
     },
     "settings": {
         "title": "Settings",
