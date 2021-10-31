@@ -4,6 +4,7 @@
         "forceConsistentCasingInFileNames": true,
         "module": "CommonJS",
         "moduleResolution": "node",
+        "outDir": "build",
         "noImplicitAny": true,
         "noImplicitOverride": true,
         "noFallthroughCasesInSwitch": true,
@@ -14,6 +15,9 @@
         "strict": true,
         "target": "es2017",
     },
+    "include": [
+        "src"
+    ],
     "exclude": [
         "node_modules"
     ]
