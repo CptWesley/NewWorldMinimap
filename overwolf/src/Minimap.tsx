@@ -174,9 +174,6 @@ export default function Minimap(props: IProps) {
             redraw(true);
         }
 
-        if (NWMM_APP_WINDOW !== 'desktop') {
-            return;
-        }
         // Left mouse button only
         if (e.pointerType === 'mouse' && e.button === 0) {
             scrollingMap.current = {
@@ -324,7 +321,7 @@ export default function Minimap(props: IProps) {
         <div className={classes.cacheStatus}>
             {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
         </div>
-        {NWMM_APP_WINDOW === 'desktop' && <MinimapToolbar className={classes.mapControls}>
+        <MinimapToolbar className={classes.mapControls}>
             <MinimapToolbarIconButton onClick={() => zoomBy(getZoomLevel() / -5)} title={t('minimap.zoomIn')}>
                 <ZoomInIcon />
             </MinimapToolbarIconButton>
@@ -334,6 +331,6 @@ export default function Minimap(props: IProps) {
             {isMapDragged && <MinimapToolbarIconButton className={classes.recenter} onClick={onRecenterMap} title={t('minimap.recenter')}>
                 <RecenterIcon />
             </MinimapToolbarIconButton>}
-        </MinimapToolbar>}
+        </MinimapToolbar>
     </div>;
 }
