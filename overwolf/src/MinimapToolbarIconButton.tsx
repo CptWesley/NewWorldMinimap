@@ -29,12 +29,13 @@ const useStyles = makeStyles()(theme => ({
             pointerEvents: 'none', // makes tooltips behave nicer
         },
 
-        '&:hover, &:focus': {
+        '&:hover': {
             background: theme.buttonBackgroundHover,
         },
 
         '&:focus': {
-            outline: 'none',
+            outline: `1px solid ${theme.buttonColor}`,
+            outlineOffset: -1,
         },
 
         '&:active': {
