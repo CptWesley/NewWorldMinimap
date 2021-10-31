@@ -113,7 +113,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         const angle = getInterpolatedAngle();
         const zoomLevel = getInterpolatedZoomLevel();
 
-        const renderAsCompass = appContext.settings.compassMode;
+        const renderAsCompass = appContext.settings.compassMode && (appContext.isTransparentSurface ?? false);
 
         ctx.canvas.width = ctx.canvas.clientWidth;
         ctx.canvas.height = ctx.canvas.clientHeight;
