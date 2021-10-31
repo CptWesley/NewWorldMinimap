@@ -1,3 +1,4 @@
+import { initializeAppUpdates } from '@/logic/appUpdates';
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
 import { initializeHooks } from '@/logic/hooks';
 import { initializeNavigation } from '@/logic/navigation/navigation';
@@ -161,3 +162,4 @@ initializeTileCache();
 initializeTileMarkerCache();
 initializeHotkeyManager();
 initializeNavigation();
+initializeAppUpdates();
