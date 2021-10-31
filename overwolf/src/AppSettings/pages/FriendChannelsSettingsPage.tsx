@@ -7,6 +7,7 @@ import { createEmptyChannel, createNewChannel, getChannels, getFriendId, maxChan
 import { makeStyles } from '@/theme';
 import { IAppSettingsPageProps } from '../AppSettings';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
+import AdvancedSettings from './AdvancedSettings';
 import FriendChannelSetting from './FriendChannelSetting';
 
 const useStyles = makeStyles()(theme => ({
@@ -116,10 +117,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                     {t('settings.friendChannels.createChannel')}
                 </Button>
             }
-            <hr />
-            <details>
-                <summary title={t('settings.advancedTooltip')} className={sharedClasses.summary} >{t('settings.advanced')}</summary>
-                <p className={sharedClasses.setting}>{t('settings.advancedTooltip')}</p>
+            <AdvancedSettings>
                 <div className={sharedClasses.setting}>
                     <p>
                         <label htmlFor='settings-friends-custom-server-url' title={t('settings.friendChannels.customServerUrlTooltip')}>
@@ -145,7 +143,7 @@ export default function FriendSettingsPage(props: IAppSettingsPageProps) {
                         </button>
                     </p>
                 </div>
-            </details>
+            </AdvancedSettings>
         </div>
     </>;
 }
