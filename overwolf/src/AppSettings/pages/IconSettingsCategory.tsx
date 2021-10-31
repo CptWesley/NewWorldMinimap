@@ -15,7 +15,7 @@ interface IProps {
     updateSettings: IAppContext['update'];
     updateIconCategorySettings: (categoryName: string, property: IconProperty, value: boolean) => IconSettings | undefined;
     updateIconSettings: (categoryName: string, typeName: string, property: IconProperty, value: boolean) => IconSettings | undefined;
-    selectAllIconsByCategory: (categoryName: string, property: IconProperty, value: boolean) => IconSettings | undefined;
+    updateIconsInCategory: (categoryName: string, property: IconProperty, value: boolean) => IconSettings | undefined;
 }
 
 const useStyles = makeStyles()(theme => ({
@@ -71,9 +71,9 @@ export default function IconSettingsCategory(props: IProps) {
     const {
         category,
         categoryKey,
-        selectAllIconsByCategory,
         updateIconCategorySettings,
         updateIconSettings,
+        updateIconsInCategory,
         updateSettings,
     } = props;
     const { classes } = useStyles();
@@ -154,7 +154,7 @@ export default function IconSettingsCategory(props: IProps) {
                 <input
                     type='checkbox'
                     checked={hasAnyVisible}
-                    onChange={e => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, 'visible', e.currentTarget.checked) })}
+                    onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'visible', e.currentTarget.checked) })}
                 />
                 <FontAwesomeIcon
                     icon={hasAnyVisible ? faEye : faEyeSlash}
@@ -167,7 +167,7 @@ export default function IconSettingsCategory(props: IProps) {
                 <input
                     type='checkbox'
                     checked={hasAnyShowLabel}
-                    onChange={e => updateSettings({ iconSettings: selectAllIconsByCategory(categoryKey, 'showLabel', e.currentTarget.checked) })}
+                    onChange={e => updateSettings({ iconSettings: updateIconsInCategory(categoryKey, 'showLabel', e.currentTarget.checked) })}
                 />
                 <FontAwesomeIcon
                     icon={hasAnyShowLabel ? faComment : faCommentSlash}

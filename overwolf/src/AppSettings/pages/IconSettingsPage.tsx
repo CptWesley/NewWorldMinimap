@@ -39,7 +39,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
         return iconSettings;
     }
 
-    function selectAllIconsByCategory(categoryName: string, property: IconProperty, value: boolean) {
+    function updateIconsInCategory(categoryName: string, property: IconProperty, value: boolean) {
         const iconSettings = settings.iconSettings;
         if (iconSettings) {
             return produce(iconSettings, draft => {
@@ -68,7 +68,7 @@ export default function IconSettingsPage(props: IAppSettingsPageProps) {
                 key={categoryKey}
                 categoryKey={categoryKey}
                 category={category}
-                selectAllIconsByCategory={selectAllIconsByCategory}
+                updateIconsInCategory={updateIconsInCategory}
                 updateIconCategorySettings={updateIconCategorySettings}
                 updateIconSettings={updateIconSettings}
                 updateSettings={updateSettings}
