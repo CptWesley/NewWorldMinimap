@@ -13,6 +13,7 @@ import drawMapNavigation from './drawMapNavigation';
 import drawMapNavigationTarget from './drawMapNavigationTarget';
 import drawMapPlayer from './drawMapPlayer';
 import drawMapTiles from './drawMapTiles';
+import drawNavMesh from './drawNavMesh';
 import drawPlayerCoordinates from './drawPlayerCoordinates';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
 import { useInterpolation } from './useInterpolation';
@@ -27,6 +28,7 @@ export type MapRendererParameters = {
     renderAsCompass: boolean,
     zoomLevel: number,
     showPlayerCoordinates: boolean,
+    showNavMesh: boolean,
 }
 
 export type MapIconRendererParameters = {
@@ -148,6 +150,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             renderAsCompass,
             zoomLevel,
             showPlayerCoordinates: appContext.settings.showPlayerCoordinates,
+            showNavMesh: appContext.settings.showNavMesh,
         };
 
         const toDraw = drawMapTiles(mapRendererParameters);
@@ -164,6 +167,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             settings: iconSettings,
             showText: appContext.settings.showText,
         };
+
+        drawNavMesh(mapRendererParameters, mapIconRendererParameters);
 
         const navTarget = drawMapNavigation(mapRendererParameters);
 

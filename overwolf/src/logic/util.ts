@@ -136,3 +136,12 @@ export function predictAngle(start: number, end: number) {
 export function generateRandomToken() {
     return Math.random().toString(36).substr(2);
 }
+
+export function onCanvas(pos: Vector2, width: number, height: number, screenWidth: number, screenHeight: number) {
+    const lowerX = pos.x - width / 2;
+    const upperX = pos.x + width / 2;
+    const lowerY = pos.y - height / 2;
+    const upperY = pos.y + height / 2;
+
+    return lowerX >= 0 && upperX < screenWidth && lowerY >= 0 && upperY < screenHeight;
+}
