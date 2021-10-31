@@ -95,7 +95,7 @@ export default function Minimap(props: IProps) {
         currentPlayerAngle,
         lastDrawParameters,
         getZoomLevel,
-        mapPositionOverride,
+        mapOverride,
         redraw,
         setPlayerPosition,
         zoomBy,
@@ -118,7 +118,8 @@ export default function Minimap(props: IProps) {
 
     function setNavigation(canvasPos: Vector2) {
         if (!canvas.current) { return; }
-        const centerPos = mapPositionOverride.current ?? currentPlayerPosition.current;
+        const centerPos = lastDrawParameters.current?.mapRendererParams.mapCenterPosition;
+        if (!centerPos) { return; }
         const width = canvas.current.width;
         const height = canvas.current.height;
 
@@ -159,7 +160,7 @@ export default function Minimap(props: IProps) {
     }
 
     function onRecenterMap() {
-        mapPositionOverride.current = undefined;
+        mapOverride.current = undefined;
         redraw(true);
         setIsMapDragged(false);
     }
@@ -181,14 +182,16 @@ export default function Minimap(props: IProps) {
             if (dragAllowed) {
                 if (!scrollingMap.current.threshold) {
                     scrollingMap.current.threshold = true;
-                    mapPositionOverride.current = { ...mapPositionOverride.current ?? currentPlayerPosition.current };
+                    if (!mapOverride.current) {
+                        mapOverride.current = { ...currentPlayerPosition.current, angle: lastDrawParameters.current?.mapRendererParams.mapAngle ?? 0 };
+                    }
                     setIsMapDragged(true);
-                } else if (mapPositionOverride.current) {
-                    const angle = lastDrawParameters.current?.mapRendererParams.renderAsCompass && lastDrawParameters.current.mapRendererParams.angle;
+                } else if (mapOverride.current) {
+                    const angle = lastDrawParameters.current?.mapRendererParams.renderAsCompass && lastDrawParameters.current.mapRendererParams.mapAngle;
                     const rotatedDX = angle ? dX * Math.cos(angle) - dY * Math.sin(angle) : dX;
                     const rotatedDY = angle ? dY * Math.cos(angle) + dX * Math.sin(angle) : dY;
-                    mapPositionOverride.current.x -= rotatedDX * getZoomLevel() / 4;
-                    mapPositionOverride.current.y += rotatedDY * getZoomLevel() / 4;
+                    mapOverride.current.x -= rotatedDX * getZoomLevel() / 4;
+                    mapOverride.current.y += rotatedDY * getZoomLevel() / 4;
                 }
                 redraw(true);
                 scrollingMap.current.position.x = e.pageX;

@@ -10,7 +10,7 @@ export default function drawMapTiles(params: MapRendererParameters) {
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
-        angle,
+        mapAngle,
     } = params;
 
     const map = getMap(
@@ -18,7 +18,7 @@ export default function drawMapTiles(params: MapRendererParameters) {
         ctx.canvas.width,
         ctx.canvas.height,
         zoomLevel,
-        renderAsCompass ? -angle : 0);
+        renderAsCompass ? -mapAngle : 0);
 
     const tileVisualSize = 256 * map.tileScale;
 
@@ -42,7 +42,7 @@ export default function drawMapTiles(params: MapRendererParameters) {
             if (renderAsCompass) {
                 ctx.save();
                 ctx.translate(center.x, center.y);
-                ctx.rotate(-angle);
+                ctx.rotate(-mapAngle);
                 ctx.translate(-center.x, -center.y);
                 ctx.drawImage(bitmap,
                     tileVisualSize / zoomLevel * x + center.x - tileScaledOffset.x / zoomLevel,

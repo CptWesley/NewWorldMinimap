@@ -8,10 +8,11 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
         center,
 
         playerPosition,
+        playerAngle,
         mapCenterPosition,
+        mapAngle,
         renderAsCompass,
         zoomLevel,
-        angle,
     } = params;
 
     const {
@@ -32,15 +33,19 @@ export default function drawMapPlayer(params: MapRendererParameters, iconParams:
     );
 
     if (renderAsCompass) {
-        const rotated = rotateAround(center, position, -angle);
+        const rotated = rotateAround(center, position, -mapAngle);
+        ctx.save();
+        ctx.translate(rotated.x, rotated.y);
+        ctx.rotate(playerAngle - mapAngle);
+        ctx.translate(-rotated.x, -rotated.y);
         ctx.drawImage(playerIcon, rotated.x - playerIcon.width / 2, rotated.y - playerIcon.height / 2);
+        ctx.restore();
     } else {
         ctx.save();
         ctx.translate(position.x, position.y);
-        ctx.rotate(angle);
+        ctx.rotate(playerAngle);
         ctx.translate(-position.x, -position.y);
-        ctx.drawImage(playerIcon, position.x - playerIcon.width / 2,
-            position.y - playerIcon.height / 2);
+        ctx.drawImage(playerIcon, position.x - playerIcon.width / 2, position.y - playerIcon.height / 2);
         ctx.restore();
     }
 }

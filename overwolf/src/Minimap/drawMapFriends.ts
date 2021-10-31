@@ -14,7 +14,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
-        angle,
+        mapAngle,
     } = params;
 
     const {
@@ -37,7 +37,7 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
         );
 
         const canvasPosition = renderAsCompass
-            ? rotateAround({ x: center.x, y: center.y }, position, -angle)
+            ? rotateAround({ x: center.x, y: center.y }, position, -mapAngle)
             : position;
 
         const radius = 5 * iconScale;

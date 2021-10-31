@@ -10,7 +10,7 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         mapCenterPosition: mapCenterPos,
         renderAsCompass,
         zoomLevel,
-        angle,
+        mapAngle,
     } = params;
 
     const {
@@ -44,14 +44,14 @@ export default function drawMapMarkers(params: MapRendererParameters, iconParams
         );
 
         if (renderAsCompass) {
-            const rotated = rotateAround(center, position, -angle);
+            const rotated = rotateAround(center, position, -mapAngle);
             ctx.drawImage(icon, rotated.x - icon.width / 2, rotated.y - icon.height / 2);
         } else {
             ctx.drawImage(icon, position.x - icon.width / 2, position.y - icon.height / 2);
         }
 
         if (showText && catSettings.showLabel && typeSettings?.showLabel) {
-            drawMapLabel(ctx, marker, iconScale, center, position, angle, renderAsCompass, icon.height);
+            drawMapLabel(ctx, marker, iconScale, center, position, mapAngle, renderAsCompass, icon.height);
         }
     }
 }

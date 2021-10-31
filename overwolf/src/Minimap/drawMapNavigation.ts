@@ -12,7 +12,7 @@ export default function drawMapNavigation(params: MapRendererParameters) {
         playerPosition,
         mapCenterPosition,
         zoomLevel,
-        angle,
+        mapAngle,
     } = params;
 
     function getCanvasCoord(worldPos: Vector2) {
@@ -25,7 +25,7 @@ export default function drawMapNavigation(params: MapRendererParameters) {
         );
 
         return renderAsCompass
-            ? rotateAround(center, posCorrected, -angle)
+            ? rotateAround(center, posCorrected, -mapAngle)
             : posCorrected;
     }
 
