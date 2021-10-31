@@ -1,12 +1,10 @@
-import { toMinimapCoordinate } from '@/logic/tiles';
+import { worldCoordinateToCanvas } from '@/logic/tiles';
 import setTextStyle from './setTextStyle';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawPlayerCoordinates(params: MapRendererParameters, iconParams: MapIconRendererParameters) {
     const {
         context: ctx,
-        center,
-        unscaledOffset: offset,
         playerPosition,
         mapCenterPosition,
         zoomLevel,
@@ -21,14 +19,16 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
         const playerPosString = `[${playerPosition.x.toFixed(3)}, ${playerPosition.y.toFixed(3)}]`;
         ctx.fillStyle = '#fff';
 
-        const mapPos = toMinimapCoordinate(mapCenterPosition, playerPosition, ctx.canvas.width, ctx.canvas.height, zoomLevel, 1);
-        const imgPosCorrected = {
-            x: mapPos.x / zoomLevel - offset.x / zoomLevel + center.x,
-            y: mapPos.y / zoomLevel - offset.y / zoomLevel + center.y,
-        };
+        const position = worldCoordinateToCanvas(
+            playerPosition,
+            mapCenterPosition,
+            zoomLevel,
+            ctx.canvas.width,
+            ctx.canvas.height,
+        );
 
-        const textX = imgPosCorrected.x;
-        const textY = imgPosCorrected.y + 20 * iconScale;
+        const textX = position.x;
+        const textY = position.y + 20 * iconScale;
 
         setTextStyle(ctx, iconScale);
 
