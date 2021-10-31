@@ -35,6 +35,7 @@ export const simpleStorageDefaultSettings = {
     resamplingRate: 30,
     lastKnownPosition: debugLocations.default,
     channelsServerUrl: '',
+    showNavMesh: false,
 };
 
 {
@@ -78,6 +79,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'animationInterpolation',
     'extrapolateLocation',
     'resamplingRate',
+    'showNavMesh',
 ];
 
 export const iconSettingStorageScope = 'icon';
