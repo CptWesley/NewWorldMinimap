@@ -69,8 +69,6 @@ export default function drawMapFriends(params: MapRendererParameters, iconParams
 
         if (showText) {
             setTextStyle(ctx, iconScale);
-            ctx.font = Math.round(icon.height / 1.5) + 'px sans-serif';
-
             ctx.strokeText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
             ctx.fillText(friend.name, canvasPosition.x, canvasPosition.y + 15 * iconScale);
         }
