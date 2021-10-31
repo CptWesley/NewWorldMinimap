@@ -28,13 +28,16 @@ export function getTileCacheKeyFromWorldCoordinate(worldPos: Vector2) {
     return getTileCacheKey(8, tilePos);
 }
 
-export function getDimensions(screenWidth: number, screenHeight: number, angle?: number) {
+export function getDimensions(screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: TileScale, angle?: number) {
     if (!angle) {
         angle = 0;
     }
 
-    const x = Math.ceil(screenWidth / tileWidth / 2) * 2 + 3;
-    const y = Math.ceil(screenHeight / tileHeight / 2) * 2 + 3;
+    const width = screenWidth * zoomLevel / tileScale;
+    const height = screenHeight * zoomLevel / tileScale;
+
+    const x = Math.ceil(width / tileWidth / 2) * 2 + 3;
+    const y = Math.ceil(height / tileHeight / 2) * 2 + 3;
 
     if (angle === 0) {
         return { x, y };
@@ -45,9 +48,9 @@ export function getDimensions(screenWidth: number, screenHeight: number, angle?:
     return { x, y };
 }
 
-export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: number) {
+export function toMinimapCoordinate(playerWorldPos: Vector2, worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, tileScale: TileScale) {
     // Gets the number of tiles that should be rendered in X/Y
-    const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale);
+    const dimensions = getDimensions(screenWidth, screenHeight, zoomLevel, tileScale);
 
     // Gets the dimensions of the map, in pixel space
     const totalWidth = tileWidth * width / tileScale;

@@ -5,7 +5,7 @@ import { getDimensions, getTileCoordinatesForWorldCoordinate, getTileLevel, getT
 const tileCache = getTileCache();
 
 function getMarkersInternal(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number) {
-    const dimensions = getDimensions(screenWidth * zoomLevel, screenHeight * zoomLevel, angle);
+    const dimensions = getDimensions(screenWidth, screenHeight, zoomLevel, 1, angle);
 
     const tilePos = getTileCoordinatesForWorldCoordinate(worldPos, 1);
     const markers: Marker[] = [];
@@ -27,7 +27,7 @@ function getTilesInternal(worldPos: Vector2, screenWidth: number, screenHeight: 
     const tileLevel = getTileLevel(zoomLevel);
     const tileScale = getTileScale(tileLevel);
 
-    const dimensions = getDimensions(screenWidth * zoomLevel / tileScale, screenHeight * zoomLevel / tileScale, angle);
+    const dimensions = getDimensions(screenWidth, screenHeight, zoomLevel, tileScale, angle);
 
     const centerTilePos = getTileCoordinatesForWorldCoordinate(worldPos, tileScale);
     const xStart = -Math.floor(dimensions.x / 2);
