@@ -53,6 +53,7 @@
             "townZoomLevelTooltip": "Determines the zoom level of the map when in towns. Lower zoom may impact performance negatively.",
             "iconScale": "Icon scale",
             "iconScaleTooltip": "Determines the size of the rendered icons.",
+            "showPlayerCoordinates": "Show player coordinates",
             "showText": "Show text",
             "showTextTooltip": "Controls whether text is displayed underneath icons on the map. Enabling may impact performance negatively.",
             "animationInterpolation": "Animation interpolation",

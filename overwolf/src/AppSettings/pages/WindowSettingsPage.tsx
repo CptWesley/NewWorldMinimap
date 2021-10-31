@@ -177,5 +177,15 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.resamplingRate')}
             </label>
         </div>
+        <div className={classes.setting}>
+            <label className={classes.checkbox}>
+                <input
+                    type='checkbox'
+                    checked={settings.showPlayerCoordinates}
+                    onChange={e => updateSimpleSetting('showPlayerCoordinates', e.currentTarget.checked)}
+                />
+                {t('settings.window.showPlayerCoordinates')}
+            </label>
+        </div>
     </>;
 }
