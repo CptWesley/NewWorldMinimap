@@ -27,6 +27,7 @@ export default function drawNavMesh(params: MapRendererParameters, iconParams: M
 
     const graph = roadGraph;
 
+    setNavMeshStyle(ctx);
     for (let i = 0; i < graph.max; i++) {
         const node = graph[i];
 
@@ -48,39 +49,42 @@ export default function drawNavMesh(params: MapRendererParameters, iconParams: M
             continue;
         }
 
-        setNavMeshStyle(ctx);
-        for (const n of node.neighbors) {
-            const neighbor = graph[n];
-            if (!neighbor) {
-                continue;
+        if (zoomLevel < 4) {
+            for (const n of node.neighbors) {
+                const neighbor = graph[n];
+                if (!neighbor) {
+                    continue;
+                }
+
+                const tempNPos = worldCoordinateToCanvas(
+                    neighbor.position,
+                    mapCenterPos,
+                    zoomLevel,
+                    ctx.canvas.width,
+                    ctx.canvas.height,
+                );
+
+                const nPos = renderAsCompass ? rotateAround(center, tempNPos, -mapAngle) : tempNPos;
+
+                ctx.beginPath();
+                ctx.moveTo(position.x, position.y);
+                ctx.lineTo(nPos.x, nPos.y);
+                ctx.stroke();
             }
 
-            const tempNPos = worldCoordinateToCanvas(
-                neighbor.position,
-                mapCenterPos,
-                zoomLevel,
-                ctx.canvas.width,
-                ctx.canvas.height,
-            );
+            if (showText) {
+                setTextStyle(ctx, iconScale);
 
-            const nPos = renderAsCompass ? rotateAround(center, tempNPos, -mapAngle) : tempNPos;
+                const textX = position.x;
+                const textY = position.y + 20 * iconScale;
 
-            ctx.beginPath();
-            ctx.moveTo(position.x, position.y);
-            ctx.lineTo(nPos.x, nPos.y);
-            ctx.stroke();
+                ctx.strokeText(i.toString(), textX, textY);
+                ctx.fillText(i.toString(), textX, textY);
+
+                setNavMeshStyle(ctx);
+            }
         }
 
         ctx.fillRect(position.x - 4, position.y - 4, 8, 8);
-
-        if (showText) {
-            setTextStyle(ctx, iconScale);
-
-            const textX = position.x;
-            const textY = position.y + 20 * iconScale;
-
-            ctx.strokeText(i.toString(), textX, textY);
-            ctx.fillText(i.toString(), textX, textY);
-        }
     }
 }
