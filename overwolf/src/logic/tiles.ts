@@ -82,12 +82,12 @@ export function worldCoordinateToCanvas(worldPos: Vector2, centerPos: Vector2, z
     const centerDistanceY = centerPos.y - worldPos.y;
 
     // Compute the scaling factor to go from world space to pixel space.
-    // Unit: pixel / world
+    // Unit: imagePixel / world
     const scaleWorldToCanvasX = (width * tileWidth) / gameMapWidth;
     const scaleWorldToCanvasY = (height * tileHeight) / gameMapHeight;
 
     // Compute the actual scaling factor, taking zoom into account.
-    // Unit: (pixel / world) / (pixel / canvasPixel) = canvasPixel / world
+    // Unit: (imagePixel / world) / (imagePixel / canvasPixel) = canvasPixel / world
     const scaleX = scaleWorldToCanvasX / zoomLevel;
     const scaleY = scaleWorldToCanvasY / zoomLevel;
 
@@ -105,33 +105,43 @@ export function worldCoordinateToCanvas(worldPos: Vector2, centerPos: Vector2, z
     return { x, y };
 }
 
-//    Function: canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, screenWidth, screenHeight)
-//    Translates a canvas position vector to a vector in worldspace. Respecting zoom provided.
-//
-//    Example Usage:
-//       x = mouse.pageX;
-//       y = mouse.pageY;
-//       // rotate for compass angle if required prior to translating
-//       const rotatedSourceVector = rotateAround({ x: centerX, y: centerY }, {x, y}, angle);
-//       const pos = renderAsCompass ? rotatedSourceVector : {x,y};
-//       const imgPos = canvasToMinimap(pos, mapCenterPos, zoomLevel, ctx.canvas.width, ctx.canvas.height);
-//
-export function canvasToMinimapCoordinate(canvasPos: Vector2, centerPos: Vector2, zoomLevel: number, screenWidth: number, screenHeight: number) {
-    const totalWidth = tileWidth * width;
-    const totalHeight = tileHeight * height;
-    const viewWidthInWorld = (screenWidth * zoomLevel * gameMapWidth) / totalWidth;
-    const viewHeightInWorld = (screenHeight * zoomLevel * gameMapHeight) / totalHeight;
+/**
+ * Converts canvas coordinates to world coordinates.
+ * @param worldPos The world position to convert to canvas coordinates.
+ * @param centerPos The world position the map is centered on.
+ * @param zoomLevel The current zoom level of the canvas.
+ * @param canvasWidth The width of the canvas.
+ * @param canvasHeight The height of the canvas.
+ * @returns The computed canvas coordinates.
+ */
+export function canvasCoordinateToWorld(canvasPos: Vector2, centerPos: Vector2, zoomLevel: number, canvasWidth: number, canvasHeight: number): Vector2 {
+    // Compute the center of the canvas.
+    // Unit: canvasPixel
+    const centerCanvasX = canvasWidth / 2;
+    const centerCanvasY = canvasHeight / 2;
 
-    const x = canvasPos.x * zoomLevel;
-    const y = canvasPos.y * zoomLevel;
+    // Compute the distance between the center of the canvas and canvasPos.
+    // Unit: canvasPixel - canvasPixel = canvasPixel
+    const centerDistanceX = centerCanvasX - canvasPos.x;
+    const centerDistanceY = centerCanvasY - canvasPos.y;
 
-    const worldOffsetX = (x * gameMapWidth) / totalWidth;
-    const finalPosX = worldOffsetX + (centerPos.x - viewWidthInWorld / 2);
+    // Compute the scaling factor to go from pixel space to world space.
+    // Unit: world / imagePixel
+    const scaleCanvasToWorldX = gameMapWidth / (width * tileWidth);
+    const scaleCanvasToWorldY = gameMapHeight / (height * tileHeight);
 
-    const workdOffsetY = gameMapHeight - (gameMapHeight - (y * gameMapHeight) / totalHeight);
-    const finalPosY = (centerPos.y + viewHeightInWorld / 2) - workdOffsetY;
+    // Compute the actual scaling factor, taking zoom into account.
+    // Unit: (world / imagePixel) * (imagePixel / canvasPixel) = world / canvasPixel
+    const scaleX = scaleCanvasToWorldX * zoomLevel;
+    const scaleY = scaleCanvasToWorldY * zoomLevel;
 
-    return { x: finalPosX, y: finalPosY };
+    // Compute the canvas coordinates.
+    // Unit: world - (canvasPixel * (world / canvasPixel)) = world
+    const x = centerPos.x - (centerDistanceX * scaleX);
+    // Use addition, because the Y axis is inverted (and double minus = plus)
+    const y = centerPos.y + (centerDistanceY * scaleY);
+
+    return { x, y };
 }
 
 export function getTileLevel(zoomLevel: number): TileLevel {

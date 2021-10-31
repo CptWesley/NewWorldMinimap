@@ -1,7 +1,7 @@
 import React from 'react';
 import { getIconName } from '@/logic/icons';
 import { getMarkers } from '@/logic/markers';
-import { canvasToMinimapCoordinate, getTileCoordinatesForWorldCoordinate, worldCoordinateToCanvas } from '@/logic/tiles';
+import { canvasCoordinateToWorld, getTileCoordinatesForWorldCoordinate, worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import { LastDrawParameters } from '@/Minimap/useMinimapRenderer';
 
@@ -50,7 +50,7 @@ export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawPara
     }
 
     const finalPos = renderAsCompass ? rotateAround(center, mousePos, angle) : mousePos;
-    const mouseInWorld = canvasToMinimapCoordinate(finalPos, mapCenterPosition, zoomLevel, ctx.canvas.width, ctx.canvas.height);
+    const mouseInWorld = canvasCoordinateToWorld(finalPos, mapCenterPosition, zoomLevel, ctx.canvas.width, ctx.canvas.height);
 
     const tilePos = getTileCoordinatesForWorldCoordinate(mouseInWorld, 1);
     const markers = getMarkers(tilePos);

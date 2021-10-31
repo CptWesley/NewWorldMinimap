@@ -16,7 +16,7 @@ import { getMarkers } from './logic/markers';
 import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
 import { store } from './logic/storage';
 import { getTileCache } from './logic/tileCache';
-import { canvasToMinimapCoordinate } from './logic/tiles';
+import { canvasCoordinateToWorld } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
 import { townZoomDistance } from './Minimap/mapConstants';
@@ -159,7 +159,7 @@ export default function Minimap(props: IProps) {
             const town = getNearestTown(centerPos);
             const zoomLevel = town.distance <= townZoomDistance ? appContext.settings.townZoomLevel : appContext.settings.zoomLevel;
 
-            let worldPos = canvasToMinimapCoordinate(canvasPos, centerPos, zoomLevel, width, height);
+            let worldPos = canvasCoordinateToWorld(canvasPos, centerPos, zoomLevel, width, height);
             if (appContext.settings.compassMode && (appContext.isTransparentSurface ?? false)) {
                 worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
             }
