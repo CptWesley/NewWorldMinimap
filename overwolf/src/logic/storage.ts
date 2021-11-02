@@ -36,6 +36,7 @@ export const simpleStorageDefaultSettings = {
     lastKnownPosition: debugLocations.default,
     channelsServerUrl: '',
     showNavMesh: false,
+    alwaysLaunchDesktop: false,
 };
 
 {

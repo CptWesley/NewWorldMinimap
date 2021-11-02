@@ -36,6 +36,16 @@ export default function OverlaySettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.overlay.shape')}
             </label>
         </div>
+        <div className={classes.setting}>
+            <label className={classes.checkbox} title={t('settings.overlay.alwaysLaunchDesktopTooltip')}>
+                <input
+                    type='checkbox'
+                    checked={settings.alwaysLaunchDesktop}
+                    onChange={e => updateSimpleSetting('alwaysLaunchDesktop', e.currentTarget.checked)}
+                />
+                {t('settings.overlay.alwaysLaunchDesktop')}
+            </label>
+        </div>
         <AdvancedSettings>
             <div className={classes.setting}>
                 <label className={classes.range} title={t('settings.overlay.opacityTooltip')}>

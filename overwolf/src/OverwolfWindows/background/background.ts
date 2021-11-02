@@ -1,6 +1,7 @@
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
 import { initializeHooks } from '@/logic/hooks';
 import { initializeNavigation } from '@/logic/navigation/navigation';
+import { load } from '@/logic/storage';
 import UnloadingEvent from '@/logic/unloadingEvent';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
@@ -71,7 +72,7 @@ export class BackgroundController {
     public run = async () => {
         this._NewWorldGameListener.start();
         // Decide whether to start the in-game or desktop window when running
-        const currWindow: ConcreteWindow = await this.isNewWorldRunning()
+        const currWindow: ConcreteWindow = await this.isNewWorldRunning() && !load('alwaysLaunchDesktop')
             ? 'inGame'
             : 'desktop';
         this.openWindow(currWindow);

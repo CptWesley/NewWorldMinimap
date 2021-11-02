@@ -71,6 +71,8 @@
         },
         "overlay": {
             "_": "In-game overlay",
+            "alwaysLaunchDesktop": "Always launch desktop window",
+            "alwaysLaunchDesktopTooltip": "Always launches the desktop window, even if the app started because of launching the game.",
             "compassMode": "Overlay Compass Mode",
             "compassModeTooltip": "Enabling will make the player always face north and rotates the map around the player, like a classic minimap.",
             "opacity": "Overlay Opacity",
