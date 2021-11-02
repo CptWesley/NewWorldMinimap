@@ -39,6 +39,10 @@ module.exports = (env, argv) => {
                         test: /[\\/]node_modules[\\/]/,
                         reuseExistingChunk: true,
                     },
+                    roadGraphData: {
+                        test: /roadGraphData\.js/,
+                        reuseExistingChunk: true,
+                    }
                 },
             },
         },
