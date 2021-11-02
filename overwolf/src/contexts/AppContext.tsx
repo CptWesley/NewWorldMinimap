@@ -38,6 +38,7 @@ export function loadAppContextSettings(): AppContextSettings {
         channelsServerUrl: load('channelsServerUrl'),
         showNavMesh: load('showNavMesh'),
         alwaysLaunchDesktop: load('alwaysLaunchDesktop'),
+        autoLaunchInGame: load('autoLaunchInGame'),
     };
 }
 

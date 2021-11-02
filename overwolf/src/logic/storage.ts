@@ -37,6 +37,7 @@ export const simpleStorageDefaultSettings = {
     channelsServerUrl: '',
     showNavMesh: false,
     alwaysLaunchDesktop: false,
+    autoLaunchInGame: true,
 };
 
 {

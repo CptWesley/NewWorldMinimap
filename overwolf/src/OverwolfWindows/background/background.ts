@@ -72,13 +72,23 @@ export class BackgroundController {
     public run = async () => {
         this._NewWorldGameListener.start();
         // Decide whether to start the in-game or desktop window when running
-        const currWindow: ConcreteWindow = await this.isNewWorldRunning() && !load('alwaysLaunchDesktop')
-            ? 'inGame'
-            : 'desktop';
-        this.openWindow(currWindow);
+        const running = await this.isNewWorldRunning();
+        const alwaysLaunchDesktop = load('alwaysLaunchDesktop');
+
+        if (!running) {
+            await this.openWindow('desktop');
+        } else {
+            if (alwaysLaunchDesktop) {
+                await this.openWindow('desktop');
+            }
+            // Always launch the in-game window in this branch, otherwise
+            // no windows would be displayed.
+            await this.openWindow('inGame');
+        }
     }
 
     public async openWindow(window: ConcreteWindow) {
+        console.trace();
         if (this._openWindows.has(window)) {
             const windowState = await this._windows[window].getWindowState();
             if (windowState.window_state && bringToFrontWindowStates.includes(windowState.window_state)) {
@@ -103,9 +113,7 @@ export class BackgroundController {
         this._openWindows.delete(window);
         this._windows[window].close();
 
-        if (this._openWindows.size === 0) {
-            this._windows.background.close();
-        }
+        this.exitIfNoWindowsOpen();
     }
 
     public listenOnGameRunningChange = this._gameRunningEvent.register;
@@ -120,7 +128,9 @@ export class BackgroundController {
         }
 
         this._gameRunning = true;
-        this.openWindow('inGame');
+        if (load('autoLaunchInGame')) {
+            this.openWindow('inGame');
+        }
         this._gameRunningEvent.fire(true);
     };
 
@@ -142,6 +152,12 @@ export class BackgroundController {
 
     private isGameNewWorld = (info: RunningGameInfo) => {
         return info.classId === newWorldId;
+    }
+
+    private exitIfNoWindowsOpen = () => {
+        if (this._openWindows.size === 0) {
+            this._windows.background.close();
+        }
     }
 }
 
