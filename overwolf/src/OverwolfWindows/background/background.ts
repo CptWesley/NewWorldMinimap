@@ -88,7 +88,6 @@ export class BackgroundController {
     }
 
     public async openWindow(window: ConcreteWindow) {
-        console.trace();
         if (this._openWindows.has(window)) {
             const windowState = await this._windows[window].getWindowState();
             if (windowState.window_state && bringToFrontWindowStates.includes(windowState.window_state)) {
