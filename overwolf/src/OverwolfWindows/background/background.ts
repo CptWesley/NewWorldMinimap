@@ -1,6 +1,7 @@
 import { initializeDynamicSettings } from '@/logic/dynamicSettings';
 import { initializeHooks } from '@/logic/hooks';
 import { initializeNavigation } from '@/logic/navigation/navigation';
+import { load } from '@/logic/storage';
 import UnloadingEvent from '@/logic/unloadingEvent';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
 import { initializeHotkeyManager } from '../../logic/hotkeyManager';
@@ -71,10 +72,19 @@ export class BackgroundController {
     public run = async () => {
         this._NewWorldGameListener.start();
         // Decide whether to start the in-game or desktop window when running
-        const currWindow: ConcreteWindow = await this.isNewWorldRunning()
-            ? 'inGame'
-            : 'desktop';
-        this.openWindow(currWindow);
+        const running = await this.isNewWorldRunning();
+        const alwaysLaunchDesktop = load('alwaysLaunchDesktop');
+
+        if (!running) {
+            await this.openWindow('desktop');
+        } else {
+            if (alwaysLaunchDesktop) {
+                await this.openWindow('desktop');
+            }
+            // Always launch the in-game window in this branch, otherwise
+            // no windows would be displayed.
+            await this.openWindow('inGame');
+        }
     }
 
     public async openWindow(window: ConcreteWindow) {
@@ -102,9 +112,7 @@ export class BackgroundController {
         this._openWindows.delete(window);
         this._windows[window].close();
 
-        if (this._openWindows.size === 0) {
-            this._windows.background.close();
-        }
+        this.exitIfNoWindowsOpen();
     }
 
     public listenOnGameRunningChange = this._gameRunningEvent.register;
@@ -119,7 +127,9 @@ export class BackgroundController {
         }
 
         this._gameRunning = true;
-        this.openWindow('inGame');
+        if (load('autoLaunchInGame')) {
+            this.openWindow('inGame');
+        }
         this._gameRunningEvent.fire(true);
     };
 
@@ -141,6 +151,12 @@ export class BackgroundController {
 
     private isGameNewWorld = (info: RunningGameInfo) => {
         return info.classId === newWorldId;
+    }
+
+    private exitIfNoWindowsOpen = () => {
+        if (this._openWindows.size === 0) {
+            this._windows.background.close();
+        }
     }
 }
 

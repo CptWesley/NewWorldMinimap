@@ -71,6 +71,10 @@
         },
         "overlay": {
             "_": "In-game overlay",
+            "alwaysLaunchDesktop": "Always open desktop window on launch",
+            "alwaysLaunchDesktopTooltip": "Always opens the desktop window when launching CptWesley's Minimap, even if the game is running.",
+            "autoLaunchInGame": "Automatically open in-game window while this app is running",
+            "autoLaunchInGameTooltip": "Automatically opens the in-game window when the game is started and CptWesley's Minimap is running.",
             "compassMode": "Overlay Compass Mode",
             "compassModeTooltip": "Enabling will make the player always face north and rotates the map around the player, like a classic minimap.",
             "opacity": "Overlay Opacity",

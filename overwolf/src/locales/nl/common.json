@@ -67,6 +67,10 @@
         },
         "overlay": {
             "_": "In-game overlay",
+            "alwaysLaunchDesktop": "Altijd het venster buiten het spel openen",
+            "alwaysLaunchDesktopTooltip": "Open altijd het venster buiten het spel wanneer CptWesley's Minimap gestart wordt, zelfs als het spel actief is.",
+            "autoLaunchInGame": "Automatisch het in-game venster openen als deze app actief is",
+            "autoLaunchInGameTooltip": "Open automatisch het in-game venster wanneer het spel geopend wordt en de CptWesley's Minimap actief is.",
             "compassMode": "Kompasmodus overlay",
             "compassModeTooltip": "Zorgt ervoor dat de speler altijd richting het noorden kijkt, en draait de kaart mee, zoals een klassieke minimap.",
             "opacity": "Ondoorzichtigheid overlay",

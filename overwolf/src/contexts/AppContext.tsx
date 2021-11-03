@@ -37,6 +37,8 @@ export function loadAppContextSettings(): AppContextSettings {
         lastKnownPosition: load('lastKnownPosition'),
         channelsServerUrl: load('channelsServerUrl'),
         showNavMesh: load('showNavMesh'),
+        alwaysLaunchDesktop: load('alwaysLaunchDesktop'),
+        autoLaunchInGame: load('autoLaunchInGame'),
     };
 }
 
