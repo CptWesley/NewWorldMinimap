@@ -11,7 +11,7 @@ export function getNumberInterpolator(animationInterpolation: AnimationInterpola
 
 export function getAngleInterpolator(animationInterpolation: AnimationInterpolation): Interpolator<number> {
     switch (animationInterpolation) {
-        case 'cosine': return interpolateAngleCosine;
+        case 'cosine': return interpolateAngleLinear;
         case 'linear': return interpolateAngleLinear;
         case 'none': return undefined;
     }
