@@ -39,7 +39,7 @@ export function loadAppContextSettings(): AppContextSettings {
         showNavMesh: load('showNavMesh'),
         alwaysLaunchDesktop: load('alwaysLaunchDesktop'),
         autoLaunchInGame: load('autoLaunchInGame'),
-        rotationSource: load('rotationSouce'),
+        rotationSource: load('rotationSource'),
     };
 }
 

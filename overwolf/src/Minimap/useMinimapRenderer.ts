@@ -225,7 +225,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
             updateInterpolatedPlayerPosition(predictedPosition, updateTime);
         }
-        updateInterpolatedAngle(getAngle(lastPlayerPosition.current, currentPlayerPosition.current), updateTime);
+        updateInterpolatedAngle(currentPlayerAngle.current, updateTime);
 
         redraw(true);
     }
