@@ -38,6 +38,7 @@ export const simpleStorageDefaultSettings = {
     showNavMesh: false,
     alwaysLaunchDesktop: false,
     autoLaunchInGame: true,
+    rotationSource: 'api' as RotationSource,
 };
 
 {
@@ -82,6 +83,7 @@ export const scopedSettings: (keyof SimpleStorageSetting)[] = [
     'extrapolateLocation',
     'resamplingRate',
     'showNavMesh',
+    'rotationSource',
 ];
 
 export const iconSettingStorageScope = 'icon';

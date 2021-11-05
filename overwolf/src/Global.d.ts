@@ -53,7 +53,7 @@ declare type IconSettings = {
 
 declare type PlayerData = {
     position: Vector3,
-    rotation: Vector3,
+    rotation: number,
     compass: string,
     map: string | undefined,
     name: string | undefined,
@@ -64,6 +64,11 @@ type AnimationInterpolation =
     | 'none'
     | 'cosine'
     | 'linear'
+    ;
+
+type RotationSource =
+    | 'api'
+    | 'computed'
     ;
 
 declare type GraphNode = {
