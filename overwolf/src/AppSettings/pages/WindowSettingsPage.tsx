@@ -178,17 +178,29 @@ export default function WindowSettingsPage(props: IAppSettingsPageProps) {
                 {t('settings.window.resamplingRate')}
             </label>
         </div>
-        <div className={classes.setting} title={t('settings.window.showPlayerCoordinatesTooltip')}>
-            <label className={classes.checkbox}>
-                <input
-                    type='checkbox'
-                    checked={settings.showPlayerCoordinates}
-                    onChange={e => updateSimpleSetting('showPlayerCoordinates', e.currentTarget.checked)}
-                />
-                {t('settings.window.showPlayerCoordinates')}
+        <div className={classes.setting}>
+            <label className={classes.select} title={t('settings.window.rotationSourceTooltip')}>
+                <select
+                    value={settings.rotationSource}
+                    onChange={e => updateSimpleSetting('rotationSource', e.currentTarget.value as RotationSource)}
+                >
+                    <option value='api'>{t('settings.window.rotationSourceApi')}</option>
+                    <option value='computed'>{t('settings.window.rotationSourceComputed')}</option>
+                </select>
+                {t('settings.window.rotationSource')}
             </label>
         </div>
         <AdvancedSettings>
+            <div className={classes.setting} title={t('settings.window.showPlayerCoordinatesTooltip')}>
+                <label className={classes.checkbox}>
+                    <input
+                        type='checkbox'
+                        checked={settings.showPlayerCoordinates}
+                        onChange={e => updateSimpleSetting('showPlayerCoordinates', e.currentTarget.checked)}
+                    />
+                    {t('settings.window.showPlayerCoordinates')}
+                </label>
+            </div>
             <div className={classes.setting} title={t('settings.window.showNavMeshTooltip')}>
                 <label className={classes.checkbox}>
                     <input
