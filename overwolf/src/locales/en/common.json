@@ -67,7 +67,11 @@
             "resamplingRate": "Upsampling factor",
             "resamplingRateTooltip": "The number of samples taken when performing inter/extra-polation. A higher value will give a smoother experience, but has worse performance.",
             "showNavMesh": "Show Nagivation Mesh",
-            "showNavMeshTooltip": "Shows the navigation mesh. Useful for debugging the navigation system. Causes a heavy performance hit. Don't enable unless necessary."
+            "showNavMeshTooltip": "Shows the navigation mesh. Useful for debugging the navigation system. Causes a heavy performance hit. Don't enable unless necessary.",
+            "rotationSource": "Rotation Data",
+            "rotationSourceTooltip": "Determines which source of rotation data is used when rendering player on the minimap.",
+            "rotationSourceApi": "Character Direction",
+            "rotationSourceComputed": "Movement Direction"
         },
         "overlay": {
             "_": "In-game overlay",
