@@ -45,6 +45,30 @@ export const townLocations = {
         x: 13179,
         y: 6970,
     },
+    'eastburn': {
+        x: 10060,
+        y: 7503,
+    },
+    'cleaves_point': {
+        x: 8872,
+        y: 7951,
+    },
+    'mountainhome': {
+        x: 9212,
+        y: 9060,
+    },
+    'mountainrise': {
+        x: 10329,
+        y: 8928,
+    },
+    'valor_hold': {
+        x: 11141,
+        y: 7310,
+    },
+    'last_stand': {
+        x: 12079,
+        y: 8521,
+    },
 };
 
 export function getNearestTown(position: Vector2) {
