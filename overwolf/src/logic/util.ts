@@ -79,12 +79,6 @@ export function interpolateVectorsCosine(start: Vector2, end: Vector2, percentag
     };
 }
 
-export function interpolateAngleCosine(start: number, end: number, percentage: number) {
-    const mu = computeCosineInterpolationMu(percentage);
-    const bestEnd = correctEndAngle(start, end);
-    return start * (1 - mu) + bestEnd * mu;
-}
-
 function correctEndAngle(start: number, end: number) {
     const alternativeEnd1 = end - Math.PI * 2;
     const alternativeEnd2 = end + Math.PI * 2;
