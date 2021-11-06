@@ -16,6 +16,7 @@ import { canvasCoordinateToWorld } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
 import { townZoomDistance } from './Minimap/mapConstants';
+import MinimapUpdateNotification from './Minimap/MinimapUpdateNotification';
 import useMinimapRenderer from './Minimap/useMinimapRenderer';
 import MinimapToolbars, { MinimapInteractionMode } from './MinimapToolbars';
 import { makeStyles } from './theme';
@@ -38,13 +39,16 @@ const useStyles = makeStyles()(() => {
         minimap: {
             position: 'relative',
         },
-        cacheStatus: {
-            background: 'rgba(0, 0, 0, 0.5)',
-            color: '#ffffff',
+        statuses: {
             position: 'absolute',
             left: 0,
             bottom: 0,
-            zIndex: globalLayers.minimapCacheStatus,
+            zIndex: globalLayers.minimapStatuses,
+
+            '& > *': {
+                background: 'rgba(0, 0, 0, 0.5)',
+                color: '#ffffff',
+            },
         },
         canvas: {
             ...canvasStyling,
@@ -309,8 +313,9 @@ export default function Minimap(props: IProps) {
             setInteractionMode={setInteractionMode}
             zoomBy={zoomBy}
         />
-        <div className={classes.cacheStatus}>
+        <div className={classes.statuses}>
             {tilesDownloading > 0 && <p>{t('minimap.tilesLoading', { count: tilesDownloading })}</p>}
+            <MinimapUpdateNotification />
         </div>
     </div>;
 }

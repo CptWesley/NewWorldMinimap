@@ -6,6 +6,7 @@
     "delete": "Delete",
     "selectAll": "Select all",
     "deselectAll": "Deselect all",
+    "unknown": "unknown",
     "header": {
         "settings": "Settings",
         "openInGame": "Open in-game window",
@@ -27,7 +28,10 @@
         "recenter": "Center on player location",
         "mode_drag": "Drag",
         "mode_destination": "Mark destination",
-        "compassMode": "Compass Mode (overlay)"
+        "compassMode": "Compass Mode (overlay)",
+        "updateAvailable": "An update is available ({{version}}). <1>Download now</1>.",
+        "updateDownloaded": "Update downloaded. <1>Restart to apply</1>.",
+        "updateFailed": "Update failed ({{reason}})."
     },
     "settings": {
         "title": "Settings",
