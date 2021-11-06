@@ -77,17 +77,3 @@ function downloadUpdateInternal() {
         }
     });
 }
-
-(window as any).doUpdate = function (st: any, vr: any) {
-    onAppUpdateEvent.fire({
-        state: st,
-        version: vr,
-    });
-};
-
-(window as any).failUpdate = function (err: string) {
-    onAppUpdateEvent.fire({
-        state: 'UpdateFailed',
-        error: err,
-    });
-};
