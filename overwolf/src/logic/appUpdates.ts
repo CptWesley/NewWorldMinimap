@@ -1,6 +1,7 @@
 import UnloadingEvent from './unloadingEvent';
 
 const updateIntervalTimeMS = 300_000;
+const updateFailureCloseTime = 10_000;
 
 type OverwolfUpdateWindow = typeof window & {
     NWMM_appUpdates: {
@@ -25,7 +26,7 @@ interface IAppUpdateFailed {
 
 export type AppUpdateInfo = IAppUpdateAvailable | IAppUpdateDownloaded | IAppUpdateFailed;
 
-type OnAppUpdateListener = (info: AppUpdateInfo) => void;
+type OnAppUpdateListener = (info: AppUpdateInfo | undefined) => void;
 const onAppUpdateEvent = new UnloadingEvent<OnAppUpdateListener>('onAppUpdate');
 const isBackground = NWMM_APP_WINDOW === 'background';
 
@@ -70,6 +71,9 @@ function downloadUpdateInternal() {
                 state: 'UpdateFailed',
                 error: e.error || 'unknown',
             });
+            setTimeout(() => {
+                onAppUpdateEvent.fire(undefined);
+            }, updateFailureCloseTime);
         }
     });
 }
