@@ -101,14 +101,14 @@ export default function Minimap(props: IProps) {
         zoomBy,
     } = useMinimapRenderer(canvas, hoverLabelCanvas);
 
-    function setPosition(pos: Vector2) {
+    function setPosition(pos: Vector2, rotation: number) {
         if (appContext.settings.shareLocation) {
             const sharedLocation = updateFriendLocation(appContext.settings.channelsServerUrl, playerName.current, pos);
             sharedLocation.then(setFriends);
         }
 
         store('lastKnownPosition', pos);
-        setPlayerPosition(pos);
+        setPlayerPosition(pos, rotation);
     }
 
     function setFriends(channels: undefined | FriendData[]) {
@@ -268,7 +268,7 @@ export default function Minimap(props: IProps) {
         (window as any).setFriends = setFriends;
 
         const callbackUnregister = registerEventCallback(info => {
-            setPosition(info.position);
+            setPosition(info.position, info.rotation);
 
             if (info.name) {
                 playerName.current = info.name;

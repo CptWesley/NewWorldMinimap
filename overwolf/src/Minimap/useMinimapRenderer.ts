@@ -206,12 +206,12 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         drawWithInterpolationRef.current(force);
     }
 
-    function setPlayerPosition(pos: Vector2) {
+    function setPlayerPosition(pos: Vector2, rotation: number) {
         if (pos.x === currentPlayerPosition.current.x && pos.y === currentPlayerPosition.current.y) {
             return;
         }
 
-        currentPlayerAngle.current = getAngle(lastPlayerPosition.current, currentPlayerPosition.current);
+        currentPlayerAngle.current = appContext.settings.rotationSource === 'computed' ? getAngle(lastPlayerPosition.current, currentPlayerPosition.current) : rotation;
         lastPositionUpdate.current = performance.now();
         lastPlayerPosition.current = currentPlayerPosition.current;
         currentPlayerPosition.current = pos;
@@ -225,7 +225,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             const predictedPosition = predictVector(lastPlayerPosition.current, currentPlayerPosition.current);
             updateInterpolatedPlayerPosition(predictedPosition, updateTime);
         }
-        updateInterpolatedAngle(getAngle(lastPlayerPosition.current, currentPlayerPosition.current), updateTime);
+        updateInterpolatedAngle(currentPlayerAngle.current, updateTime);
 
         redraw(true);
     }

@@ -11,7 +11,7 @@ export function getNumberInterpolator(animationInterpolation: AnimationInterpola
 
 export function getAngleInterpolator(animationInterpolation: AnimationInterpolation): Interpolator<number> {
     switch (animationInterpolation) {
-        case 'cosine': return interpolateAngleCosine;
+        case 'cosine': return interpolateAngleLinear;
         case 'linear': return interpolateAngleLinear;
         case 'none': return undefined;
     }
@@ -77,12 +77,6 @@ export function interpolateVectorsCosine(start: Vector2, end: Vector2, percentag
         x: start.x * (1 - mu) + end.x * mu,
         y: start.y * (1 - mu) + end.y * mu,
     };
-}
-
-export function interpolateAngleCosine(start: number, end: number, percentage: number) {
-    const mu = computeCosineInterpolationMu(percentage);
-    const bestEnd = correctEndAngle(start, end);
-    return start * (1 - mu) + bestEnd * mu;
 }
 
 function correctEndAngle(start: number, end: number) {
