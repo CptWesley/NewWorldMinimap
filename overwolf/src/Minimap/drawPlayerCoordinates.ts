@@ -1,4 +1,5 @@
 import { worldCoordinateToCanvas } from '@/logic/tiles';
+import { rotateAround } from '@/logic/util';
 import setTextStyle from './setTextStyle';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
@@ -9,6 +10,9 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
         mapCenterPosition,
         zoomLevel,
         showPlayerCoordinates,
+        renderAsCompass,
+        mapAngle,
+        center,
     } = params;
 
     const {
@@ -26,9 +30,12 @@ export default function drawPlayerCoordinates(params: MapRendererParameters, ico
             ctx.canvas.width,
             ctx.canvas.height,
         );
+        const canvasPosition = renderAsCompass
+            ? rotateAround(center, position, -mapAngle)
+            : position;
 
-        const textX = position.x;
-        const textY = position.y + 20 * iconScale;
+        const textX = canvasPosition.x;
+        const textY = canvasPosition.y + 20 * iconScale;
 
         setTextStyle(ctx, iconScale);
 
