@@ -17,7 +17,7 @@ import drawNavMesh from './drawNavMesh';
 import drawPlayerCoordinates from './drawPlayerCoordinates';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
 import { useInterpolation } from './useInterpolation';
-import drawFeatureCollection from "@/Minimap/drawFeatureCollection";
+import drawFeatureCollection from '@/Minimap/drawFeatureCollection';
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,

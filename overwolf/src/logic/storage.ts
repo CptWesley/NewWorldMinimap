@@ -1,5 +1,5 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
-import {FeatureCollection} from "geojson";
+import {FeatureCollection} from 'geojson';
 
 export const debugFeatureCollections = {
     weaversFen: JSON.parse(`
@@ -27,7 +27,6 @@ export const debugFeatureCollections = {
         }
     `) as FeatureCollection,
 };
-
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
