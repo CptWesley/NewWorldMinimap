@@ -13,6 +13,7 @@ import FriendSettingsPage from './pages/FriendChannelsSettingsPage';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
+import PreviewFeaturesSettingsPage from './pages/PreviewFeaturesSettingsPage';
 
 interface IProps {
     visible: boolean;
@@ -178,6 +179,7 @@ const settingsPageMap = {
     overlay: OverlaySettingsPage,
     icon: IconSettingsPage,
     friendChannels: FriendSettingsPage,
+    previewFeatures: PreviewFeaturesSettingsPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
@@ -185,6 +187,7 @@ const settingsPages: (keyof typeof settingsPageMap)[] = [
     'overlay',
     'icon',
     'friendChannels',
+    'previewFeatures',
 ];
 
 export default function AppSettings(props: IProps) {
@@ -240,6 +243,19 @@ export default function AppSettings(props: IProps) {
                     >
                         {t(`settings.${p}._`)}
                     </button>
+                )}
+                {previewSettingsPages.map(p => {
+                    const page = p[0];
+                    const shouldRender = p[1](context.settings);
+                    return shouldRender ? (
+                        <button key={page}
+                            className={clsx(classes.navItem, page === currentPage && classes.navItemActive)}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {t(`settings.${p[0]}._`)}
+                        </button>
+                    ) : <></>;
+                }
                 )}
             </nav>
             <div className={classes.content}>
