@@ -14,6 +14,7 @@ import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
 import PreviewFeaturesSettingsPage from './pages/PreviewFeaturesSettingsPage';
+import FeatureCollectionPage, {featureCollectionPageEnabled} from './pages/FeatureCollectionPage';
 
 interface IProps {
     visible: boolean;
@@ -180,6 +181,7 @@ const settingsPageMap = {
     icon: IconSettingsPage,
     friendChannels: FriendSettingsPage,
     previewFeatures: PreviewFeaturesSettingsPage,
+    featureCollection: FeatureCollectionPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
@@ -188,6 +190,10 @@ const settingsPages: (keyof typeof settingsPageMap)[] = [
     'icon',
     'friendChannels',
     'previewFeatures',
+];
+
+const previewSettingsPages: [keyof typeof settingsPageMap, (settings: AppContextSettings) => Boolean][] = [
+    ['featureCollection', featureCollectionPageEnabled],
 ];
 
 export default function AppSettings(props: IProps) {

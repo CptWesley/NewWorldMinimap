@@ -118,6 +118,8 @@
             "featureCollectionRender": "Render Feature Collection.",
             "featureCollectionEdit": "Edit Feature Collection."
         },
+        "featureCollection": {
+            "_": "Feature collection"
         }
     }
 }

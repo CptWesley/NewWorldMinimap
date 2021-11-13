@@ -75,3 +75,8 @@ declare type GraphNode = {
     position: Vector2,
     neighbors: number[],
 }
+
+declare type featureProperties = {
+    strokeStyle?: string,
+    lineWidth?: number,
+}

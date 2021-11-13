@@ -17,6 +17,7 @@ import drawNavMesh from './drawNavMesh';
 import drawPlayerCoordinates from './drawPlayerCoordinates';
 import { angleInterpolationTime, locationInterpolationTime, mapFastZoom, mapSlowZoom, tooLargeDistance, townZoomDistance } from './mapConstants';
 import { useInterpolation } from './useInterpolation';
+import drawFeatureCollection from "@/Minimap/drawFeatureCollection";
 
 export type MapRendererParameters = {
     context: CanvasRenderingContext2D,
@@ -29,6 +30,7 @@ export type MapRendererParameters = {
     zoomLevel: number,
     showPlayerCoordinates: boolean,
     showNavMesh: boolean,
+    showFeatureCollection: boolean,
 }
 
 export type MapIconRendererParameters = {
@@ -151,6 +153,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
             zoomLevel,
             showPlayerCoordinates: appContext.settings.showPlayerCoordinates,
             showNavMesh: appContext.settings.showNavMesh,
+            showFeatureCollection: appContext.settings.enabledPreviewFunctionailities.includes('feature-collection-render'),
         };
 
         const toDraw = drawMapTiles(mapRendererParameters);
@@ -181,6 +184,8 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
 
         drawPlayerCoordinates(mapRendererParameters, mapIconRendererParameters);
+
+        drawFeatureCollection(mapRendererParameters, mapIconRendererParameters, appContext.settings.featureCollection.features);
 
         lastDrawParameters.current = {
             mapRendererParams: mapRendererParameters,
@@ -276,6 +281,7 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
         appContext.settings.animationInterpolation,
         appContext.settings.compassMode,
         appContext.settings.extrapolateLocation,
+        appContext.settings.featureCollection,
         appContext.settings.iconScale,
         appContext.settings.iconSettings,
         appContext.settings.showNavMesh,
