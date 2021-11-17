@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
+import { enableForbiddenFeatures } from '@/logic/featureFlags';
 import { FriendData } from '@/logic/friends';
 import MapIconsCache from '@/logic/mapIconsCache';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
@@ -172,11 +173,13 @@ export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasEle
 
         const navTarget = drawMapNavigation(mapRendererParameters);
 
-        drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
+        if (enableForbiddenFeatures) {
+            drawMapMarkers(mapRendererParameters, mapIconRendererParameters, toDraw);
 
-        drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
+            drawMapFriends(mapRendererParameters, mapIconRendererParameters, currentFriends.current);
 
-        drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
+            drawMapNavigationTarget(mapRendererParameters, mapIconRendererParameters, navTarget);
+        }
 
         drawMapPlayer(mapRendererParameters, mapIconRendererParameters);
 
