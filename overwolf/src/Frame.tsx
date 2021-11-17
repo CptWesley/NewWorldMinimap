@@ -5,6 +5,7 @@ import { GlobalStyles } from 'tss-react';
 import App from './App';
 import AppSettings from './AppSettings/AppSettings';
 import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings } from './contexts/AppContext';
+import InAppNotices from './InAppNotices';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { makeStyles, theme } from './theme';
 
@@ -120,6 +121,7 @@ export default function Frame(props: IProps) {
                     onClose={() => setAppSettingsVisible(false)}
                 />
                 {header}
+                <InAppNotices />
                 <App />
             </div>
         </AppContext.Provider>
