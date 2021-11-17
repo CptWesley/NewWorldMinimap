@@ -7,7 +7,7 @@ export type AppContextSettings = SimpleStorageSetting & {
 
 export interface IAppContext {
     settings: AppContextSettings;
-    update: (delta: Partial<AppContextSettings>) => void;
+    update: (delta: React.SetStateAction<Partial<AppContextSettings>>) => void;
     toggleFrameMenu: () => void;
     gameRunning: boolean;
     isTransparentSurface: boolean | undefined;
