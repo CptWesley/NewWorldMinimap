@@ -8,6 +8,7 @@ import DragIcon from './Icons/DragIcon';
 import RecenterIcon from './Icons/RecenterIcon';
 import ZoomInIcon from './Icons/ZoomInIcon';
 import ZoomOutIcon from './Icons/ZoomOutIcon';
+import { canDrawNavigation } from './logic/featureFlags';
 import MinimapToolbar from './MinimapToolbar';
 import MinimapToolbarIconButton from './MinimapToolbarIconButton';
 import { makeStyles } from './theme';
@@ -90,6 +91,7 @@ export default function MinimapToolbars(props: IProps) {
                 isSelected={interactionMode === 'destination'}
                 onClick={() => setInteractionMode('destination')}
                 title={t('minimap.mode_destination')}
+                disabled={!canDrawNavigation}
             >
                 <DestinationIcon />
             </MinimapToolbarIconButton>

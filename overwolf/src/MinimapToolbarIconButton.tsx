@@ -29,7 +29,7 @@ const useStyles = makeStyles()(theme => ({
             pointerEvents: 'none', // makes tooltips behave nicer
         },
 
-        '&:hover': {
+        '&:hover:not(:disabled)': {
             background: theme.buttonBackgroundHover,
         },
 
@@ -40,6 +40,10 @@ const useStyles = makeStyles()(theme => ({
 
         '&:active': {
             background: theme.buttonBackgroundPress,
+        },
+
+        '&:disabled': {
+            opacity: 0.5,
         },
     },
     selected: {
