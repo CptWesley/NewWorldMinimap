@@ -1,6 +1,11 @@
+import { canDrawNavigation } from '@/logic/featureFlags';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapNavigationTarget(params: MapRendererParameters, iconParams: MapIconRendererParameters, target: Vector2 | undefined) {
+    if (!canDrawNavigation) {
+        return;
+    }
+
     if (!target) {
         return;
     }

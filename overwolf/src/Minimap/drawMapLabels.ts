@@ -1,4 +1,5 @@
 import React from 'react';
+import { canDrawMarkers } from '@/logic/featureFlags';
 import { getIconName } from '@/logic/icons';
 import { getMarkers } from '@/logic/markers';
 import { canvasCoordinateToWorld, getTileCoordinatesForWorldCoordinate, worldCoordinateToCanvas } from '@/logic/tiles';
@@ -22,6 +23,10 @@ export default function drawMapLabel(ctx: CanvasRenderingContext2D, marker: Mark
 }
 
 export function drawMapHoverLabel(mousePos: Vector2, lastDrawCache: LastDrawParameters, canvas: React.RefObject<HTMLCanvasElement>, iconScale: number) {
+    if (!canDrawMarkers) {
+        return;
+    }
+
     if (!canvas.current) {
         return;
     }

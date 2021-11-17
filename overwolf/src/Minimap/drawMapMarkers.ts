@@ -1,9 +1,14 @@
+import { canDrawMarkers } from '@/logic/featureFlags';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import drawMapLabel from '@/Minimap/drawMapLabels';
 import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRenderer';
 
 export default function drawMapMarkers(params: MapRendererParameters, iconParams: MapIconRendererParameters, markers: Marker[]) {
+    if (!canDrawMarkers) {
+        return;
+    }
+
     const {
         context: ctx,
         center,
