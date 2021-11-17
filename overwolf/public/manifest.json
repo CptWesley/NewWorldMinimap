@@ -4,7 +4,7 @@
   "meta": {
     "name": "CptWesley's Minimap",
     "author": "Wesley Baartman",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "minimum-overwolf-version": "0.92.300.0",
     "description": "Open-source minimap for Amazon's New World.",
     "dock_button_title": "CptWesleys Minimap",
