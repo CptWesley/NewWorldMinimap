@@ -112,6 +112,14 @@
             "customServerUrlTooltip": "The URL of the server channels endpoint that you want to connect to. Leave blank for default server.",
             "friendId": "Your friend ID is '{{id}}'.",
             "regenerateId": "Generate a new friend ID. Does not affect operations, only the ID that the server receives."
+        },
+        "previewFeatures": {
+            "_": "Functionaility previews",
+            "featureCollectionRender": "Render Feature Collection.",
+            "featureCollectionEdit": "Edit Feature Collection."
+        },
+        "featureCollection": {
+            "_": "Feature collection"
         }
     }
 }

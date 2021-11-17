@@ -1,4 +1,32 @@
 import { ConcreteWindow } from '../OverwolfWindows/consts';
+import {FeatureCollection} from 'geojson';
+
+export const debugFeatureCollections = {
+    weaversFen: JSON.parse(`
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "legend": "Testing",
+                        "strokeStyle": "#EBA5AB",
+                        "lineWidth": 5
+                    },
+                    "geometry": {
+                        "type": "LineString",
+                        "coordinates": [
+                            [ 11540.99, 5444.16 ],
+                            [ 11571, 5453.48 ],
+                            [ 11575, 5431 ],
+                            [ 11507, 5404 ]
+                        ]
+                    }
+                }
+            ]
+        }
+    `) as FeatureCollection,
+};
 
 const debugLocations = {
     default: { x: 7728.177, y: 1988.299 } as Vector2,
@@ -14,6 +42,10 @@ type DeprecatedInterpolation =
 const deprecatedInterpolationKey = 'interpolation';
 
 const deprecatedFriendServerUrlKey = 'friendServerUrl';
+
+type PreviewFunctionaility =
+    | 'feature-collection-render'
+    | 'feature-collection-edit'
 
 export const simpleStorageDefaultSettings = {
     showHeader: true,
@@ -39,6 +71,8 @@ export const simpleStorageDefaultSettings = {
     alwaysLaunchDesktop: false,
     autoLaunchInGame: true,
     rotationSource: 'api' as RotationSource,
+    enabledPreviewFunctionailities: [] as PreviewFunctionaility[],
+    featureCollection: debugFeatureCollections.weaversFen,
 };
 
 {

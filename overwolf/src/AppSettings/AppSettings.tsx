@@ -13,6 +13,8 @@ import FriendSettingsPage from './pages/FriendChannelsSettingsPage';
 import IconSettingsPage from './pages/IconSettingsPage';
 import OverlaySettingsPage from './pages/OverlaySettingsPage';
 import WindowSettingsPage from './pages/WindowSettingsPage';
+import PreviewFeaturesSettingsPage from './pages/PreviewFeaturesSettingsPage';
+import FeatureCollectionPage, {featureCollectionPageEnabled} from './pages/FeatureCollectionPage';
 
 interface IProps {
     visible: boolean;
@@ -178,6 +180,8 @@ const settingsPageMap = {
     overlay: OverlaySettingsPage,
     icon: IconSettingsPage,
     friendChannels: FriendSettingsPage,
+    previewFeatures: PreviewFeaturesSettingsPage,
+    featureCollection: FeatureCollectionPage,
 } as const;
 
 const settingsPages: (keyof typeof settingsPageMap)[] = [
@@ -185,6 +189,11 @@ const settingsPages: (keyof typeof settingsPageMap)[] = [
     'overlay',
     'icon',
     'friendChannels',
+    'previewFeatures',
+];
+
+const previewSettingsPages: [keyof typeof settingsPageMap, (settings: AppContextSettings) => Boolean][] = [
+    ['featureCollection', featureCollectionPageEnabled],
 ];
 
 export default function AppSettings(props: IProps) {
@@ -240,6 +249,19 @@ export default function AppSettings(props: IProps) {
                     >
                         {t(`settings.${p}._`)}
                     </button>
+                )}
+                {previewSettingsPages.map(p => {
+                    const page = p[0];
+                    const shouldRender = p[1](context.settings);
+                    return shouldRender ? (
+                        <button key={page}
+                            className={clsx(classes.navItem, page === currentPage && classes.navItemActive)}
+                            onClick={() => setCurrentPage(page)}
+                        >
+                            {t(`settings.${p[0]}._`)}
+                        </button>
+                    ) : <></>;
+                }
                 )}
             </nav>
             <div className={classes.content}>
