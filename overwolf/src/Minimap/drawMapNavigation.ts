@@ -1,10 +1,15 @@
+import { canDrawNavigation } from '@/logic/featureFlags';
 import { getNavPath } from '@/logic/navigation/navigation';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import setLineStyle from './setLineStyle';
 import { MapRendererParameters } from './useMinimapRenderer';
 
-export default function drawMapNavigation(params: MapRendererParameters) {
+export default function drawMapNavigation(params: MapRendererParameters): Vector2 | undefined {
+    if (!canDrawNavigation) {
+        return undefined;
+    }
+
     const {
         context: ctx,
         center,

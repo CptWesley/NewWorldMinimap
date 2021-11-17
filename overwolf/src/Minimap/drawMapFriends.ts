@@ -1,3 +1,4 @@
+import { canDrawFriends } from '@/logic/featureFlags';
 import { FriendData } from '@/logic/friends';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
@@ -7,6 +8,10 @@ import { MapIconRendererParameters, MapRendererParameters } from './useMinimapRe
 const sliceRotationOffset = -Math.PI / 2;
 
 export default function drawMapFriends(params: MapRendererParameters, iconParams: MapIconRendererParameters, friends: FriendData[]) {
+    if (!canDrawFriends) {
+        return;
+    }
+
     const {
         context: ctx,
         center,
