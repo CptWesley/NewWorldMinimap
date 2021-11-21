@@ -7,6 +7,7 @@ import DiscordButton from '@/DiscordButton';
 import { globalLayers } from '@/globalLayers';
 import CloseOIcon from '@/Icons/CloseOIcon';
 import LanguagePicker from '@/LanguagePicker';
+import { canDrawFriends, canDrawMarkers } from '@/logic/featureFlags';
 import { SimpleStorageSetting, store } from '@/logic/storage';
 import { makeStyles } from '@/theme';
 import FriendSettingsPage from './pages/FriendChannelsSettingsPage';
@@ -180,12 +181,16 @@ const settingsPageMap = {
     friendChannels: FriendSettingsPage,
 } as const;
 
-const settingsPages: (keyof typeof settingsPageMap)[] = [
-    'window',
-    'overlay',
-    'icon',
-    'friendChannels',
-];
+function* getSettingsPages(): Generator<keyof typeof settingsPageMap, void, void> {
+    yield 'window';
+    yield 'overlay';
+    if (canDrawMarkers) {
+        yield 'icon';
+    }
+    if (canDrawFriends) {
+        yield 'friendChannels';
+    }
+}
 
 export default function AppSettings(props: IProps) {
     const {
@@ -195,6 +200,8 @@ export default function AppSettings(props: IProps) {
     const context = useContext(AppContext);
     const { classes } = useStyles();
     const { t } = useTranslation();
+
+    const settingsPages = [...getSettingsPages()];
 
     const [currentPage, setCurrentPage] = useState(settingsPages[0]);
     const [isPeeking, setIsPeeking] = useState(false);
