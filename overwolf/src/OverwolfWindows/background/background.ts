@@ -1,12 +1,5 @@
-import { initializeDynamicSettings } from '@/logic/dynamicSettings';
-import { initializeHooks } from '@/logic/hooks';
-import { initializeNavigation } from '@/logic/navigation/navigation';
 import { load } from '@/logic/storage';
-import UnloadingEvent from '@/logic/unloadingEvent';
 import { OWGameListener, OWGames, OWWindow } from '@overwolf/overwolf-api-ts';
-import { initializeHotkeyManager } from '../../logic/hotkeyManager';
-import { initializeTileCache } from '../../logic/tileCache';
-import { initializeTileMarkerCache } from '../../logic/tileMarkerCache';
 import { BackgroundWindow, ConcreteWindow, newWorldId, windowNames } from '../consts';
 
 import RunningGameInfo = overwolf.games.RunningGameInfo;
@@ -16,8 +9,6 @@ export type BackgroundControllerWindow = typeof window & {
     backgroundController: BackgroundController;
 }
 
-type GameRunningEventListener = (gameRunning: boolean) => void;
-
 const bringToFrontWindowStates: string[] = [WindowState.MAXIMIZED, WindowState.NORMAL];
 
 export class BackgroundController {
@@ -25,8 +16,6 @@ export class BackgroundController {
     private _windows: Record<BackgroundWindow | ConcreteWindow, OWWindow>;
     private _openWindows = new Set<ConcreteWindow>();
     private _NewWorldGameListener: OWGameListener;
-    private _gameRunning = false;
-    private _gameRunningEvent = new UnloadingEvent<GameRunningEventListener>('gameRunning');
 
     private constructor() {
         this._windows = {
@@ -39,13 +28,6 @@ export class BackgroundController {
             onGameStarted: this.onGameStarted,
             onGameEnded: this.onGameEnded,
         });
-
-        if (!NWMM_APP_BUILD_PRODUCTION) {
-            this.debug_setGameRunning = (running: boolean) => {
-                this._gameRunning = running;
-                this._gameRunningEvent.fire(running);
-            };
-        }
     }
 
     public static get isSupported() {
@@ -63,10 +45,6 @@ export class BackgroundController {
         }
 
         return BackgroundController._instance;
-    }
-
-    public get gameRunning() {
-        return this._gameRunning;
     }
 
     public run = async () => {
@@ -115,22 +93,14 @@ export class BackgroundController {
         this.exitIfNoWindowsOpen();
     }
 
-    public listenOnGameRunningChange = this._gameRunningEvent.register;
-
-    public debug_setGameRunning = (running: boolean) => {
-        console.log(`Attempted to set gameRunning to ${running}, but this was a no-op.`);
-    }
-
     private onGameStarted = async (info: RunningGameInfo) => {
         if (!info || !this.isGameNewWorld(info)) {
             return;
         }
 
-        this._gameRunning = true;
         if (load('autoLaunchInGame')) {
             this.openWindow('inGame');
         }
-        this._gameRunningEvent.fire(true);
     };
 
     private onGameEnded = async (info: RunningGameInfo) => {
@@ -138,9 +108,7 @@ export class BackgroundController {
             return;
         }
 
-        this._gameRunning = false;
         this.closeWindow('inGame');
-        this._gameRunningEvent.fire(false);
 
     };
 
@@ -170,10 +138,3 @@ if (BackgroundController.isSupported) {
     BackgroundController.instance.run();
     (window as BackgroundControllerWindow).backgroundController = BackgroundController.instance;
 }
-
-initializeDynamicSettings();
-initializeHooks();
-initializeTileCache();
-initializeTileMarkerCache();
-initializeHotkeyManager();
-initializeNavigation();

@@ -3,20 +3,11 @@ import { interestingFeatures } from '../OverwolfWindows/consts';
 import AppPlatform from './platform';
 import UnloadingEvent from './unloadingEvent';
 
-type OverwolfHookWindow = typeof window & {
-    NWMM_registerEventCallback: typeof onPlayerDataUpdateEvent.register;
-}
-
 export const positionUpdateRate = 500;
 
 type OnPlayerDataUpdateListener = (info: PlayerData) => void;
 
 const onPlayerDataUpdateEvent = new UnloadingEvent<OnPlayerDataUpdateListener>('onPlayerDataUpdate');
-const isBackground = NWMM_APP_WINDOW === 'background';
-
-export const registerEventCallback = isBackground
-    ? onPlayerDataUpdateEvent.register
-    : (AppPlatform.getMainWindow() as OverwolfHookWindow).NWMM_registerEventCallback;
 
 function onUpdate(info: any) {
     const playerData = transformData(info);
@@ -60,17 +51,13 @@ function transformData(info: any): PlayerData | undefined {
 }
 
 export function initializeHooks() {
-    if (!isBackground) {
-        return;
-    }
-
-    const listener = new OWGamesEvents({
-        onInfoUpdates: onUpdate,
-        onNewEvents: onUpdate,
-    }, interestingFeatures);
-    listener.start();
     if (AppPlatform.isOverwolfApp()) {
+        const listener = new OWGamesEvents({
+            onInfoUpdates: onUpdate,
+            onNewEvents: onUpdate,
+        }, interestingFeatures);
+        listener.start();
         setInterval(() => overwolf.games.events.getInfo(onUpdate), positionUpdateRate);
     }
-    (window as OverwolfHookWindow).NWMM_registerEventCallback = onPlayerDataUpdateEvent.register;
+    return onPlayerDataUpdateEvent.register;
 }

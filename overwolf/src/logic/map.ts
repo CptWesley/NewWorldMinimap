@@ -1,8 +1,8 @@
 import { getMarkers } from './markers';
-import { getTileCache } from './tileCache';
+import AppPlatform from './platform';
 import { getDimensions, getTileCoordinatesForWorldCoordinate, getTileLevel, getTileScale } from './tiles';
 
-const tileCache = getTileCache();
+const tileCache = AppPlatform.state.tileCache;
 
 function getMarkersInternal(worldPos: Vector2, screenWidth: number, screenHeight: number, zoomLevel: number, angle: number) {
     const dimensions = getDimensions(screenWidth * zoomLevel, screenHeight * zoomLevel, angle);

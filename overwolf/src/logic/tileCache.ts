@@ -1,12 +1,7 @@
-import AppPlatform from './platform';
 import UnloadingEvent from './unloadingEvent';
 
 export function getTileCacheKey(tileLevel: number, tilePos: Vector2) {
     return `${tileLevel}@${tilePos.x},${tilePos.y}`;
-}
-
-export type TileCacheWindow = typeof window & {
-    NWMM_TileCache: TileCache;
 }
 
 type TileCacheHit = {
@@ -30,15 +25,7 @@ class TileCache {
     private failedBitmapCache = new Set<string>();
     private onTileDownloadingCountChangeEvent = new UnloadingEvent<OnTileDownloadingCountChangeListener>('tileCacheDownloadingCountChange');
 
-    public static get isSupported() {
-        return NWMM_APP_WINDOW === 'background';
-    }
-
     public static get instance(): TileCache {
-        if (!this.isSupported) {
-            throw new Error('Using TileCache directly in this window is not supported. Use getTileCache instead.');
-        }
-
         if (!TileCache._instance) {
             TileCache._instance = new TileCache();
         }
@@ -103,11 +90,5 @@ class TileCache {
 }
 
 export function initializeTileCache() {
-    if (TileCache.isSupported) {
-        (window as TileCacheWindow).NWMM_TileCache = TileCache.instance;
-    }
-}
-
-export function getTileCache() {
-    return (AppPlatform.getMainWindow() as TileCacheWindow).NWMM_TileCache;
+    return TileCache.instance;
 }

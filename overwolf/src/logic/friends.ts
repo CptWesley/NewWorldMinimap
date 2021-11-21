@@ -3,7 +3,7 @@ import encUtf8 from 'crypto-js/enc-utf8';
 import SHA256 from 'crypto-js/sha256';
 import Dexie from 'dexie';
 import { v4 as uuidV4, validate as validateUuid } from 'uuid';
-import { getDynamicSettings } from './dynamicSettings';
+import AppPlatform from './platform';
 
 export const maxChannels = 10;
 const friendIdKey = 'friendId';
@@ -79,7 +79,7 @@ export async function updateFriendLocation(server: string, name: string, locatio
     let url = server.trim();
 
     if (!url || url.length === 0) {
-        const settings = getDynamicSettings();
+        const settings = AppPlatform.state.getDynamicSettings();
         if (settings && settings.channelsServerEndpoint) {
             url = settings.channelsServerEndpoint;
         }

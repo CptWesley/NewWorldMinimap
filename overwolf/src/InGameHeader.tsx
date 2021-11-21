@@ -7,7 +7,7 @@ import { globalLayers } from './globalLayers';
 import CloseIcon from './Icons/CloseIcon';
 import DesktopWindowIcon from './Icons/DesktopWindowIcon';
 import SettingsIcon from './Icons/SettingsIcon';
-import { getHotkeyManager } from './logic/hotkeyManager';
+import AppPlatform from './logic/platform';
 import { getBackgroundController } from './OverwolfWindows/background/background';
 import { windowNames } from './OverwolfWindows/consts';
 import { inGameAppTitle } from './OverwolfWindows/in_game/in_game';
@@ -164,7 +164,7 @@ const useStyles = makeStyles()(theme => ({
 }));
 
 const backgroundController = getBackgroundController();
-const hotkeyManager = getHotkeyManager();
+const hotkeyManager = AppPlatform.state.hotkeyManager;
 export default function InGameHeader() {
     const context = useContext(AppContext);
     const { classes } = useStyles();

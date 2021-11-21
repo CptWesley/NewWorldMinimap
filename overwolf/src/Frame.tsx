@@ -6,7 +6,7 @@ import App from './App';
 import AppSettings from './AppSettings/AppSettings';
 import { AppContext, AppContextSettings, IAppContext, loadAppContextSettings } from './contexts/AppContext';
 import InAppNotices from './InAppNotices';
-import { getBackgroundController } from './OverwolfWindows/background/background';
+import AppPlatform from './logic/platform';
 import { makeStyles, theme } from './theme';
 
 interface IProps {
@@ -32,7 +32,7 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
-const backgroundController = getBackgroundController();
+const informant = AppPlatform.state.informant;
 
 export default function Frame(props: IProps) {
     const {
@@ -43,7 +43,7 @@ export default function Frame(props: IProps) {
 
     const [appSettingsVisible, setAppSettingsVisible] = useState(false);
     const [appContextSettings, setAppContextSettings] = useState<AppContextSettings>(loadAppContextSettings);
-    const [gameRunning, setGameRunning] = useState(backgroundController.gameRunning);
+    const [gameRunning, setGameRunning] = useState(informant.gameRunning);
 
     const updateAppContext = useCallback((e: React.SetStateAction<Partial<AppContextSettings>>) => {
         if (typeof e === 'function') {
@@ -55,7 +55,7 @@ export default function Frame(props: IProps) {
     const toggleFrameMenu = useCallback(() => setAppSettingsVisible(prev => !prev), []);
 
     useEffect(() => {
-        const gameRunningListenRegistration = backgroundController.listenOnGameRunningChange(setGameRunning, window);
+        const gameRunningListenRegistration = informant.listenOnGameRunningChange(setGameRunning, window);
 
         return () => {
             gameRunningListenRegistration();

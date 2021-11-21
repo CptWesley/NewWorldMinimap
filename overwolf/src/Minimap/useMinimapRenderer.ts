@@ -2,9 +2,8 @@ import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AppContext } from '@/contexts/AppContext';
 import { FriendData } from '@/logic/friends';
 import MapIconsCache from '@/logic/mapIconsCache';
+import AppPlatform from '@/logic/platform';
 import { store, zoomLevelSettingBounds } from '@/logic/storage';
-import { getTileCache } from '@/logic/tileCache';
-import { getTileMarkerCache } from '@/logic/tileMarkerCache';
 import { getNearestTown } from '@/logic/townLocations';
 import { getAngle, getAngleInterpolator, getNumberInterpolator, getVector2Interpolator, predictVector, squaredDistance, vector2Equal } from '@/logic/util';
 import drawMapFriends from './drawMapFriends';
@@ -45,8 +44,8 @@ export type LastDrawParameters = {
 
 type MapOverride = Vector2 & { angle: number };
 
-const tileCache = getTileCache();
-const markerCache = getTileMarkerCache();
+const tileCache = AppPlatform.state.tileCache;
+const markerCache = AppPlatform.state.tileMarkerCache;
 export default function useMinimapRenderer(canvas: React.RefObject<HTMLCanvasElement>, hoverCanvas: React.RefObject<HTMLCanvasElement>) {
     const appContext = useContext(AppContext);
 

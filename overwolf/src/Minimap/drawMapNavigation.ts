@@ -1,5 +1,5 @@
 import { canDrawNavigation } from '@/logic/featureFlags';
-import { getNavPath } from '@/logic/navigation/navigation';
+import AppPlatform from '@/logic/platform';
 import { worldCoordinateToCanvas } from '@/logic/tiles';
 import { rotateAround } from '@/logic/util';
 import setLineStyle from './setLineStyle';
@@ -35,7 +35,7 @@ export default function drawMapNavigation(params: MapRendererParameters): Vector
     }
 
     let lastPos: Vector2 | undefined = undefined;
-    const path = getNavPath(playerPosition);
+    const path = AppPlatform.state.navigation.getNavPath(playerPosition);
     if (path && path.length > 0) {
         const startPos = getCanvasCoord(path[0]);
 

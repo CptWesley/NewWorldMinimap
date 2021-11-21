@@ -1,22 +1,21 @@
-import AppPlatform from '../platform';
 import { squaredDistance } from '../util';
 import { findPath } from './navigationInternal';
 
-const isBackground = NWMM_APP_WINDOW === 'background';
-const mainWindow = AppPlatform.getMainWindow() as any;
+let navPath: Vector2[] | undefined;
+let lastNavUpdate: number;
 
-export function resetNav() {
+function resetNav() {
     setPath(undefined);
 }
 
-export function setNav(start: Vector2, end: Vector2) {
+function setNav(start: Vector2, end: Vector2) {
     const path = findPath(start, end);
     setPath(path);
     return path;
 }
 
-export function getNavTarget() {
-    const path = mainWindow.navPath as Vector2[] | undefined;
+function getNavTarget() {
+    const path = navPath;
 
     if (!path || path.length < 1) {
         return undefined;
@@ -25,14 +24,14 @@ export function getNavTarget() {
     return path[path.length - 1];
 }
 
-export function getNavPath(pos: Vector2) {
-    const path = mainWindow.navPath as Vector2[] | undefined;
+function getNavPath(pos: Vector2) {
+    const path = navPath;
     if (!path) {
         return undefined;
     }
 
     const { index, distance } = findNearestNode(path, pos);
-    const time = performance.now() - mainWindow.lastNavUpdate;
+    const time = performance.now() - lastNavUpdate;
 
     if (distance > 500 && time > 5000) {
         return setNav(pos, path[path.length - 1]);
@@ -43,14 +42,17 @@ export function getNavPath(pos: Vector2) {
 }
 
 export function initializeNavigation() {
-    if (!isBackground) {
-        return;
-    }
+    return {
+        setNav,
+        resetNav,
+        getNavTarget,
+        getNavPath,
+    };
 }
 
 function setPath(path: Vector2[] | undefined) {
-    mainWindow.navPath = path;
-    mainWindow.lastNavUpdate = performance.now();
+    navPath = path;
+    lastNavUpdate = performance.now();
 }
 
 function findNearestNode(path: Vector2[], pos: Vector2) {

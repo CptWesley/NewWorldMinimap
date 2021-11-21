@@ -1,12 +1,7 @@
 import { customMarkers } from '../Icons/MapIcons/customMarkers';
-import AppPlatform from './platform';
 import { getTileCacheKey } from './tileCache';
 import { getTileCacheKeyFromWorldCoordinate } from './tiles';
 import UnloadingEvent from './unloadingEvent';
-
-export type MarkerCacheWindow = typeof window & {
-    NWMM_MarkerCache: TileMarkerCache;
-}
 
 const markersUrl = 'https://www.newworld-map.com/markers.json';
 type OnMarkersLoadedListener = () => void;
@@ -21,15 +16,7 @@ class TileMarkerCache {
         this.promise = this.fillCache();
     }
 
-    public static get isSupported() {
-        return NWMM_APP_WINDOW === 'background';
-    }
-
     public static get instance(): TileMarkerCache {
-        if (!this.isSupported) {
-            throw new Error('Using MarkerCache directly in this window is not supported. Use getMarkerCache instead.');
-        }
-
         if (!TileMarkerCache._instance) {
             TileMarkerCache._instance = new TileMarkerCache();
         }
@@ -109,11 +96,5 @@ class TileMarkerCache {
 }
 
 export function initializeTileMarkerCache() {
-    if (TileMarkerCache.isSupported) {
-        (window as MarkerCacheWindow).NWMM_MarkerCache = TileMarkerCache.instance;
-    }
-}
-
-export function getTileMarkerCache() {
-    return (AppPlatform.getMainWindow() as MarkerCacheWindow).NWMM_MarkerCache;
+    return TileMarkerCache.instance;
 }

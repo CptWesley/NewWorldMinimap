@@ -3,7 +3,7 @@ import { Trans, useTranslation } from 'react-i18next';
 import Button from './Button';
 import LanguagePicker from './LanguagePicker';
 import { discordUrl } from './links';
-import { getBackgroundController } from './OverwolfWindows/background/background';
+import AppPlatform from './logic/platform';
 import { makeStyles } from './theme';
 
 const useStyles = makeStyles()(theme => ({
@@ -39,13 +39,13 @@ const useStyles = makeStyles()(theme => ({
     },
 }));
 
-const backgroundController = getBackgroundController();
+const informant = AppPlatform.state.informant;
 export default function Welcome() {
     const { classes } = useStyles();
     const { t } = useTranslation();
 
     function tryForceMap() {
-        backgroundController.debug_setGameRunning(true);
+        informant.debug_setGameRunning(true);
     }
 
     return <div className={classes.root}>

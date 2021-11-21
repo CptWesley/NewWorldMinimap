@@ -3,10 +3,6 @@ import { hotkeys, newWorldId } from '../OverwolfWindows/consts';
 import AppPlatform from './platform';
 import UnloadingEvent from './unloadingEvent';
 
-export type HotkeyManagerWindow = typeof window & {
-    NWMM_HotkeyManager: HotkeyManager;
-}
-
 type Hotkey = keyof typeof hotkeys;
 type OnHotkeyInvokedListener = (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent) => void;
 
@@ -38,15 +34,7 @@ class HotkeyManager {
         }
     }
 
-    public static get isSupported() {
-        return NWMM_APP_WINDOW === 'background';
-    }
-
     public static get instance(): HotkeyManager {
-        if (!this.isSupported) {
-            throw new Error('Using HotkeyManager directly in this window is not supported. Use getHotkeyManager instead.');
-        }
-
         if (!HotkeyManager._instance) {
             HotkeyManager._instance = new HotkeyManager();
         }
@@ -62,11 +50,5 @@ class HotkeyManager {
 }
 
 export function initializeHotkeyManager() {
-    if (HotkeyManager.isSupported) {
-        (window as HotkeyManagerWindow).NWMM_HotkeyManager = HotkeyManager.instance;
-    }
-}
-
-export function getHotkeyManager() {
-    return (AppPlatform.getMainWindow() as HotkeyManagerWindow).NWMM_HotkeyManager;
+    return HotkeyManager.instance;
 }

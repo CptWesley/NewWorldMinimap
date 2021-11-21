@@ -1,7 +1,7 @@
+import AppPlatform from './platform';
 import { loadIconConfiguration } from './storage';
-import { getTileMarkerCache } from './tileMarkerCache';
 
-const tileMarkerCache = getTileMarkerCache();
+const tileMarkerCache = AppPlatform.state.tileMarkerCache;
 
 export function getMarkers(tilePos: Vector2) {
     const result = tileMarkerCache.get(tilePos);

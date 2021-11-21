@@ -6,12 +6,10 @@ import { drawMapHoverLabel } from '@/Minimap/drawMapLabels';
 import { AppContext } from './contexts/AppContext';
 import { globalLayers } from './globalLayers';
 import { FriendData, updateFriendLocation } from './logic/friends';
-import { positionUpdateRate, registerEventCallback } from './logic/hooks';
-import { getHotkeyManager } from './logic/hotkeyManager';
+import { positionUpdateRate } from './logic/hooks';
 import { getMarkers } from './logic/markers';
-import { getNavTarget, resetNav, setNav } from './logic/navigation/navigation';
+import AppPlatform from './logic/platform';
 import { store } from './logic/storage';
-import { getTileCache } from './logic/tileCache';
 import { canvasCoordinateToWorld } from './logic/tiles';
 import { getNearestTown } from './logic/townLocations';
 import { rotateAround, squaredDistance } from './logic/util';
@@ -58,9 +56,8 @@ const useStyles = makeStyles()(() => {
     };
 });
 
-const tileCache = getTileCache();
-
-const hotkeyManager = getHotkeyManager();
+const tileCache = AppPlatform.state.tileCache;
+const hotkeyManager = AppPlatform.state.hotkeyManager;
 export default function Minimap(props: IProps) {
     const {
         className,
@@ -130,12 +127,12 @@ export default function Minimap(props: IProps) {
         if (appContext.settings.compassMode && (appContext.isTransparentSurface ?? false)) {
             worldPos = rotateAround(centerPos, worldPos, -currentPlayerAngle.current);
         }
-        const currentTarget = getNavTarget();
+        const currentTarget = AppPlatform.state.navigation.getNavTarget();
 
         if (currentTarget && squaredDistance(worldPos, currentTarget) < 200) {
-            resetNav();
+            AppPlatform.state.navigation.resetNav();
         } else {
-            setNav(currentPlayerPosition.current, worldPos);
+            AppPlatform.state.navigation.setNav(currentPlayerPosition.current, worldPos);
         }
 
         redraw(true);
@@ -267,7 +264,7 @@ export default function Minimap(props: IProps) {
         (window as any).getMarkers = getMarkers;
         (window as any).setFriends = setFriends;
 
-        const callbackUnregister = registerEventCallback(info => {
+        const callbackUnregister = AppPlatform.state.registerDataUpdate(info => {
             setPosition(info.position, info.rotation);
 
             if (info.name) {
