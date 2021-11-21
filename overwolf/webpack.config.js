@@ -24,8 +24,9 @@ module.exports = (env, argv) => {
     const config = {
         entry: {
             background: './src/OverwolfWindows/background/background.ts',
+            browser: './src/OverwolfWindows/browser/browser.ts',
             desktop: './src/OverwolfWindows/desktop/desktop.ts',
-            in_game: './src/OverwolfWindows/in_game/in_game.ts'
+            in_game: './src/OverwolfWindows/in_game/in_game.ts',
         },
         output: {
             filename: '[name].bundle.js',
@@ -82,6 +83,12 @@ module.exports = (env, argv) => {
                 templateParameters,
                 filename: path.resolve(__dirname, './dist/background.html'),
                 chunks: ['background']
+            }),
+            new HtmlWebpackPlugin({
+                template: './src/OverwolfWindows/browser/browser.html',
+                templateParameters,
+                filename: path.resolve(__dirname, './dist/browser.html'),
+                chunks: ['browser']
             }),
             new HtmlWebpackPlugin({
                 template: './src/OverwolfWindows/desktop/desktop.html',
