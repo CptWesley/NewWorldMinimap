@@ -1,8 +1,9 @@
+import AppPlatform from '../platform';
 import { squaredDistance } from '../util';
 import { findPath } from './navigationInternal';
 
 const isBackground = NWMM_APP_WINDOW === 'background';
-const mainWindow = overwolf.windows.getMainWindow() as any;
+const mainWindow = AppPlatform.getMainWindow() as any;
 
 export function resetNav() {
     setPath(undefined);

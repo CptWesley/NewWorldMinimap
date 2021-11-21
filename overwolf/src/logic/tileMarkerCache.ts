@@ -1,4 +1,5 @@
 import { customMarkers } from '../Icons/MapIcons/customMarkers';
+import AppPlatform from './platform';
 import { getTileCacheKey } from './tileCache';
 import { getTileCacheKeyFromWorldCoordinate } from './tiles';
 import UnloadingEvent from './unloadingEvent';
@@ -114,5 +115,5 @@ export function initializeTileMarkerCache() {
 }
 
 export function getTileMarkerCache() {
-    return (overwolf.windows.getMainWindow() as MarkerCacheWindow).NWMM_MarkerCache;
+    return (AppPlatform.getMainWindow() as MarkerCacheWindow).NWMM_MarkerCache;
 }

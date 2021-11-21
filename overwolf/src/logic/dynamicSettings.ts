@@ -1,3 +1,5 @@
+import AppPlatform from './platform';
+
 type DynamicSettings = {
     channelsServerEndpoint: string,
 }
@@ -10,7 +12,7 @@ const dynamicSettingsUrl = 'https://raw.githubusercontent.com/CptWesley/NewWorld
 const isBackground = NWMM_APP_WINDOW === 'background';
 const actualRetrieval = isBackground
     ? getDynamicSettingsBackground
-    : (overwolf.windows.getMainWindow() as DynamicSettingsWindow).NWMM_getDynamicSettingsBackground;
+    : (AppPlatform.getMainWindow() as DynamicSettingsWindow).NWMM_getDynamicSettingsBackground;
 
 let stored: DynamicSettings | undefined = undefined;
 

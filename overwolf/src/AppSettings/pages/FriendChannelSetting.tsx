@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { validate as validateUuid } from 'uuid';
 import Button from '@/Button';
 import { deleteChannel, putChannel, StoredChannel, updateChannel } from '@/logic/friends';
+import AppPlatform from '@/logic/platform';
 import { generateRandomToken } from '@/logic/util';
 import { makeStyles } from '@/theme';
 import { useSharedSettingsStyles } from '../sharedSettingStyles';
@@ -127,7 +128,9 @@ export default function FriendChannelSetting(props: IProps) {
     }
 
     function copyChannelCode() {
-        overwolf.utils.placeOnClipboard(`${displayChannel.id}:${displayChannel.psk}`);
+        if (AppPlatform.isOverwolfApp()) {
+            overwolf.utils.placeOnClipboard(`${displayChannel.id}:${displayChannel.psk}`);
+        }
     }
 
     const isOpen = isNew || isAdding || open;

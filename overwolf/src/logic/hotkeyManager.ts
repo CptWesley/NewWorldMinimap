@@ -1,5 +1,6 @@
 import { OWHotkeys } from '@overwolf/overwolf-api-ts/dist';
 import { hotkeys, newWorldId } from '../OverwolfWindows/consts';
+import AppPlatform from './platform';
 import UnloadingEvent from './unloadingEvent';
 
 export type HotkeyManagerWindow = typeof window & {
@@ -22,16 +23,18 @@ class HotkeyManager {
         };
         this.hotkeyTexts = new Map();
 
-        for (const [key, overwolfBindName] of Object.entries(hotkeys)) {
-            const hotkeyKey = key as Hotkey;
+        if (AppPlatform.isOverwolfApp()) {
+            for (const [key, overwolfBindName] of Object.entries(hotkeys)) {
+                const hotkeyKey = key as Hotkey;
 
-            OWHotkeys.onHotkeyDown(overwolfBindName, (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent) => {
-                this.hotkeyEvents[hotkeyKey].fire(hotkeyResult);
-            });
+                OWHotkeys.onHotkeyDown(overwolfBindName, (hotkeyResult: overwolf.settings.hotkeys.OnPressedEvent) => {
+                    this.hotkeyEvents[hotkeyKey].fire(hotkeyResult);
+                });
 
-            OWHotkeys.getHotkeyText(hotkeys.toggleInGame, newWorldId).then(hotkeyText => {
-                this.hotkeyTexts.set(hotkeyKey, hotkeyText);
-            });
+                OWHotkeys.getHotkeyText(hotkeys.toggleInGame, newWorldId).then(hotkeyText => {
+                    this.hotkeyTexts.set(hotkeyKey, hotkeyText);
+                });
+            }
         }
     }
 
@@ -65,5 +68,5 @@ export function initializeHotkeyManager() {
 }
 
 export function getHotkeyManager() {
-    return (overwolf.windows.getMainWindow() as HotkeyManagerWindow).NWMM_HotkeyManager;
+    return (AppPlatform.getMainWindow() as HotkeyManagerWindow).NWMM_HotkeyManager;
 }

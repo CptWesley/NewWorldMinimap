@@ -1,3 +1,4 @@
+import AppPlatform from './platform';
 import UnloadingEvent from './unloadingEvent';
 
 export function getTileCacheKey(tileLevel: number, tilePos: Vector2) {
@@ -108,5 +109,5 @@ export function initializeTileCache() {
 }
 
 export function getTileCache() {
-    return (overwolf.windows.getMainWindow() as TileCacheWindow).NWMM_TileCache;
+    return (AppPlatform.getMainWindow() as TileCacheWindow).NWMM_TileCache;
 }
